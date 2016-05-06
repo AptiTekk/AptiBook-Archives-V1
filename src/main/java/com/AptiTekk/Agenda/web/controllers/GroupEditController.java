@@ -7,21 +7,19 @@ package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 /**
- *
  * @author kevint
  */
 @ManagedBean
@@ -34,19 +32,23 @@ public class GroupEditController {
 
     @Inject
     private UserGroupService groupService;
-    
-    private Map<UserGroup, TreeNode> map = new HashMap<>();
+
+    private String newGroupName;
 
     @PostConstruct
     public void init() {
+        buildTree();
+    }
+
+    public void buildTree() {
         UserGroup rootGroup = groupService.findByName(UserGroupService.ROOT_GROUP_NAME);
         root = new DefaultTreeNode(rootGroup, null);
-        
+
         attachChildren(rootGroup, this.root);
     }
 
     public void attachChildren(UserGroup parentGroup, TreeNode parent) {
-        for(UserGroup child : parentGroup.getChildren()) {
+        for (UserGroup child : parentGroup.getChildren()) {
             TreeNode nextGen = new DefaultTreeNode(child, parent);
             attachChildren(child, nextGen);
         }
@@ -68,6 +70,14 @@ public class GroupEditController {
         this.selectedNode = selectedNode;
     }
 
+    public String getNewGroupName() {
+        return newGroupName;
+    }
+
+    public void setNewGroupName(String newGroupName) {
+        this.newGroupName = newGroupName;
+    }
+
     public void onDragDrop(TreeDragDropEvent event) {
         TreeNode dragNode = event.getDragNode();
         TreeNode dropNode = event.getDropNode();
@@ -75,6 +85,49 @@ public class GroupEditController {
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dragged " + dragNode.getData(), "Dropped on " + dropNode.getData() + " at " + dropIndex);
         FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    //-- Button Actions
+    public void updateSettings() {
+        saveChildren(root);
+    }
+
+    public void saveChildren(TreeNode parent) {
+        for (TreeNode child : parent.getChildren()) {
+            groupService.merge((UserGroup) child.getData());
+            saveChildren(child);
+        }
+    }
+
+    public void resetTree() {
+        root = null;
+        buildTree();
+    }
+
+    public void deleteSelectedGroup() {
+        if (this.selectedNode != null) {
+            for (TreeNode child : selectedNode.getChildren()) {
+                child.setParent(selectedNode.getParent());
+                ((UserGroup) child.getData()).setParent(((UserGroup) selectedNode.getData()).getParent());
+            }
+            TreeNode parent = selectedNode.getParent();
+            parent.getChildren().remove(selectedNode);
+            selectedNode = null;
+
+        }
+    }
+
+    public void addGroup() {
+        UserGroup newGroup = new UserGroup();
+        newGroup.setName(this.newGroupName);
+        TreeNode newNode = new DefaultTreeNode(newGroup, null);
+        if(selectedNode == null) {
+            newNode.setParent(root);
+            newGroup.setParent((UserGroup) root.getData());
+        } else {
+            newNode.setParent(selectedNode);
+            newGroup.setParent((UserGroup) selectedNode.getData());
+        }
     }
 
 }
