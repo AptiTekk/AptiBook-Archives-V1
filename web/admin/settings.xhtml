@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -8,38 +8,38 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
 
-    <ui:composition template="/WEB-INF/templates/default_header.xhtml">
-        <ui:define name="content">
-            <h:panelGroup layout="block" id="settingsPage">
-                <b:container>
-                    <ol class="breadcrumb" style="margin-top: 20px">
-                        <li><h:link outcome="index" value="Home" /></li>
-                        <li class="active">Agenda Settings</li>
-                        <li class="active">#{SettingsController.currentPage.name}</li>
-                    </ol>
+<ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="content">
+        <h:panelGroup layout="block" id="settingsPage">
+            <b:container>
+                <ol class="breadcrumb" style="margin-top: 20px">
+                    <li><h:link outcome="index" value="Home"/></li>
+                    <li class="active">Agenda Settings</li>
+                    <li class="active">#{SettingsController.currentPage.name}</li>
+                </ol>
 
-                    <h:form style="margin-bottom:20px">
-                        <ul class="nav nav-tabs">
-                            <ui:repeat value="#{SettingsController.pages}" var="page">
-                                <li role="presentation"
-                                    class="#{SettingsController.currentPage == page ? 'active' : ''}">
-                                    <h:commandLink
+                <h:form style="margin-bottom:20px">
+                    <ul class="nav nav-tabs">
+                        <ui:repeat value="#{SettingsController.pages}" var="page">
+
+                            <li class="#{SettingsController.currentPage == page ? 'active' : ''}">
+                                <h:commandLink
                                         action="#{SettingsController.setCurrentPage(page)}"
                                         value="#{page.name}">
-                                        <f:ajax render=":settingsPage" onevent="loading"/>
-                                    </h:commandLink>
-                                </li>
-                            </ui:repeat>
-                        </ul>
-                    </h:form>
+                                    <f:ajax render=":settingsPage" onevent="loading"/>
+                                </h:commandLink>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </h:form>
 
-                    <p:inputText style="display: none;"/>
-                    <b:modal />
-                    <ui:include
-                        src="/WEB-INF/private/admin/#{SettingsController.currentPage.fileName}" />
-                </b:container>
-            </h:panelGroup>
-        </ui:define>
-    </ui:composition>
+                <p:inputText style="display: none;"/>
+                <b:modal/>
+                <ui:include
+                        src="/WEB-INF/private/admin/#{SettingsController.currentPage.fileName}"/>
+            </b:container>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
 
 </html>

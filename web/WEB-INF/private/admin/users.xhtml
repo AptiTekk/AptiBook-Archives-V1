@@ -21,11 +21,11 @@
                                               selection="#{UserEditController.user}" rowKey="#{user.id}">
                                     <pf:ajax event="rowSelect" update=":usersPage" onstart="loading_start()" oncomplete="loading_complete()"/>
                                     <pf:ajax event="rowUnselect" update=":usersPage" onstart="loading_start()" oncomplete="loading_complete()"/>
-                                    <pf:column headerText="Id" priority="2" style="width:50px">
-                                        <h:outputText value="#{user.id}" />
-                                    </pf:column>
-                                    <pf:column headerText="Username" priority="1" style="width:100%">
+                                    <pf:column headerText="Username" priority="1">
                                         <h:outputText value="#{user.username}" />
+                                    </pf:column>
+                                    <pf:column headerText="Full Name">
+                                        <h:outputText value="#{user.fullname}" />
                                     </pf:column>
                                 </pf:dataTable>
                             </div>
