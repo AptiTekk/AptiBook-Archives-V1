@@ -98,4 +98,9 @@
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupEditController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ReservablesEditController</managed-bean-name>
+        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservablesEditController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>
