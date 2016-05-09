@@ -6,8 +6,10 @@
 package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
+import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
 import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
+import org.primefaces.component.tree.Tree;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -33,7 +35,7 @@ public class GroupEditController {
     @Inject
     private UserGroupService groupService;
 
-    private String newGroupName;
+    private boolean hasBeenEdited;
 
     @PostConstruct
     public void init() {
@@ -43,14 +45,15 @@ public class GroupEditController {
     public void buildTree() {
         UserGroup rootGroup = groupService.findByName(UserGroupService.ROOT_GROUP_NAME);
         root = new DefaultTreeNode(rootGroup, null);
-
+        root.setExpanded(true);
         attachChildren(rootGroup, this.root);
     }
 
     public void attachChildren(UserGroup parentGroup, TreeNode parent) {
         for (UserGroup child : parentGroup.getChildren()) {
-            AgendaLogger.logVerbose("Adding children for UserGroup " + child.getName());
+            AgendaLogger.logVerbose("Adding children for UserGroup " + child.getName() + " (ID:" + child.getId() + ")");
             TreeNode nextGen = new DefaultTreeNode(child, parent);
+            nextGen.setExpanded(true);
             attachChildren(child, nextGen);
         }
     }
@@ -71,12 +74,16 @@ public class GroupEditController {
         this.selectedNode = selectedNode;
     }
 
-    public String getNewGroupName() {
-        return newGroupName;
+    public boolean isHasBeenEdited() {
+        return hasBeenEdited;
     }
 
-    public void setNewGroupName(String newGroupName) {
-        this.newGroupName = newGroupName;
+    public void setHasBeenEdited(boolean hasBeenEdited) {
+        this.hasBeenEdited = hasBeenEdited;
+    }
+
+    public UserGroup getData(TreeNode node) {
+        return (UserGroup) node.getData();
     }
 
     public void onDragDrop(TreeDragDropEvent event) {
@@ -84,8 +91,11 @@ public class GroupEditController {
         TreeNode dropNode = event.getDropNode();
         int dropIndex = event.getDropIndex();
 
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Dragged " + dragNode.getData(), "Dropped on " + dropNode.getData() + " at " + dropIndex);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+        AgendaLogger.logVerbose("Setting new parent " + ((UserGroup) dropNode.getData()).getName() + " for UserGroup " + ((UserGroup) dragNode.getData()).getName());
+
+        ((UserGroup) dragNode.getData()).setParent(((UserGroup) dropNode.getData()));
+
+        hasBeenEdited = true;
     }
 
     //-- Button Actions

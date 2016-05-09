@@ -142,10 +142,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" level="project" />
-    <orderEntry type="library" name="Maven: javax:javaee-web-api:7.0" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.mail:javax.mail:1.5.5" level="project" />
-    <orderEntry type="library" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: com.mysema.querydsl:querydsl-jpa:3.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.mysema.querydsl:querydsl-core:3.7.2" level="project" />
     <orderEntry type="library" name="Maven: com.mysema.commons:mysema-commons-lang:0.2.4" level="project" />
