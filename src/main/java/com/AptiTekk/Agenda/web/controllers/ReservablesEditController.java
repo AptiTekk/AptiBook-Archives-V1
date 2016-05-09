@@ -36,9 +36,11 @@ public class ReservablesEditController {
     public void updateSettings() {
         if (getSelectedReservableType() != null) {
             if (getEditableReservableTypeName().isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Reservable Type Name cannot be empty!"));
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
             } else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 ]+")) {
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Reservable Type Name may only contain A-Z, a-z, 0-9, and spaces!"));
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, and spaces!"));
+            } else if (reservableTypeService.findByName(getEditableReservableTypeName()) != null) {
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable Type with that name already exists!"));
             }
 
             if(FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty())
