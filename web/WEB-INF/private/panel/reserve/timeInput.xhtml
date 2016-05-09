@@ -1,92 +1,102 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:pf="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui">
 
-    <ui:composition>
-        <b:jumbotron>
-            <b:container>
-                <h1>Hello, #{AccountController.user.fullname}!</h1>
-                <p>To begin your search, please fill out the form below and let
-                    us know what time you need to make a reservation!</p>
-            </b:container>
-        </b:jumbotron>
+<ui:composition>
+    <b:jumbotron>
         <b:container>
-            <b:row>
-                <b:column colXs="12" colMd="3">
-                    <b:panel title="Policies" collapsible="false">
-                        <ul>
-                            <li>This is a bullet point.</li>
-                            <li>This too!</li>
-                        </ul>
-                        <p>Here lies a disclaimer. It will be ignored, just like all
-                            disclaimers usually are. If you are not ignoring it, you will
-                            not follow it. That is the way of life; and that is how we as a
-                            society innovate. For innovation shall not be hindered by
-                            policies.</p>
-                    </b:panel>
-                </b:column>
+            <h1>Hello, #{AccountController.user.fullname}!</h1>
+            <p>To begin your search, please fill out the form below and let
+                us know what time you need to make a reservation!</p>
+        </b:container>
+    </b:jumbotron>
+    <b:container>
+        <b:row>
+            <b:column colXs="12" colMd="3">
+                <b:panel title="Policies" collapsible="false">
+                    <ul>
+                        <li>This is a bullet point.</li>
+                        <li>This too!</li>
+                    </ul>
+                    <p>Here lies a disclaimer. It will be ignored, just like all
+                        disclaimers usually are. If you are not ignoring it, you will
+                        not follow it. That is the way of life; and that is how we as a
+                        society innovate. For innovation shall not be hindered by
+                        policies.</p>
+                </b:panel>
+            </b:column>
 
-                <b:column colXs="12" colMd="9">
-                    <!-- Time Selection Form -->
-                    <h:form id="timeForm">
+            <b:column colXs="12" colMd="9">
+                <!-- Time Selection Form -->
+                <h:form id="timeForm">
+                    <b:row>
+                        <!-- Column 1: Reservable Type Selection -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="I'm looking for" styleClass="lead"/>
+                            <pf:dataTable value="#{TimeSelectionController.reservableTypes}"
+                                          var="reservableType"
+                                          selectionMode="single"
+                                          selection="#{TimeSelectionController.selectedReservableType}"
+                                          rowKey="#{reservableType.id}" sortBy="#{reservableType.name}">
+                                <pf:ajax event="rowSelect" update=":timeForm" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                                <pf:ajax event="rowUnselect" update=":timeForm" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                                <pf:column headerText="Type" priority="1" style="width:100%">
+                                    <h:outputText value="#{reservableType.name}"/>
+                                </pf:column>
+                            </pf:dataTable>
+                        </b:column>
 
-                        <b:row>
-                            <b:column colXs="12">
-                                <h:outputText value="I'm looking for" styleClass="lead" />
-                                <h:selectOneMenu value="#{TimeSelectionController.reservableType}" styleClass="big-select">
-                                    <f:selectItems value="#{TimeSelectionController.reservableTypes}" var="reservableType" 
-                                                   itemValue="#{reservableType}" itemLabel="#{reservableType.name}" />
-                                    <f:converter binding="#{reservableTypeConverter}" />
-                                    <f:ajax render=":timeForm" />
-                                </h:selectOneMenu>
-                            </b:column>
-                        </b:row>
+                        <!-- Column 2: Inline Date Selection -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="On" styleClass="lead"/>
+                            <pf:calendar value="#{TimeSelectionController.date}"
+                                         mode="inline" styleClass="datepicker-fullwidth">
+                                <f:ajax event="dateSelect" render=":timeForm" onevent="loading"/>
+                            </pf:calendar>
+                        </b:column>
 
-                        <b:row>
-                            <!-- Column 1: Inline Date Selection -->
-                            <b:column colXs="12" colSm="4" styleClass="date-picker">
-                                <h:outputText value="On" styleClass="lead" />
-                                <p:calendar value="#{TimeSelectionController.date}"
-                                            mode="inline">
-                                    <f:ajax event="dateSelect" render=":timeForm" onevent="loading"/>
-                                </p:calendar>
-                            </b:column>
-
-                            <!-- Column 2: Time Selection & Submit Button -->
-                            <b:column colXs="12" colSm="8">
-                                <h:outputText value="From" styleClass="lead" />
-                                <h:selectOneMenu value="#{TimeSelectionController.startTime}" styleClass="big-select">
-                                    <f:selectItem itemValue="#{null}"
-                                                  itemLabel="--- Select a Time ---" noSelectionOption="true" />
-                                    <f:selectItems value="#{TimeSelectionController.startTimes}"
-                                                   var="time" />
-                                    <f:ajax render=":timeForm" onevent="loading"/>
-                                </h:selectOneMenu>
-                                <h:outputText value="Until" styleClass="lead" />
-                                <h:selectOneMenu value="#{TimeSelectionController.endTime}"
-                                                 disabled="#{TimeSelectionController.endTimes == null}" styleClass="big-select">
-                                    <f:selectItems value="#{TimeSelectionController.endTimes}"
-                                                   var="time" />
-                                    <f:ajax render=":timeForm" onevent="loading"/>
-                                </h:selectOneMenu>
-                                <h:commandButton
+                        <!-- Column 3: Time Selection & Submit Button -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="From" styleClass="lead"/>
+                            <h:selectOneMenu value="#{TimeSelectionController.startTime}" styleClass="big-select" disabled="#{TimeSelectionController.selectedReservableType == null}">
+                                <f:selectItem itemValue="#{null}"
+                                              itemLabel="--- Select a Time ---" noSelectionOption="true"/>
+                                <f:selectItems value="#{TimeSelectionController.startTimes}"
+                                               var="time"/>
+                                <f:ajax render=":timeForm" onevent="loading"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="Until" styleClass="lead"/>
+                            <h:selectOneMenu value="#{TimeSelectionController.endTime}"
+                                             disabled="#{TimeSelectionController.endTimes == null}"
+                                             styleClass="big-select">
+                                <f:selectItems value="#{TimeSelectionController.endTimes}"
+                                               var="time"/>
+                                <f:ajax render=":timeForm" onevent="loading"/>
+                            </h:selectOneMenu>
+                        </b:column>
+                    </b:row>
+                    <b:row style="margin-top:20px">
+                        <b:column colXs="12">
+                            <h:commandButton
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
                                     disabled="#{TimeSelectionController.startTime == null}"
                                     action="#{TimeSelectionController.searchForReservable()}">
-                                    <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
-                                </h:commandButton>
-                            </b:column>
-                        </b:row>
-                    </h:form>
-                </b:column>
-            </b:row>
-        </b:container>
-    </ui:composition>
+                                <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
+                            </h:commandButton>
+                        </b:column>
+                    </b:row>
+                </h:form>
+            </b:column>
+        </b:row>
+    </b:container>
+</ui:composition>
 </html>

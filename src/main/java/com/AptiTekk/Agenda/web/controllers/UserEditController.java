@@ -114,6 +114,7 @@ public class UserEditController {
             }
 
             user = userService.merge(user);
+            refreshUserList();
 
             editSuccess = true;
         }

@@ -38,7 +38,7 @@ public class TimeSelectionController {
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 
     private List<ReservableType> reservableTypes;
-    private ReservableType reservableType;
+    private ReservableType selectedReservableType;
     
     private List<Reservable> results;
 
@@ -127,7 +127,7 @@ public class TimeSelectionController {
         Date startDateTime = datetimeFormat.parse(dateFormat.format(date) + " " + startTime);
         Date endDateTime = datetimeFormat.parse(dateFormat.format(date) + " " + endTime);
 
-        this.results = reservationService.findAvailableReservables(reservableType, startDateTime, endDateTime);
+        this.results = reservationService.findAvailableReservables(selectedReservableType, startDateTime, endDateTime);
         AgendaLogger.logVerbose(results.toString());
         } catch(ParseException e) {
             e.printStackTrace();
@@ -146,6 +146,9 @@ public class TimeSelectionController {
             AgendaLogger.logVerbose("Date Empty - Setting to today");
             date = Calendar.getInstance().getTime();
         }
+
+        this.startTime = null;
+        this.endTimes = null;
         this.date = date;
     }
 
@@ -197,13 +200,14 @@ public class TimeSelectionController {
         this.reservableTypes = reservableTypes;
     }
 
-    public ReservableType getReservableType() {
-        return reservableType;
+    public ReservableType getSelectedReservableType() {
+        return selectedReservableType;
     }
 
-    public void setReservableType(ReservableType reservableType) {
-        AgendaLogger.logVerbose("Reservable Type Selected: " + reservableType.getName());
-        this.reservableType = reservableType;
+    public void setSelectedReservableType(ReservableType selectedReservableType) {
+        AgendaLogger.logVerbose("Reservable Type Selected: " + selectedReservableType.getName());
+        this.selectedReservableType = selectedReservableType;
+        this.setDate(getDate());
     }
     
     public List<Reservable> getResults()

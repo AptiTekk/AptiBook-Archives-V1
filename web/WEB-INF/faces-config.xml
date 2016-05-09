@@ -10,11 +10,6 @@
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>LoginController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.LoginController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
         <managed-bean-name>AccountController</managed-bean-name>
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.AccountController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>

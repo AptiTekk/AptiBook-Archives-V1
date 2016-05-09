@@ -47,6 +47,7 @@ public class ReservablesEditController {
             {
                 getSelectedReservableType().setName(getEditableReservableTypeName());
                 setSelectedReservableType(reservableTypeService.merge(getSelectedReservableType()));
+                refreshReservableTypeList();
                 FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Type Updated"));
             }
         }
