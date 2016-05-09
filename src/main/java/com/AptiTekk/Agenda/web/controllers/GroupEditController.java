@@ -7,6 +7,10 @@ package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
+import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
+import org.primefaces.event.TreeDragDropEvent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -14,10 +18,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-
-import org.primefaces.event.TreeDragDropEvent;
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
 
 /**
  * @author kevint
@@ -49,6 +49,7 @@ public class GroupEditController {
 
     public void attachChildren(UserGroup parentGroup, TreeNode parent) {
         for (UserGroup child : parentGroup.getChildren()) {
+            AgendaLogger.logVerbose("Adding children for UserGroup " + child.getName());
             TreeNode nextGen = new DefaultTreeNode(child, parent);
             attachChildren(child, nextGen);
         }
@@ -96,6 +97,7 @@ public class GroupEditController {
         for (TreeNode child : parent.getChildren()) {
             groupService.merge((UserGroup) child.getData());
             saveChildren(child);
+            AgendaLogger.logVerbose("Persisting settings for UserGroup " + ((UserGroup) child.getData()).getName());
         }
     }
 
@@ -119,15 +121,14 @@ public class GroupEditController {
 
     public void addGroup() {
         UserGroup newGroup = new UserGroup();
-        newGroup.setName(this.newGroupName);
-        TreeNode newNode = new DefaultTreeNode(newGroup, null);
-        if(selectedNode == null) {
-            newNode.setParent(root);
-            newGroup.setParent((UserGroup) root.getData());
-        } else {
-            newNode.setParent(selectedNode);
-            newGroup.setParent((UserGroup) selectedNode.getData());
-        }
+        newGroup.setName("New Group");
+        UserGroup parent = ((selectedNode == null) ? (UserGroup) root.getData() : (UserGroup) selectedNode.getData());
+        newGroup.setParent(parent);
+        parent.getChildren().add(newGroup);
+        AgendaLogger.logVerbose("Setting New Group's parent to " + parent.getName());
+        groupService.insert(newGroup);
+        groupService.merge(parent);
+        resetTree();
     }
 
 }

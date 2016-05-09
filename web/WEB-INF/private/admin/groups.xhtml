@@ -6,7 +6,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition>
     <h2>Groups</h2>
@@ -14,25 +15,38 @@
         <b:container>
 
             <h:form>
-                <b:row>
-                    <p:tree id="tree" value="#{GroupEditController.root}" var="node" selectionMode="single"
-                            selection="#{GroupEditController.selectedNode}"
-                            draggable="true" droppable="true" dragdropScope="demo" orientation="horizontal">
-                        <p:ajax event="dragdrop" listener="#{GroupEditController.onDragDrop}"/>
-                        <p:treeNode>
+                <b:messages/>
+                <!--<b:row>
+
+                    <pf:tree id="tree" value="#{GroupEditController.root}" var="node" selectionMode="single"
+                             selection="#{GroupEditController.selectedNode}" dynamic="true"
+                             draggable="true" droppable="true" orientation="horizontal">
+                        <pf:ajax event="dragdrop" listener="#{GroupEditController.onDragDrop}"/>
+                        <pf:treeNode>
                             <h:outputText value="#{node.name}"/>
-                        </p:treeNode>
-                    </p:tree>
+                        </pf:treeNode>
+                    </pf:tree>
                 </b:row>
+                <hr />-->
                 <b:row>
+                    <b:column colMd="3" colXs="6">
+                        <pf:tree id="draggabletree" value="#{GroupEditController.root}" var="node" selectionMode="single"
+                                 selection="#{GroupEditController.selectedNode}" dynamic="true"
+                                 draggable="true" droppable="true">
+                            <pf:ajax event="dragdrop" listener="#{GroupEditController.onDragDrop}"/>
+                            <pf:treeNode>
+                                <h:outputText value="#{node.name}"/>
+                            </pf:treeNode>
+                        </pf:tree>
+                    </b:column>
                     <div class="form-group">
                         <div class="pull-right">
                             <div class="btn-toolbar">
-                                <b:button styleClass="btn btn-success"
-                                          value="Add Group"
-                                          style="display: inline-block"
-                                          p:data-toggle="modal"
-                                          p:data-target="#additionInfoModal"/>
+                                <h:commandButton styleClass="btn btn-success"
+                                                 value="Add New Group" style="display: inline-block"
+                                                 action="#{GroupEditController.addGroup()}">
+                                    <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                </h:commandButton>
 
                                 <h:commandButton styleClass="btn btn-primary"
                                                  value="Save Changes" style="display: inline-block"
@@ -58,28 +72,16 @@
                         </div>
                     </div>
                 </b:row>
+
+
             </h:form>
-            <!-- Addition Info Modal -->
-            <b:modal id="additionInfoModal" title="Add Group">
-                <h:outputLabel styleClass="col-xs-3 control-label" value="New Name:"/>
-                <b:inputText value="#{GroupEditController.newGroupName}"/>
-                <f:facet name="footer">
-                    <b:button styleClass="btn btn-default"
-                              p:data-dismiss="modal" value="Cancel"/>
-                    <h:commandButton styleClass="btn btn-primary"
-                                     p:data-dismiss="modal" value="Add"
-                                     action="#{GroupEditController.addGroup}">
-                        <f:ajax render=":groupsPage" onevent="loading"/>
-                    </h:commandButton>
-                </f:facet>
-            </b:modal>
-            <!-- End Addition Info Modal -->
 
             <!-- Deletion Confirmation Modal -->
             <b:modal id="deletionConfirmModal" title="Group
                          Deletion Confirmation">
                 Are you sure you want to delete group '#{GroupEditController.selectedNode.data}'?
                 <f:facet name="footer">
+
                     <b:button styleClass="btn btn-default"
                               p:data-dismiss="modal" value="Cancel"/>
                     <h:commandButton styleClass="btn btn-danger"
@@ -87,9 +89,11 @@
                                      action="#{GroupEditController.deleteSelectedGroup}">
                         <f:ajax render=":groupsPage" onevent="loading"/>
                     </h:commandButton>
+
                 </f:facet>
             </b:modal>
             <!-- End Deletion Confirmation Modal -->
+
         </b:container>
     </h:panelGroup>
 </ui:composition>
