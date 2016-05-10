@@ -12,21 +12,24 @@ import com.AptiTekk.Agenda.core.entity.QNotification;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
 import com.mysema.query.jpa.impl.JPAQuery;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- *
  * @author kevint
  */
 @Stateless
 public class NotificationServiceImpl extends EntityServiceAbstract<Notification> implements NotificationService {
-    
+
     QNotification table = QNotification.notification;
-    
+
     @Inject
     MailingService mailingService;
 
@@ -35,7 +38,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
     }
 
     @Override
-    public void sendEmailNotification(Notification n) 
+    public void sendEmailNotification(Notification n)
             throws MessagingException, NoSuchMethodException, SecurityException,
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
@@ -50,8 +53,30 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
 
     @Override
     public List<Notification> getUnread(User user) {
-        return new JPAQuery(entityManager).from(table).where(table.user.eq(user))
+        List<Notification> result = new JPAQuery(entityManager).from(table)
+                .where(table.user.eq(user))
+                .where(table.notif_read.eq(false))
                 .list(table);
+
+        Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
+
+        // Sort the stream:
+        Stream<Notification> notificationStream = result.stream().sorted(comparator);
+
+        return notificationStream.collect(Collectors.toList());
     }
 
+    @Override
+    public List<Notification> getAllByUser(User user) {
+        List<Notification> result = new JPAQuery(entityManager).from(table).where(table.user.eq(user))
+                .list(table);
+
+        Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getRead());
+        comparator = comparator.thenComparing(Comparator.comparing(notif -> notif.getCreation()));
+
+        // Sort the stream:
+        Stream<Notification> notificationStream = result.stream().sorted(comparator);
+
+        return notificationStream.collect(Collectors.toList());
+    }
 }

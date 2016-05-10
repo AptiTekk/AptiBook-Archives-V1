@@ -218,6 +218,7 @@
             <groupId>net.bootsfaces</groupId>
             <artifactId>bootsfaces</artifactId>
             <version>0.8.1</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>

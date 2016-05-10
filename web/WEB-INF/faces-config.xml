@@ -75,6 +75,15 @@
         <navigation-case>
             <from-outcome>reserve</from-outcome>
             <to-view-id>/panel/reserve.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <display-name>*</display-name>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>notifications</from-outcome>
+            <to-view-id>/panel/notifications.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -96,6 +105,11 @@
     <managed-bean>
         <managed-bean-name>ReservablesEditController</managed-bean-name>
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservablesEditController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>NotificationController</managed-bean-name>
+        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.NotificationController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
     </managed-bean>
 </faces-config>

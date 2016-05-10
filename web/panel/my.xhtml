@@ -1,38 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:b="http://bootsfaces.net/ui"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
-	<ui:define name="content">
-		<b:container>
-                    <h2 style="margin-top:50px">My Reservations</h2>
-                    
-                    <b:column colMd="9" colXs="12">
-                        <p:schedule value="#{ReservationViewController.lazyEventModel}" />
-                    </b:column>
-                    <b:column colMd="3">
-                        <ui:fragment rendered="#{not empty ReservationViewController.cardModels}">
-                            <ui:repeat value="#{ReservationViewController.cardModels}" var="card">
-                                <b:panel title="#{card.title} - #{card.reservable.name}" look="info">
-                                    <h4>#{card.title}</h4>
-                                    <h6>#{card.description}</h6>
-                                    <p>#{card.timeStart}</p>
-                                    <p>#{card.timeEnd}</p>
-                                </b:panel>
-                            </ui:repeat>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{empty ReservationViewController.cardModels}">
-                            <i>No Reservations</i>
-                        </ui:fragment>
-                    </b:column>
-		</b:container>
-	</ui:define>
+    <ui:define name="content">
+        <b:container>
+            <h2 style="margin-top:50px">My Reservations</h2>
+
+            <b:column colMd="9" colXs="12">
+                <p:schedule value="#{ReservationViewController.lazyEventModel}"/>
+            </b:column>
+            <b:column colMd="3">
+                <ui:fragment rendered="#{not empty ReservationViewController.cardModels}">
+                    <ui:repeat value="#{ReservationViewController.cardModels}" var="card">
+                        <b:panel title="#{card.title} - #{card.reservable.name}" look="info">
+                            <h4>#{card.title}</h4>
+                            <h6>#{card.description}</h6>
+                            <p>#{card.timeStart}</p>
+                            <p>#{card.timeEnd}</p>
+                        </b:panel>
+                    </ui:repeat>
+                </ui:fragment>
+                <ui:fragment rendered="#{empty ReservationViewController.cardModels}">
+                    <i>No Reservations</i>
+                </ui:fragment>
+            </b:column>
+        </b:container>
+    </ui:define>
 </ui:composition>
 
 </html>

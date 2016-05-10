@@ -18,7 +18,7 @@ import javax.mail.MessagingException;
  */
 public interface NotificationService extends EntityService<Notification> {
     
-    public static final AppProperty NOTIFICATION_DATEFORMAT = new AppProperty("agenda.notification.dateFormat", "MM-dd-yyyy hh:mm");
+    public static final AppProperty NOTIFICATION_DATEFORMAT = new AppProperty("agenda.notification.dateFormat", "MM-dd-yyyy hh:mm a");
     
     void sendEmailNotification(Notification n) 
             throws MessagingException, NoSuchMethodException, SecurityException,
@@ -28,5 +28,7 @@ public interface NotificationService extends EntityService<Notification> {
     void markAsRead(Notification n);
     
     List<Notification> getUnread(User user);
+
+    List<Notification> getAllByUser(User user);
     
 }
