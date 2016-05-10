@@ -83,7 +83,7 @@ public class GroupEditController {
     }
 
     public UserGroup getData(TreeNode node) {
-        return (UserGroup) node.getData();
+        return node == null ? null : (UserGroup) node.getData();
     }
 
     public void onDragDrop(TreeDragDropEvent event) {
