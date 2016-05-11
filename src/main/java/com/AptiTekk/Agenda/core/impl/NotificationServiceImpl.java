@@ -59,6 +59,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
                 .list(table);
 
         Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
+        comparator = comparator.reversed();
 
         // Sort the stream:
         Stream<Notification> notificationStream = result.stream().sorted(comparator);
@@ -71,10 +72,17 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
         List<Notification> result = new JPAQuery(entityManager).from(table).where(table.user.eq(user))
                 .list(table);
 
-        Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getRead());
-        comparator = comparator.thenComparing(Comparator.comparing(notif -> notif.getCreation()));
+        result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
+            notification.setRead(false);
+        });
 
-        // Sort the stream:
+        if (result == null)
+            return null;
+
+        Comparator<Notification> comparator = Comparator.comparing(Notification::getRead);
+        comparator = comparator.reversed();
+        comparator = comparator.thenComparing(Notification::getCreation);
+        comparator = comparator.reversed();
         Stream<Notification> notificationStream = result.stream().sorted(comparator);
 
         return notificationStream.collect(Collectors.toList());

@@ -66,8 +66,8 @@
                         <b:navLink outcome="notifications" icon="glyphicon-bell"
                                    onclick="loading_start()">
                             <ui:fragment
-                                    rendered="#{NotificationController.notifications != null}">
-                                <b:badge value="#{NotificationController.notifications.size()}"/>
+                                    rendered="#{NotificationController.unread != null and NotificationController.unread.size() > 0}">
+                                <b:badge value="#{NotificationController.unread.size()}"/>
                             </ui:fragment>
                         </b:navLink>
 

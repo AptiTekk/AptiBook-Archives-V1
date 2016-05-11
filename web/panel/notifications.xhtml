@@ -6,13 +6,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+>
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
-        <f:metadata>
-            <f:viewAction action="#{NotificationController.markUnreadRead}" />
-        </f:metadata>
         <b:container>
             <h2 style="margin-top:50px">Notifications</h2>
 
