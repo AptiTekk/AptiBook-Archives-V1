@@ -21,9 +21,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-/**
- * @author kevint
- */
 @ManagedBean
 @ViewScoped
 public class GroupEditController {

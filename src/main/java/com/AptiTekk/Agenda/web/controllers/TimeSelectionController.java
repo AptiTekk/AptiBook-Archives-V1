@@ -103,8 +103,8 @@ public class TimeSelectionController {
             Calendar counterCalendar = (Calendar) minCalendar.clone();
             counterCalendar.add(Calendar.MINUTE, 30);
 
-            while ((double) (counterCalendar.get(Calendar.HOUR_OF_DAY)
-                    + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (double) (allowedTimes.getEndTime()
+            while ((counterCalendar.get(Calendar.HOUR_OF_DAY)
+                    + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (allowedTimes.getEndTime()
                     .get(Calendar.HOUR_OF_DAY) + (allowedTimes.getEndTime().get(Calendar.MINUTE) / 60d))
                     + 0.5) {
                 String value = timeFormat.format(counterCalendar.getTime());

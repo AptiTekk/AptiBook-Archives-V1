@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -10,171 +10,185 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-    <ui:composition>
-        <h:panelGroup layout="block" id="usersPage">
-            <b:container>
-                <b:row>
-                    <b:column colXs="12" colSm="3">
-                        <h:form>
-                            <div class="form-group">
-                                <pf:dataTable id="usersDT" var="user" value="#{UserEditController.users}" selectionMode="single" 
-                                              selection="#{UserEditController.user}" rowKey="#{user.id}">
-                                    <pf:ajax event="rowSelect" update=":usersPage" onstart="loading_start()" oncomplete="loading_complete()"/>
-                                    <pf:ajax event="rowUnselect" update=":usersPage" onstart="loading_start()" oncomplete="loading_complete()"/>
-                                    <pf:column headerText="Username" priority="1">
-                                        <h:outputText value="#{user.username}" />
-                                    </pf:column>
-                                    <pf:column headerText="Full Name">
-                                        <h:outputText value="#{user.fullname}" />
-                                    </pf:column>
-                                </pf:dataTable>
-                            </div>
-                            <div class="form-group">
-                                <h:commandButton action="#{UserEditController.addNewUser}" 
-                                                 styleClass="btn btn-success" value="Add New User">
-                                    <f:ajax render=":usersPage" onevent="loading"/>
-                                </h:commandButton>
-                            </div>
-                        </h:form>
-                    </b:column>
+<ui:composition>
+    <h:panelGroup layout="block" id="usersPage">
+        <b:container>
+            <b:row>
+                <b:column colXs="12" colSm="3">
+                    <h:form>
+                        <div class="form-group">
+                            <pf:dataTable id="usersDT" var="user" value="#{UserEditController.users}"
+                                          selectionMode="single"
+                                          selection="#{UserEditController.user}" rowKey="#{user.id}">
+                                <pf:ajax event="rowSelect" update=":usersPage" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                                <pf:ajax event="rowUnselect" update=":usersPage" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                                <pf:column headerText="Username" priority="1">
+                                    <h:outputText value="#{user.username}"/>
+                                </pf:column>
+                                <pf:column headerText="Full Name">
+                                    <h:outputText value="#{user.fullname}"/>
+                                </pf:column>
+                            </pf:dataTable>
+                        </div>
+                        <div class="form-group">
+                            <h:commandButton action="#{UserEditController.addNewUser}"
+                                             styleClass="btn btn-success" value="Add New User">
+                                <f:ajax render=":usersPage" onevent="loading"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </b:column>
 
-                    <b:column colXs="12" colSm="9">
-                        <h:form styleClass="form-horizontal">
-                            <b:messages for="accountSettingsForm" showSummary="false" showDetail="true"/>
+                <b:column colXs="12" colSm="9">
+                    <h:form styleClass="form-horizontal">
+                        <b:messages for="accountSettingsForm" showSummary="false" showDetail="true"/>
 
-                            <b:column colXs="9" offsetXs="3">
-                                <h4>Personal Information:</h4>
+                        <b:column colXs="9" offsetXs="3">
+                            <h4>Personal Information:</h4>
+                        </b:column>
+                        <div class="form-group">
+                            <h:outputLabel value="Username:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <c:choose>
+                                    <c:when test="#{UserEditController.user.immutableUsername}">
+                                        <h:outputText styleClass="form-control"
+                                                      value="#{UserEditController.editableUsername}" p:disabled="true"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h:inputText styleClass="form-control"
+                                                     value="#{UserEditController.editableUsername}"
+                                                     disabled="#{UserEditController.user == null}"/>
+                                    </c:otherwise>
+                                </c:choose>
                             </b:column>
-                            <div class="form-group">
-                                <h:outputLabel value="Username:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <c:choose>
-                                        <c:when test="#{UserEditController.user.immutableUsername}">
-                                            <h:outputText styleClass="form-control" value="#{UserEditController.editableUsername}" p:disabled="true"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <h:inputText styleClass="form-control"
-                                                         value="#{UserEditController.editableUsername}" />
-                                        </c:otherwise>
-                                    </c:choose>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="First Name:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <h:inputText styleClass="form-control"
-                                                 value="#{UserEditController.editableFirstName}" />
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Last Name:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <h:inputText styleClass="form-control"
-                                                 value="#{UserEditController.editableLastName}" />
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="E-Mail:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-envelope" /></span>
-                                        <h:inputText styleClass="form-control"
-                                                     value="#{UserEditController.editableEmail}" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Phone Number:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-earphone" /></span>
-                                        <h:inputText styleClass="form-control"
-                                                     value="#{UserEditController.editablePhoneNumber}" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Location:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-map-marker" /></span>
-                                        <h:inputText styleClass="form-control"
-                                                     value="#{UserEditController.editableLocation}" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <b:column colXs="9" offsetXs="3">
-                                <h4>Change Password:</h4>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="First Name:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <h:inputText styleClass="form-control"
+                                             value="#{UserEditController.editableFirstName}"
+                                             disabled="#{UserEditController.user == null}"/>
                             </b:column>
-                            <div class="form-group">
-                                <h:outputLabel value="New Password:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Last Name:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <h:inputText styleClass="form-control"
+                                             value="#{UserEditController.editableLastName}"
+                                             disabled="#{UserEditController.user == null}"/>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="E-Mail:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <div class="input-group">
                                         <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk" /></span>
-                                        <h:inputSecret styleClass="form-control"
-                                                       value="#{UserEditController.newPassword}" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Confirm New Password:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
+                                                class="glyphicon glyphicon-envelope"/></span>
+                                    <h:inputText styleClass="form-control"
+                                                 value="#{UserEditController.editableEmail}"
+                                                 disabled="#{UserEditController.user == null}"/>
+                                </div>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Phone Number:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <div class="input-group">
                                         <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk" /></span>
-                                        <h:inputSecret styleClass="form-control"
-                                                       value="#{UserEditController.confirmPassword}" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-offset-3 col-xs-9">
-                                    <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{UserEditController.updateSettings()}" disabled="#{UserEditController.user == null}">
-                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
-                                                         action="#{UserEditController.resetSettings()}" disabled="#{UserEditController.user == null}">
-                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete User" 
-                                                  style="display: inline-block"
-                                                  p:data-toggle="modal" 
-                                                  p:data-target="#deletionConfirmModal" 
-                                                  disabled="#{UserEditController.user == null or 
-                                                              UserEditController.user.immutableUsername}" />
-                                    </div>
+                                                class="glyphicon glyphicon-earphone"/></span>
+                                    <h:inputText styleClass="form-control"
+                                                 value="#{UserEditController.editablePhoneNumber}"
+                                                 disabled="#{UserEditController.user == null}"/>
+                                </div>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Location:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-map-marker"/></span>
+                                    <h:inputText styleClass="form-control"
+                                                 value="#{UserEditController.editableLocation}"
+                                                 disabled="#{UserEditController.user == null}"/>
+                                </div>
+                            </b:column>
+                        </div>
+                        <b:column colXs="9" offsetXs="3">
+                            <h4>Change Password:</h4>
+                        </b:column>
+                        <div class="form-group">
+                            <h:outputLabel value="New Password:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-asterisk"/></span>
+                                    <h:inputSecret styleClass="form-control"
+                                                   value="#{UserEditController.newPassword}"
+                                                   disabled="#{UserEditController.user == null}"/>
+                                </div>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Confirm New Password:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-asterisk"/></span>
+                                    <h:inputSecret styleClass="form-control"
+                                                   value="#{UserEditController.confirmPassword}"
+                                                   disabled="#{UserEditController.user == null}"/>
+                                </div>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-offset-3 col-xs-9">
+                                <div class="btn-toolbar">
+                                    <h:commandButton styleClass="btn btn-primary"
+                                                     value="Save Changes" style="display: inline-block"
+                                                     action="#{UserEditController.updateSettings()}"
+                                                     disabled="#{UserEditController.user == null}">
+                                        <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                    </h:commandButton>
+                                    <h:commandButton styleClass="btn btn-default"
+                                                     value="Reset Fields" style="display: inline-block"
+                                                     action="#{UserEditController.resetSettings()}"
+                                                     disabled="#{UserEditController.user == null}">
+                                        <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                    </h:commandButton>
+                                    <b:button styleClass="btn btn-danger"
+                                              value="Delete User"
+                                              style="display: inline-block"
+                                              p:data-toggle="modal"
+                                              p:data-target="#deletionConfirmModal"
+                                              disabled="#{UserEditController.user == null or
+                                                              UserEditController.user.immutableUsername}"/>
                                 </div>
                             </div>
-                        </h:form>
-                    </b:column>
-                </b:row>
+                        </div>
+                    </h:form>
+                </b:column>
+            </b:row>
 
-                <!-- Deletion Confirmation Modal -->
-                <b:modal id="deletionConfirmModal" title="User
+            <!-- Deletion Confirmation Modal -->
+            <b:modal id="deletionConfirmModal" title="User
                          Deletion Confirmation">
-                    Are you sure you want to delete user '#{UserEditController.user.username}'?
-                    <f:facet name="footer">
-                        <b:button styleClass="btn btn-default"
-                                         p:data-dismiss="modal" value="Cancel" />
-                        <h:commandButton styleClass="btn btn-danger"
-                                         p:data-dismiss="modal" value="Delete"
-                                         action="#{UserEditController.deleteSelectedUser}">
-                            <f:ajax render=":usersPage" onevent="loading"/>
-                        </h:commandButton>
-                    </f:facet>
-                </b:modal>
-                <!-- End Deletion Confirmation Modal -->
-            </b:container>
-        </h:panelGroup>
-    </ui:composition>
+                Are you sure you want to delete user '#{UserEditController.user.username}'?
+                <f:facet name="footer">
+                    <b:button styleClass="btn btn-default"
+                              p:data-dismiss="modal" value="Cancel"/>
+                    <h:commandButton styleClass="btn btn-danger"
+                                     p:data-dismiss="modal" value="Delete"
+                                     action="#{UserEditController.deleteSelectedUser}">
+                        <f:ajax render=":usersPage" onevent="loading"/>
+                    </h:commandButton>
+                </f:facet>
+            </b:modal>
+            <!-- End Deletion Confirmation Modal -->
+        </b:container>
+    </h:panelGroup>
+</ui:composition>
 
 </html>

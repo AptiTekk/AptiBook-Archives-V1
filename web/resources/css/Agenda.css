@@ -52,6 +52,23 @@
     align-items: center;
 }
 
+/* ---------------------------------- BEGIN UI MODIFICATIONS ---------------------------------- */
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+/* ---------------------------------- END UI MODIFICATIONS ---------------------------------- */
+
 /* ---------------------------------- BEGIN DATATABLE ---------------------------------- */
 
 .ui-datatable .ui-datatable-tablewrapper {
@@ -61,10 +78,7 @@
 }
 
 .ui-datatable th {
-    background-image: none;
     cursor: initial;
-    box-shadow: none;
-    -webkit-box-shadow: none;
     border-radius: 0;
 }
 
@@ -80,10 +94,6 @@
 
 .ui-datatable tbody, .ui-datatable tr, .ui-datatable td, .ui-datatable th {
     border-style: none !important;
-}
-
-.ui-datatable .ui-state-highlight {
-    background-image: none;
 }
 
 /* ---------------------------------- END DATATABLE ---------------------------------- */
@@ -112,11 +122,8 @@
 }
 
 .ui-datepicker td > a {
-    background-image: none !important;
     border: none !important;
-    box-shadow: none !important;
     text-align: center !important;
-    text-shadow: none !important;
     padding: 5px !important;
 }
 

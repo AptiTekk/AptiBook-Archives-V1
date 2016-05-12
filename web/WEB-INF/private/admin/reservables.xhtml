@@ -43,21 +43,59 @@
                 <b:column colXs="12" colSm="9">
                     <h:form styleClass="form-horizontal">
 
-                        <b:column colXs="9" offsetXs="3">
-                            <b:messages for="reservableTypeEditForm" showSummary="false" showDetail="true"/>
-                            <h4>Reservable Type Settings:</h4>
-                        </b:column>
+                        <div class="form-group">
+                            <b:column colXs="9" offsetXs="3">
+                                <b:messages for="reservableTypeEditForm" showSummary="false" showDetail="true"/>
+                                <h4>Reservable Type Settings:</h4>
+                            </b:column>
+                        </div>
                         <div class="form-group">
                             <h:outputLabel value="Name:" styleClass="col-xs-3 control-label"/>
                             <b:column colXs="9">
                                 <h:inputText styleClass="form-control"
-                                             value="#{ReservablesEditController.editableReservableTypeName}" />
+                                             value="#{ReservablesEditController.editableReservableTypeName}"
+                                             disabled="#{ReservablesEditController.selectedReservableType == null}"/>
                             </b:column>
                         </div>
-                        <b:column colXs="9" offsetXs="3">
-                            <h4>Reservables:</h4>
-                        </b:column>
-                        <!-- TODO: List of reservables, ability to add reservables, etc. -->
+                        <div class="form-group">
+                            <b:column colXs="9" offsetXs="3">
+                                <h4>Reservables:</h4>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-offset-3 col-xs-9">
+                                <p style="font-weight: 600">Expand rows to edit Reservables</p>
+                                <pf:dataTable var="reservable"
+                                              value="#{ReservablesEditController.selectedReservableType.reservables}">
+                                    <pf:column style="width:16px">
+                                        <pf:rowToggler/>
+                                    </pf:column>
+                                    <pf:column headerText="Name">
+                                        <h:outputText value="#{reservable.name}"/>
+                                    </pf:column>
+
+                                    <pf:rowExpansion>
+                                        <pf:panelGrid columns="2" columnClasses="label,value" style="width:300px">
+                                            <f:facet name="header">
+                                                Header
+                                            </f:facet>
+                                        </pf:panelGrid>
+                                    </pf:rowExpansion>
+                                </pf:dataTable>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-xs-offset-3 col-xs-9">
+                                <div class="btn-toolbar">
+                                    <h:commandButton styleClass="btn btn-success"
+                                                     value="Add New Reservable" style="display: inline-block"
+                                                     action="#{ReservablesEditController.updateSettings()}"
+                                                     disabled="#{ReservablesEditController.selectedReservableType == null}">
+                                        <f:ajax execute="@form" render=":reservablesPage" onevent="loading"/>
+                                    </h:commandButton>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9">
                                 <div class="btn-toolbar">

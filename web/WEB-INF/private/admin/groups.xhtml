@@ -7,105 +7,118 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:pf="http://primefaces.org/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition>
-    <h2>Groups</h2>
     <h:panelGroup layout="block" id="groupsPage">
         <b:container>
-
-            <h:form>
-                <b:messages/>
-                <b:row>
-                    <pf:tree id="tree" value="#{GroupEditController.root}" var="node" dynamic="true"
-                             orientation="horizontal">
-                        <pf:treeNode>
-                            <h:outputText value="#{node.name}"/>
-                        </pf:treeNode>
-                    </pf:tree>
-                </b:row>
-                <hr/>
-                <h4>Editing</h4>
-                <b:row>
-                    <b:column colMd="3" colXs="6">
-                        <h:panelGroup id="dragTreeEditor" layout="block"
-                                      styleClass="#{GroupEditController.hasBeenEdited? 'alert alert-warning' : ''}">
-                            <pf:tree id="draggabletree" value="#{GroupEditController.root}" var="node"
-                                     selectionMode="single"
-                                     selection="#{GroupEditController.selectedNode}" dynamic="true"
-                                     draggable="true" droppable="true">
-                                <pf:ajax event="dragdrop" update=":@([id$=dragTreeEditor])"
-                                         listener="#{GroupEditController.onDragDrop}"/>
-                                <pf:ajax event="select" update=":@([id$=buttonGroup]):@([id$=editingGroup])"/>
+            <b:row>
+                <b:column colSm="6">
+                    <h:form>
+                        <div class="form-group">
+                            <pf:tree id="tree" value="#{GroupEditController.root}" var="node" dynamic="true"
+                                     orientation="horizontal" selectionMode="single"
+                                     selection="#{GroupEditController.selectedNode}">
+                                <pf:ajax event="select" update=":groupsPage" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
                                 <pf:treeNode>
                                     <h:outputText value="#{node.name}"/>
                                 </pf:treeNode>
                             </pf:tree>
-                        </h:panelGroup>
-                    </b:column>
-                    <b:column>
-                        <h:panelGroup layout="block" id="editingGroup" rendered="#{GroupEditController.selectedNode != null}">
+                        </div>
+                        <div class="form-group">
+                            <h:commandButton styleClass="btn btn-success"
+                                             value="Add New Group"
+                                             action="#{GroupEditController.addGroup()}">
+                                <f:ajax render=":groupsPage" onevent="loading()"/>
+                            </h:commandButton>
+                        </div>
+                    </h:form>
+                </b:column>
+                <b:column colSm="6">
+                    <h:form styleClass="form-horizontal">
+                        <b:column colXs="9" offsetXs="3">
+                            <b:messages for="groupEditForm" />
+                            <h4>Group Settings</h4>
+                        </b:column>
 
-                            <div class="form-group">
-                                <h:outputLabel value="Name:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <h:inputText styleClass="form-control"
-                                                 value="#{GroupEditController.getData(GroupEditController.selectedNode).name}"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <pf:dataList
-                                            value="#{GroupEditController.getData(GroupEditController.selectedNode).users}"
-                                            var="user" type="unordered" itemType="none" paginator="true" rows="10"
-                                            styleClass="paginated">
-                                        <h:outputText value="#{user.username}" style="display:inline-block"/>
-                                    </pf:dataList>
-                                </b:column>
-                            </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Name:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <c:choose>
+                                    <c:when test="#{GroupEditController.getData(GroupEditController.selectedNode).immutable}">
+                                        <h:outputText styleClass="form-control"
+                                                      value="#{GroupEditController.getData(GroupEditController.selectedNode).name}" p:disabled="true"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <h:inputText styleClass="form-control"
+                                                     value="#{GroupEditController.getData(GroupEditController.selectedNode).name}"
+                                                     disabled="#{GroupEditController.selectedNode == null}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </b:column>
+                        </div>
+                        <div class="form-group">
+                            <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <pf:dataList
+                                        value="#{GroupEditController.getData(GroupEditController.selectedNode).users}"
+                                        var="user" type="unordered" itemType="none" paginator="true" rows="10"
+                                        styleClass="paginated">
+                                    <h:outputText value="#{user.username}" style="display:inline-block"/>
+                                </pf:dataList>
+                            </b:column>
+                        </div>
 
-                        </h:panelGroup>
+                        <div class="form-group">
+                            <div class="col-xs-offset-3 col-xs-9">
+                                <div class="btn-toolbar">
+                                    <h:commandButton styleClass="btn btn-primary"
+                                                     value="Save Changes" style="display: inline-block"
+                                                     action="#{GroupEditController.updateSettings()}"
+                                                     disabled="#{GroupEditController.selectedNode == null}">
+                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                    </h:commandButton>
 
-                        <h:panelGroup layout="block" id="buttonGroup">
-                            <div class="form-group">
-                                <div class="pull-right">
-                                    <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-success"
-                                                         value="Add New Group" style="display: inline-block"
-                                                         action="#{GroupEditController.addGroup()}">
-                                            <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                        </h:commandButton>
+                                    <h:commandButton styleClass="btn btn-default"
+                                                     value="Reset Fields" style="display: inline-block"
+                                                     action="#{GroupEditController.resetTree()}"
+                                                     disabled="#{GroupEditController.selectedNode == null}">
+                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                    </h:commandButton>
 
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{GroupEditController.updateSettings()}">
-                                            <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                        </h:commandButton>
+                                    <b:button styleClass="btn btn-danger"
+                                              value="Delete Group"
+                                              style="display: inline-block"
+                                              p:data-toggle="modal"
+                                              p:data-target="#deletionConfirmModal"
+                                              disabled="#{GroupEditController.selectedNode == null or GroupEditController.getData(GroupEditController.selectedNode).immutable}"/>
 
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
-                                                         action="#{GroupEditController.resetTree()}">
-                                            <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                        </h:commandButton>
-
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete Group"
-                                                  style="display: inline-block"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"
-                                                  disabled="#{GroupEditController.selectedNode == null}"/>
-
-                                    </div>
                                 </div>
                             </div>
-                        </h:panelGroup>
-                    </b:column>
-                </b:row>
-
-
-            </h:form>
-
+                        </div>
+                    </h:form>
+                </b:column>
+            </b:row>
+            <hr/>
+            <b:row>
+                <b:column colMd="3" colXs="6">
+                    <h:panelGroup id="dragTreeEditor" layout="block"
+                                  styleClass="#{GroupEditController.hasBeenEdited? 'alert alert-warning' : ''}">
+                        <!--<pf:tree id="draggabletree" value="#{GroupEditController.root}" var="node"
+                                 selectionMode="single"
+                                 selection="#{GroupEditController.selectedNode}" dynamic="true"
+                                 draggable="true" droppable="true">
+                            <pf:ajax event="dragdrop" update=":@([id$=dragTreeEditor])"
+                                     listener="#{GroupEditController.onDragDrop}"/>
+                            <pf:ajax event="select" update=":@([id$=buttonGroup]):@([id$=editingGroup])"/>
+                            <pf:treeNode>
+                                <h:outputText value="#{node.name}"/>
+                            </pf:treeNode>
+                        </pf:tree>-->
+                    </h:panelGroup>
+                </b:column>
+            </b:row>
 
             <!-- Deletion Confirmation Modal -->
             <b:modal id="deletionConfirmModal" title="Group

@@ -1,6 +1,7 @@
 package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.ReservableTypeService;
+import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
 
 import javax.annotation.PostConstruct;
@@ -35,16 +36,15 @@ public class ReservablesEditController {
 
     public void updateSettings() {
         if (getSelectedReservableType() != null) {
-            if (getEditableReservableTypeName().isEmpty()) {
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
-            } else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 ]+")) {
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, and spaces!"));
-            } else if (reservableTypeService.findByName(getEditableReservableTypeName()) != null) {
+            ReservableType reservableType = reservableTypeService.findByName(getEditableReservableTypeName());
+            if (reservableType != null && !reservableType.equals(getSelectedReservableType()))
                 FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable Type with that name already exists!"));
-            }
+            else if (getEditableReservableTypeName().isEmpty())
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
+            else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 ]+"))
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, and spaces!"));
 
-            if(FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty())
-            {
+            if (FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty()) {
                 getSelectedReservableType().setName(getEditableReservableTypeName());
                 setSelectedReservableType(reservableTypeService.merge(getSelectedReservableType()));
                 refreshReservableTypeList();
