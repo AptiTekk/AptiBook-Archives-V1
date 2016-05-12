@@ -23,11 +23,9 @@
                         <ui:repeat value="#{SettingsController.pages}" var="page">
 
                             <li class="#{SettingsController.currentPage == page ? 'active' : ''}">
-                                <h:commandLink
-                                        action="#{SettingsController.setCurrentPage(page)}"
-                                        value="#{page.name}">
-                                    <f:ajax render=":settingsPage" onevent="loading"/>
-                                </h:commandLink>
+                                <h:link value="#{page.name}" onclick="loading_start()">
+                                    <f:param name="tab" value="#{page.name}"/>
+                                </h:link>
                             </li>
                         </ui:repeat>
                     </ul>
@@ -35,7 +33,7 @@
 
                 <p:inputText style="display: none;"/>
                 <b:modal/>
-                <p:draggable disabled="true" />
+                <p:draggable disabled="true"/>
 
                 <ui:include
                         src="/WEB-INF/private/admin/#{SettingsController.currentPage.fileName}"/>

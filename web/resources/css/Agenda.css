@@ -69,6 +69,19 @@
 
 /* ---------------------------------- END UI MODIFICATIONS ---------------------------------- */
 
+/* ---------------------------------- BEGIN ACCORDION ---------------------------------- */
+
+.ui-accordion .ui-accordion-header.ui-state-active {
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.ui-accordion .ui-accordion-content.ui-widget-content {
+    background-color: #eeeeee;
+}
+
+/* ---------------------------------- END ACCORDION ---------------------------------- */
+
 /* ---------------------------------- BEGIN DATATABLE ---------------------------------- */
 
 .ui-datatable .ui-datatable-tablewrapper {

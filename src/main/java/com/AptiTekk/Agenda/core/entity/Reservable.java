@@ -58,6 +58,10 @@ public class Reservable implements Serializable {
 
   public Reservable() {}
 
+  public Reservable(String name) {
+    this.name = name;
+  }
+
   public int getId() {
     return this.id;
   }

@@ -1,8 +1,10 @@
 package com.AptiTekk.Agenda.web.controllers;
 
+import com.AptiTekk.Agenda.core.ReservableService;
 import com.AptiTekk.Agenda.core.ReservableTypeService;
 import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
+import org.primefaces.event.TabChangeEvent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -19,8 +21,12 @@ public class ReservablesEditController {
     @Inject
     private ReservableTypeService reservableTypeService;
 
+    @Inject
+    private ReservableService reservableService;
+
     private List<ReservableType> reservableTypes;
     private ReservableType selectedReservableType;
+    private Reservable selectedTabReservable;
 
     private String editableReservableTypeName;
 
@@ -54,14 +60,16 @@ public class ReservablesEditController {
     }
 
     public void resetSettings() {
-        if (getSelectedReservableType() != null) {
+        if (getSelectedReservableType() != null)
             setEditableReservableTypeName(getSelectedReservableType().getName());
-        }
+        else
+            setEditableReservableTypeName("");
     }
 
     public void addNewReservableType() {
         ReservableType reservableType = new ReservableType("New Reservable Type");
         reservableTypeService.insert(reservableType);
+
         refreshReservableTypeList();
     }
 
@@ -83,12 +91,51 @@ public class ReservablesEditController {
         refreshReservableTypeList();
     }
 
+    public void onReservableTabChange(TabChangeEvent event) {
+        if (event.getData() instanceof Reservable)
+            selectedTabReservable = (Reservable) event.getData();
+    }
+
+    public void deleteSelectedTabReservable() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        try {
+            if (reservableService.get(getSelectedTabReservable().getId()) != null) {
+                context.addMessage("reservableTypeEditForm", new FacesMessage("Successful", "Reservable Deleted!"));
+                reservableService.delete(getSelectedTabReservable().getId());
+                setSelectedReservableType(reservableTypeService.get(getSelectedReservableType().getId()));
+            } else {
+                throw new Exception("Reservable not found!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            context.addMessage("reservableTypeEditForm", new FacesMessage("Failure", "Error While Deleting Reservable!"));
+        }
+
+        refreshReservableTypeList();
+    }
+
+    public void addNewReservable() {
+        if (getSelectedReservableType() != null) {
+            Reservable reservable = new Reservable("New Reservable");
+            reservable.setType(getSelectedReservableType());
+            reservableService.insert(reservable);
+
+            setSelectedReservableType(reservableTypeService.get(getSelectedReservableType().getId()));
+
+            refreshReservableTypeList();
+        }
+    }
+
     public List<ReservableType> getReservableTypes() {
         return reservableTypes;
     }
 
     public ReservableType getSelectedReservableType() {
         return selectedReservableType;
+    }
+
+    public Reservable getSelectedTabReservable() {
+        return selectedTabReservable;
     }
 
     public void setSelectedReservableType(ReservableType selectedReservableType) {
@@ -103,4 +150,5 @@ public class ReservablesEditController {
     public void setEditableReservableTypeName(String editableReservableTypeName) {
         this.editableReservableTypeName = editableReservableTypeName;
     }
+
 }

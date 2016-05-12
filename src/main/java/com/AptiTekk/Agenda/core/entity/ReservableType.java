@@ -18,7 +18,7 @@ public class ReservableType implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
     private List<Reservable> reservables;
 
     private static final long serialVersionUID = 1L;
