@@ -100,11 +100,9 @@ public class NotificationController implements NotificationListener {
     @Override
     public void pushNotification(Notification n) {
         System.out.println("Notification pushed to frontend!");
-    }
-
-    public void testInsert() {
-        FacesMessage message = new FacesMessage("Test Notif", "Notif body");
+        FacesMessage message = new FacesMessage(n.getSubject(), (n.getBody().length() > 30 ? n.getBody().substring(0, 30) + "..." : n.getBody()));
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, message);
     }
+
 }
