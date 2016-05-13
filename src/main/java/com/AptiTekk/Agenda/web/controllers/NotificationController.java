@@ -104,5 +104,4 @@ public class NotificationController implements NotificationListener {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, message);
     }
-
 }
