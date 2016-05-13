@@ -5,6 +5,7 @@ import com.AptiTekk.Agenda.core.Properties;
 import com.AptiTekk.Agenda.core.UserService;
 import com.AptiTekk.Agenda.core.entity.Notification;
 import com.AptiTekk.Agenda.core.entity.User;
+import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
 import com.AptiTekk.Agenda.core.utilities.FacesSessionHelper;
 import com.AptiTekk.Agenda.core.utilities.notification.NotificationListener;
 
@@ -99,7 +100,7 @@ public class NotificationController implements NotificationListener {
 
     @Override
     public void pushNotification(Notification n) {
-        System.out.println("Notification pushed to frontend!");
+        AgendaLogger.logVerbose("Notification pushed to frontend!");
         FacesMessage message = new FacesMessage(n.getSubject(), (n.getBody().length() > 30 ? n.getBody().substring(0, 30) + "..." : n.getBody()));
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, message);
