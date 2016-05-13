@@ -14,9 +14,9 @@
             <h2 style="margin-top:50px">Notifications</h2>
 
             <b:column colSm="6" offsetSm="3">
-                <ui:fragment rendered="#{not empty NotificationController.notifications}">
+                <ui:fragment rendered="#{not empty NotificationViewController.notifications}">
                     <!--<b:accordion>-->
-                    <ui:repeat value="#{NotificationController.notifications}" var="notification">
+                    <ui:repeat value="#{NotificationViewController.notifications}" var="notification">
                         <b:panel id="notification#{notification.id}" title="#{notification.subject}">
                             <f:attribute name="look" value="#{notification.read? 'default' : 'primary'}"/>
                             #{notification.body}
@@ -27,11 +27,15 @@
                     </ui:repeat>
                     <!--</b:accordion>-->
                 </ui:fragment>
-                <ui:fragment rendered="#{empty NotificationController.notifications}">
+                <ui:fragment rendered="#{empty NotificationViewController.notifications}">
                     <h5 class="text-center">
                         <small>No Notifications</small>
                     </h5>
                 </ui:fragment>
+                <h:form>
+
+                    <b:commandButton value="Push Test Notification" action="#{NotificationController.testInsert}"/>
+                </h:form>
             </b:column>
         </b:container>
     </ui:define>

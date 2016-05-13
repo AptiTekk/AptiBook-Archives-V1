@@ -112,4 +112,13 @@
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.NotificationController</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>NotificationViewController</managed-bean-name>
+        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.NotificationViewController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+        <managed-property>
+            <property-name>notificationController</property-name>
+            <value>#{NotificationController}</value>
+        </managed-property>
+    </managed-bean>
 </faces-config>

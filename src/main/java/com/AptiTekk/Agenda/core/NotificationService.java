@@ -8,9 +8,11 @@ package com.AptiTekk.Agenda.core;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
 import com.AptiTekk.Agenda.core.entity.Notification;
 import com.AptiTekk.Agenda.core.entity.User;
+import com.AptiTekk.Agenda.core.utilities.notification.NotificationListener;
+
+import javax.mail.MessagingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import javax.mail.MessagingException;
 
 /**
  *
@@ -30,5 +32,7 @@ public interface NotificationService extends EntityService<Notification> {
     List<Notification> getUnread(User user);
 
     List<Notification> getAllByUser(User user);
+
+    void registerListener(NotificationListener notificationListener);
     
 }
