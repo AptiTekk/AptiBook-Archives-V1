@@ -30,6 +30,8 @@ public class ReservablesEditController {
 
     private String editableReservableTypeName;
 
+    private String editableTabReservableName;
+
     @PostConstruct
     public void init() {
         refreshReservableTypeList();
@@ -47,8 +49,8 @@ public class ReservablesEditController {
                 FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable Type with that name already exists!"));
             else if (getEditableReservableTypeName().isEmpty())
                 FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
-            else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 ]+"))
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, and spaces!"));
+            else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 #]+"))
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
 
             if (FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty()) {
                 getSelectedReservableType().setName(getEditableReservableTypeName());
@@ -64,6 +66,34 @@ public class ReservablesEditController {
             setEditableReservableTypeName(getSelectedReservableType().getName());
         else
             setEditableReservableTypeName("");
+    }
+
+    public void updateTabReservableSettings()
+    {
+        if(getSelectedTabReservable() != null)
+        {
+            Reservable reservable = reservableService.findByName(getEditableTabReservableName());
+            if (reservable != null && !reservable.equals(getSelectedTabReservable()))
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable with that name already exists!"));
+            else if (getEditableTabReservableName().isEmpty())
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name cannot be empty!"));
+            else if (!getEditableTabReservableName().matches("[A-Za-z0-9 #]+"))
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
+
+            if (FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty()) {
+                getSelectedTabReservable().setName(getEditableTabReservableName());
+                setSelectedTabReservable(reservableService.merge(getSelectedTabReservable()));
+                refreshReservableTypeList();
+                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Updated"));
+            }
+        }
+    }
+
+    public void resetTabReservableSettings() {
+        if(getSelectedTabReservable() != null)
+            setEditableTabReservableName(getSelectedTabReservable().getName());
+        else
+            setEditableTabReservableName("");
     }
 
     public void addNewReservableType() {
@@ -93,7 +123,7 @@ public class ReservablesEditController {
 
     public void onReservableTabChange(TabChangeEvent event) {
         if (event.getData() instanceof Reservable)
-            selectedTabReservable = (Reservable) event.getData();
+            setSelectedTabReservable((Reservable) event.getData());
     }
 
     public void deleteSelectedTabReservable() {
@@ -138,6 +168,11 @@ public class ReservablesEditController {
         return selectedTabReservable;
     }
 
+    public void setSelectedTabReservable(Reservable selectedTabReservable) {
+        this.selectedTabReservable = selectedTabReservable;
+        resetTabReservableSettings();
+    }
+
     public void setSelectedReservableType(ReservableType selectedReservableType) {
         this.selectedReservableType = selectedReservableType;
         resetSettings();
@@ -151,4 +186,11 @@ public class ReservablesEditController {
         this.editableReservableTypeName = editableReservableTypeName;
     }
 
+    public String getEditableTabReservableName() {
+        return editableTabReservableName;
+    }
+
+    public void setEditableTabReservableName(String editableTabReservableName) {
+        this.editableTabReservableName = editableTabReservableName;
+    }
 }
