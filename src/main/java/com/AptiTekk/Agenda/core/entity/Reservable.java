@@ -20,144 +20,159 @@ import javax.persistence.TemporalType;
 
 /**
  * The persistent class for the Room database table.
- * 
  */
 @Entity
 @NamedQuery(name = "Reservable.findAll", query = "SELECT r FROM Reservable r")
 public class Reservable implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date availabilityEnd;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date availabilityEnd;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date availabilityStart;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date availabilityStart;
 
-  private String name;
+    private String name;
 
-  private byte needsApproval;
+    private byte needsApproval;
 
-  // bi-directional many-to-one association to Reservation
-  @OneToMany(mappedBy = "reservable")
-  private List<Reservation> reservations;
-  
-  @ManyToOne
-  private ReservableType type;
+    // bi-directional many-to-one association to Reservation
+    @OneToMany(mappedBy = "reservable")
+    private List<Reservation> reservations;
 
-  // bi-directional many-to-one association to Group
-  @ManyToMany
-  @JoinTable(name = "Reservable_has_UserGroups", joinColumns = {@JoinColumn(name = "Room_id")},
-      inverseJoinColumns = {@JoinColumn(name = "UserGroup_idUserGroup")})
-  private List<UserGroup> owners;
-  
-  private String imageFileName;
+    @ManyToOne
+    private ReservableType type;
 
-  public Reservable() {}
+    // bi-directional many-to-one association to Group
+    @ManyToMany
+    @JoinTable(name = "Reservable_has_UserGroups", joinColumns = {@JoinColumn(name = "Room_id")},
+            inverseJoinColumns = {@JoinColumn(name = "UserGroup_idUserGroup")})
+    private List<UserGroup> owners;
 
-  public Reservable(String name) {
-    this.name = name;
-  }
+    private String imageFileName;
 
-  public int getId() {
-    return this.id;
-  }
+    public Reservable() {
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public Reservable(String name) {
+        this.name = name;
+    }
 
-  public Date getAvailabilityEnd() {
-    return this.availabilityEnd;
-  }
+    public int getId() {
+        return this.id;
+    }
 
-  public void setAvailabilityEnd(Date availabilityEnd) {
-    this.availabilityEnd = availabilityEnd;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public Date getAvailabilityStart() {
-    return this.availabilityStart;
-  }
+    public Date getAvailabilityEnd() {
+        return this.availabilityEnd;
+    }
 
-  public void setAvailabilityStart(Date availabilityStart) {
-    this.availabilityStart = availabilityStart;
-  }
+    public void setAvailabilityEnd(Date availabilityEnd) {
+        this.availabilityEnd = availabilityEnd;
+    }
 
-  public String getName() {
-    return this.name;
-  }
+    public Date getAvailabilityStart() {
+        return this.availabilityStart;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setAvailabilityStart(Date availabilityStart) {
+        this.availabilityStart = availabilityStart;
+    }
 
-  public byte getNeedsApproval() {
-    return this.needsApproval;
-  }
+    public String getName() {
+        return this.name;
+    }
 
-  public void setNeedsApproval(byte needsApproval) {
-    this.needsApproval = needsApproval;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public List<Reservation> getReservations() {
-    return this.reservations;
-  }
+    public byte getNeedsApproval() {
+        return this.needsApproval;
+    }
 
-  public void setReservations(List<Reservation> reservations) {
-    this.reservations = reservations;
-  }
+    public void setNeedsApproval(byte needsApproval) {
+        this.needsApproval = needsApproval;
+    }
 
-  public Reservation addReservation(Reservation reservation) {
-    getReservations().add(reservation);
-    reservation.setReservable(this);
+    public List<Reservation> getReservations() {
+        return this.reservations;
+    }
 
-    return reservation;
-  }
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
-  public Reservation removeReservation(Reservation reservation) {
-    getReservations().remove(reservation);
-    reservation.setReservable(null);
+    public Reservation addReservation(Reservation reservation) {
+        getReservations().add(reservation);
+        reservation.setReservable(this);
 
-    return reservation;
-  }
+        return reservation;
+    }
 
-  public ReservableType getType() {
-    return type;
-  }
+    public Reservation removeReservation(Reservation reservation) {
+        getReservations().remove(reservation);
+        reservation.setReservable(null);
 
-  public void setType(ReservableType type) {
-    this.type = type;
-  }
+        return reservation;
+    }
 
-  public List<UserGroup> getOwners() {
-    return owners;
-  }
+    public ReservableType getType() {
+        return type;
+    }
 
-  public void setOwners(List<UserGroup> owners) {
-    this.owners = owners;
-  }
-  
-  public UserGroup addOwner(UserGroup owner) {
-    getOwners().add(owner);
+    public void setType(ReservableType type) {
+        this.type = type;
+    }
 
-    return owner;
-  }
+    public List<UserGroup> getOwners() {
+        return owners;
+    }
 
-  public UserGroup removeOwner(UserGroup owner) {
-    getOwners().remove(owner);
+    public void setOwners(List<UserGroup> owners) {
+        this.owners = owners;
+    }
 
-    return owner;
-  }
+    public UserGroup addOwner(UserGroup owner) {
+        getOwners().add(owner);
 
-  public String getImageFileName() {
-    return imageFileName;
-  }
+        return owner;
+    }
 
-  public void setImageFileName(String imageFileName) {
-    this.imageFileName = imageFileName;
-  }
+    public UserGroup removeOwner(UserGroup owner) {
+        getOwners().remove(owner);
 
+        return owner;
+    }
+
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Reservable that = (Reservable) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

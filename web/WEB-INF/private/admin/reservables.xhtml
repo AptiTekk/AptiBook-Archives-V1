@@ -81,6 +81,8 @@
                                 </div>
                             </div>
                         </div>
+                    </h:form>
+                    <div class="form-horizontal">
                         <div class="form-group">
                             <b:column colXs="9" offsetXs="3">
                                 <h4>Reservables:</h4>
@@ -98,15 +100,47 @@
                                                            value="#{ReservablesEditController.selectedReservableType.reservables}"
                                                            var="reservable">
                                             <pf:ajax event="tabChange"
-                                                     listener="#{ReservablesEditController.onReservableTabChange}" update=":reservableDeletionConfirmModal"/>
+                                                     listener="#{ReservablesEditController.onReservableTabChange}"
+                                                     update=":reservableDeletionConfirmModal"/>
                                             <pf:tab title="#{reservable.name}">
-                                                <h:panelGrid columns="2" cellpadding="10">
-                                                    <b:button styleClass="btn btn-danger"
-                                                              value="Delete Reservable"
-                                                              p:data-toggle="modal"
-                                                              p:data-target="#reservableDeletionConfirmModal"
-                                                              disabled="#{ReservablesEditController.selectedReservableType == null}"/>
-                                                </h:panelGrid>
+                                                <h:form>
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Name:"
+                                                                       styleClass="col-xs-3 control-label"/>
+                                                        <b:column colXs="9">
+                                                            <h:inputText styleClass="form-control"
+                                                                         id="tabReservableName"
+                                                                         value="#{ReservablesEditController.editableTabReservableName}"/>
+                                                        </b:column>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-xs-offset-3 col-xs-9">
+                                                            <div class="btn-toolbar">
+                                                                <h:commandButton styleClass="btn btn-primary"
+                                                                                 value="Save Changes"
+                                                                                 style="display: inline-block"
+                                                                                 action="#{ReservablesEditController.updateTabReservableSettings()}">
+                                                                    <f:ajax execute="@form"
+                                                                            render=":reservablesPage"
+                                                                            onevent="loading"/>
+                                                                </h:commandButton>
+                                                                <h:commandButton styleClass="btn btn-default"
+                                                                                 value="Reset Fields"
+                                                                                 style="display: inline-block"
+                                                                                 action="#{ReservablesEditController.resetTabReservableSettings()}">
+                                                                    <f:ajax execute="@form"
+                                                                            render=":reservablesPage"
+                                                                            onevent="loading"/>
+                                                                </h:commandButton>
+                                                                <b:button styleClass="btn btn-danger"
+                                                                          value="Delete Reservable"
+                                                                          style="display: inline-block"
+                                                                          p:data-toggle="modal"
+                                                                          p:data-target="#reservableDeletionConfirmModal"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </h:form>
                                             </pf:tab>
                                         </pf:accordionPanel>
                                     </c:otherwise>
@@ -116,16 +150,18 @@
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9">
                                 <div class="btn-toolbar">
-                                    <h:commandButton styleClass="btn btn-success"
-                                                     value="Add New Reservable" style="display: inline-block"
-                                                     action="#{ReservablesEditController.addNewReservable()}"
-                                                     disabled="#{ReservablesEditController.selectedReservableType == null}">
-                                        <f:ajax render=":reservablesPage" onevent="loading"/>
-                                    </h:commandButton>
+                                    <h:form>
+                                        <h:commandButton styleClass="btn btn-success"
+                                                         value="Add New Reservable" style="display: inline-block"
+                                                         action="#{ReservablesEditController.addNewReservable()}"
+                                                         disabled="#{ReservablesEditController.selectedReservableType == null}">
+                                            <f:ajax render=":reservablesPage" onevent="loading"/>
+                                        </h:commandButton>
+                                    </h:form>
                                 </div>
                             </div>
                         </div>
-                    </h:form>
+                    </div>
                 </b:column>
             </b:row>
 
