@@ -34,5 +34,7 @@ public interface NotificationService extends EntityService<Notification> {
     List<Notification> getAllByUser(User user);
 
     void registerListener(NotificationListener notificationListener);
+
+    void unregisterListener(NotificationListener notificationListener);
     
 }

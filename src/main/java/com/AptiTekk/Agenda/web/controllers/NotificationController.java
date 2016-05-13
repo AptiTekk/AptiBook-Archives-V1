@@ -10,6 +10,7 @@ import com.AptiTekk.Agenda.core.utilities.FacesSessionHelper;
 import com.AptiTekk.Agenda.core.utilities.notification.NotificationListener;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -52,6 +53,11 @@ public class NotificationController implements NotificationListener {
             pullNotifications();
             notificationService.registerListener(this);
         }
+    }
+
+    @PreDestroy
+    public void deinit() {
+        notificationService.unregisterListener(this);
     }
 
     public void pullNotifications() {

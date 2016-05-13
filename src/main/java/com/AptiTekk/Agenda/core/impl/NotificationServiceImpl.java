@@ -102,4 +102,9 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
     public void registerListener(NotificationListener newListener) {
         notificationListeners.add(newListener);
     }
+
+    @Override
+    public void unregisterListener(NotificationListener notificationListener) {
+        notificationListeners.remove(notificationListener);
+    }
 }
