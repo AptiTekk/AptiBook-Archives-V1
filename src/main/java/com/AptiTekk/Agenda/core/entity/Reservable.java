@@ -38,7 +38,7 @@ public class Reservable implements Serializable {
 
     private String name;
 
-    private Boolean needsApproval;
+    private Boolean needsApproval = false;
 
     // bi-directional many-to-one association to Reservation
     @OneToMany(mappedBy = "reservable")

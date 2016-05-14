@@ -31,16 +31,6 @@ public class ReservablesEditController {
     @Inject
     private ReservableService reservableService;
 
-    private TimeRange allowedTimes;
-    private final DateFormat timeFormat = new SimpleDateFormat("h:mm a");
-    private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
-
-    private List<String> startTimes;
-    private String startTime;
-
-    private List<String> endTimes;
-    private String endTime;
-
     private List<ReservableType> reservableTypes;
     private ReservableType selectedReservableType;
     private Reservable selectedTabReservable;
@@ -56,69 +46,6 @@ public class ReservablesEditController {
     public void init() {
         refreshReservableTypeList();
         resetSettings();
-
-        // ---- Temporary code to generate an allowed time TimeRange. Should
-        // ideally come from a settings page somewhere. ----//
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(0, 0, 0, 6, 30);
-
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(0, 0, 0, 20, 30);
-
-        allowedTimes = new TimeRange(startTime, endTime);
-    }
-
-    /**
-     * Generates a list of times that can be selected for the "Start Time". This
-     * list will range from the minimum time allowed to 30 minutes before the
-     * maximum time allowed (To allow for the end time to be at least 30 minutes
-     * away from the selected time)
-     */
-    private void calculateStartTimes() {
-        startTimes = new ArrayList<>();
-
-        Calendar counterCalendar = (Calendar) allowedTimes.getStartTime().clone();
-
-        while ((double) (counterCalendar.get(Calendar.HOUR_OF_DAY)
-                + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (double) (allowedTimes.getEndTime()
-                .get(Calendar.HOUR_OF_DAY) + (allowedTimes.getEndTime().get(Calendar.MINUTE) / 60d))) {
-            String value = timeFormat.format(counterCalendar.getTime());
-            startTimes.add(value);
-
-            counterCalendar.add(Calendar.MINUTE, 30);
-        }
-
-    }
-
-    /**
-     * Generates a list of times that can be selected for the "End Time" based
-     * on the currently selected time.
-     */
-    private void calculateEndTimes() {
-        endTimes = new ArrayList<>();
-
-        try {
-            Date parsedDate = timeFormat.parse(startTime);
-            Calendar minCalendar = Calendar.getInstance();
-            minCalendar.setTime(parsedDate);
-
-            Calendar counterCalendar = (Calendar) minCalendar.clone();
-            counterCalendar.add(Calendar.MINUTE, 30);
-
-            while ((counterCalendar.get(Calendar.HOUR_OF_DAY)
-                    + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (allowedTimes.getEndTime()
-                    .get(Calendar.HOUR_OF_DAY) + (allowedTimes.getEndTime().get(Calendar.MINUTE) / 60d))
-                    + 0.5) {
-                String value = timeFormat.format(counterCalendar.getTime());
-                endTimes.add(value);
-
-                counterCalendar.add(Calendar.MINUTE, 30);
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            endTimes.add("--- Internal Server Error ---");
-        }
     }
 
     private void refreshReservableTypeList() {
@@ -129,17 +56,17 @@ public class ReservablesEditController {
         if (getSelectedReservableType() != null) {
             ReservableType reservableType = reservableTypeService.findByName(getEditableReservableTypeName());
             if (reservableType != null && !reservableType.equals(getSelectedReservableType()))
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable Type with that name already exists!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable Type with that name already exists!"));
             else if (getEditableReservableTypeName().isEmpty())
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name cannot be empty!"));
             else if (!getEditableReservableTypeName().matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
 
-            if (FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty()) {
+            if (FacesContext.getCurrentInstance().getMessageList(":reservableTypeEditForm").isEmpty()) {
                 getSelectedReservableType().setName(getEditableReservableTypeName());
                 setSelectedReservableType(reservableTypeService.merge(getSelectedReservableType()));
                 refreshReservableTypeList();
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Type Updated"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Type Updated"));
             }
         }
     }
@@ -155,18 +82,29 @@ public class ReservablesEditController {
         if (getSelectedTabReservable() != null) {
             Reservable reservable = reservableService.findByName(getEditableTabReservableName());
             if (reservable != null && !reservable.equals(getSelectedTabReservable()))
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable with that name already exists!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservable with that name already exists!"));
             else if (getEditableTabReservableName().isEmpty())
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name cannot be empty!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name cannot be empty!"));
             else if (!getEditableTabReservableName().matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
 
-            if (FacesContext.getCurrentInstance().getMessageList("reservableTypeEditForm").isEmpty()) {
+            if (FacesContext.getCurrentInstance().getMessageList(":reservableTypeEditForm").isEmpty()) {
                 getSelectedTabReservable().setName(getEditableTabReservableName());
                 getSelectedTabReservable().setNeedsApproval(isEditableTabReservableApproval());
+
+                try {
+                    getSelectedTabReservable().setAvailabilityStart(getEditableTabReservableAvailabilityStart() == null ? null : TimeSelectionController.TIME_FORMAT.parse(getEditableTabReservableAvailabilityStart()));
+                    getSelectedTabReservable().setAvailabilityEnd(getEditableTabReservableAvailabilityEnd() == null ? null : TimeSelectionController.TIME_FORMAT.parse(getEditableTabReservableAvailabilityEnd()));
+                } catch (ParseException e) {
+                    FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An internal error occurred while updating Reservable! (Time selection invalid)"));
+                    e.printStackTrace();
+                    refreshReservableTypeList();
+                    return;
+                }
+
                 setSelectedTabReservable(reservableService.merge(getSelectedTabReservable()));
                 refreshReservableTypeList();
-                FacesContext.getCurrentInstance().addMessage("reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Updated"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Reservable Updated"));
             }
         }
     }
@@ -175,9 +113,13 @@ public class ReservablesEditController {
         if (getSelectedTabReservable() != null) {
             setEditableTabReservableName(getSelectedTabReservable().getName());
             setEditableTabReservableApproval(getSelectedTabReservable().getNeedsApproval());
+            setEditableTabReservableAvailabilityStart(getSelectedTabReservable().getAvailabilityStart() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabReservable().getAvailabilityStart()));
+            setEditableTabReservableAvailabilityEnd(getSelectedTabReservable().getAvailabilityEnd() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabReservable().getAvailabilityEnd()));
         } else {
             setEditableTabReservableName("");
             setEditableTabReservableApproval(false);
+            setEditableTabReservableAvailabilityStart(null);
+            setEditableTabReservableAvailabilityEnd(null);
         }
     }
 
@@ -301,29 +243,5 @@ public class ReservablesEditController {
 
     public void setEditableTabReservableAvailabilityEnd(String editableTabReservableAvailabilityEnd) {
         this.editableTabReservableAvailabilityEnd = editableTabReservableAvailabilityEnd;
-    }
-
-    public List<String> getStartTimes() {
-        return startTimes;
-    }
-
-    public List<String> getEndTimes() {
-        return endTimes;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
     }
 }

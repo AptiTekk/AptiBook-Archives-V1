@@ -29,12 +29,14 @@ public class TimeSelectionController {
     private List<String> startTimes;
     private String startTime;
 
+
     private List<String> endTimes;
     private String endTime;
+    private String lastStartTimeCalculated;
 
     private TimeRange allowedTimes;
-    private final DateFormat timeFormat = new SimpleDateFormat("h:mm a");
-    private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
+    public static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
+    public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
 
     private List<ReservableType> reservableTypes;
     private ReservableType selectedReservableType;
@@ -79,7 +81,7 @@ public class TimeSelectionController {
         while ((double) (counterCalendar.get(Calendar.HOUR_OF_DAY)
                 + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (double) (allowedTimes.getEndTime()
                 .get(Calendar.HOUR_OF_DAY) + (allowedTimes.getEndTime().get(Calendar.MINUTE) / 60d))) {
-            String value = timeFormat.format(counterCalendar.getTime());
+            String value = TIME_FORMAT.format(counterCalendar.getTime());
             startTimes.add(value);
 
             counterCalendar.add(Calendar.MINUTE, 30);
@@ -91,11 +93,11 @@ public class TimeSelectionController {
      * Generates a list of times that can be selected for the "End Time" based
      * on the currently selected time.
      */
-    private void calculateEndTimes() {
+    private void calculateEndTimes(String startTime) {
         endTimes = new ArrayList<>();
 
         try {
-            Date parsedDate = timeFormat.parse(startTime);
+            Date parsedDate = TIME_FORMAT.parse(startTime);
             Calendar minCalendar = Calendar.getInstance();
             minCalendar.setTime(parsedDate);
 
@@ -106,7 +108,7 @@ public class TimeSelectionController {
                     + (counterCalendar.get(Calendar.MINUTE) / 60d)) != (allowedTimes.getEndTime()
                     .get(Calendar.HOUR_OF_DAY) + (allowedTimes.getEndTime().get(Calendar.MINUTE) / 60d))
                     + 0.5) {
-                String value = timeFormat.format(counterCalendar.getTime());
+                String value = TIME_FORMAT.format(counterCalendar.getTime());
                 endTimes.add(value);
 
                 counterCalendar.add(Calendar.MINUTE, 30);
@@ -123,8 +125,8 @@ public class TimeSelectionController {
 
         try {
         DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/YYYY h:mm a");
-        Date startDateTime = datetimeFormat.parse(dateFormat.format(date) + " " + startTime);
-        Date endDateTime = datetimeFormat.parse(dateFormat.format(date) + " " + endTime);
+        Date startDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
+        Date endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
 
         this.results = reservationService.findAvailableReservables(selectedReservableType, startDateTime, endDateTime);
         AgendaLogger.logVerbose(results.toString());
@@ -140,7 +142,7 @@ public class TimeSelectionController {
 
     public void setDate(Date date) {
         if (date != null) {
-            AgendaLogger.logVerbose("Date Selected: " + dateFormat.format(date));
+            AgendaLogger.logVerbose("Date Selected: " + DATE_FORMAT.format(date));
         } else {
             AgendaLogger.logVerbose("Date Empty - Setting to today");
             date = Calendar.getInstance().getTime();
@@ -164,17 +166,15 @@ public class TimeSelectionController {
     }
 
     public void setStartTime(String startTime) {
-        AgendaLogger.logVerbose("Start Time Selected: " + startTime);
         this.startTime = startTime;
-
-        if (startTime != null) {
-            calculateEndTimes();
-        } else {
-            endTimes = null;
-        }
     }
 
-    public List<String> getEndTimes() {
+    public List<String> getEndTimes(String startTime) {
+        if(startTime == null || startTime.isEmpty())
+            return null;
+        if(startTime.equals(lastStartTimeCalculated) && endTimes != null)
+            return endTimes;
+        calculateEndTimes(startTime);
         return endTimes;
     }
 

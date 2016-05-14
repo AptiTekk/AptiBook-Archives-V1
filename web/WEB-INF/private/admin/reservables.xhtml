@@ -44,11 +44,12 @@
 
                 <!-- Reservable Type Edit Fields -->
                 <b:column colXs="12" colSm="9">
-                    <h:form styleClass="form-horizontal">
+                    <h:form styleClass="form-horizontal" id="reservableTypeEditForm">
 
                         <div class="form-group">
                             <b:column colXs="9" offsetXs="3">
-                                <b:messages for="reservableTypeEditForm" showSummary="false" showDetail="true"/>
+                                <b:messages for=":reservableTypeEditForm" showSummary="false"
+                                            showDetail="true"/>
                                 <h4>Reservable Type Settings:</h4>
                             </b:column>
                         </div>
@@ -113,21 +114,66 @@
                                                      update=":reservableDeletionConfirmModal"/>
 
                                             <pf:tab title="#{reservable.name}">
-                                                <h:form>
-
+                                                <h:form id="reservableEditForm">
                                                     <!-- Edit Fields -->
                                                     <div class="form-group">
                                                         <h:outputLabel value="Name:"
                                                                        styleClass="col-xs-3 control-label"/>
                                                         <b:column colXs="9">
                                                             <h:inputText styleClass="form-control"
-                                                                         value="#{ReservablesEditController.editableTabReservableName}"/>
+                                                                         value="#{ReservablesEditController.editableTabReservableName}">
+                                                                <f:ajax render="@form"/>
+                                                            </h:inputText>
                                                         </b:column>
                                                     </div>
                                                     <div class="form-group">
-                                                        <h:outputLabel value="Requires Approval:" styleClass="col-xs-3 control-label" />
-                                                        <b:column colXs="9" tooltip="If checked, any reservations for this Reservable must be approved by its owners." tooltipPosition="left">
-                                                            <h:selectBooleanCheckbox value="#{ReservablesEditController.editableTabReservableApproval}" />
+                                                        <h:outputLabel value="Requires Approval:"
+                                                                       styleClass="col-xs-3 control-label"/>
+                                                        <b:column colXs="9"
+                                                                  tooltip="If checked, any requested reservations for this Reservable must be approved by its owners."
+                                                                  tooltipPosition="left">
+                                                            <h:selectBooleanCheckbox
+                                                                    value="#{ReservablesEditController.editableTabReservableApproval}">
+                                                                <f:ajax render="@form"/>
+                                                            </h:selectBooleanCheckbox>
+                                                        </b:column>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Min. Allowed Time:"
+                                                                       styleClass="col-xs-3 control-label"/>
+                                                        <b:column colXs="9"
+                                                                  tooltip="No reservations may be made before this time."
+                                                                  tooltipPosition="left">
+                                                            <h:selectOneMenu
+                                                                    value="#{ReservablesEditController.editableTabReservableAvailabilityStart}"
+                                                                    styleClass="big-select">
+                                                                <f:selectItem itemValue="#{null}"
+                                                                              itemLabel="--- Select a Time ---"
+                                                                              noSelectionOption="true"/>
+                                                                <f:selectItems
+                                                                        value="#{TimeSelectionController.startTimes}"
+                                                                        var="time"/>
+                                                                <f:ajax render="@form"
+                                                                        onevent="loading"/>
+                                                            </h:selectOneMenu>
+                                                        </b:column>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Max. Allowed Time:"
+                                                                       styleClass="col-xs-3 control-label"/>
+                                                        <b:column colXs="9"
+                                                                  tooltip="No reservations may be made after this time."
+                                                                  tooltipPosition="left">
+                                                            <h:selectOneMenu
+                                                                    value="#{ReservablesEditController.editableTabReservableAvailabilityEnd}"
+                                                                    styleClass="big-select"
+                                                                    disabled="#{ReservablesEditController.editableTabReservableAvailabilityStart == null}">
+                                                                <f:selectItems
+                                                                        value="#{TimeSelectionController.getEndTimes(ReservablesEditController.editableTabReservableAvailabilityStart)}"
+                                                                        var="time"/>
+                                                                <f:ajax render="@form"
+                                                                        onevent="loading"/>
+                                                            </h:selectOneMenu>
                                                         </b:column>
                                                     </div>
 
@@ -147,8 +193,7 @@
                                                                                  value="Reset Fields"
                                                                                  style="display: inline-block"
                                                                                  action="#{ReservablesEditController.resetTabReservableSettings()}">
-                                                                    <f:ajax execute="@form"
-                                                                            render=":reservablesPage"
+                                                                    <f:ajax render="@form"
                                                                             onevent="loading"/>
                                                                 </h:commandButton>
                                                                 <b:button styleClass="btn btn-danger"

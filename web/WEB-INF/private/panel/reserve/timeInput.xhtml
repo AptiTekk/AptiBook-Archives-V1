@@ -75,9 +75,9 @@
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
                             <h:selectOneMenu value="#{TimeSelectionController.endTime}"
-                                             disabled="#{TimeSelectionController.endTimes == null}"
+                                             disabled="#{TimeSelectionController.startTime == null}"
                                              styleClass="big-select">
-                                <f:selectItems value="#{TimeSelectionController.endTimes}"
+                                <f:selectItems value="#{TimeSelectionController.getEndTimes(TimeSelectionController.startTime)}"
                                                var="time"/>
                                 <f:ajax render=":timeForm" onevent="loading"/>
                             </h:selectOneMenu>
