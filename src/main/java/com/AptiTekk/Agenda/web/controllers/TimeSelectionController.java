@@ -33,7 +33,6 @@ public class TimeSelectionController {
     private String endTime;
 
     private TimeRange allowedTimes;
-
     private final DateFormat timeFormat = new SimpleDateFormat("h:mm a");
     private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/YYYY");
 

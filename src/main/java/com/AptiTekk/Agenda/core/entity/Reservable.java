@@ -38,7 +38,7 @@ public class Reservable implements Serializable {
 
     private String name;
 
-    private byte needsApproval;
+    private Boolean needsApproval;
 
     // bi-directional many-to-one association to Reservation
     @OneToMany(mappedBy = "reservable")
@@ -94,11 +94,11 @@ public class Reservable implements Serializable {
         this.name = name;
     }
 
-    public byte getNeedsApproval() {
+    public Boolean getNeedsApproval() {
         return this.needsApproval;
     }
 
-    public void setNeedsApproval(byte needsApproval) {
+    public void setNeedsApproval(Boolean needsApproval) {
         this.needsApproval = needsApproval;
     }
 

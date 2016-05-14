@@ -14,6 +14,8 @@
     <h:panelGroup layout="block" id="reservablesPage">
         <b:container>
             <b:row>
+
+                <!-- Reservable Type Selection List -->
                 <b:column colXs="12" colSm="3">
                     <h:form>
                         <div class="form-group">
@@ -40,6 +42,7 @@
                     </h:form>
                 </b:column>
 
+                <!-- Reservable Type Edit Fields -->
                 <b:column colXs="12" colSm="9">
                     <h:form styleClass="form-horizontal">
 
@@ -82,6 +85,8 @@
                             </div>
                         </div>
                     </h:form>
+
+                    <!-- Reservables Accordion -->
                     <div class="form-horizontal">
                         <div class="form-group">
                             <b:column colXs="9" offsetXs="3">
@@ -92,9 +97,13 @@
                             <div class="col-xs-offset-3 col-xs-9">
                                 <p style="font-weight: 600">Expand rows to edit Reservables</p>
                                 <c:choose>
+
+                                    <!-- No Reservables Found -->
                                     <c:when test="#{empty ReservablesEditController.selectedReservableType.reservables}">
                                         <p>This Reservable Type has no Reservables! Click the button below to get started.</p>
                                     </c:when>
+
+                                    <!-- Reservables Found -->
                                     <c:otherwise>
                                         <pf:accordionPanel dynamic="true" cache="true" activeIndex="-1"
                                                            value="#{ReservablesEditController.selectedReservableType.reservables}"
@@ -102,17 +111,27 @@
                                             <pf:ajax event="tabChange"
                                                      listener="#{ReservablesEditController.onReservableTabChange}"
                                                      update=":reservableDeletionConfirmModal"/>
+
                                             <pf:tab title="#{reservable.name}">
                                                 <h:form>
+
+                                                    <!-- Edit Fields -->
                                                     <div class="form-group">
                                                         <h:outputLabel value="Name:"
                                                                        styleClass="col-xs-3 control-label"/>
                                                         <b:column colXs="9">
                                                             <h:inputText styleClass="form-control"
-                                                                         id="tabReservableName"
                                                                          value="#{ReservablesEditController.editableTabReservableName}"/>
                                                         </b:column>
                                                     </div>
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Requires Approval:" styleClass="col-xs-3 control-label" />
+                                                        <b:column colXs="9" tooltip="If checked, any reservations for this Reservable must be approved by its owners." tooltipPosition="left">
+                                                            <h:selectBooleanCheckbox value="#{ReservablesEditController.editableTabReservableApproval}" />
+                                                        </b:column>
+                                                    </div>
+
+                                                    <!-- Save, Reset, Delete buttons -->
                                                     <div class="form-group">
                                                         <div class="col-xs-offset-3 col-xs-9">
                                                             <div class="btn-toolbar">
@@ -147,6 +166,8 @@
                                 </c:choose>
                             </div>
                         </div>
+
+                        <!-- Add new Reservable Button -->
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9">
                                 <div class="btn-toolbar">
@@ -181,7 +202,6 @@
                     </h:commandButton>
                 </f:facet>
             </b:modal>
-            <!-- End Reservable Type Deletion Confirmation Modal -->
 
             <!-- Reservable Deletion Confirmation Modal -->
             <b:modal id="reservableDeletionConfirmModal" title="Reservable
@@ -199,7 +219,6 @@
                     </h:commandButton>
                 </f:facet>
             </b:modal>
-            <!-- End Reservable Deletion Confirmation Modal -->
         </b:container>
     </h:panelGroup>
 </ui:composition>
