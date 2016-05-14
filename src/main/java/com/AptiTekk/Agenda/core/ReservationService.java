@@ -3,9 +3,9 @@ package com.AptiTekk.Agenda.core;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
 import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
-import javax.ejb.Local;
-
 import com.AptiTekk.Agenda.core.entity.Reservation;
+
+import javax.ejb.Local;
 import java.util.Date;
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface ReservationService extends EntityService<Reservation> {
             "Hey {user.fullname},\nA new reservation has been requested for {reservation.reservable.name}. Details are as follows:"
                     + "\n\t {reservation.title}"
                     + "\n\t {reservation.timeStart}"
-                    + "\n\t {reservation.timeEnd");
+                    + "\n\t {reservation.timeEnd}");
   
     List<Reservable> findAvailableReservables(ReservableType type, Date startDateTime, Date endDateTime);
     
