@@ -1,14 +1,32 @@
 package com.AptiTekk.Agenda.core;
 
+import com.AptiTekk.Agenda.core.entity.AppProperty;
+import com.AptiTekk.Agenda.core.entity.Reservation;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
+
 import javax.ejb.Local;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 @Local
 public interface GoogleCalendarService {
-  
-//  public Credential authorize() throws IOException;
-//  
-//  public Calendar getCalendarService() throws IOException;
-  
-  
-  
+
+    String CALENDAR_USER_ID = "CALENDAR";
+
+    AppProperty CALENDAR_ID_PROPERTY = new AppProperty("agenda.google.calendar.calendarID", "primary");
+
+    SimpleDateFormat eventDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'");
+
+    Calendar getCalendarService() throws IOException;
+
+    void insert(Calendar calendarService, Reservation reservation) throws IOException;
+
+    Event get(Calendar calendarService, Reservation reservation) throws IOException;
+
+    void update(Calendar calendarService, Reservation reservation) throws IOException;
+
+    void delete(Calendar calendarService, Reservation reservation) throws IOException;
+
+
 }

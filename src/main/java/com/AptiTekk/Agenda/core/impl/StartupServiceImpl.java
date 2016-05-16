@@ -1,25 +1,18 @@
 package com.AptiTekk.Agenda.core.impl;
 
-import com.AptiTekk.Agenda.core.GoogleService;
-import com.AptiTekk.Agenda.core.NotificationService;
-import com.AptiTekk.Agenda.core.Properties;
-import com.AptiTekk.Agenda.core.ReservableTypeService;
-import com.AptiTekk.Agenda.core.ReservationService;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import com.AptiTekk.Agenda.core.StartupService;
-import com.AptiTekk.Agenda.core.UserGroupService;
-import com.AptiTekk.Agenda.core.UserService;
+import com.AptiTekk.Agenda.core.*;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
 import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
 import com.AptiTekk.Agenda.core.utilities.Sha256Helper;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +97,7 @@ public class StartupServiceImpl implements StartupService {
                 add(ReservationService.class);
                 add(NotificationService.class);
                 add(GoogleService.class);
+                add(GoogleCalendarService.class);
             }
         };
         for (Class cl : allClasses) {
