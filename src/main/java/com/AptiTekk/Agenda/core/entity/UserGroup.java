@@ -31,12 +31,10 @@ public class UserGroup implements Serializable {
     private List<User> users = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    @JoinColumn(name = "parent_id")
     private UserGroup parent;
 
-    @OneToMany
-    @OrderColumn
-    @JoinColumn(name = "parent_id")
+    @OneToMany(mappedBy = "parent")
     private List<UserGroup> children = new ArrayList<>();
 
     public UserGroup() {
@@ -122,4 +120,19 @@ public class UserGroup implements Serializable {
         return this.getParent() == null;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserGroup userGroup = (UserGroup) o;
+
+        return id == userGroup.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

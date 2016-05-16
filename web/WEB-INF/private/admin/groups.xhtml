@@ -16,7 +16,7 @@
                 <b:column colSm="6">
                     <h:form>
                         <div class="form-group">
-                            <pf:tree id="tree" value="#{GroupEditController.root}" var="node" dynamic="true"
+                            <pf:tree id="tree" value="#{GroupController.root}" var="node" dynamic="true"
                                      orientation="horizontal" selectionMode="single"
                                      selection="#{GroupEditController.selectedNode}">
                                 <pf:ajax event="select" update=":groupsPage" onstart="loading_start()"
@@ -98,25 +98,6 @@
                             </div>
                         </div>
                     </h:form>
-                </b:column>
-            </b:row>
-            <hr/>
-            <b:row>
-                <b:column colMd="3" colXs="6">
-                    <h:panelGroup id="dragTreeEditor" layout="block"
-                                  styleClass="#{GroupEditController.hasBeenEdited? 'alert alert-warning' : ''}">
-                        <!--<pf:tree id="draggabletree" value="#{GroupEditController.root}" var="node"
-                                 selectionMode="single"
-                                 selection="#{GroupEditController.selectedNode}" dynamic="true"
-                                 draggable="true" droppable="true">
-                            <pf:ajax event="dragdrop" update=":@([id$=dragTreeEditor])"
-                                     listener="#{GroupEditController.onDragDrop}"/>
-                            <pf:ajax event="select" update=":@([id$=buttonGroup]):@([id$=editingGroup])"/>
-                            <pf:treeNode>
-                                <h:outputText value="#{node.name}"/>
-                            </pf:treeNode>
-                        </pf:tree>-->
-                    </h:panelGroup>
                 </b:column>
             </b:row>
 

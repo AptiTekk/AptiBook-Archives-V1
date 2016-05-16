@@ -6,6 +6,7 @@ import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
 import com.AptiTekk.Agenda.core.utilities.TimeRange;
 import org.primefaces.event.TabChangeEvent;
+import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -41,6 +42,7 @@ public class ReservablesEditController {
     private boolean editableTabReservableApproval;
     private String editableTabReservableAvailabilityStart;
     private String editableTabReservableAvailabilityEnd;
+    private TreeNode editableTabReservableOwnerGroup;
 
     @PostConstruct
     public void init() {
@@ -243,5 +245,13 @@ public class ReservablesEditController {
 
     public void setEditableTabReservableAvailabilityEnd(String editableTabReservableAvailabilityEnd) {
         this.editableTabReservableAvailabilityEnd = editableTabReservableAvailabilityEnd;
+    }
+
+    public TreeNode getEditableTabReservableOwnerGroup() {
+        return editableTabReservableOwnerGroup;
+    }
+
+    public void setEditableTabReservableOwnerGroup(TreeNode editableTabReservableOwnerGroup) {
+        this.editableTabReservableOwnerGroup = editableTabReservableOwnerGroup;
     }
 }

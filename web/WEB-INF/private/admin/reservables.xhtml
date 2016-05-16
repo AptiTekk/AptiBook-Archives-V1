@@ -120,33 +120,35 @@
                                                         <h:outputLabel value="Name:"
                                                                        styleClass="col-xs-3 control-label"/>
                                                         <b:column colXs="9">
-                                                            <h:inputText styleClass="form-control"
+                                                            <h:inputText id="name" styleClass="form-control"
                                                                          value="#{ReservablesEditController.editableTabReservableName}">
                                                                 <f:ajax render="@form"/>
                                                             </h:inputText>
+                                                            <pf:tooltip for="name"
+                                                                        value="The name as will be shown to users making reservations. E.g.: 'Library'"/>
                                                         </b:column>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <h:outputLabel value="Requires Approval:"
                                                                        styleClass="col-xs-3 control-label"/>
-                                                        <b:column colXs="9"
-                                                                  tooltip="If checked, any requested reservations for this Reservable must be approved by its owners."
-                                                                  tooltipPosition="left">
-                                                            <h:selectBooleanCheckbox
-                                                                    value="#{ReservablesEditController.editableTabReservableApproval}">
+                                                        <b:column colXs="9">
+                                                            <h:selectBooleanCheckbox id="approvalCheck"
+                                                                                     value="#{ReservablesEditController.editableTabReservableApproval}">
                                                                 <f:ajax render="@form"/>
                                                             </h:selectBooleanCheckbox>
+                                                            <pf:tooltip for="approvalCheck"
+                                                                        value="If checked, any requested reservations for this Reservable must be approved by the groups which own it."/>
                                                         </b:column>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <h:outputLabel value="Min. Allowed Time:"
                                                                        styleClass="col-xs-3 control-label"/>
-                                                        <b:column colXs="9"
-                                                                  tooltip="No reservations may be made before this time."
-                                                                  tooltipPosition="left">
-                                                            <h:selectOneMenu
-                                                                    value="#{ReservablesEditController.editableTabReservableAvailabilityStart}"
-                                                                    styleClass="big-select">
+                                                        <b:column colXs="9">
+                                                            <h:selectOneMenu id="minTime"
+                                                                             value="#{ReservablesEditController.editableTabReservableAvailabilityStart}"
+                                                                             styleClass="big-select">
                                                                 <f:selectItem itemValue="#{null}"
                                                                               itemLabel="--- Select a Time ---"
                                                                               noSelectionOption="true"/>
@@ -156,24 +158,47 @@
                                                                 <f:ajax render="@form"
                                                                         onevent="loading"/>
                                                             </h:selectOneMenu>
+                                                            <pf:tooltip for="minTime"
+                                                                        value="No reservations may be made before this time."/>
                                                         </b:column>
                                                     </div>
+
                                                     <div class="form-group">
                                                         <h:outputLabel value="Max. Allowed Time:"
                                                                        styleClass="col-xs-3 control-label"/>
-                                                        <b:column colXs="9"
-                                                                  tooltip="No reservations may be made after this time."
-                                                                  tooltipPosition="left">
-                                                            <h:selectOneMenu
-                                                                    value="#{ReservablesEditController.editableTabReservableAvailabilityEnd}"
-                                                                    styleClass="big-select"
-                                                                    disabled="#{ReservablesEditController.editableTabReservableAvailabilityStart == null}">
+                                                        <b:column colXs="9">
+                                                            <h:selectOneMenu id="maxTime"
+                                                                             value="#{ReservablesEditController.editableTabReservableAvailabilityEnd}"
+                                                                             styleClass="big-select"
+                                                                             disabled="#{ReservablesEditController.editableTabReservableAvailabilityStart == null}">
                                                                 <f:selectItems
                                                                         value="#{TimeSelectionController.getEndTimes(ReservablesEditController.editableTabReservableAvailabilityStart)}"
                                                                         var="time"/>
                                                                 <f:ajax render="@form"
                                                                         onevent="loading"/>
                                                             </h:selectOneMenu>
+                                                            <pf:tooltip for="maxTime"
+                                                                        value="No reservations may be made after this time."/>
+                                                        </b:column>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Owner Group:"
+                                                                       styleClass="col-xs-3 control-label"/>
+                                                        <b:column colXs="9">
+                                                            <pf:tree id="tree" value="#{GroupController.root}"
+                                                                     var="node" dynamic="true"
+                                                                     orientation="horizontal" selectionMode="single"
+                                                                     selection="#{ReservablesEditController.editableTabReservableOwnerGroup}">
+                                                                <pf:ajax event="select" update="@form"
+                                                                         onstart="loading_start()"
+                                                                         oncomplete="loading_complete()"/>
+                                                                <pf:treeNode>
+                                                                    <h:outputText value="#{node.name}"/>
+                                                                </pf:treeNode>
+                                                            </pf:tree>
+                                                            <pf:tooltip for="tree"
+                                                                        value="The selected group and its parents will be notified of reservation requests for this Reservable." showDelay="1000"/>
                                                         </b:column>
                                                     </div>
 
