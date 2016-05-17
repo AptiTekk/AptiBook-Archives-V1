@@ -7,6 +7,7 @@ package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -24,17 +25,11 @@ public class GroupEditController {
     @Inject
     private UserGroupService groupService;
 
-    @ManagedProperty(value = "#{GroupController}")
-    private GroupController groupController;
-
     private TreeNode selectedNode;
 
     private String editableGroupName = "";
-    private TreeNode editableGroupParent;
-
-    public void setGroupController(GroupController groupController) {
-        this.groupController = groupController;
-    }
+    private TreeNode editableGroupParentNode;
+    private UserGroup currentGroupParent;
 
     @PostConstruct
     public void init()
@@ -44,7 +39,7 @@ public class GroupEditController {
 
     public void updateSettings() {
         UserGroup group = groupService.findByName(editableGroupName);
-        if(group != null && !group.equals((UserGroup) selectedNode.getData()))
+        if(group != null && !group.equals(selectedNode.getData()))
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Group with that name already exists!"));
         else if(editableGroupName.isEmpty())
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name cannot be empty!"));
@@ -56,7 +51,6 @@ public class GroupEditController {
             UserGroup selectedGroup = (UserGroup) selectedNode.getData();
             selectedGroup.setName(editableGroupName);
             groupService.merge(selectedGroup);
-            groupController.buildTree();
 
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
         }
@@ -66,13 +60,15 @@ public class GroupEditController {
     {
         if(selectedNode != null)
         {
-            editableGroupName = ((UserGroup)selectedNode.getData()).getName();
-            editableGroupParent = selectedNode.getParent();
+            editableGroupName = getSelectedGroup().getName();
+            currentGroupParent = getSelectedGroup().getParent();
+            editableGroupParentNode = null;
         }
         else
         {
             editableGroupName = "";
-            editableGroupParent = null;
+            currentGroupParent = null;
+            editableGroupParentNode = null;
         }
     }
 
@@ -87,32 +83,23 @@ public class GroupEditController {
                 groupService.merge(childGroup);
             }
 
-            System.out.println("Parent ID: "+parentGroup.getId());
-            System.out.println("Selected ID: "+selectedGroup.getId());
-
             groupService.delete(selectedGroup.getId()); //Remove selected group from database
             selectedNode = null;
 
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
-            groupController.buildTree(); //Rebuild Tree
         }
     }
 
     public void addGroup() {
         UserGroup newGroup = new UserGroup();
         newGroup.setName("New Group");
-        UserGroup parentGroup = selectedNode == null ? (UserGroup) groupController.getRoot().getData() : (UserGroup) selectedNode.getData();
+        UserGroup parentGroup = selectedNode == null ? groupService.getRootGroup() : (UserGroup) selectedNode.getData();
         newGroup.setParent(parentGroup);
         parentGroup.getChildren().add(newGroup);
         groupService.insert(newGroup);
         groupService.merge(parentGroup);
 
         FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
-        groupController.buildTree();
-    }
-
-    public UserGroup getData(TreeNode node) {
-        return node == null ? null : (UserGroup) node.getData();
     }
 
     public TreeNode getSelectedNode() {
@@ -121,6 +108,7 @@ public class GroupEditController {
 
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
+        resetSettings();
     }
 
     public UserGroup getSelectedGroup()
@@ -128,6 +116,11 @@ public class GroupEditController {
         if(selectedNode != null)
             return (UserGroup) selectedNode.getData();
         return null;
+    }
+
+    public void onParentSelected(NodeSelectEvent event)
+    {
+        this.editableGroupParentNode = event.getTreeNode();
     }
 
     public String getEditableGroupName() {
@@ -138,11 +131,7 @@ public class GroupEditController {
         this.editableGroupName = editableGroupName;
     }
 
-    public TreeNode getEditableGroupParent() {
-        return editableGroupParent;
-    }
-
-    public void setEditableGroupParent(TreeNode editableGroupParent) {
-        this.editableGroupParent = editableGroupParent;
+    public UserGroup getCurrentGroupParent() {
+        return currentGroupParent;
     }
 }

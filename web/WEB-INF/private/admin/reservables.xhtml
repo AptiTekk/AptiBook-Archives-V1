@@ -111,7 +111,8 @@
                                                            var="reservable">
                                             <pf:ajax event="tabChange"
                                                      listener="#{ReservablesEditController.onReservableTabChange}"
-                                                     update=":reservableDeletionConfirmModal"/>
+                                                     update=":reservableDeletionConfirmModal" onstart="loading_start()"
+                                                     oncomplete="loading_complete()"/>
 
                                             <pf:tab title="#{reservable.name}">
                                                 <h:form id="reservableEditForm">
@@ -186,19 +187,20 @@
                                                         <h:outputLabel value="Owner Group:"
                                                                        styleClass="col-xs-3 control-label"/>
                                                         <b:column colXs="9">
-                                                            <pf:tree id="tree" value="#{GroupController.getParentSelectionRoot(null)}"
+                                                            <pf:tree id="tree"
+                                                                     value="#{GroupTreeController.getTree(ReservablesEditController.tabReservableCurrentOwnerGroup, null, false)}"
                                                                      var="node" dynamic="true"
-                                                                     orientation="horizontal" selectionMode="single"
-                                                                     selection="#{ReservablesEditController.editableTabReservableOwnerGroup}">
-                                                                <pf:ajax event="select" update="@form"
-                                                                         onstart="loading_start()"
-                                                                         oncomplete="loading_complete()"/>
+                                                                     orientation="horizontal" selectionMode="single">
+                                                                <pf:ajax event="select" onstart="loading_start()"
+                                                                         oncomplete="loading_complete()"
+                                                                         listener="#{ReservablesEditController.onOwnerSelected}"/>
                                                                 <pf:treeNode>
                                                                     <h:outputText value="#{node.name}"/>
                                                                 </pf:treeNode>
                                                             </pf:tree>
                                                             <pf:tooltip for="tree"
-                                                                        value="The selected group and its parents will be notified of reservation requests for this Reservable." showDelay="1000"/>
+                                                                        value="The selected group and its parents will be notified of reservation requests for this Reservable."
+                                                                        showDelay="1000"/>
                                                         </b:column>
                                                     </div>
 
