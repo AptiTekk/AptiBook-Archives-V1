@@ -1,30 +1,18 @@
 package com.AptiTekk.Agenda.core.impl;
 
-import com.AptiTekk.Agenda.core.GoogleService;
-import static com.AptiTekk.Agenda.core.GoogleService.CALENDAR_ID_PROPERTY;
-import com.AptiTekk.Agenda.core.NotificationService;
-import com.AptiTekk.Agenda.core.Properties;
-import com.AptiTekk.Agenda.core.ReservableService;
-import javax.ejb.Stateless;
+import com.AptiTekk.Agenda.core.*;
+import com.AptiTekk.Agenda.core.entity.*;
 
-import com.AptiTekk.Agenda.core.ReservationService;
-import com.AptiTekk.Agenda.core.entity.Notification;
-import com.AptiTekk.Agenda.core.entity.QReservation;
-import com.AptiTekk.Agenda.core.entity.Reservable;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
-import com.AptiTekk.Agenda.core.entity.Reservation;
-import com.AptiTekk.Agenda.core.entity.User;
-import com.AptiTekk.Agenda.core.entity.UserGroup;
-import static com.AptiTekk.Agenda.core.utilities.NotificationFactory.createDefaultNotificationBuilder;
-import com.google.api.services.calendar.model.Event;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
-import javax.mail.MessagingException;
-
 import java.util.List;
-import javax.inject.Inject;
+
+import static com.AptiTekk.Agenda.core.utilities.NotificationFactory.createDefaultNotificationBuilder;
 
 @Stateless
 public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> implements ReservationService {
@@ -38,7 +26,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     ReservableService reservableService;
 
     @Inject
-    GoogleService googleService;
+    GoogleCalendarService googleCalendarService;
 
     @Inject
     NotificationService notificationService;
@@ -51,10 +39,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     public void insert(Reservation reservation) {
         try {
             if (!properties.get(GoogleService.ACCESS_TOKEN_PROPERTY.getKey()).isEmpty()) {
-                Event event = new Event();
-                event.setSummary(reservation.getTitle());
-                event.setDescription(reservation.getReservable().getName() + "\n" + reservation.getDescription());
-                googleService.getCalendarService().events().insert(properties.get(CALENDAR_ID_PROPERTY.getKey()), event);
+                googleCalendarService.insert(googleCalendarService.getCalendarService(), reservation);
             }
 
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
