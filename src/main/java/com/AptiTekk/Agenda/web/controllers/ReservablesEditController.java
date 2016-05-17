@@ -5,7 +5,7 @@ import com.AptiTekk.Agenda.core.ReservableTypeService;
 import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
-import com.AptiTekk.Agenda.core.utilities.TimeRange;
+import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
 
@@ -15,12 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @ManagedBean
@@ -44,6 +39,7 @@ public class ReservablesEditController {
     private String editableTabReservableAvailabilityStart;
     private String editableTabReservableAvailabilityEnd;
     private TreeNode editableTabReservableOwnerGroup;
+    private UserGroup tabReservableCurrentOwnerGroup;
 
     @PostConstruct
     public void init() {
@@ -91,7 +87,7 @@ public class ReservablesEditController {
             else if (!getEditableTabReservableName().matches("[A-Za-z0-9 #]+"))
                 FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and space!"));
 
-            if(getEditableTabReservableOwnerGroup() == null)
+            if(editableTabReservableOwnerGroup == null)
                 FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Reservable!"));
 
             if (FacesContext.getCurrentInstance().getMessageList(":reservableTypeEditForm").isEmpty()) {
@@ -108,7 +104,7 @@ public class ReservablesEditController {
                     return;
                 }
 
-                getSelectedTabReservable().setOwner((UserGroup) getEditableTabReservableOwnerGroup().getData());
+                getSelectedTabReservable().setOwner((UserGroup) editableTabReservableOwnerGroup.getData());
 
                 setSelectedTabReservable(reservableService.merge(getSelectedTabReservable()));
                 refreshReservableTypeList();
@@ -123,11 +119,13 @@ public class ReservablesEditController {
             setEditableTabReservableApproval(getSelectedTabReservable().getNeedsApproval());
             setEditableTabReservableAvailabilityStart(getSelectedTabReservable().getAvailabilityStart() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabReservable().getAvailabilityStart()));
             setEditableTabReservableAvailabilityEnd(getSelectedTabReservable().getAvailabilityEnd() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabReservable().getAvailabilityEnd()));
+            this.tabReservableCurrentOwnerGroup = getSelectedTabReservable().getOwner();
         } else {
             setEditableTabReservableName("");
             setEditableTabReservableApproval(false);
             setEditableTabReservableAvailabilityStart(null);
             setEditableTabReservableAvailabilityEnd(null);
+            this.tabReservableCurrentOwnerGroup = null;
         }
     }
 
@@ -253,11 +251,12 @@ public class ReservablesEditController {
         this.editableTabReservableAvailabilityEnd = editableTabReservableAvailabilityEnd;
     }
 
-    public TreeNode getEditableTabReservableOwnerGroup() {
-        return editableTabReservableOwnerGroup;
+    public void onOwnerSelected(NodeSelectEvent event)
+    {
+        this.editableTabReservableOwnerGroup = event.getTreeNode();
     }
 
-    public void setEditableTabReservableOwnerGroup(TreeNode editableTabReservableOwnerGroup) {
-        this.editableTabReservableOwnerGroup = editableTabReservableOwnerGroup;
+    public UserGroup getTabReservableCurrentOwnerGroup() {
+        return tabReservableCurrentOwnerGroup;
     }
 }

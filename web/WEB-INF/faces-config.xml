@@ -101,15 +101,11 @@
         <managed-bean-name>GroupEditController</managed-bean-name>
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupEditController</managed-bean-class>
         <managed-bean-scope>view</managed-bean-scope>
-        <managed-property>
-            <property-name>groupController</property-name>
-            <value>#{GroupController}</value>
-        </managed-property>
     </managed-bean>
     <managed-bean>
-        <managed-bean-name>GroupController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
+        <managed-bean-name>GroupTreeController</managed-bean-name>
+        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupTreeController</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
     <managed-bean>
         <managed-bean-name>ReservablesEditController</managed-bean-name>

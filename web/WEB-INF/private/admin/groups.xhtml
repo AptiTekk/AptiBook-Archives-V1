@@ -16,10 +16,10 @@
                 <b:column colSm="6">
                     <h:form>
                         <div class="form-group">
-                            <pf:tree id="tree" value="#{GroupController.root}" var="node" dynamic="true"
-                                     orientation="horizontal" selectionMode="single"
+                            <pf:tree id="tree" value="#{GroupTreeController.getTree(null, null, false)}" var="node"
+                                     orientation="horizontal" selectionMode="single" cache="true" dynamic="false"
                                      selection="#{GroupEditController.selectedNode}">
-                                <pf:ajax event="select" update=":groupsPage" onstart="loading_start()"
+                                <pf:ajax event="select" update=":groupEditForm" onstart="loading_start()"
                                          oncomplete="loading_complete()"/>
                                 <pf:treeNode>
                                     <h:outputText value="#{node.name}"/>
@@ -36,17 +36,17 @@
                     </h:form>
                 </b:column>
                 <b:column colSm="6">
-                    <h:form styleClass="form-horizontal">
+                    <h:form styleClass="form-horizontal" id="groupEditForm">
                         <c:choose>
                             <c:when test="#{GroupEditController.selectedNode == null}">
                                 <b:column colXs="9" offsetXs="3">
-                                    <b:messages for="groupEditForm"/>
+                                    <b:messages for=":groupEditForm"/>
                                     <h4>Please select a group.</h4>
                                 </b:column>
                             </c:when>
                             <c:otherwise>
                                 <b:column colXs="9" offsetXs="3">
-                                    <b:messages for="groupEditForm"/>
+                                    <b:messages for=":groupEditForm"/>
                                     <h4>Group Settings</h4>
                                 </b:column>
 
@@ -71,19 +71,18 @@
                                     <h:outputLabel value="Parent Group:"
                                                    styleClass="col-xs-3 control-label"/>
                                     <b:column colXs="9">
-                                        <pf:tree id="tree"
-                                                 value="#{GroupController.getParentSelectionRoot(GroupEditController.selectedGroup)}"
-                                                 var="node" dynamic="true"
-                                                 orientation="horizontal" selectionMode="single"
-                                                 selection="#{ReservablesEditController.editableTabReservableOwnerGroup}">
-                                            <pf:ajax event="select" update="@form"
-                                                     onstart="loading_start()"
-                                                     oncomplete="loading_complete()"/>
+                                        <pf:tree id="parentSelectionTree"
+                                                 value="#{GroupTreeController.getTree(GroupEditController.currentGroupParent, GroupEditController.selectedGroup, true)}"
+                                                 var="node" cache="true" dynamic="false"
+                                                 orientation="horizontal" selectionMode="single">
+                                            <pf:ajax event="select" onstart="loading_start()"
+                                                     oncomplete="loading_complete()"
+                                                     listener="#{GroupEditController.onParentSelected}"/>
                                             <pf:treeNode>
                                                 <h:outputText value="#{node.name}"/>
                                             </pf:treeNode>
                                         </pf:tree>
-                                        <pf:tooltip for="tree"
+                                        <pf:tooltip for="parentSelectionTree"
                                                     value="The selected group and its parents will be notified of reservation requests for this Reservable."
                                                     showDelay="1000"/>
                                     </b:column>
@@ -93,7 +92,7 @@
                                     <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
                                     <b:column colXs="9">
                                         <pf:dataList
-                                                value="#{GroupEditController.getData(GroupEditController.selectedNode).users}"
+                                                value="#{GroupEditController.selectedGroup.users}"
                                                 var="user" type="unordered" itemType="none" paginator="true" rows="10"
                                                 styleClass="paginated">
                                             <h:outputText value="#{user.username}" style="display:inline-block"/>
@@ -121,7 +120,7 @@
                                                       style="display: inline-block"
                                                       p:data-toggle="modal"
                                                       p:data-target="#deletionConfirmModal"
-                                                      disabled="#{GroupEditController.getData(GroupEditController.selectedNode).immutable}"/>
+                                                      disabled="#{GroupEditController.selectedGroup.immutable}"/>
 
                                         </div>
                                     </div>
@@ -135,7 +134,7 @@
             <!-- Deletion Confirmation Modal -->
             <b:modal id="deletionConfirmModal" title="Group
                          Deletion Confirmation">
-                Are you sure you want to delete group '#{GroupEditController.selectedNode.data}'?
+                Are you sure you want to delete group '#{GroupEditController.selectedGroup.name}'?
                 <f:facet name="footer">
 
                     <b:button styleClass="btn btn-default"
