@@ -16,34 +16,33 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- *
  * @author kevint
  */
 @Entity
 public class Notification implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @ManyToOne
     private User user;
-    
+
     private String subject;
-    
+
     private String body;
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date creation = new Date();
-    
+
     private Boolean notif_read = false;
-    
+
     public Notification() {
         super();
     }
-    
+
     public Notification(User user, String subject, String body) {
         setUser(user);
         setSubject(subject);
@@ -97,30 +96,26 @@ public class Notification implements Serializable {
     public void setRead(Boolean notif_read) {
         this.notif_read = notif_read;
     }
-    
+
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Notification that = (Notification) o;
+
+        return id != null ? id.equals(that.id) : that.id == null;
+
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Notification)) {
-            return false;
-        }
-        Notification other = (Notification) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return 31 * (id.intValue() + getClass().getName().hashCode());
     }
 
     @Override
     public String toString() {
         return "com.AptiTekk.Agenda.core.entity.Notifications[ id=" + id + " ]";
     }
-    
+
 }

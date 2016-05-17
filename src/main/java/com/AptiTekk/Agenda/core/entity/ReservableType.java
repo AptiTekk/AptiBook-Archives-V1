@@ -7,7 +7,6 @@ import javax.persistence.*;
 
 /**
  * Entity implementation class for Entity: ReservableType
- *
  */
 @Entity
 public class ReservableType implements Serializable {
@@ -26,9 +25,8 @@ public class ReservableType implements Serializable {
     public ReservableType() {
         super();
     }
-    
-    public ReservableType(String name)
-    {
+
+    public ReservableType(String name) {
         super();
         this.name = name;
     }
@@ -58,28 +56,18 @@ public class ReservableType implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 23 * hash + this.id;
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReservableType that = (ReservableType) o;
+
+        return id == that.id;
+
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ReservableType other = (ReservableType) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return 31 * (id + getClass().getName().hashCode());
     }
-
 }

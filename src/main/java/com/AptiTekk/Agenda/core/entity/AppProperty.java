@@ -3,11 +3,11 @@ package com.AptiTekk.Agenda.core.entity;
 import java.io.Serializable;
 import java.lang.String;
 import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Entity implementation class for Entity: Property
- *
  */
 @Entity
 @NamedQuery(name = "AppProperty.findAll", query = "SELECT e FROM AppProperty e")
@@ -55,4 +55,19 @@ public class AppProperty implements Serializable {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AppProperty that = (AppProperty) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * (id + getClass().getName().hashCode());
+    }
 }

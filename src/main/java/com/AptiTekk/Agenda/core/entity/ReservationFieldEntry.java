@@ -9,56 +9,70 @@ import javax.persistence.ManyToOne;
 
 /**
  * Entity implementation class for Entity: ReservationFieldEntry
- *
  */
 @Entity
 
 public class ReservationFieldEntry implements Serializable {
 
-  @Id
-  @GeneratedValue
-  private int id;
-  @ManyToOne
-  private Reservation reservation;
-  @ManyToOne
-  private ReservationField field;
-  private String content;
-  private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue
+    private int id;
+    @ManyToOne
+    private Reservation reservation;
+    @ManyToOne
+    private ReservationField field;
+    private String content;
+    private static final long serialVersionUID = 1L;
 
-  public ReservationFieldEntry() {
-    super();
-  }
+    public ReservationFieldEntry() {
+        super();
+    }
 
-  public int getId() {
-    return this.id;
-  }
+    public int getId() {
+        return this.id;
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public Reservation getReservation() {
-    return this.reservation;
-  }
+    public Reservation getReservation() {
+        return this.reservation;
+    }
 
-  public void setReservation(Reservation reservation) {
-    this.reservation = reservation;
-  }
+    public void setReservation(Reservation reservation) {
+        this.reservation = reservation;
+    }
 
-  public ReservationField getField() {
-    return this.field;
-  }
+    public ReservationField getField() {
+        return this.field;
+    }
 
-  public void setField(ReservationField field) {
-    this.field = field;
-  }
+    public void setField(ReservationField field) {
+        this.field = field;
+    }
 
-  public String getContent() {
-    return this.content;
-  }
+    public String getContent() {
+        return this.content;
+    }
 
-  public void setContent(String content) {
-    this.content = content;
-  }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ReservationFieldEntry that = (ReservationFieldEntry) o;
+
+        return id == that.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * (id + getClass().getName().hashCode());
+    }
 }

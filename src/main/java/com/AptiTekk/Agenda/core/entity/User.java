@@ -21,197 +21,196 @@ import com.AptiTekk.Agenda.core.utilities.notification.OmitInjection;
 
 /**
  * The persistent class for the User database table.
- * 
  */
 @Entity
 @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 public class User implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 
-  private String email;
+    private String email;
 
-  private boolean enabled;
+    private boolean enabled;
 
-  private String firstName;
+    private String firstName;
 
-  private String lastName;
+    private String lastName;
 
-  private String location;
+    private String location;
 
-  private byte[] password;
+    private byte[] password;
 
-  private String phoneNumber;
+    private String phoneNumber;
 
-  private String username;
+    private String username;
 
-  // bi-directional many-to-one association to Reservation
-  @OneToMany(mappedBy = "user")
-  private List<Reservation> reservations;
+    // bi-directional many-to-one association to Reservation
+    @OneToMany(mappedBy = "user")
+    private List<Reservation> reservations;
 
-  // bi-directional many-to-many association to Group
-  @ManyToMany
-  @JoinTable(name = "User_has_Group", joinColumns = {@JoinColumn(name = "User_id")},
-      inverseJoinColumns = {@JoinColumn(name = "Group_idGroup")})
-  private List<UserGroup> userGroups = new ArrayList<>();
+    // bi-directional many-to-many association to Group
+    @ManyToMany
+    @JoinTable(name = "User_has_Group", joinColumns = {@JoinColumn(name = "User_id")},
+            inverseJoinColumns = {@JoinColumn(name = "Group_idGroup")})
+    private List<UserGroup> userGroups = new ArrayList<>();
 
-  private Boolean receiveEmailNotifications;
-  
-  @OneToMany(mappedBy = "user")
-  private List<Notification> notifications = new ArrayList<>();
+    private Boolean receiveEmailNotifications;
 
-  public User() {}
+    @OneToMany(mappedBy = "user")
+    private List<Notification> notifications = new ArrayList<>();
 
-  public int getId() {
-    return this.id;
-  }
+    public User() {
+    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
+    public int getId() {
+        return this.id;
+    }
 
-  public String getEmail() {
-    return this.email;
-  }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public String getEmail() {
+        return this.email;
+    }
 
-  public boolean getEnabled() {
-    return this.enabled;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
+    public boolean getEnabled() {
+        return this.enabled;
+    }
 
-  public String getFirstName() {
-    return this.firstName;
-  }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+    public String getFirstName() {
+        return this.firstName;
+    }
 
-  public String getLastName() {
-    return this.lastName;
-  }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public String getLastName() {
+        return this.lastName;
+    }
 
-  public String getLocation() {
-    return this.location;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
+    public String getLocation() {
+        return this.location;
+    }
 
-  @OmitInjection
-  public byte[] getPassword() {
-    return this.password;
-  }
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
-  public void setPassword(byte[] password) {
-    this.password = password;
-  }
+    @OmitInjection
+    public byte[] getPassword() {
+        return this.password;
+    }
 
-  public String getPhoneNumber() {
-    return this.phoneNumber;
-  }
+    public void setPassword(byte[] password) {
+        this.password = password;
+    }
 
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
+    public String getPhoneNumber() {
+        return this.phoneNumber;
+    }
 
-  public String getUsername() {
-    return this.username;
-  }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    public String getUsername() {
+        return this.username;
+    }
 
-  public List<Reservation> getReservations() {
-    return this.reservations;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public void setReservations(List<Reservation> reservations) {
-    this.reservations = reservations;
-  }
+    public List<Reservation> getReservations() {
+        return this.reservations;
+    }
 
-  public Reservation addReservation(Reservation reservation) {
-    getReservations().add(reservation);
-    return reservation;
-  }
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
+    }
 
-  public Reservation removeReservation(Reservation reservation) {
-    getReservations().remove(reservation);
-    return reservation;
-  }
+    public Reservation addReservation(Reservation reservation) {
+        getReservations().add(reservation);
+        return reservation;
+    }
 
-  public List<UserGroup> getUserGroups() {
-    return this.userGroups;
-  }
+    public Reservation removeReservation(Reservation reservation) {
+        getReservations().remove(reservation);
+        return reservation;
+    }
 
-  public void setUserGroups(List<UserGroup> userGroups) {
-    this.userGroups = userGroups;
-  }
+    public List<UserGroup> getUserGroups() {
+        return this.userGroups;
+    }
 
-  /**
-   * Gets the full name of the user, or the username if the first name is empty.
-   * 
-   * @return The user's full name.
-   */
-  public String getFullname() {
-    if (getFirstName() == null || getFirstName().isEmpty())
-      return getUsername();
-    else
-      return getFirstName() + " " + (getLastName() == null ? "" : getLastName());
-  }
+    public void setUserGroups(List<UserGroup> userGroups) {
+        this.userGroups = userGroups;
+    }
 
-  public boolean isAdmin() {
-    return userGroups.stream().anyMatch((userGroup) -> (userGroup.getName().equals(UserGroupService.ROOT_GROUP_NAME)));
-  }
+    /**
+     * Gets the full name of the user, or the username if the first name is empty.
+     *
+     * @return The user's full name.
+     */
+    public String getFullname() {
+        if (getFirstName() == null || getFirstName().isEmpty())
+            return getUsername();
+        else
+            return getFirstName() + " " + (getLastName() == null ? "" : getLastName());
+    }
 
-  public Boolean getReceiveEmailNotifications() {
-    return receiveEmailNotifications;
-  }
+    public boolean isAdmin() {
+        return userGroups.stream().anyMatch((userGroup) -> (userGroup.getName().equals(UserGroupService.ROOT_GROUP_NAME)));
+    }
 
-  public void setReceiveEmailNotifications(Boolean receiveEmailNotifications) {
-    this.receiveEmailNotifications = receiveEmailNotifications;
-  }
+    public Boolean getReceiveEmailNotifications() {
+        return receiveEmailNotifications;
+    }
 
-  public UserGroup addGroup(UserGroup userGroup) {
-    getUserGroups().add(userGroup);
-    return userGroup;
-  }
+    public void setReceiveEmailNotifications(Boolean receiveEmailNotifications) {
+        this.receiveEmailNotifications = receiveEmailNotifications;
+    }
 
-  public UserGroup removeGroup(UserGroup userGroup) {
-    getUserGroups().remove(userGroup);
-    return userGroup;
-  }
-  
-  public boolean isImmutableUsername()
-  {
-      return this.username != null && this.username.equals(UserService.ADMIN_USERNAME);
-  }
-  
-  public Notification addNotification(Notification notification) {
-    getNotifications().add(notification);
-    return notification;
-  }
+    public UserGroup addGroup(UserGroup userGroup) {
+        getUserGroups().add(userGroup);
+        return userGroup;
+    }
 
-  public Notification removeNotification(Notification notification) {
-    getNotifications().remove(notification);
-    return notification;
-  }
+    public UserGroup removeGroup(UserGroup userGroup) {
+        getUserGroups().remove(userGroup);
+        return userGroup;
+    }
+
+    public boolean isImmutableUsername() {
+        return this.username != null && this.username.equals(UserService.ADMIN_USERNAME);
+    }
+
+    public Notification addNotification(Notification notification) {
+        getNotifications().add(notification);
+        return notification;
+    }
+
+    public Notification removeNotification(Notification notification) {
+        getNotifications().remove(notification);
+        return notification;
+    }
 
     public List<Notification> getNotifications() {
         return notifications;
@@ -220,7 +219,21 @@ public class User implements Serializable {
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
-  
-  
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        return id == user.id;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * (id + getClass().getName().hashCode());
+    }
 
 }
