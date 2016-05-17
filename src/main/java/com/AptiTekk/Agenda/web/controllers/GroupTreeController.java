@@ -16,24 +16,22 @@ import java.util.*;
 @RequestScoped
 public class GroupTreeController {
 
-    private TreeNode rootNode;
-
-    private UserGroup initiallySelectedGroup;
-    private UserGroup initiallyExcludedGroup;
-    private boolean initialSelectionAllowance;
+    private HashMap<Integer, TreeNode> cache = new HashMap<>();
 
     @Inject
     private UserGroupService groupService;
 
-    public void buildTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, boolean allowRootSelection) {
-        initiallySelectedGroup = currentlySelectedGroup;
-        initiallyExcludedGroup = userGroupToExclude;
-        initialSelectionAllowance = allowRootSelection;
+    @PostConstruct
+    public void init()
+    {
+        System.out.println("--------------- New Tree Controller ---------------");
+    }
 
+    private TreeNode buildTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, boolean allowRootSelection) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
-        rootNode = new DefaultTreeNode(rootGroup);
+        TreeNode rootNode = new DefaultTreeNode(rootGroup);
         rootNode.setExpanded(true);
         if(currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
             rootNode.setSelected(true);
@@ -59,54 +57,29 @@ public class GroupTreeController {
         }
 
         rootNode.setSelectable(allowRootSelection);
+
+        return rootNode;
     }
 
-    public TreeNode getTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, boolean allowRootSelection) {
-        System.out.println("Building tree with data: ");
-        if(currentlySelectedGroup != null)
-            System.out.println(currentlySelectedGroup.getName());
-        if(userGroupToExclude != null)
-            System.out.println(userGroupToExclude.getName());
-        System.out.println(allowRootSelection);
+    public TreeNode getTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, Boolean allowRootSelection) {
+        int hashCode = 0;
 
-        boolean createNewTree = false;
+        hashCode += currentlySelectedGroup == null ? 0 : currentlySelectedGroup.hashCode();
+        hashCode += userGroupToExclude == null ? 0 : userGroupToExclude.hashCode();
+        hashCode += allowRootSelection.hashCode();
 
-        if (rootNode != null)
+        if(cache.containsKey(hashCode))
         {
-            if(initiallySelectedGroup != null)
-            {
-                if(currentlySelectedGroup == null)
-                    createNewTree = true;
-                else if(!initiallySelectedGroup.equals(currentlySelectedGroup))
-                    createNewTree = true;
-            }
-
-            if(initiallyExcludedGroup != null)
-            {
-                if(userGroupToExclude == null)
-                    createNewTree = true;
-                else if(!initiallyExcludedGroup.equals(userGroupToExclude))
-                    createNewTree = true;
-            }
-
-            if(initialSelectionAllowance != allowRootSelection)
-                createNewTree = true;
-        }
-        else
-            createNewTree = true;
-
-        if(createNewTree)
-        {
-            //We need to make a new tree, then return it.
-            System.out.println("Building new tree");
-            buildTree(currentlySelectedGroup, userGroupToExclude, allowRootSelection);
-            return rootNode;
-        }
-        else
-        {
-            //We already generated the tree. Return it.
             System.out.println("Already Built");
-            return rootNode;
+            return cache.get(hashCode);
+        }
+        else
+        {
+            System.out.println("Creating new Tree");
+            TreeNode newTree = buildTree(currentlySelectedGroup, userGroupToExclude, allowRootSelection);
+            cache.put(hashCode, newTree);
+
+            return newTree;
         }
     }
 

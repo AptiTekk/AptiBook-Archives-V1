@@ -130,6 +130,6 @@ public class UserGroup implements Serializable {
 
     @Override
     public int hashCode() {
-        return id;
+        return 31 * (id + getClass().getName().hashCode());
     }
 }
