@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -8,12 +8,47 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
 
-    <ui:composition template="/WEB-INF/templates/default_header.xhtml">
-        <ui:define name="content">
+<ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="content">
+        <h:panelGroup id="page">
             <b:container>
                 <h2 style="margin-top:50px">Manage Reservations</h2>
+
+                <b:column colSm="8" offsetSm="1">
+                    <ui:fragment rendered="#{not empty ReservationManagementController.user.reservations}">
+                        <ui:repeat value="#{ReservationManagementController.user.reservations}" var="reservation">
+                            <b:panel title="#{reservation.title} - #{reservation.reservable.name}" look="info">
+                                <h4>#{reservation.title}</h4>
+                                <h6>#{reservation.description}</h6>
+                                <p>#{reservation.timeStart}</p>
+                                <p>#{reservation.timeEnd}</p>
+                                <br/>
+                                <i>#{ReservationManagementController.formatApprovedBy(reservation)}</i>
+                                <f:facet name="footer">
+                                    <div class="btn-toolbar pull-right">
+                                        <h:commandButton styleClass="btn btn-primary"
+                                                         value="Edit Reservation" style="display: inline-block">
+                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
+                                        </h:commandButton>
+
+                                        <b:button styleClass="btn btn-danger"
+                                                  value="Delete Reservation"
+                                                  style="display: inline-block"
+                                                  p:data-toggle="modal"
+                                                  p:data-target="#deletionConfirmModal"/>
+
+                                    </div>
+                                </f:facet>
+                            </b:panel>
+                        </ui:repeat>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{empty ReservationManagementController.user.reservations}">
+                        <i>No Reservations</i>
+                    </ui:fragment>
+                </b:column>
             </b:container>
-        </ui:define>
-    </ui:composition>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
 
 </html>

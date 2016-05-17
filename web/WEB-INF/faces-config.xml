@@ -130,4 +130,9 @@
             <value>#{NotificationController}</value>
         </managed-property>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ReservationManagementController</managed-bean-name>
+        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservationManagementController</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 </faces-config>

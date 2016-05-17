@@ -3,8 +3,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui">
 
@@ -18,12 +16,12 @@
             </b:column>
             <b:column colMd="3">
                 <ui:fragment rendered="#{not empty ReservationViewController.cardModels}">
-                    <ui:repeat value="#{ReservationViewController.cardModels}" var="card">
-                        <b:panel title="#{card.title} - #{card.reservable.name}" look="info">
-                            <h4>#{card.title}</h4>
-                            <h6>#{card.description}</h6>
-                            <p>#{card.timeStart}</p>
-                            <p>#{card.timeEnd}</p>
+                    <ui:repeat value="#{ReservationViewController.cardModels}" var="reservation">
+                        <b:panel title="#{reservation.title} - #{reservation.reservable.name}" look="info">
+                            <h4>#{reservation.title}</h4>
+                            <h6>#{reservation.description}</h6>
+                            <p>#{reservation.timeStart}</p>
+                            <p>#{reservation.timeEnd}</p>
                         </b:panel>
                     </ui:repeat>
                 </ui:fragment>
