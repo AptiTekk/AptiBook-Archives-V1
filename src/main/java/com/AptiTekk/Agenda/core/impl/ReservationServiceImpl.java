@@ -59,7 +59,8 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
             String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
-            for (UserGroup group : reservation.getReservable().getOwners()) {
+            //TODO: Traverse Reservable Owner to find all Owners
+            /*for (UserGroup group : reservation.getReservable().getOwners()) {
                 for (User user : group.getUsers()) {
                     try {
                         Notification n = (Notification) createDefaultNotificationBuilder()
@@ -72,7 +73,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                         e.printStackTrace();
                     }
                 }
-            }
+            }*/
 
             super.insert(reservation);
         } catch (IOException e) {

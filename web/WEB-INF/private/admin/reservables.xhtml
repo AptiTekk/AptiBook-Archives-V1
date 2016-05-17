@@ -186,7 +186,7 @@
                                                         <h:outputLabel value="Owner Group:"
                                                                        styleClass="col-xs-3 control-label"/>
                                                         <b:column colXs="9">
-                                                            <pf:tree id="tree" value="#{GroupController.root}"
+                                                            <pf:tree id="tree" value="#{GroupController.getParentSelectionRoot(null)}"
                                                                      var="node" dynamic="true"
                                                                      orientation="horizontal" selectionMode="single"
                                                                      selection="#{ReservablesEditController.editableTabReservableOwnerGroup}">

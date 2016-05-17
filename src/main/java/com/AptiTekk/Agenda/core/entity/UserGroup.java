@@ -2,7 +2,6 @@ package com.AptiTekk.Agenda.core.entity;
 
 import java.io.Serializable;
 
-import javax.jws.soap.SOAPBinding.Use;
 import javax.persistence.*;
 
 import java.util.ArrayList;
@@ -22,11 +21,9 @@ public class UserGroup implements Serializable {
 
     private String name;
 
-    // bi-directional many-to-one association to Room
-    @ManyToMany(mappedBy = "owners")
-    private List<Reservable> rooms;
+    @OneToMany(mappedBy = "owner")
+    private List<Reservable> reservables;
 
-    // bi-directional many-to-many association to User
     @ManyToMany(mappedBy = "userGroups")
     private List<User> users = new ArrayList<>();
 
@@ -60,21 +57,21 @@ public class UserGroup implements Serializable {
         this.name = name;
     }
 
-    public List<Reservable> getRooms() {
-        return this.rooms;
+    public List<Reservable> getReservables() {
+        return this.reservables;
     }
 
-    public void setRooms(List<Reservable> rooms) {
-        this.rooms = rooms;
+    public void setReservables(List<Reservable> rooms) {
+        this.reservables = rooms;
     }
 
     public Reservable addReservable(Reservable room) {
-        getRooms().add(room);
+        getReservables().add(room);
         return room;
     }
 
     public Reservable removeReservable(Reservable room) {
-        getRooms().remove(room);
+        getReservables().remove(room);
         return room;
     }
 

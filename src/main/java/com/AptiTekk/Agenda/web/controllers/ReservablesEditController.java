@@ -4,6 +4,7 @@ import com.AptiTekk.Agenda.core.ReservableService;
 import com.AptiTekk.Agenda.core.ReservableTypeService;
 import com.AptiTekk.Agenda.core.entity.Reservable;
 import com.AptiTekk.Agenda.core.entity.ReservableType;
+import com.AptiTekk.Agenda.core.entity.UserGroup;
 import com.AptiTekk.Agenda.core.utilities.TimeRange;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
@@ -88,7 +89,10 @@ public class ReservablesEditController {
             else if (getEditableTabReservableName().isEmpty())
                 FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name cannot be empty!"));
             else if (!getEditableTabReservableName().matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Reservable's name may only contain A-Z, a-z, 0-9, #, and space!"));
+
+            if(getEditableTabReservableOwnerGroup() == null)
+                FacesContext.getCurrentInstance().addMessage(":reservableTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Reservable!"));
 
             if (FacesContext.getCurrentInstance().getMessageList(":reservableTypeEditForm").isEmpty()) {
                 getSelectedTabReservable().setName(getEditableTabReservableName());
@@ -103,6 +107,8 @@ public class ReservablesEditController {
                     refreshReservableTypeList();
                     return;
                 }
+
+                getSelectedTabReservable().setOwner((UserGroup) getEditableTabReservableOwnerGroup().getData());
 
                 setSelectedTabReservable(reservableService.merge(getSelectedTabReservable()));
                 refreshReservableTypeList();

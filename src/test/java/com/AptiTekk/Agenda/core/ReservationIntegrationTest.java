@@ -68,12 +68,7 @@ public class ReservationIntegrationTest {
         Reservable testReservable = new Reservable();
         testReservable.setName("TestReservable");
         testReservable.setType(testReservableType);
-        List<UserGroup> owners = new ArrayList<UserGroup>() {
-            {
-                add(testOwners);
-            }
-        };
-        testReservable.setOwners(owners);
+        testReservable.setOwner(testOwners);
 
         userService.insert(testOwner);
         userService.insert(testRenter);

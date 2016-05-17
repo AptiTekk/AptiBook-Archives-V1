@@ -37,66 +37,97 @@
                 </b:column>
                 <b:column colSm="6">
                     <h:form styleClass="form-horizontal">
-                        <b:column colXs="9" offsetXs="3">
-                            <b:messages for="groupEditForm" />
-                            <h4>Group Settings</h4>
-                        </b:column>
+                        <c:choose>
+                            <c:when test="#{GroupEditController.selectedNode == null}">
+                                <b:column colXs="9" offsetXs="3">
+                                    <b:messages for="groupEditForm"/>
+                                    <h4>Please select a group.</h4>
+                                </b:column>
+                            </c:when>
+                            <c:otherwise>
+                                <b:column colXs="9" offsetXs="3">
+                                    <b:messages for="groupEditForm"/>
+                                    <h4>Group Settings</h4>
+                                </b:column>
 
-                        <div class="form-group">
-                            <h:outputLabel value="Name:" styleClass="col-xs-3 control-label"/>
-                            <b:column colXs="9">
-                                <c:choose>
-                                    <c:when test="#{GroupEditController.getData(GroupEditController.selectedNode).immutable}">
-                                        <h:outputText styleClass="form-control"
-                                                      value="#{GroupEditController.getData(GroupEditController.selectedNode).name}" p:disabled="true"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <h:inputText styleClass="form-control"
-                                                     value="#{GroupEditController.getData(GroupEditController.selectedNode).name}"
-                                                     disabled="#{GroupEditController.selectedNode == null}"/>
-                                    </c:otherwise>
-                                </c:choose>
-                            </b:column>
-                        </div>
-                        <div class="form-group">
-                            <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
-                            <b:column colXs="9">
-                                <pf:dataList
-                                        value="#{GroupEditController.getData(GroupEditController.selectedNode).users}"
-                                        var="user" type="unordered" itemType="none" paginator="true" rows="10"
-                                        styleClass="paginated">
-                                    <h:outputText value="#{user.username}" style="display:inline-block"/>
-                                </pf:dataList>
-                            </b:column>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-xs-offset-3 col-xs-9">
-                                <div class="btn-toolbar">
-                                    <h:commandButton styleClass="btn btn-primary"
-                                                     value="Save Changes" style="display: inline-block"
-                                                     action="#{GroupEditController.updateSettings()}"
-                                                     disabled="#{GroupEditController.selectedNode == null}">
-                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                    </h:commandButton>
-
-                                    <h:commandButton styleClass="btn btn-default"
-                                                     value="Reset Fields" style="display: inline-block"
-                                                     action="#{GroupEditController.resetTree()}"
-                                                     disabled="#{GroupEditController.selectedNode == null}">
-                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                    </h:commandButton>
-
-                                    <b:button styleClass="btn btn-danger"
-                                              value="Delete Group"
-                                              style="display: inline-block"
-                                              p:data-toggle="modal"
-                                              p:data-target="#deletionConfirmModal"
-                                              disabled="#{GroupEditController.selectedNode == null or GroupEditController.getData(GroupEditController.selectedNode).immutable}"/>
-
+                                <div class="form-group">
+                                    <h:outputLabel value="Name:" styleClass="col-xs-3 control-label"/>
+                                    <b:column colXs="9">
+                                        <c:choose>
+                                            <c:when test="#{GroupEditController.selectedGroup.immutable}">
+                                                <h:outputText styleClass="form-control"
+                                                              value="#{GroupEditController.selectedGroup.name}"
+                                                              p:disabled="true"/>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <h:inputText styleClass="form-control"
+                                                             value="#{GroupEditController.editableGroupName}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </b:column>
                                 </div>
-                            </div>
-                        </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Parent Group:"
+                                                   styleClass="col-xs-3 control-label"/>
+                                    <b:column colXs="9">
+                                        <pf:tree id="tree"
+                                                 value="#{GroupController.getParentSelectionRoot(GroupEditController.selectedGroup)}"
+                                                 var="node" dynamic="true"
+                                                 orientation="horizontal" selectionMode="single"
+                                                 selection="#{ReservablesEditController.editableTabReservableOwnerGroup}">
+                                            <pf:ajax event="select" update="@form"
+                                                     onstart="loading_start()"
+                                                     oncomplete="loading_complete()"/>
+                                            <pf:treeNode>
+                                                <h:outputText value="#{node.name}"/>
+                                            </pf:treeNode>
+                                        </pf:tree>
+                                        <pf:tooltip for="tree"
+                                                    value="The selected group and its parents will be notified of reservation requests for this Reservable."
+                                                    showDelay="1000"/>
+                                    </b:column>
+                                </div>
+
+                                <div class="form-group">
+                                    <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
+                                    <b:column colXs="9">
+                                        <pf:dataList
+                                                value="#{GroupEditController.getData(GroupEditController.selectedNode).users}"
+                                                var="user" type="unordered" itemType="none" paginator="true" rows="10"
+                                                styleClass="paginated">
+                                            <h:outputText value="#{user.username}" style="display:inline-block"/>
+                                        </pf:dataList>
+                                    </b:column>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-xs-offset-3 col-xs-9">
+                                        <div class="btn-toolbar">
+                                            <h:commandButton styleClass="btn btn-primary"
+                                                             value="Save Changes" style="display: inline-block"
+                                                             action="#{GroupEditController.updateSettings()}">
+                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                            </h:commandButton>
+
+                                            <h:commandButton styleClass="btn btn-default"
+                                                             value="Reset Fields" style="display: inline-block"
+                                                             action="#{GroupEditController.resetSettings()}">
+                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                            </h:commandButton>
+
+                                            <b:button styleClass="btn btn-danger"
+                                                      value="Delete Group"
+                                                      style="display: inline-block"
+                                                      p:data-toggle="modal"
+                                                      p:data-target="#deletionConfirmModal"
+                                                      disabled="#{GroupEditController.getData(GroupEditController.selectedNode).immutable}"/>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </h:form>
                 </b:column>
             </b:row>

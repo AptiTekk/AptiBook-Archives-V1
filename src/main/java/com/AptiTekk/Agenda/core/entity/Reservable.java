@@ -47,11 +47,8 @@ public class Reservable implements Serializable {
     @ManyToOne
     private ReservableType type;
 
-    // bi-directional many-to-one association to Group
-    @ManyToMany
-    @JoinTable(name = "Reservable_has_UserGroups", joinColumns = {@JoinColumn(name = "Room_id")},
-            inverseJoinColumns = {@JoinColumn(name = "UserGroup_idUserGroup")})
-    private List<UserGroup> owners;
+    @ManyToOne
+    private UserGroup owner;
 
     private String imageFileName;
 
@@ -132,24 +129,12 @@ public class Reservable implements Serializable {
         this.type = type;
     }
 
-    public List<UserGroup> getOwners() {
-        return owners;
-    }
-
-    public void setOwners(List<UserGroup> owners) {
-        this.owners = owners;
-    }
-
-    public UserGroup addOwner(UserGroup owner) {
-        getOwners().add(owner);
-
+    public UserGroup getOwner() {
         return owner;
     }
 
-    public UserGroup removeOwner(UserGroup owner) {
-        getOwners().remove(owner);
-
-        return owner;
+    public void setOwner(UserGroup owner) {
+        this.owner = owner;
     }
 
     public String getImageFileName() {
