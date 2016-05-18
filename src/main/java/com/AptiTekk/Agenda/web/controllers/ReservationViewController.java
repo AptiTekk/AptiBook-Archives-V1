@@ -9,15 +9,15 @@ import com.AptiTekk.Agenda.core.utilities.FacesSessionHelper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
-/**
- *
- * @author kevint
- */
+@ManagedBean(name = "ReservationViewController")
+@ViewScoped
 public class ReservationViewController {
 
     @Inject
