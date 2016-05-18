@@ -12,11 +12,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.util.Set;
 
 /**
  * Created by kevint on 5/16/2016.
  */
-@ManagedBean
+@ManagedBean(name = "ReservationManagementController")
 @ViewScoped
 public class ReservationManagementController {
 
@@ -28,6 +29,8 @@ public class ReservationManagementController {
 
     private User user;
 
+    private Set<Reservation> reservations;
+
     @PostConstruct
     public void init() {
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -38,6 +41,7 @@ public class ReservationManagementController {
             this.setUser(userService.findByName(loggedInUser));
         }
 
+        reservations = reservationService.getAllUnderUser(user);
     }
 
     public String formatApprovedBy(Reservation reservation) {
@@ -58,5 +62,13 @@ public class ReservationManagementController {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(Set<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }
