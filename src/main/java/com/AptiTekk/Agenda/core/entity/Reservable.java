@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -148,16 +150,22 @@ public class Reservable implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Reservable that = (Reservable) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof Reservable)) return false;
 
+        Reservable other = (Reservable) o;
+
+        return EqualsHelper.areEquals(getName(), other.getName())
+                && EqualsHelper.areEquals(getAvailabilityStart(), other.getAvailabilityStart())
+                && EqualsHelper.areEquals(getAvailabilityEnd(), other.getAvailabilityEnd())
+                && EqualsHelper.areEquals(getNeedsApproval(), other.getNeedsApproval())
+                && EqualsHelper.areEquals(getImageFileName(), other.getImageFileName());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getName(), getAvailabilityStart(), getAvailabilityEnd(), getNeedsApproval(), getImageFileName());
     }
 }

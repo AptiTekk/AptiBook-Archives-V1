@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -154,16 +156,24 @@ public class Reservation implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Reservation that = (Reservation) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof Reservation)) return false;
 
+        Reservation other = (Reservation) o;
+
+        return  EqualsHelper.areEquals(getTitle(), other.getTitle())
+                && EqualsHelper.areEquals(getDescription(), other.getDescription())
+                && EqualsHelper.areEquals(getDateCreated(), other.getDateCreated())
+                && EqualsHelper.areEquals(getGoogleEventId(), other.getGoogleEventId())
+                && EqualsHelper.areEquals(getPendingApproval(), other.getPendingApproval())
+                && EqualsHelper.areEquals(getTimeStart(), other.getTimeStart())
+                && EqualsHelper.areEquals(getTimeEnd(), other.getTimeEnd());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), getDateCreated(), getGoogleEventId(), getPendingApproval(), getTimeStart(), getTimeEnd());
     }
 }

@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -63,16 +65,18 @@ public class ReservationFieldEntry implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        ReservationFieldEntry that = (ReservationFieldEntry) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof ReservationFieldEntry)) return false;
 
+        ReservationFieldEntry other = (ReservationFieldEntry) o;
+
+        return EqualsHelper.areEquals(getContent(), other.getContent());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getContent());
     }
 }

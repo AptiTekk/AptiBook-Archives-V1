@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
 import com.AptiTekk.Agenda.core.UserService;
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
 import com.AptiTekk.Agenda.core.utilities.notification.OmitInjection;
 
 
@@ -223,17 +224,26 @@ public class User implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        User user = (User) o;
+        if (o == null) return false;
 
-        return id == user.id;
+        if (!(o instanceof User)) return false;
 
+        User other = (User) o;
+
+        return EqualsHelper.areEquals(getUsername(), other.getUsername())
+                && EqualsHelper.areEquals(getPassword(), other.getPassword())
+                && EqualsHelper.areEquals(getFirstName(), other.getFirstName())
+                && EqualsHelper.areEquals(getLastName(), other.getLastName())
+                && EqualsHelper.areEquals(getEmail(), other.getEmail())
+                && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
+                && EqualsHelper.areEquals(getLocation(), other.getLocation())
+                && EqualsHelper.areEquals(getEnabled(), other.getEnabled());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getUsername(), getPassword(), getFirstName(), getLastName(), getEmail(), getPhoneNumber(), getLocation(), getEnabled());
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.String;
 import javax.persistence.*;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -58,16 +59,19 @@ public class AppProperty implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        AppProperty that = (AppProperty) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof AppProperty)) return false;
 
+        AppProperty other = (AppProperty) o;
+
+        return EqualsHelper.areEquals(getKey(), other.getKey())
+                && EqualsHelper.areEquals(getValue(), other.getValue());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getKey(), getValue());
     }
 }

@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -63,16 +65,20 @@ public class ReservationApproval implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        ReservationApproval that = (ReservationApproval) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof ReservationApproval)) return false;
 
+        ReservationApproval other = (ReservationApproval) o;
+
+        return  EqualsHelper.areEquals(getUser(), other.getUser())
+                && EqualsHelper.areEquals(getReservation(), other.getReservation())
+                && EqualsHelper.areEquals(getApproved(), other.getApproved());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getUser(), getReservation(), getApproved());
     }
 }
