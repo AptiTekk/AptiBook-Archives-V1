@@ -1,9 +1,8 @@
 package com.AptiTekk.Agenda.core;
 
-import javax.ejb.Local;
-
 import com.AptiTekk.Agenda.core.entity.UserGroup;
 
+import javax.ejb.Local;
 import java.util.List;
 
 @Local
@@ -28,5 +27,7 @@ public interface UserGroupService extends EntityService<UserGroup> {
      * @return The top level, AKA root group.
      */
     public UserGroup getRootGroup();
+
+    UserGroup[] getSenior(List<UserGroup> groups);
 
 }

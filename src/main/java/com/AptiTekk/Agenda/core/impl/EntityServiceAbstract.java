@@ -1,11 +1,11 @@
 package com.AptiTekk.Agenda.core.impl;
 
+import com.AptiTekk.Agenda.core.EntityService;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import com.AptiTekk.Agenda.core.EntityService;
-import java.util.List;
 import javax.persistence.Query;
+import java.util.List;
 
 public abstract class EntityServiceAbstract<T> implements EntityService<T> {
 
@@ -16,6 +16,9 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T> {
 
     public EntityServiceAbstract(Class<T> entityType) {
         this.entityType = entityType;
+    }
+
+    protected EntityServiceAbstract() {
     }
 
     @Override

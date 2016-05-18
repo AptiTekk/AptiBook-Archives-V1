@@ -6,7 +6,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:pf="http://primefaces.org/ui"
+>
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
@@ -14,10 +15,17 @@
             <b:container>
                 <h2 style="margin-top:50px">Manage Reservations</h2>
 
-                <b:column colSm="8" offsetSm="1">
-                    <ui:fragment rendered="#{not empty ReservationManagementController.user.reservations}">
-                        <ui:repeat value="#{ReservationManagementController.user.reservations}" var="reservation">
-                            <b:panel title="#{reservation.title} - #{reservation.reservable.name}" look="info">
+                <ui:fragment rendered="#{not empty ReservationManagementController.reservations}">
+                    <b:column colMd="6" offsetMd="2">
+
+                        <pf:accordionPanel dynamic="true" cache="true" activeIndex="-1"
+                                           value="#{ReservationManagementController.reservations}"
+                                           var="reservation">
+                            <pf:ajax event="tabChange"
+                                     onstart="loading_start()"
+                                     oncomplete="loading_complete()"/>
+
+                            <pf:tab title="#{reservation.title} - #{reservation.reservable.name}">
                                 <h4>#{reservation.title}</h4>
                                 <h6>#{reservation.description}</h6>
                                 <p>#{reservation.timeStart}</p>
@@ -26,23 +34,32 @@
                                 <i>#{ReservationManagementController.formatApprovedBy(reservation)}</i>
                                 <f:facet name="footer">
                                     <div class="btn-toolbar pull-right">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Edit Reservation" style="display: inline-block">
+                                        <h:commandButton styleClass="btn btn-success"
+                                                         value="Approve" style="display: inline-block"
+                                                         action="#{GroupEditController.updateSettings()}">
                                             <f:ajax execute="@form" render=":page" onevent="loading"/>
                                         </h:commandButton>
 
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete Reservation"
-                                                  style="display: inline-block"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"/>
+                                        <h:commandButton styleClass="btn btn-warning"
+                                                         value="Counterpropose" style="display: inline-block">
+                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
+                                        </h:commandButton>
 
+                                        <h:commandButton styleClass="btn btn-danger"
+                                                         value="Reject" style="display: inline-block">
+                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
+                                        </h:commandButton>
                                     </div>
                                 </f:facet>
-                            </b:panel>
-                        </ui:repeat>
-                    </ui:fragment>
-                    <ui:fragment rendered="#{empty ReservationManagementController.user.reservations}">
+                            </pf:tab>
+                        </pf:accordionPanel>
+
+                    </b:column>
+                </ui:fragment>
+
+
+                <b:column colSm="8" offsetSm="1">
+                    <ui:fragment rendered="#{empty ReservationManagementController.reservations}">
                         <i>No Reservations</i>
                     </ui:fragment>
                 </b:column>

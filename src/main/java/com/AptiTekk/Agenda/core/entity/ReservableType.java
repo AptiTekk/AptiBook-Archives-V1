@@ -2,10 +2,9 @@ package com.AptiTekk.Agenda.core.entity;
 
 import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-
-import javax.persistence.*;
 
 /**
  * Entity implementation class for Entity: ReservableType
@@ -23,7 +22,7 @@ public class ReservableType implements Serializable {
     private List<Reservable> reservables;
 
     @OneToMany(mappedBy = "reservableType", cascade = CascadeType.REMOVE)
-    @OrderColumn(name = "Order")
+    @OrderColumn(name = "`Order`")
     private List<ReservationField> reservationFields;
 
     private static final long serialVersionUID = 1L;

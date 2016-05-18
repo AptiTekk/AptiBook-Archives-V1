@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+>
+
+<ui:composition>
+    <h:panelGroup id="page">
+        <b:container>
+            <h2 style="margin-top:50px">Reservation Field Editor</h2>
+
+            <ui:repeat value="#{ReservationFieldEditorController.fields}" var="field">
+                <div class="form-group">
+                    <b:column colXs="9">
+                        <h:inputText value="#{field.name}" styleClass="col-xs-3 control-label"/>
+                        <h:inputText styleClass="form-control"
+                                     value="#{field.description}"/>
+                    </b:column>
+                </div>
+            </ui:repeat>
+
+        </b:container>
+    </h:panelGroup>
+</ui:composition>
+
+</html>
