@@ -5,6 +5,8 @@
  */
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
@@ -100,17 +102,22 @@ public class Notification implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Notification that = (Notification) o;
+        if (o == null) return false;
 
-        return id != null ? id.equals(that.id) : that.id == null;
+        if (!(o instanceof Notification)) return false;
 
+        Notification other = (Notification) o;
+
+        return EqualsHelper.areEquals(getSubject(), other.getSubject())
+                && EqualsHelper.areEquals(getBody(), other.getBody())
+                && EqualsHelper.areEquals(getCreation(), other.getCreation())
+                && EqualsHelper.areEquals(getRead(), other.getRead());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id.intValue() + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getSubject(), getBody(), getCreation(), getRead());
     }
 
     @Override
