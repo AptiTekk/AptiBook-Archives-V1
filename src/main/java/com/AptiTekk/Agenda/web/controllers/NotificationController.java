@@ -21,11 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by kevint on 5/9/2016.
- * Happy birthday Me
- */
-@ManagedBean
+@ManagedBean(name = "NotificationController")
 @SessionScoped
 public class NotificationController implements NotificationListener {
 

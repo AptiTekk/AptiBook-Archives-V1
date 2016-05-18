@@ -1,12 +1,10 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 /**
  * Entity implementation class for Entity: ReservationField
@@ -25,6 +23,9 @@ public class ReservationField implements Serializable {
     @Lob
     private String description;
     private static final long serialVersionUID = 1L;
+
+    @ManyToOne
+    private ReservableType reservableType;
 
     public ReservationField() {
         super();
@@ -54,19 +55,30 @@ public class ReservationField implements Serializable {
         this.description = description;
     }
 
+    public ReservableType getReservableType() {
+        return reservableType;
+    }
+
+    public void setReservableType(ReservableType reservableType) {
+        this.reservableType = reservableType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        ReservationField that = (ReservationField) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof ReservationField)) return false;
 
+        ReservationField other = (ReservationField) o;
+
+        return EqualsHelper.areEquals(getName(), other.getName())
+                && EqualsHelper.areEquals(getDescription(), other.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getName(), getDescription());
     }
 }

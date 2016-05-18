@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -19,6 +21,10 @@ public class ReservableType implements Serializable {
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
     private List<Reservable> reservables;
+
+    @OneToMany(mappedBy = "reservableType", cascade = CascadeType.REMOVE)
+    @OrderColumn(name = "Order")
+    private List<ReservationField> reservationFields;
 
     private static final long serialVersionUID = 1L;
 
@@ -55,19 +61,29 @@ public class ReservableType implements Serializable {
         this.name = name;
     }
 
+    public List<ReservationField> getReservationFields() {
+        return reservationFields;
+    }
+
+    public void setReservationFields(List<ReservationField> reservationFields) {
+        this.reservationFields = reservationFields;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        ReservableType that = (ReservableType) o;
+        if (o == null) return false;
 
-        return id == that.id;
+        if (!(o instanceof ReservableType)) return false;
 
+        ReservableType other = (ReservableType) o;
+
+        return EqualsHelper.areEquals(getName(), other.getName());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getName());
     }
 }

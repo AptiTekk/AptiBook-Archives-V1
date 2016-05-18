@@ -6,6 +6,7 @@
 package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.UserGroupService;
+import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
@@ -18,7 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
-@ManagedBean
+@ManagedBean(name = "GroupEditController")
 @ViewScoped
 public class GroupEditController {
 

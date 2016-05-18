@@ -4,26 +4,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
-    <managed-bean>
-        <managed-bean-name>TimeSelectionController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.TimeSelectionController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>AccountController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.AccountController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>SettingsController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.SettingsController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>UserEditController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.UserEditController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
     <navigation-rule>
         <display-name>*</display-name>
         <from-view-id>*</from-view-id>
@@ -87,45 +67,6 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-    <managed-bean>
-        <managed-bean-name>ReservationViewController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservationViewController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>PropertiesController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.PropertiesController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>GroupEditController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupEditController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>GroupTreeController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.GroupTreeController</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>ReservablesEditController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservablesEditController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>NotificationController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.NotificationController</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    <managed-bean>
-        <managed-bean-name>NotificationViewController</managed-bean-name>
-        <managed-bean-class>com.AptiTekk.Agenda.web.controllers.NotificationViewController</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-        <managed-property>
-            <property-name>notificationController</property-name>
-            <value>#{NotificationController}</value>
-        </managed-property>
-    </managed-bean>
     <managed-bean>
         <managed-bean-name>ReservationManagementController</managed-bean-name>
         <managed-bean-class>com.AptiTekk.Agenda.web.controllers.ReservationManagementController</managed-bean-class>

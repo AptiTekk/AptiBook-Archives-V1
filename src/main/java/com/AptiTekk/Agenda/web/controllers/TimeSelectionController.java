@@ -20,7 +20,7 @@ import com.AptiTekk.Agenda.core.utilities.TimeRange;
 import java.text.DateFormat;
 import javax.inject.Inject;
 
-@ManagedBean
+@ManagedBean(name = "TimeSelectionController")
 @ViewScoped
 public class TimeSelectionController {
 

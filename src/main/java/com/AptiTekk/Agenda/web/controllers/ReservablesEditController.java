@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import java.text.ParseException;
 import java.util.List;
 
-@ManagedBean
+@ManagedBean(name = "ReservablesEditController")
 @ViewScoped
 public class ReservablesEditController {
 

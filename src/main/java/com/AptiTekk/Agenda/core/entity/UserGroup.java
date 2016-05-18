@@ -1,5 +1,7 @@
 package com.AptiTekk.Agenda.core.entity;
 
+import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 
 import javax.persistence.*;
@@ -120,16 +122,18 @@ public class UserGroup implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        UserGroup userGroup = (UserGroup) o;
+        if (o == null) return false;
 
-        return id == userGroup.id;
+        if (!(o instanceof UserGroup)) return false;
 
+        UserGroup other = (UserGroup) o;
+
+        return EqualsHelper.areEquals(getName(), other.getName());
     }
 
     @Override
     public int hashCode() {
-        return 31 * (id + getClass().getName().hashCode());
+        return EqualsHelper.calculateHashCode(getName());
     }
 }

@@ -73,7 +73,7 @@
                                     <b:column colXs="9">
                                         <pf:tree id="parentSelectionTree"
                                                  value="#{GroupTreeController.getTree(GroupEditController.currentGroupParent, GroupEditController.selectedGroup, true)}"
-                                                 var="node" cache="true" dynamic="false"
+                                                 var="node" dynamic="true"
                                                  orientation="horizontal" selectionMode="single">
                                             <pf:ajax event="select" onstart="loading_start()"
                                                      oncomplete="loading_complete()"

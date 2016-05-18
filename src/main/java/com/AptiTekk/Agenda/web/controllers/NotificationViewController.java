@@ -9,10 +9,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import java.util.List;
 
-/**
- * Created by kevint on 5/13/2016.
- */
-@ManagedBean
+@ManagedBean(name = "NotificationViewController")
 @ViewScoped
 public class NotificationViewController {
 

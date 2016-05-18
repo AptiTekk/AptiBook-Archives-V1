@@ -12,7 +12,7 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.*;
 
-@ManagedBean
+@ManagedBean(name = "GroupTreeController")
 @RequestScoped
 public class GroupTreeController {
 
@@ -21,19 +21,13 @@ public class GroupTreeController {
     @Inject
     private UserGroupService groupService;
 
-    @PostConstruct
-    public void init()
-    {
-        System.out.println("--------------- New Tree Controller ---------------");
-    }
-
     private TreeNode buildTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, boolean allowRootSelection) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
         TreeNode rootNode = new DefaultTreeNode(rootGroup);
         rootNode.setExpanded(true);
-        if(currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
+        if (currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
             rootNode.setSelected(true);
         queue.add(rootNode);
 
@@ -44,13 +38,15 @@ public class GroupTreeController {
 
             if (group != null) {
                 for (UserGroup child : group.getChildren()) {
-                    if (userGroupToExclude != null && child.equals(userGroupToExclude))
+                    if (userGroupToExclude != null && child.equals(userGroupToExclude)) {
                         continue;
+                    }
 
                     TreeNode node = new DefaultTreeNode(child, currEntry);
                     node.setExpanded(true);
-                    if(currentlySelectedGroup != null && child.equals(currentlySelectedGroup))
+                    if (currentlySelectedGroup != null && child.equals(currentlySelectedGroup)) {
                         node.setSelected(true);
+                    }
                     queue.add(node);
                 }
             }
@@ -68,14 +64,9 @@ public class GroupTreeController {
         hashCode += userGroupToExclude == null ? 0 : userGroupToExclude.hashCode();
         hashCode += allowRootSelection.hashCode();
 
-        if(cache.containsKey(hashCode))
-        {
-            System.out.println("Already Built");
+        if (cache.containsKey(hashCode)) {
             return cache.get(hashCode);
-        }
-        else
-        {
-            System.out.println("Creating new Tree");
+        } else {
             TreeNode newTree = buildTree(currentlySelectedGroup, userGroupToExclude, allowRootSelection);
             cache.put(hashCode, newTree);
 

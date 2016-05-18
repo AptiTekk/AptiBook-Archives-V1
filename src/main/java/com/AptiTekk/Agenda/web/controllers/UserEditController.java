@@ -12,7 +12,7 @@ import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.Sha256Helper;
 import java.util.List;
 
-@ManagedBean
+@ManagedBean(name = "UserEditController")
 @ViewScoped
 public class UserEditController {
 

@@ -19,7 +19,7 @@ import com.AptiTekk.Agenda.web.AuthenticationFilter;
 
 import java.io.IOException;
 
-@ManagedBean
+@ManagedBean(name = "AccountController")
 @ViewScoped
 public class AccountController {
 
