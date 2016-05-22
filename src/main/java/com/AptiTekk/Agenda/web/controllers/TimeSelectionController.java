@@ -1,9 +1,10 @@
 package com.AptiTekk.Agenda.web.controllers;
 
-import com.AptiTekk.Agenda.core.ReservableTypeService;
+import com.AptiTekk.Agenda.core.AssetTypeService;
 import com.AptiTekk.Agenda.core.ReservationService;
-import com.AptiTekk.Agenda.core.entity.Reservable;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
+import com.AptiTekk.Agenda.core.entity.Asset;
+import com.AptiTekk.Agenda.core.entity.AssetType;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,16 +39,16 @@ public class TimeSelectionController {
     public static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
     public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
 
-    private List<ReservableType> reservableTypes;
-    private ReservableType selectedReservableType;
+    private List<AssetType> assetTypes;
+    private AssetType selectedAssetType;
     
-    private List<Reservable> results;
+    private List<Asset> results;
 
     @Inject
     private ReservationService reservationService;
 
     @Inject
-    private ReservableTypeService reservableTypeService;
+    private AssetTypeService assetTypeService;
 
     @PostConstruct
     public void init() {
@@ -64,7 +65,7 @@ public class TimeSelectionController {
         // ---- End Temporary Code ----//
         calculateStartTimes();
 
-        reservableTypes = reservableTypeService.getAll();
+        assetTypes = assetTypeService.getAll();
     }
 
     /**
@@ -121,14 +122,14 @@ public class TimeSelectionController {
     }
 
     public void searchForReservable() {
-        AgendaLogger.logVerbose("Searching for Reservable");
+        AgendaLogger.logVerbose("Searching for Asset");
 
         try {
         DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/YYYY h:mm a");
         Date startDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
         Date endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
 
-        this.results = reservationService.findAvailableReservables(selectedReservableType, startDateTime, endDateTime);
+        this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime);
         AgendaLogger.logVerbose(results.toString());
         } catch(ParseException e) {
             e.printStackTrace();
@@ -191,25 +192,25 @@ public class TimeSelectionController {
         this.endTime = endTime;
     }
 
-    public List<ReservableType> getReservableTypes() {
-        return reservableTypes;
+    public List<AssetType> getAssetTypes() {
+        return assetTypes;
     }
 
-    public void setReservableTypes(List<ReservableType> reservableTypes) {
-        this.reservableTypes = reservableTypes;
+    public void setAssetTypes(List<AssetType> assetTypes) {
+        this.assetTypes = assetTypes;
     }
 
-    public ReservableType getSelectedReservableType() {
-        return selectedReservableType;
+    public AssetType getSelectedAssetType() {
+        return selectedAssetType;
     }
 
-    public void setSelectedReservableType(ReservableType selectedReservableType) {
-        AgendaLogger.logVerbose("Reservable Type Selected: " + selectedReservableType.getName());
-        this.selectedReservableType = selectedReservableType;
+    public void setSelectedAssetType(AssetType selectedAssetType) {
+        AgendaLogger.logVerbose("Asset Type Selected: " + selectedAssetType.getName());
+        this.selectedAssetType = selectedAssetType;
         this.setDate(getDate());
     }
     
-    public List<Reservable> getResults()
+    public List<Asset> getResults()
     {
         return this.results;
     }

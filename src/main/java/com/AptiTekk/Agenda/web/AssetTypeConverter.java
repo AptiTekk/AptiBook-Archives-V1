@@ -1,7 +1,7 @@
 package com.AptiTekk.Agenda.web;
 
-import com.AptiTekk.Agenda.core.ReservableTypeService;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
+import com.AptiTekk.Agenda.core.AssetTypeService;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
@@ -11,24 +11,24 @@ import javax.inject.Inject;
 
 @ManagedBean
 @ApplicationScoped
-public class ReservableTypeConverter implements Converter  {
+public class AssetTypeConverter implements Converter  {
 
     @Inject
-    private ReservableTypeService reservableTypeService;
+    private AssetTypeService assetTypeService;
     
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-        if(string == null || string.isEmpty() || reservableTypeService == null)
+        if(string == null || string.isEmpty() || assetTypeService == null)
             return null;
         
-        return reservableTypeService.findByName(string);
+        return assetTypeService.findByName(string);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-        if(o instanceof ReservableType)
+        if(o instanceof AssetType)
         {
-            return ((ReservableType) o).getName();
+            return ((AssetType) o).getName();
         }
         return "";
     }

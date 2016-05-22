@@ -2,22 +2,22 @@ package com.AptiTekk.Agenda.core.impl;
 
 import javax.ejb.Stateless;
 
-import com.AptiTekk.Agenda.core.ReservableTypeService;
+import com.AptiTekk.Agenda.core.AssetTypeService;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.QReservableType;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
 import com.mysema.query.jpa.impl.JPAQuery;
 
 @Stateless
-public class ReservableTypeServiceImpl extends EntityServiceAbstract<ReservableType> implements ReservableTypeService {
+public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> implements AssetTypeService {
 
     QReservableType table = QReservableType.reservableType;
 
-    public ReservableTypeServiceImpl() {
-        super(ReservableType.class);
+    public AssetTypeServiceImpl() {
+        super(AssetType.class);
     }
 
     @Override
-    public ReservableType findByName(String name) {
+    public AssetType findByName(String name) {
         return new JPAQuery(entityManager).from(table).where(table.name.eq(name))
                 .singleResult(table);
     }

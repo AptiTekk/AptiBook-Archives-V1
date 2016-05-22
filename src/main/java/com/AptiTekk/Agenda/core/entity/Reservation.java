@@ -37,9 +37,9 @@ public class Reservation implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeStart;
 
-    // bi-directional many-to-one association to Room
-    @ManyToOne
-    private Reservable reservable;
+  // bi-directional many-to-one association to Room
+  @ManyToOne
+  private Asset asset;
 
     // bi-directional many-to-one association to User
     @ManyToOne
@@ -113,13 +113,13 @@ public class Reservation implements Serializable {
         this.timeStart = timeStart;
     }
 
-    public Reservable getReservable() {
-        return this.reservable;
-    }
+  public Asset getAsset() {
+    return this.asset;
+  }
 
-    public void setReservable(Reservable reservable) {
-        this.reservable = reservable;
-    }
+  public void setAsset(Asset asset) {
+    this.asset = asset;
+  }
 
     public User getUser() {
         return this.user;

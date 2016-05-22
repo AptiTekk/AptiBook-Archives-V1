@@ -23,8 +23,8 @@ public class UserGroup implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "owner")
-    private List<Reservable> reservables;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
+    private List<Asset> assets;
 
     @ManyToMany(mappedBy = "userGroups")
     private List<User> users = new ArrayList<>();
@@ -59,21 +59,21 @@ public class UserGroup implements Serializable {
         this.name = name;
     }
 
-    public List<Reservable> getReservables() {
-        return this.reservables;
+    public List<Asset> getAssets() {
+        return this.assets;
     }
 
-    public void setReservables(List<Reservable> rooms) {
-        this.reservables = rooms;
+    public void setAssets(List<Asset> rooms) {
+        this.assets = rooms;
     }
 
-    public Reservable addReservable(Reservable room) {
-        getReservables().add(room);
+    public Asset addReservable(Asset room) {
+        getAssets().add(room);
         return room;
     }
 
-    public Reservable removeReservable(Reservable room) {
-        getReservables().remove(room);
+    public Asset removeReservable(Asset room) {
+        getAssets().remove(room);
         return room;
     }
 

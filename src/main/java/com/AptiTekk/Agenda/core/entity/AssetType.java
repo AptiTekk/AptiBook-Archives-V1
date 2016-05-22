@@ -7,10 +7,11 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Entity implementation class for Entity: ReservableType
+ * Entity implementation class for Entity: AssetType
+ *
  */
 @Entity
-public class ReservableType implements Serializable {
+public class AssetType implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,19 +20,20 @@ public class ReservableType implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
-    private List<Reservable> reservables;
+    private List<Asset> assets;
 
-    @OneToMany(mappedBy = "reservableType", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "assetType", cascade = CascadeType.REMOVE)
     @OrderColumn(name = "`Order`")
     private List<ReservationField> reservationFields;
 
     private static final long serialVersionUID = 1L;
 
-    public ReservableType() {
+    public AssetType() {
         super();
     }
-
-    public ReservableType(String name) {
+    
+    public AssetType(String name)
+    {
         super();
         this.name = name;
     }
@@ -44,12 +46,12 @@ public class ReservableType implements Serializable {
         this.id = id;
     }
 
-    public List<Reservable> getReservables() {
-        return reservables;
+    public List<Asset> getAssets() {
+        return assets;
     }
 
-    public void setReservables(List<Reservable> reservables) {
-        this.reservables = reservables;
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
     }
 
     public String getName() {
@@ -74,9 +76,9 @@ public class ReservableType implements Serializable {
 
         if (o == null) return false;
 
-        if (!(o instanceof ReservableType)) return false;
+        if (!(o instanceof AssetType)) return false;
 
-        ReservableType other = (ReservableType) o;
+        AssetType other = (AssetType) o;
 
         return EqualsHelper.areEquals(getName(), other.getName());
     }

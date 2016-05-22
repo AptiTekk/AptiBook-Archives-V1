@@ -45,7 +45,7 @@ public class ReservationViewController {
         DefaultScheduleEvent event = new DefaultScheduleEvent();
         event.setStartDate(res.getTimeStart());
         event.setEndDate(res.getTimeEnd());
-        event.setTitle(res.getReservable().getName() + " - " + res.getTitle());
+        event.setTitle(res.getAsset().getName() + " - " + res.getTitle());
         event.setDescription(res.getDescription());
         return event;
     }

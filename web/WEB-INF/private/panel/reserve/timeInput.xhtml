@@ -36,20 +36,20 @@
                 <!-- Time Selection Form -->
                 <h:form id="timeForm">
                     <b:row>
-                        <!-- Column 1: Reservable Type Selection -->
+                        <!-- Column 1: Asset Type Selection -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="I'm looking for" styleClass="lead"/>
-                            <pf:dataTable value="#{TimeSelectionController.reservableTypes}"
-                                          var="reservableType"
+                            <pf:dataTable value="#{TimeSelectionController.assetTypes}"
+                                          var="assetType"
                                           selectionMode="single"
-                                          selection="#{TimeSelectionController.selectedReservableType}"
-                                          rowKey="#{reservableType.id}" sortBy="#{reservableType.name}">
+                                          selection="#{TimeSelectionController.selectedAssetType}"
+                                          rowKey="#{assetType.id}" sortBy="#{assetType.name}">
                                 <pf:ajax event="rowSelect" update=":timeForm" onstart="loading_start()"
                                          oncomplete="loading_complete()"/>
                                 <pf:ajax event="rowUnselect" update=":timeForm" onstart="loading_start()"
                                          oncomplete="loading_complete()"/>
                                 <pf:column headerText="Type" priority="1" style="width:100%">
-                                    <h:outputText value="#{reservableType.name}"/>
+                                    <h:outputText value="#{assetType.name}"/>
                                 </pf:column>
                             </pf:dataTable>
                         </b:column>
@@ -66,7 +66,7 @@
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.startTime}" styleClass="big-select" disabled="#{TimeSelectionController.selectedReservableType == null}">
+                            <h:selectOneMenu value="#{TimeSelectionController.startTime}" styleClass="big-select" disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
                                 <f:selectItems value="#{TimeSelectionController.startTimes}"

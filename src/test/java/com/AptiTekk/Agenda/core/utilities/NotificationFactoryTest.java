@@ -6,11 +6,11 @@ import java.util.Date;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.AptiTekk.Agenda.core.entity.Reservable;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
+import com.AptiTekk.Agenda.core.entity.Asset;
 import com.AptiTekk.Agenda.core.entity.Reservation;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.NotificationFactory.EmailNotificationBuilder;
@@ -28,24 +28,24 @@ public class NotificationFactoryTest {
     user.setFirstName("Mitchell");
     user.setLastName("Talmadge");
 
-    ReservableType type = new ReservableType();
+    AssetType type = new AssetType();
     type.setId(999);
 
-    Reservable item = new Reservable();
+    Asset item = new Asset();
     item.setName("item name!");
     item.setType(type);
 
     Reservation res = new Reservation();
     res.setDateCreated(new Date());
-    res.setReservable(item);
+    res.setAsset(item);
 
     String body =
         "Hello {user.fullname} {reservation.reservable.name} {reservation.reservable.type.id}";
     String html = "<html>{body} {user.email} {user.password} {unparseable}</html>";
     String expectedHtml = html
         .replace("{body}",
-            "Hello " + user.getFullname() + " " + res.getReservable().getName() + " "
-                + res.getReservable().getType().getId())
+            "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
+                + res.getAsset().getType().getId())
         .replace("{user.email}", user.getEmail())
         .replace("{user.password}", VariableInjection.OMITTED_PARAM);
 

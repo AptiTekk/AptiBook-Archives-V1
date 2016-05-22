@@ -18,7 +18,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     Properties properties;
 
     @Inject
-    ReservableService reservableService;
+    AssetService assetService;
 
     @Inject
     GoogleCalendarService googleCalendarService;
@@ -42,8 +42,8 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
             String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
-            //TODO: Traverse Reservable Owner to find all Owners
-            /*for (UserGroup group : reservation.getReservable().getOwners()) {
+            //TODO: Traverse Asset Owner to find all Owners
+            /*for (UserGroup group : reservation.getAsset().getOwners()) {
                 for (User user : group.getUsers()) {
                     try {
                         Notification n = (Notification) createDefaultNotificationBuilder()
@@ -114,14 +114,13 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     }
 
     @Override
-    public List<Reservable> findAvailableReservables(ReservableType type, Date startDateTime, Date endDateTime
-    ) {
-        List<Reservable> reservables = reservableService.getAllByType(type);
-        List<Reservable> result = new ArrayList<>();
+    public List<Asset> findAvailableAssets(AssetType type, Date startDateTime, Date endDateTime) {
+        List<Asset> assets = assetService.getAllByType(type);
+        List<Asset> result = new ArrayList<>();
 
-        for (Reservable reservable : reservables) {
+        for (Asset asset : assets) {
             boolean openSlot = true;
-            for (Reservation reservation : reservable.getReservations()) {
+            for (Reservation reservation : asset.getReservations()) {
                 if (reservation.getTimeStart().before(startDateTime)
                         && reservation.getTimeEnd().before(startDateTime)) {
                     openSlot = true;
@@ -133,7 +132,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                 }
             }
             if (openSlot) {
-                result.add(reservable);
+                result.add(asset);
             }
         }
         return result;
@@ -144,7 +143,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         final Set<Reservation> result = new HashSet<>();
         UserGroup[] seniors = userGroupService.getSenior(user.getUserGroups());
         for (UserGroup group : seniors) {
-            group.getReservables().forEach(reservable -> result.addAll(reservable.getReservations()));
+            group.getAssets().forEach(reservable -> result.addAll(reservable.getReservations()));
             result.addAll(getDecendantsReservation(result, group));
         }
         return result;
@@ -152,9 +151,8 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     private Set<Reservation> getDecendantsReservation(Set<Reservation> set, UserGroup group) {
         group.getChildren().forEach(userGroup -> {
-                    userGroup.getReservables().forEach(reservable
-                            -> reservable.getReservations().forEach(reservation
-                            -> set.add(reservation)));
+                    userGroup.getAssets().forEach(reservable
+                            -> reservable.getReservations().forEach(set::add));
                     getDecendantsReservation(set, userGroup);
                 }
         );

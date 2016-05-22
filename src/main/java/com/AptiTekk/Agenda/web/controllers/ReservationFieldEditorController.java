@@ -1,7 +1,7 @@
 package com.AptiTekk.Agenda.web.controllers;
 
-import com.AptiTekk.Agenda.core.ReservableService;
-import com.AptiTekk.Agenda.core.ReservableTypeService;
+import com.AptiTekk.Agenda.core.AssetService;
+import com.AptiTekk.Agenda.core.AssetTypeService;
 import com.AptiTekk.Agenda.core.ReservationFieldService;
 import com.AptiTekk.Agenda.core.entity.ReservationField;
 
@@ -11,18 +11,15 @@ import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.List;
 
-/**
- * Created by kevint on 5/18/2016.
- */
 @ManagedBean(name = "ReservationFieldEditorController")
 @ViewScoped
 public class ReservationFieldEditorController {
 
     @Inject
-    ReservableTypeService typeService;
+    AssetTypeService assetTypeService;
 
     @Inject
-    ReservableService reservableService;
+    AssetService assetService;
 
     @Inject
     ReservationFieldService reservationFieldService;
