@@ -5,7 +5,6 @@
  */
 package com.AptiTekk.Agenda.web.oauth;
 
-import static com.AptiTekk.Agenda.core.GoogleService.CALENDAR_USER_ID;
 import static com.AptiTekk.Agenda.core.GoogleService.INITAL_PATH;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;

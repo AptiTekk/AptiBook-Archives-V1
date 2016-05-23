@@ -12,14 +12,17 @@
     <properties>
         <!-- Define the version of the JBoss BOMs we want to import to specify
         tested stacks. -->
-        <version.jboss.bom>10.0.0.CR4</version.jboss.bom>
-        <version.wildfly>10.0.0.Final</version.wildfly>
+        <version.jboss.bom>10.0.1.Final</version.jboss.bom>
+        <version.wildfly>10.0.1.Final</version.wildfly>
 
-        <version.querydsl>3.7.2</version.querydsl>
+        <querydsl.version>4.1.1</querydsl.version>
 
         <!-- maven-compiler-plugin -->
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
     </properties>
 
     <build>
@@ -27,8 +30,18 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
                 <configuration>
                     <warSourceDirectory>web</warSourceDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -42,10 +55,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>target/generated-sources/java</outputDirectory>
-                            <processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-                            <options>
-                                <querydsl.entityAccessors>true</querydsl.entityAccessors>
-                            </options>
+                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
                         </configuration>
                     </execution>
                 </executions>
@@ -162,6 +172,12 @@
 
         <!-- Java EE Dependencies -->
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <version>1.2</version>
@@ -190,16 +206,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
             <version>1.5.5</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.logmanager</groupId>
@@ -211,14 +220,20 @@
 
         <!-- QueryDSL -->
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-jpa</artifactId>
-            <version>${version.querydsl}</version>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.mysema.querydsl</groupId>
-            <artifactId>querydsl-apt</artifactId>
-            <version>${version.querydsl}</version>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-jpa</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
         </dependency>
         <!-- End QueryDSL -->
 

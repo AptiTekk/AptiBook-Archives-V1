@@ -1,6 +1,7 @@
 package com.AptiTekk.Agenda.core.impl;
 
 import com.AptiTekk.Agenda.core.EntityService;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,11 +11,11 @@ import java.util.List;
 public abstract class EntityServiceAbstract<T> implements EntityService<T> {
 
     @PersistenceContext(unitName = "Agenda")
-    protected EntityManager entityManager;
+    EntityManager entityManager;
 
-    protected Class<T> entityType;
+    Class<T> entityType;
 
-    public EntityServiceAbstract(Class<T> entityType) {
+    EntityServiceAbstract(Class<T> entityType) {
         this.entityType = entityType;
     }
 

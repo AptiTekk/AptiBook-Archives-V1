@@ -4,17 +4,18 @@ import javax.ejb.Stateless;
 
 import com.AptiTekk.Agenda.core.AssetService;
 import com.AptiTekk.Agenda.core.AssetTypeService;
-import com.AptiTekk.Agenda.core.entity.QReservable;
+import com.AptiTekk.Agenda.core.entity.QAsset;
 import com.AptiTekk.Agenda.core.entity.Asset;
 import com.AptiTekk.Agenda.core.entity.AssetType;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
+
 import java.util.List;
 import javax.inject.Inject;
 
 @Stateless
 public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements AssetService {
 
-    private QReservable reservableTable = QReservable.reservable;
+    private QAsset reservableTable = QAsset.asset;
     
     @Inject
     private AssetTypeService assetTypeService;
@@ -25,13 +26,12 @@ public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements As
 
     @Override
     public Asset findByName(String roomName) {
-        return new JPAQuery(entityManager).from(reservableTable).where(reservableTable.name.eq(roomName))
-                .singleResult(reservableTable);
+        return new JPAQuery<Asset>().from(reservableTable).where(reservableTable.name.eq(roomName)).fetchOne();
     }
 
     @Override
     public List<Asset> getAllByType(AssetType type) {
-        return new JPAQuery(entityManager).from(reservableTable).where(reservableTable.type.eq(type)).list(reservableTable);
+        return new JPAQuery<Asset>().from(reservableTable).where(reservableTable.type.eq(type)).fetch();
     }
     
     
