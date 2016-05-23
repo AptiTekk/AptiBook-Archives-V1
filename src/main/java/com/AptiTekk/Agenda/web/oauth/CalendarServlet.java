@@ -5,17 +5,18 @@
  */
 package com.AptiTekk.Agenda.web.oauth;
 
-import static com.AptiTekk.Agenda.core.GoogleService.CALENDAR_USER_ID;
-import static com.AptiTekk.Agenda.core.GoogleService.INITAL_PATH;
+import com.AptiTekk.Agenda.core.GoogleService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
-import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.AptiTekk.Agenda.core.GoogleService;
+import java.io.IOException;
+
+import static com.AptiTekk.Agenda.core.GoogleService.INITAL_PATH;
 
 /**
  *

@@ -1,14 +1,5 @@
 package com.AptiTekk.Agenda.web.controllers;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
-import javax.print.attribute.standard.Severity;
-
 import com.AptiTekk.Agenda.core.UserService;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
@@ -17,6 +8,13 @@ import com.AptiTekk.Agenda.core.utilities.FacesSessionHelper;
 import com.AptiTekk.Agenda.core.utilities.Sha256Helper;
 import com.AptiTekk.Agenda.web.AuthenticationFilter;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.io.IOException;
 
 @ManagedBean(name = "AccountController")
