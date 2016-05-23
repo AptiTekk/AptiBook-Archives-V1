@@ -4,22 +4,20 @@ import com.AptiTekk.Agenda.core.AssetTypeService;
 import com.AptiTekk.Agenda.core.ReservationService;
 import com.AptiTekk.Agenda.core.entity.Asset;
 import com.AptiTekk.Agenda.core.entity.AssetType;
+import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
+import com.AptiTekk.Agenda.core.utilities.TimeRange;
 
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
-import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
-import com.AptiTekk.Agenda.core.utilities.TimeRange;
-import java.text.DateFormat;
-import javax.inject.Inject;
 
 @ManagedBean(name = "TimeSelectionController")
 @ViewScoped
@@ -41,7 +39,7 @@ public class TimeSelectionController {
 
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;
-    
+
     private List<Asset> results;
 
     @Inject
@@ -129,7 +127,7 @@ public class TimeSelectionController {
         Date startDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
         Date endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
 
-        this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime);
+            this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime);
         AgendaLogger.logVerbose(results.toString());
         } catch(ParseException e) {
             e.printStackTrace();
@@ -209,7 +207,7 @@ public class TimeSelectionController {
         this.selectedAssetType = selectedAssetType;
         this.setDate(getDate());
     }
-    
+
     public List<Asset> getResults()
     {
         return this.results;

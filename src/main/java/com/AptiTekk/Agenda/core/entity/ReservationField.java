@@ -2,9 +2,8 @@ package com.AptiTekk.Agenda.core.entity;
 
 import com.AptiTekk.Agenda.core.utilities.EqualsHelper;
 
-import java.io.Serializable;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Entity implementation class for Entity: ReservationField

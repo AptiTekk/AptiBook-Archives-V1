@@ -1,12 +1,12 @@
 package com.AptiTekk.Agenda.core.impl;
 
-import javax.ejb.Stateless;
-
 import com.AptiTekk.Agenda.core.UserService;
 import com.AptiTekk.Agenda.core.entity.QUser;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.Sha256Helper;
 import com.querydsl.jpa.impl.JPAQuery;
+
+import javax.ejb.Stateless;
 
 @Stateless
 public class UserServiceImpl extends EntityServiceAbstract<User> implements UserService {

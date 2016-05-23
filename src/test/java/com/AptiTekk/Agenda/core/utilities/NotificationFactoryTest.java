@@ -1,21 +1,19 @@
 package com.AptiTekk.Agenda.core.utilities;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
-
-import javax.mail.MessagingException;
-import javax.naming.NamingException;
-
-import com.AptiTekk.Agenda.core.entity.AssetType;
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.AptiTekk.Agenda.core.entity.Asset;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.Reservation;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.NotificationFactory.EmailNotificationBuilder;
 import com.AptiTekk.Agenda.core.utilities.notification.EmailNotification;
 import com.AptiTekk.Agenda.core.utilities.notification.VariableInjection;
+import org.junit.Assert;
+import org.junit.Test;
+
+import javax.mail.MessagingException;
+import javax.naming.NamingException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
 
 public class NotificationFactoryTest {
 
@@ -40,12 +38,12 @@ public class NotificationFactoryTest {
     res.setAsset(item);
 
     String body =
-        "Hello {user.fullname} {reservation.asset.name} {reservation.asset.type.id}";
+            "Hello {user.fullname} {reservation.asset.name} {reservation.asset.type.id}";
     String html = "<html>{body} {user.email} {user.password} {unparseable}</html>";
     String expectedHtml = html
         .replace("{body}",
-            "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
-                + res.getAsset().getType().getId())
+                "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
+                        + res.getAsset().getType().getId())
         .replace("{user.email}", user.getEmail())
         .replace("{user.password}", VariableInjection.OMITTED_PARAM);
 

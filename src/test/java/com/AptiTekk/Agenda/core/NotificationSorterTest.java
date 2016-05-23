@@ -5,14 +5,12 @@ import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-import javax.management.ListenerNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

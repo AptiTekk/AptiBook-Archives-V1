@@ -87,7 +87,7 @@ public class AssetsEditController {
             else if (!getEditableTabAssetName().matches("[A-Za-z0-9 #]+"))
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name may only contain A-Z, a-z, 0-9, #, and space!"));
 
-            if(editableTabAssetOwnerGroup == null)
+            if (editableTabAssetOwnerGroup == null)
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset!"));
 
             if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
@@ -251,8 +251,7 @@ public class AssetsEditController {
         this.editableTabAssetAvailabilityEnd = editableTabAssetAvailabilityEnd;
     }
 
-    public void onOwnerSelected(NodeSelectEvent event)
-    {
+    public void onOwnerSelected(NodeSelectEvent event) {
         this.editableTabAssetOwnerGroup = event.getTreeNode();
     }
 

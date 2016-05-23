@@ -1,7 +1,6 @@
 package com.AptiTekk.Agenda.core.impl;
 
 import com.AptiTekk.Agenda.core.EntityService;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

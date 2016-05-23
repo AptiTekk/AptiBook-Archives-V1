@@ -31,9 +31,8 @@ public class AssetType implements Serializable {
     public AssetType() {
         super();
     }
-    
-    public AssetType(String name)
-    {
+
+    public AssetType(String name) {
         super();
         this.name = name;
     }

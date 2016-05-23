@@ -3,18 +3,16 @@ package com.AptiTekk.Agenda.core.testingUtil;
 import com.AptiTekk.Agenda.core.EntityService;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.impl.EntityServiceAbstract;
-import java.io.File;
-
-import org.jboss.shrinkwrap.api.Archive;
+import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
-import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
+import java.io.File;
 
 public class TestUtils {
-  
+
   public static WebArchive createDeployment() {
     File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
         .importRuntimeDependencies().resolve().withTransitivity().asFile();

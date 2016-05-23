@@ -151,8 +151,8 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     private Set<Reservation> getDecendantsReservation(Set<Reservation> set, UserGroup group) {
         group.getChildren().forEach(userGroup -> {
-                    userGroup.getAssets().forEach(reservable
-                            -> reservable.getReservations().forEach(set::add));
+            userGroup.getAssets().forEach(reservable
+                    -> reservable.getReservations().forEach(set::add));
                     getDecendantsReservation(set, userGroup);
                 }
         );

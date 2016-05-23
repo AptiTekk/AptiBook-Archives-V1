@@ -1,22 +1,21 @@
 package com.AptiTekk.Agenda.core.impl;
 
-import javax.ejb.Stateless;
-
 import com.AptiTekk.Agenda.core.AssetService;
 import com.AptiTekk.Agenda.core.AssetTypeService;
-import com.AptiTekk.Agenda.core.entity.QAsset;
 import com.AptiTekk.Agenda.core.entity.Asset;
 import com.AptiTekk.Agenda.core.entity.AssetType;
+import com.AptiTekk.Agenda.core.entity.QAsset;
 import com.querydsl.jpa.impl.JPAQuery;
 
-import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.List;
 
 @Stateless
 public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements AssetService {
 
     private QAsset reservableTable = QAsset.asset;
-    
+
     @Inject
     private AssetTypeService assetTypeService;
 
@@ -33,7 +32,6 @@ public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements As
     public List<Asset> getAllByType(AssetType type) {
         return new JPAQuery<Asset>().from(reservableTable).where(reservableTable.type.eq(type)).fetch();
     }
-    
-    
+
 
 }

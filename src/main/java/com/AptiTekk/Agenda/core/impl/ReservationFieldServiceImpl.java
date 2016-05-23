@@ -1,12 +1,11 @@
 package com.AptiTekk.Agenda.core.impl;
 
 import com.AptiTekk.Agenda.core.ReservationFieldService;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.QReservationField;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
 import com.AptiTekk.Agenda.core.entity.ReservationField;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
 import java.util.List;
 
 public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService {
@@ -18,8 +17,8 @@ public class ReservationFieldServiceImpl extends EntityServiceAbstract<Reservati
     }
 
     @Override
-    public List<ReservationField> getByType(ReservableType type) {
-        return new JPAQuery(entityManager).from(table).where(table.reservableType.eq(type))
-                .list(table);
+    public List<ReservationField> getByType(AssetType type) {
+        return new JPAQuery<ReservationField>().from(table).where(((type == null) ? table.assetType.isNull() : table.assetType.eq(type)))
+                .fetch();
     }
 }

@@ -1,16 +1,15 @@
 package com.AptiTekk.Agenda.core.impl;
 
-import javax.ejb.Stateless;
-
 import com.AptiTekk.Agenda.core.Properties;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
 import com.AptiTekk.Agenda.core.entity.QAppProperty;
 import com.querydsl.jpa.impl.JPAQuery;
 
-import java.util.List;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.List;
 
 @Stateless
 public class PropertiesImpl implements Properties {

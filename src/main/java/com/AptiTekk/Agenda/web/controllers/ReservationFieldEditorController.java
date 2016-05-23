@@ -3,6 +3,7 @@ package com.AptiTekk.Agenda.web.controllers;
 import com.AptiTekk.Agenda.core.AssetService;
 import com.AptiTekk.Agenda.core.AssetTypeService;
 import com.AptiTekk.Agenda.core.ReservationFieldService;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.ReservationField;
 
 import javax.annotation.PostConstruct;
@@ -22,9 +23,9 @@ public class ReservationFieldEditorController {
 
     @Inject
     AssetService assetService;
-    List<ReservableType> reservableTypes;
+    List<AssetType> reservableTypes;
 
-    ReservableType type;
+    AssetType type;
 
     @Inject
     ReservationFieldService reservationFieldService;
@@ -62,7 +63,7 @@ public class ReservationFieldEditorController {
 
     public void resetSettings() {
         fields = reservationFieldService.getByType(type);
-        reservableTypes = typeService.getAll();
+        reservableTypes = assetTypeService.getAll();
     }
 
     public List<ReservationField> getFields() {
@@ -81,19 +82,19 @@ public class ReservationFieldEditorController {
         this.field = field;
     }
 
-    public List<ReservableType> getReservableTypes() {
+    public List<AssetType> getReservableTypes() {
         return reservableTypes;
     }
 
-    public void setReservableTypes(List<ReservableType> reservableTypes) {
+    public void setReservableTypes(List<AssetType> reservableTypes) {
         this.reservableTypes = reservableTypes;
     }
 
-    public ReservableType getType() {
+    public AssetType getType() {
         return type;
     }
 
-    public void setType(ReservableType type) {
+    public void setType(AssetType type) {
         this.type = type;
     }
 }

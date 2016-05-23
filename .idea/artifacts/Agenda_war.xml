@@ -1,8 +1,13 @@
 <component name="ArtifactManager">
   <artifact type="war" name="Agenda:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="agenda-1.0-SNAPSHOT.war">
+    <output-path>$PROJECT_DIR$/out/artifacts/Agenda_war</output-path>
+    <root id="archive" name="Agenda_war.war">
       <element id="artifact" artifact-name="Agenda:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="jpa-descriptors" facet="Agenda/jpa/JPA" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>
