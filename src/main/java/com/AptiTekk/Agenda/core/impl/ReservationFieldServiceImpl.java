@@ -9,10 +9,6 @@ import com.mysema.query.jpa.impl.JPAQuery;
 import javax.ejb.Stateless;
 import java.util.List;
 
-/**
- * Created by kevint on 5/18/2016.
- */
-@Stateless
 public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService {
 
     QReservationField table = QReservationField.reservationField;

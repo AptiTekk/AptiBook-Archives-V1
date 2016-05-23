@@ -1,6 +1,10 @@
 package com.AptiTekk.Agenda.core;
 
 import com.AptiTekk.Agenda.core.entity.*;
+import com.AptiTekk.Agenda.core.entity.AppProperty;
+import com.AptiTekk.Agenda.core.entity.Asset;
+import com.AptiTekk.Agenda.core.entity.AssetType;
+import com.AptiTekk.Agenda.core.entity.Reservation;
 
 import javax.ejb.Local;
 import java.util.Date;
@@ -17,7 +21,7 @@ public interface ReservationService extends EntityService<Reservation> {
                     + "\n\t {reservation.timeStart}"
                     + "\n\t {reservation.timeEnd}");
   
-    List<Reservable> findAvailableReservables(ReservableType type, Date startDateTime, Date endDateTime);
+    List<Asset> findAvailableAssets(AssetType type, Date startDateTime, Date endDateTime);
 
     Set<Reservation> getAllUnderUser(User user);
     

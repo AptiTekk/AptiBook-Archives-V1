@@ -1,6 +1,7 @@
 package com.AptiTekk.Agenda.web;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.inject.Inject;
@@ -79,7 +80,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     String parameters = "?";
-    for (Entry<String, String[]> entry : currentReq.getParameterMap().entrySet()) {
+    for (Map.Entry<String, String[]> entry : ((Map<String, String[]>) currentReq.getParameterMap()).entrySet()) {
       String key = entry.getKey();
       String[] value = entry.getValue();
 

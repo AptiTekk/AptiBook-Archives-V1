@@ -10,9 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -24,8 +21,8 @@ import javax.persistence.TemporalType;
  * The persistent class for the Room database table.
  */
 @Entity
-@NamedQuery(name = "Reservable.findAll", query = "SELECT r FROM Reservable r")
-public class Reservable implements Serializable {
+@NamedQuery(name = "Reservable.findAll", query = "SELECT r FROM Asset r")
+public class Asset implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -43,21 +40,21 @@ public class Reservable implements Serializable {
     private Boolean needsApproval = false;
 
     // bi-directional many-to-one association to Reservation
-    @OneToMany(mappedBy = "reservable")
+    @OneToMany(mappedBy = "asset")
     private List<Reservation> reservations;
 
     @ManyToOne
-    private ReservableType type;
+    private AssetType type;
 
     @ManyToOne
     private UserGroup owner;
 
     private String imageFileName;
 
-    public Reservable() {
+    public Asset() {
     }
 
-    public Reservable(String name) {
+    public Asset(String name) {
         this.name = name;
     }
 
@@ -111,23 +108,23 @@ public class Reservable implements Serializable {
 
     public Reservation addReservation(Reservation reservation) {
         getReservations().add(reservation);
-        reservation.setReservable(this);
+        reservation.setAsset(this);
 
         return reservation;
     }
 
     public Reservation removeReservation(Reservation reservation) {
         getReservations().remove(reservation);
-        reservation.setReservable(null);
+        reservation.setAsset(null);
 
         return reservation;
     }
 
-    public ReservableType getType() {
+    public AssetType getType() {
         return type;
     }
 
-    public void setType(ReservableType type) {
+    public void setType(AssetType type) {
         this.type = type;
     }
 
@@ -153,9 +150,9 @@ public class Reservable implements Serializable {
 
         if (o == null) return false;
 
-        if (!(o instanceof Reservable)) return false;
+        if (!(o instanceof Asset)) return false;
 
-        Reservable other = (Reservable) o;
+        Asset other = (Asset) o;
 
         return EqualsHelper.areEquals(getName(), other.getName())
                 && EqualsHelper.areEquals(getAvailabilityStart(), other.getAvailabilityStart())

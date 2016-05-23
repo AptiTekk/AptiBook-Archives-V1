@@ -6,7 +6,7 @@ import com.AptiTekk.Agenda.core.UserService;
 import com.AptiTekk.Agenda.core.entity.QUser;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.Sha256Helper;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 
 @Stateless
 public class UserServiceImpl extends EntityServiceAbstract<User> implements UserService {
@@ -23,8 +23,8 @@ public class UserServiceImpl extends EntityServiceAbstract<User> implements User
             return null;
         }
 
-        return new JPAQuery(entityManager).from(userTable).where(userTable.username.eq(username))
-                .uniqueResult(userTable);
+        return new JPAQuery<User>().from(userTable).where(userTable.username.eq(username))
+                .fetchOne();
     }
 
     @Override
@@ -34,9 +34,9 @@ public class UserServiceImpl extends EntityServiceAbstract<User> implements User
         }
 
         byte[] hashedPassword = Sha256Helper.rawToSha(password);
-        return new JPAQuery(entityManager).from(userTable)
+        return new JPAQuery<User>().from(userTable)
                 .where(userTable.username.eq(username).and(userTable.password.eq(hashedPassword)))
-                .uniqueResult(userTable);
+                .fetchOne();
     }
 
 }

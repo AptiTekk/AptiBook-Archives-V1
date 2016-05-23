@@ -4,5 +4,8 @@
     <container containerId="container.arquillian.embedded.wild-fly" name="WildFly Embedded">
       <maven-library groupId="org.wildfly.arquillian" artifactId="wildfly-arquillian-container-embedded" version="RELEASE" />
     </container>
+    <container containerId="container.arquillian.manual" name="Wildfly Managed">
+      <maven-library groupId="org.wildfly.arquillian" artifactId="wildfly-arquillian-container-managed" version="1.1.0.Final" />
+    </container>
   </component>
 </project>

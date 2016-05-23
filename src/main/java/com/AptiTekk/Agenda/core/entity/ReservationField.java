@@ -25,7 +25,7 @@ public class ReservationField implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
-    private ReservableType reservableType;
+    private AssetType assetType;
 
     public ReservationField() {
         super();
@@ -55,12 +55,12 @@ public class ReservationField implements Serializable {
         this.description = description;
     }
 
-    public ReservableType getReservableType() {
-        return reservableType;
+    public AssetType getAssetType() {
+        return assetType;
     }
 
-    public void setReservableType(ReservableType reservableType) {
-        this.reservableType = reservableType;
+    public void setAssetType(AssetType assetType) {
+        this.assetType = assetType;
     }
 
     @Override

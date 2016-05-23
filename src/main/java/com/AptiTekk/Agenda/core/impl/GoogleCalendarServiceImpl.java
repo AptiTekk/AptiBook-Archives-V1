@@ -59,7 +59,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         Event reservationEvent = new Event();
         reservationEvent.setId(eventId.toString());
         reservationEvent.setSummary(reservation.getTitle());
-        reservationEvent.setLocation(reservation.getReservable().getName());
+        reservationEvent.setLocation(reservation.getAsset().getName());
         reservationEvent.setDescription(reservation.getDescription());
         reservationEvent.setStart(start);
         reservationEvent.setEnd(end);
@@ -85,7 +85,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
         Event reservationEvent = calendarService.events().get(properties.get(CALENDAR_ID_PROPERTY.getKey()), reservation.getGoogleEventId()).execute();
         reservationEvent.setSummary(reservation.getTitle());
-        reservationEvent.setLocation(reservation.getReservable().getName());
+        reservationEvent.setLocation(reservation.getAsset().getName());
         reservationEvent.setDescription(reservation.getDescription());
         reservationEvent.setStart(start);
         reservationEvent.setEnd(end);

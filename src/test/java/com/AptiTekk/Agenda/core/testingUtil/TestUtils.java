@@ -15,7 +15,7 @@ import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
 
 public class TestUtils {
   
-  public static Archive<?> createDeployment() {
+  public static WebArchive createDeployment() {
     File[] libs = Maven.resolver().loadPomFromFile("pom.xml")
         .importRuntimeDependencies().resolve().withTransitivity().asFile();
     

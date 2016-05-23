@@ -13,7 +13,7 @@ public class SettingsController {
 
     public enum SettingsPage {
         PROPERTIES("Properties", "properties.xhtml"), USERS("Users", "users.xhtml"), GROUPS("Groups",
-                "groups.xhtml"), RESERVABLES("Reservables", "reservables.xhtml"),
+                "groups.xhtml"), ASSETS("Assets", "assets.xhtml"),
         RESERVATIONFIELDEDITOR("Fields Editor", "reservationfieldeditor.xhtml");
 
         private String name;

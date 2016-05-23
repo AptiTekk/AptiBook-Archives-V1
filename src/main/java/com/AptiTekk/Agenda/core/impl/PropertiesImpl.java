@@ -5,7 +5,8 @@ import javax.ejb.Stateless;
 import com.AptiTekk.Agenda.core.Properties;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
 import com.AptiTekk.Agenda.core.entity.QAppProperty;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -26,14 +27,14 @@ public class PropertiesImpl implements Properties {
 
     @Override
     public String get(String key) {
-        return new JPAQuery(entityManager).from(table).where(table.propertyKey.eq(key))
-                .uniqueResult(table).getValue();
+        return new JPAQuery<AppProperty>().from(table).where(table.propertyKey.eq(key))
+                .fetchOne().getValue();
     }
 
     @Override
     public AppProperty getProperty(String key) {
-        return new JPAQuery(entityManager).from(table).where(table.propertyKey.eq(key))
-                .uniqueResult(table);
+        return new JPAQuery<AppProperty>().from(table).where(table.propertyKey.eq(key))
+                .fetchOne();
     }
 
     @Override

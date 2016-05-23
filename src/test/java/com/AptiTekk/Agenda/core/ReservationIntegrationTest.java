@@ -1,22 +1,21 @@
 package com.AptiTekk.Agenda.core;
 
-import com.AptiTekk.Agenda.core.entity.Reservable;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
-import com.AptiTekk.Agenda.core.entity.Reservation;
-import com.AptiTekk.Agenda.core.entity.User;
-import com.AptiTekk.Agenda.core.entity.UserGroup;
+import com.AptiTekk.Agenda.core.entity.*;
+import com.AptiTekk.Agenda.core.entity.AssetType;
+
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.AptiTekk.Agenda.core.testingUtil.TestUtils;
-import java.util.ArrayList;
+
 import java.util.Date;
-import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -24,7 +23,7 @@ import static org.junit.Assert.assertNotNull;
 public class ReservationIntegrationTest {
 
     @Deployment
-    public static Archive<?> createDeployment() {
+    public static WebArchive createDeployment() {
         return TestUtils.createDeployment();
     }
 
@@ -33,9 +32,9 @@ public class ReservationIntegrationTest {
     @Inject
     UserGroupService userGroupService;
     @Inject
-    ReservableTypeService typeService;
+    AssetTypeService typeService;
     @Inject
-    ReservableService reservableService;
+    AssetService assetService;
     @Inject
     ReservationService reservationService;
 
@@ -62,21 +61,21 @@ public class ReservationIntegrationTest {
         testRenter.setUsername("testRenter");
         testRenter.setEnabled(true);
 
-        ReservableType testReservableType = new ReservableType();
-        testReservableType.setName("TestType");
+        AssetType testAssetType = new AssetType();
+        testAssetType.setName("TestType");
 
-        Reservable testReservable = new Reservable();
-        testReservable.setName("TestReservable");
-        testReservable.setType(testReservableType);
-        testReservable.setOwner(testOwners);
+        Asset testAsset = new Asset();
+        testAsset.setName("TestReservable");
+        testAsset.setType(testAssetType);
+        testAsset.setOwner(testOwners);
 
         userService.insert(testOwner);
         userService.insert(testRenter);
 
         userGroupService.insert(testOwners);
 
-        typeService.insert(testReservableType);
-        reservableService.insert(testReservable);
+        typeService.insert(testAssetType);
+        assetService.insert(testAsset);
 
         Reservation reservation = new Reservation();
         reservation.setTitle("Test Reservation");
@@ -88,7 +87,7 @@ public class ReservationIntegrationTest {
         Date timeEnd = new Date();
         timeEnd.setTime(timeEnd.getTime() + 100000);
         reservation.setTimeEnd(timeEnd);
-        reservation.setReservable(testReservable);
+        reservation.setAsset(testAsset);
         reservation.setUser(testRenter);
 
         reservationService.insert(reservation);

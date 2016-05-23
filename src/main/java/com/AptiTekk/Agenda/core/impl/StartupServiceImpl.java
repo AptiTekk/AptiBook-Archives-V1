@@ -2,7 +2,7 @@ package com.AptiTekk.Agenda.core.impl;
 
 import com.AptiTekk.Agenda.core.*;
 import com.AptiTekk.Agenda.core.entity.AppProperty;
-import com.AptiTekk.Agenda.core.entity.ReservableType;
+import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
 import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
@@ -31,7 +31,7 @@ public class StartupServiceImpl implements StartupService {
     private UserService userService;
 
     @Inject
-    private ReservableTypeService reservableTypeService;
+    private AssetTypeService assetTypeService;
 
     @Inject
     private Properties properties;
@@ -79,9 +79,9 @@ public class StartupServiceImpl implements StartupService {
 
     @Override
     public void checkForReservableTypes() {
-        if (reservableTypeService.getAll().isEmpty()) {
-            ReservableType reservableType = new ReservableType("Rooms");
-            reservableTypeService.insert(reservableType);
+        if (assetTypeService.getAll().isEmpty()) {
+            AssetType assetType = new AssetType("Rooms");
+            assetTypeService.insert(assetType);
         }
     }
 

@@ -12,7 +12,7 @@ import com.AptiTekk.Agenda.core.entity.QNotification;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
 import com.AptiTekk.Agenda.core.utilities.notification.NotificationListener;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -63,10 +63,9 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
 
     @Override
     public List<Notification> getUnread(User user) {
-        List<Notification> result = new JPAQuery(entityManager).from(table)
+        List<Notification> result = new JPAQuery<Notification>().from(table)
                 .where(table.user.eq(user))
-                .where(table.notif_read.eq(false))
-                .list(table);
+                .where(table.notif_read.eq(false)).fetch();
 
         Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
         comparator = comparator.reversed();
@@ -79,15 +78,12 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
 
     @Override
     public List<Notification> getAllByUser(User user) {
-        List<Notification> result = new JPAQuery(entityManager).from(table).where(table.user.eq(user))
-                .list(table);
+        List<Notification> result = new JPAQuery<Notification>().from(table).where(table.user.eq(user))
+                .fetch();
 
         result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
             notification.setRead(false);
         });
-
-        if (result == null)
-            return null;
 
         Comparator<Notification> comparator = Comparator.comparing(Notification::getRead);
         comparator = comparator.reversed();

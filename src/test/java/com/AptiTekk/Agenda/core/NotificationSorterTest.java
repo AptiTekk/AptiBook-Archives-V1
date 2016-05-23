@@ -6,6 +6,7 @@ import com.AptiTekk.Agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by kevint on 5/10/2016.
- */
 @RunWith(Arquillian.class)
 public class NotificationSorterTest {
 
@@ -29,7 +27,7 @@ public class NotificationSorterTest {
     NotificationService notificationService;
 
     @Deployment
-    public static Archive<?> createDeployment() {
+    public static WebArchive createDeployment() {
         return TestUtils.createDeployment();
     }
 

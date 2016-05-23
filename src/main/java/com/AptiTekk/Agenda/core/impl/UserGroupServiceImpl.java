@@ -3,7 +3,7 @@ package com.AptiTekk.Agenda.core.impl;
 import com.AptiTekk.Agenda.core.UserGroupService;
 import com.AptiTekk.Agenda.core.entity.QUserGroup;
 import com.AptiTekk.Agenda.core.entity.UserGroup;
-import com.mysema.query.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -34,8 +34,8 @@ public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
 
     @Override
     public UserGroup findByName(String userGroupName) {
-        return new JPAQuery(entityManager).from(userGroupTable)
-                .where(userGroupTable.name.eq(userGroupName)).singleResult(userGroupTable);
+        return new JPAQuery<UserGroup>().from(userGroupTable)
+                .where(userGroupTable.name.eq(userGroupName)).fetchOne();
     }
 
     @Override

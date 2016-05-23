@@ -17,7 +17,7 @@
             <b:column colMd="3">
                 <ui:fragment rendered="#{not empty ReservationViewController.cardModels}">
                     <ui:repeat value="#{ReservationViewController.cardModels}" var="reservation">
-                        <b:panel title="#{reservation.title} - #{reservation.reservable.name}" look="info">
+                        <b:panel title="#{reservation.title} - #{reservation.asset.name}" look="info">
                             <h4>#{reservation.title}</h4>
                             <h6>#{reservation.description}</h6>
                             <p>#{reservation.timeStart}</p>
