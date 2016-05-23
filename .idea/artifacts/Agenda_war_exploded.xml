@@ -1,85 +1,82 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="Agenda:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/Agenda_war_exploded.war</output-path>
+    <output-path>$PROJECT_DIR$/target/agenda-1.0-SNAPSHOT</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="Agenda/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="Agenda" />
-          <element id="jpa-descriptors" facet="Agenda/jpa/JPA" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Arquillian JUnit:Release" />
-          <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.3" />
-          <element id="library" level="project" name="Maven: com.aptitekk:aptiapi:1.3-SNAPSHOT" />
-          <element id="library" level="project" name="Maven: org.jasypt:jasypt:1.9.2" />
-          <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.7.2" />
-          <element id="library" level="project" name="Maven: org.primefaces.themes:bootstrap:1.0.10" />
-          <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.8.1" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.3" />
-          <element id="library" level="project" name="Maven: com.google.api-client:google-api-client:1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.apis:google-api-services-calendar:v3-rev173-1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:1.3.9" />
-          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.5" />
-          <element id="library" level="project" name="Maven: com.google.guava:guava-jdk5:17.0" />
-          <element id="library" level="project" name="Maven: com.google.guava:guava:18.0" />
-          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jackson2:1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jdo:1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client:1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client-servlet:1.21.0" />
-          <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" />
-          <element id="library" level="project" name="Maven: com.infradna.tool:bridge-method-annotation:1.13" />
-          <element id="library" level="project" name="Maven: com.mysema.codegen:codegen:0.6.8" />
-          <element id="library" level="project" name="Maven: com.mysema.commons:mysema-commons-lang:0.2.4" />
-          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-apt:3.7.2" />
-          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-codegen:3.7.2" />
-          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-core:3.7.2" />
-          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-jpa:3.7.2" />
-          <element id="library" level="project" name="Maven: com.sun.mail:javax.mail:1.5.5" />
-          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
-          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
-          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
-          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
-          <element id="library" level="project" name="Maven: javax.activation:activation:1.1.1" />
           <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
-          <element id="library" level="project" name="Maven: javax.jdo:jdo2-api:2.3-eb" />
-          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
-          <element id="library" level="project" name="Maven: javax.transaction:transaction-api:1.1" />
-          <element id="library" level="project" name="Maven: javax:javaee-web-api:7.0" />
-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.1" />
-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.3" />
-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpmime:4.5.1" />
-          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-file:2.6" />
-          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-http-lightweight:2.6" />
-          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-http-shared:2.6" />
-          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.6" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-aether-provider:3.2.5" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-model-builder:3.2.5" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-model:3.2.5" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-repository-metadata:3.2.5" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings-builder:3.2.5" />
-          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings:3.2.5" />
-          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" />
-          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-interpolation:1.21" />
-          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-utils:3.0.20" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava:18.0" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.2.0" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:2.2.0" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:2.2.0" />
           <element id="library" level="project" name="Maven: org.eclipse.aether:aether-api:1.0.0.v20140518" />
-          <element id="library" level="project" name="Maven: org.eclipse.aether:aether-connector-basic:1.0.0.v20140518" />
           <element id="library" level="project" name="Maven: org.eclipse.aether:aether-impl:1.0.0.v20140518" />
           <element id="library" level="project" name="Maven: org.eclipse.aether:aether-spi:1.0.0.v20140518" />
-          <element id="library" level="project" name="Maven: org.eclipse.aether:aether-transport-wagon:1.0.0.v20140518" />
           <element id="library" level="project" name="Maven: org.eclipse.aether:aether-util:1.0.0.v20140518" />
-          <element id="library" level="project" name="Maven: org.eclipse.jdt.core.compiler:ecj:4.3.1" />
-          <element id="library" level="project" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" />
-          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:2.2.0" />
-          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:2.2.0" />
-          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.2.0" />
-          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:2.2.0" />
-          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:2.2.0" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
-          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" />
+          <element id="library" level="project" name="Maven: org.eclipse.aether:aether-connector-basic:1.0.0.v20140518" />
+          <element id="library" level="project" name="Maven: org.eclipse.aether:aether-transport-wagon:1.0.0.v20140518" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-aether-provider:3.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-model:3.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-model-builder:3.2.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-repository-metadata:3.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings:3.2.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings-builder:3.2.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-interpolation:1.21" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-utils:3.0.20" />
           <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-sec-dispatcher:1.3" />
+          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" />
+          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.6" />
+          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-file:2.6" />
+          <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-http-lightweight:2.6" />
+          <element id="library" level="project" name="Maven: org.apache.maven.wagon:wagon-http-shared:2.6" />
+          <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.7.2" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:2.2.0" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:2.2.0" />
+          <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.5" />
+          <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client-servlet:1.21.0" />
+          <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" />
+          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client:1.21.0" />
+          <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:1.3.9" />
+          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jdo:1.21.0" />
+          <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="Maven: javax.jdo:jdo2-api:2.3-eb" />
+          <element id="library" level="project" name="Maven: javax.transaction:transaction-api:1.1" />
+          <element id="library" level="project" name="Maven: com.google.apis:google-api-services-calendar:v3-rev173-1.21.0" />
+          <element id="library" level="project" name="Maven: com.google.api-client:google-api-client:1.21.0" />
+          <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jackson2:1.21.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.3" />
+          <element id="library" level="project" name="Maven: com.google.guava:guava-jdk5:17.0" />
+          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-jpa:3.7.2" />
+          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-core:3.7.2" />
+          <element id="library" level="project" name="Maven: com.mysema.commons:mysema-commons-lang:0.2.4" />
+          <element id="library" level="project" name="Maven: com.infradna.tool:bridge-method-annotation:1.13" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
+          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-apt:3.7.2" />
+          <element id="library" level="project" name="Maven: com.mysema.querydsl:querydsl-codegen:3.7.2" />
+          <element id="library" level="project" name="Maven: com.mysema.codegen:codegen:0.6.8" />
+          <element id="library" level="project" name="Maven: org.eclipse.jdt.core.compiler:ecj:4.3.1" />
+          <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.8.1" />
+          <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.3" />
+          <element id="library" level="project" name="Maven: org.primefaces.themes:bootstrap:1.0.10" />
+          <element id="library" level="project" name="Maven: com.aptitekk:aptiapi:1.3-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpmime:4.5.1" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.1" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.3" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
+          <element id="library" level="project" name="Maven: org.jasypt:jasypt:1.9.2" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
         </element>
       </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/agenda-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="Agenda/web/Web" />
     </root>
   </artifact>
 </component>

@@ -7,6 +7,8 @@
     <groupId>com.aptitekk</groupId>
     <artifactId>agenda</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
     <properties>
         <!-- Define the version of the JBoss BOMs we want to import to specify
         tested stacks. -->
@@ -22,6 +24,13 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warSourceDirectory>web</warSourceDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.mysema.maven</groupId>
                 <artifactId>apt-maven-plugin</artifactId>
@@ -80,7 +89,7 @@
         <repository>
             <id>AptiTekk</id>
             <name>AptiTekk</name>
-            <url>https://aptitekk.com/maven</url>
+            <url>http//aptitekk.com/maven</url>
         </repository>
     </repositories>
 
