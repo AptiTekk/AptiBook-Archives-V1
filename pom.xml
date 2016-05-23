@@ -89,7 +89,7 @@
         <repository>
             <id>AptiTekk</id>
             <name>AptiTekk</name>
-            <url>http//aptitekk.com/maven</url>
+            <url>http://aptitekk.com/maven</url>
         </repository>
     </repositories>
 
