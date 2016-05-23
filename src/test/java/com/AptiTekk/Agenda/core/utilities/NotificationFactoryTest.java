@@ -40,7 +40,7 @@ public class NotificationFactoryTest {
     res.setAsset(item);
 
     String body =
-        "Hello {user.fullname} {reservation.reservable.name} {reservation.reservable.type.id}";
+        "Hello {user.fullname} {reservation.asset.name} {reservation.asset.type.id}";
     String html = "<html>{body} {user.email} {user.password} {unparseable}</html>";
     String expectedHtml = html
         .replace("{body}",
