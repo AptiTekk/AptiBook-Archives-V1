@@ -67,6 +67,13 @@
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
           <element id="library" level="project" name="Maven: org.jasypt:jasypt:1.9.2" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:2.2.1" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:2.2.1" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.2.1" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:2.2.1" />
+          <element id="library" level="project" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:2.2.1" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
+          <element id="library" level="project" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
