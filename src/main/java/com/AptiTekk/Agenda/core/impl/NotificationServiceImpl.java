@@ -24,9 +24,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * @author kevint
- */
 @Stateless
 public class NotificationServiceImpl extends EntityServiceAbstract<Notification> implements NotificationService {
 

@@ -10,14 +10,12 @@ import com.AptiTekk.Agenda.core.entity.Notification;
 import com.AptiTekk.Agenda.core.entity.User;
 import com.AptiTekk.Agenda.core.utilities.notification.NotificationListener;
 
+import javax.ejb.Local;
 import javax.mail.MessagingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-/**
- *
- * @author kevint
- */
+@Local
 public interface NotificationService extends EntityService<Notification> {
     
     public static final AppProperty NOTIFICATION_DATEFORMAT = new AppProperty("agenda.notification.dateFormat", "MM-dd-yyyy hh:mm a");

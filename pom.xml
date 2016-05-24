@@ -25,6 +25,11 @@
     </properties>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -164,10 +169,6 @@
             <id>prime-repo</id>
             <name>Prime Repo</name>
             <url>http://repository.primefaces.org</url>
-        </repository>
-        <repository>
-            <id>maven-central</id>
-            <url>http://repo1.maven.org/maven2</url>
         </repository>
         <repository>
             <id>AptiTekk</id>
