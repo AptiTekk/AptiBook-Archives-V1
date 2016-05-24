@@ -18,7 +18,7 @@ public class ReservationFieldServiceImpl extends EntityServiceAbstract<Reservati
 
     @Override
     public List<ReservationField> getByType(AssetType type) {
-        return new JPAQuery<ReservationField>().from(table).where(((type == null) ? table.assetType.isNull() : table.assetType.eq(type)))
+        return new JPAQuery<ReservationField>(entityManager).from(table).where(((type == null) ? table.assetType.isNull() : table.assetType.eq(type)))
                 .fetch();
     }
 }

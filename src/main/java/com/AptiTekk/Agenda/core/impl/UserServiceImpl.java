@@ -23,7 +23,7 @@ public class UserServiceImpl extends EntityServiceAbstract<User> implements User
             return null;
         }
 
-        return new JPAQuery<User>().from(userTable).where(userTable.username.eq(username))
+        return new JPAQuery<User>(entityManager).from(userTable).where(userTable.username.eq(username))
                 .fetchOne();
     }
 
@@ -34,7 +34,7 @@ public class UserServiceImpl extends EntityServiceAbstract<User> implements User
         }
 
         byte[] hashedPassword = Sha256Helper.rawToSha(password);
-        return new JPAQuery<User>().from(userTable)
+        return new JPAQuery<User>(entityManager).from(userTable)
                 .where(userTable.username.eq(username).and(userTable.password.eq(hashedPassword)))
                 .fetchOne();
     }

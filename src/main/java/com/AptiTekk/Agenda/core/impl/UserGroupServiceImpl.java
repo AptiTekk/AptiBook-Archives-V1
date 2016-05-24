@@ -34,7 +34,7 @@ public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
 
     @Override
     public UserGroup findByName(String userGroupName) {
-        return new JPAQuery<UserGroup>().from(userGroupTable)
+        return new JPAQuery<UserGroup>(entityManager).from(userGroupTable)
                 .where(userGroupTable.name.eq(userGroupName)).fetchOne();
     }
 

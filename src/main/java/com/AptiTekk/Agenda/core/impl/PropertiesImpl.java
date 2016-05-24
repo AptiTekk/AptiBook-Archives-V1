@@ -26,13 +26,13 @@ public class PropertiesImpl implements Properties {
 
     @Override
     public String get(String key) {
-        return new JPAQuery<AppProperty>().from(table).where(table.propertyKey.eq(key))
+        return new JPAQuery<AppProperty>(entityManager).from(table).where(table.propertyKey.eq(key))
                 .fetchOne().getValue();
     }
 
     @Override
     public AppProperty getProperty(String key) {
-        return new JPAQuery<AppProperty>().from(table).where(table.propertyKey.eq(key))
+        return new JPAQuery<AppProperty>(entityManager).from(table).where(table.propertyKey.eq(key))
                 .fetchOne();
     }
 

@@ -56,7 +56,6 @@
           <element id="library" level="project" name="Maven: com.querydsl:querydsl-core:4.1.1" />
           <element id="library" level="project" name="Maven: com.mysema.commons:mysema-commons-lang:0.2.4" />
           <element id="library" level="project" name="Maven: com.infradna.tool:bridge-method-annotation:1.13" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.6.1" />
           <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.8.1" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:5.3" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:bootstrap:1.0.10" />

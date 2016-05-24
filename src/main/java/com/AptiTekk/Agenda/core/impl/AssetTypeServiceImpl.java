@@ -18,7 +18,7 @@ public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> imple
 
     @Override
     public AssetType findByName(String name) {
-        return new JPAQuery<AssetType>().from(table).where(table.name.eq(name)).fetchOne();
+        return new JPAQuery<AssetType>(entityManager).from(table).where(table.name.eq(name)).fetchOne();
     }
 
 }

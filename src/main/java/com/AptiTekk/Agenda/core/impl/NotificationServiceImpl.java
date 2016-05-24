@@ -63,7 +63,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
 
     @Override
     public List<Notification> getUnread(User user) {
-        List<Notification> result = new JPAQuery<Notification>().from(table)
+        List<Notification> result = new JPAQuery<Notification>(entityManager).from(table)
                 .where(table.user.eq(user))
                 .where(table.notif_read.eq(false)).fetch();
 
@@ -78,7 +78,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
 
     @Override
     public List<Notification> getAllByUser(User user) {
-        List<Notification> result = new JPAQuery<Notification>().from(table).where(table.user.eq(user))
+        List<Notification> result = new JPAQuery<Notification>(entityManager).from(table).where(table.user.eq(user))
                 .fetch();
 
         result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
