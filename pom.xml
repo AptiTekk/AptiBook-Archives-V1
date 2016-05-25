@@ -74,6 +74,9 @@
                 <arquillian.serverHome>${project.build.directory}/wildfly-10.0.0.Final</arquillian.serverHome>
             </properties>
             <dependencies>
+                <!-- Testing Dependencies -->
+
+                <!-- Arquillian -->
                 <dependency>
                     <groupId>org.jboss.arquillian</groupId>
                     <artifactId>arquillian-bom</artifactId>
@@ -82,16 +85,54 @@
                     <scope>import</scope>
                 </dependency>
                 <dependency>
-                    <groupId>org.jboss.arquillian.junit</groupId>
-                    <artifactId>arquillian-junit-container</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
                     <artifactId>wildfly-arquillian-container-managed</artifactId>
                     <version>1.1.0.Final</version>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.junit</groupId>
+                    <artifactId>arquillian-junit-container</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.extension</groupId>
+                    <artifactId>arquillian-transaction-jta</artifactId>
+                    <version>LATEST</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.arquillian.protocol</groupId>
+                    <artifactId>arquillian-protocol-servlet</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <!-- End Arquillian -->
+
+                <!-- Shrinkwrap -->
+                <dependency>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                    <artifactId>shrinkwrap-resolver-depchain</artifactId>
+                    <type>pom</type>
+                    <scope>test</scope>
+                </dependency>
+                <!-- End Shrinkwrap -->
+
+                <dependency>
+                    <groupId>junit</groupId>
+                    <artifactId>junit</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.weld</groupId>
+                    <artifactId>weld-core</artifactId>
+                    <version>2.3.4.Final</version>
+                    <scope>test</scope>
+                </dependency>
+                <!-- End Testing Dependencies -->
             </dependencies>
             <build>
                 <plugins>
@@ -178,46 +219,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Testing Dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-core</artifactId>
-            <version>2.3.4.Final</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.extension</groupId>
-            <artifactId>arquillian-transaction-jta</artifactId>
-            <version>LATEST</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.protocol</groupId>
-            <artifactId>arquillian-protocol-servlet</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-depchain</artifactId>
-            <type>pom</type>
-            <scope>test</scope>
-        </dependency>
-        <!-- End Testing Dependencies -->
-
         <!-- Google Dependencies -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
