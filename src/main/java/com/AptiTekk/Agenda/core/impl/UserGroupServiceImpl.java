@@ -7,10 +7,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Stateless
 public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
@@ -62,6 +59,22 @@ public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
                 (o1, o2) -> steps.get(o2) - steps.get(o1));
         treeMap.putAll(steps);
         return treeMap.keySet().toArray(new UserGroup[treeMap.size()]);
+    }
+
+    @Override
+    public List<UserGroup> getHierarchyUp(UserGroup origin) {
+        List<UserGroup> hierarchy = new ArrayList<>();
+        hierarchy.add(origin);
+
+        UserGroup currentGroup = origin;
+        UserGroup parentGroup;
+        while((parentGroup = currentGroup.getParent()) != null)
+        {
+            hierarchy.add(parentGroup);
+            currentGroup = parentGroup;
+        }
+
+        return hierarchy;
     }
 
 

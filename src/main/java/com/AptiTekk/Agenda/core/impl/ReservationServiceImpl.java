@@ -3,10 +3,13 @@ package com.AptiTekk.Agenda.core.impl;
 import com.AptiTekk.Agenda.core.*;
 import com.AptiTekk.Agenda.core.Properties;
 import com.AptiTekk.Agenda.core.entity.*;
+import com.AptiTekk.Agenda.core.utilities.NotificationFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.mail.MessagingException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Stateless
@@ -42,11 +45,14 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
             String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
-            //TODO: Traverse Asset Owner to find all Owners
-            /*for (UserGroup group : reservation.getAsset().getOwners()) {
+
+            List<UserGroup> userGroups = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
+
+            for (UserGroup group : userGroups) {
+                System.out.println("Group: " + group.getName());
                 for (User user : group.getUsers()) {
                     try {
-                        Notification n = (Notification) createDefaultNotificationBuilder()
+                        Notification n = (Notification) NotificationFactory.createDefaultNotificationBuilder()
                                 .setTo(user)
                                 .setSubject(notif_subject)
                                 .setBody(notif_body)
@@ -56,7 +62,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                         e.printStackTrace();
                     }
                 }
-            }*/
+            }
 
             super.insert(reservation);
         } catch (IOException e) {

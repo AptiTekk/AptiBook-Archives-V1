@@ -47,8 +47,9 @@ public class ReservationIntegrationTest {
         testOwner.setUsername("testOwner");
         testOwner.setEnabled(true);
 
-        UserGroup testOwners = new UserGroup();
-        testOwners.addUser(testOwner);
+        UserGroup testOwnerGroup = new UserGroup();
+        testOwnerGroup.setName("Test Owner Group");
+        testOwnerGroup.addUser(testOwner);
 
         User testRenter = new User();
         testRenter.setFirstName("Test");
@@ -62,12 +63,12 @@ public class ReservationIntegrationTest {
         Asset testAsset = new Asset();
         testAsset.setName("TestReservable");
         testAsset.setType(testAssetType);
-        testAsset.setOwner(testOwners);
+        testAsset.setOwner(testOwnerGroup);
 
         userService.insert(testOwner);
         userService.insert(testRenter);
 
-        userGroupService.insert(testOwners);
+        userGroupService.insert(testOwnerGroup);
 
         typeService.insert(testAssetType);
         assetService.insert(testAsset);
@@ -85,6 +86,7 @@ public class ReservationIntegrationTest {
         reservation.setAsset(testAsset);
         reservation.setUser(testRenter);
 
+        System.out.println(reservationService.getClass().getName());
         reservationService.insert(reservation);
         
         assertEquals("Notifications count should be 1", 1, notificationService.getAll().size());

@@ -72,10 +72,10 @@ public class NotificationSorterTest {
 
         //assert
         List<Notification> expected = new ArrayList<Notification>() {{
-            add(unreadNotification2);
             add(unreadNotification1);
-            add(readNotification2);
+            add(unreadNotification2);
             add(readNotification1);
+            add(readNotification2);
         }};
 
         for(int i=0; i<notifs.size(); i++) {

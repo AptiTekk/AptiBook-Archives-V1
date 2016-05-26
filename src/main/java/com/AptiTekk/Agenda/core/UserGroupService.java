@@ -30,4 +30,5 @@ public interface UserGroupService extends EntityService<UserGroup> {
 
     UserGroup[] getSenior(List<UserGroup> groups);
 
+    List<UserGroup> getHierarchyUp(UserGroup origin);
 }
