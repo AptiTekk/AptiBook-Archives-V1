@@ -1,83 +1,95 @@
 package com.AptiTekk.Agenda.core.utilities;
 
+import com.AptiTekk.Agenda.core.GoogleCalendarService;
 import com.AptiTekk.Agenda.core.entity.Asset;
 import com.AptiTekk.Agenda.core.entity.AssetType;
 import com.AptiTekk.Agenda.core.entity.Reservation;
 import com.AptiTekk.Agenda.core.entity.User;
+import com.AptiTekk.Agenda.core.testingUtil.TestUtils;
 import com.AptiTekk.Agenda.core.utilities.NotificationFactory.EmailNotificationBuilder;
 import com.AptiTekk.Agenda.core.utilities.notification.EmailNotification;
 import com.AptiTekk.Agenda.core.utilities.notification.VariableInjection;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
+@RunWith(Arquillian.class)
 public class NotificationFactoryTest {
 
-  @Test
-  public void variableInjectionTest()
-      throws NamingException, NoSuchMethodException, SecurityException, IllegalAccessException,
-      IllegalArgumentException, InvocationTargetException, MessagingException {
-    User user = new User();
-    user.setEmail("kevint@gm-thorne.com");
-    user.setFirstName("Mitchell");
-    user.setLastName("Talmadge");
+    @Deployment
+    public static Archive<?> createDeployment() {
+        return TestUtils.createDeployment(NotificationFactory.class, User.class, EmailNotification.class, Asset.class, Reservation.class, EmailNotificationBuilder.class);
+    }
 
-    AssetType type = new AssetType();
-    type.setId(999);
+    @Test
+    public void variableInjectionTest()
+            throws NamingException, NoSuchMethodException, SecurityException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, MessagingException {
+        User user = new User();
+        user.setEmail("kevint@gm-thorne.com");
+        user.setFirstName("Mitchell");
+        user.setLastName("Talmadge");
 
-    Asset item = new Asset();
-    item.setName("item name!");
-    item.setType(type);
+        AssetType type = new AssetType();
+        type.setId(999);
 
-    Reservation res = new Reservation();
-    res.setDateCreated(new Date());
-    res.setAsset(item);
+        Asset item = new Asset();
+        item.setName("item name!");
+        item.setType(type);
 
-    String body =
-            "Hello {user.fullname} {reservation.asset.name} {reservation.asset.type.id}";
-    String html = "<html>{body} {user.email} {user.password} {unparseable}</html>";
-    String expectedHtml = html
-        .replace("{body}",
-                "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
-                        + res.getAsset().getType().getId())
-        .replace("{user.email}", user.getEmail())
-        .replace("{user.password}", VariableInjection.OMITTED_PARAM);
+        Reservation res = new Reservation();
+        res.setDateCreated(new Date());
+        res.setAsset(item);
 
-    EmailNotificationBuilder builder = NotificationFactory.createEmailNotificationBuilder()
-        .setSubject("Test Subject").setBody(body).setTemplate(html);
+        String body =
+                "Hello {user.fullname} {reservation.asset.name} {reservation.asset.type.id}";
+        String html = "<html>{body} {user.email} {user.password} {unparseable}</html>";
+        String expectedHtml = html
+                .replace("{body}",
+                        "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
+                                + res.getAsset().getType().getId())
+                .replace("{user.email}", user.getEmail())
+                .replace("{user.password}", VariableInjection.OMITTED_PARAM);
 
-    builder.build(user, res);
+        EmailNotificationBuilder builder = NotificationFactory.createEmailNotificationBuilder()
+                .setSubject("Test Subject").setBody(body).setTemplate(html);
 
-    Assert.assertEquals("Variable injection failed!",
-        builder.getHtml(), expectedHtml);
-  }
+        builder.build(user, res);
 
-  @Test
-  public void emailNotificationFactoryTest() throws Exception {
-    User user = new User();
-    user.setEmail("kevint@gm-thorne.com");
-    user.setFirstName("Mitchell");
-    user.setLastName("Talmadge");
+        Assert.assertEquals("Variable injection failed!",
+                builder.getHtml(), expectedHtml);
+    }
 
-    String body = "Hi there {user.fullname}";
-    String template = "<html>{body}</html>";
-    String subject = "Subject";
+    @Test
+    public void emailNotificationFactoryTest() throws Exception {
+        User user = new User();
+        user.setEmail("kevint@gm-thorne.com");
+        user.setFirstName("Mitchell");
+        user.setLastName("Talmadge");
 
-    String expectedHtmlRender =
-        template.replace("{body}", body.replace("{user.fullname}", user.getFullname()));
+        String body = "Hi there {user.fullname}";
+        String template = "<html>{body}</html>";
+        String subject = "Subject";
 
-    EmailNotification emailNotification = NotificationFactory.createEmailNotificationBuilder()
-        .setTemplate(template).setBody(body).setTo(user).setSubject(subject).build(user);
+        String expectedHtmlRender =
+                template.replace("{body}", body.replace("{user.fullname}", user.getFullname()));
 
-    Assert.assertEquals("Email recipients didn't match!", user.getEmail(),
-        emailNotification.getTo().getEmail());
-    Assert.assertEquals("Subjects didn't match!", subject, emailNotification.getSubject());
-    Assert.assertEquals("HTML parts didn't match!", expectedHtmlRender,
-        emailNotification.getContent().getBodyPart(0).getContent().toString());
-  }
+        EmailNotification emailNotification = NotificationFactory.createEmailNotificationBuilder()
+                .setTemplate(template).setBody(body).setTo(user).setSubject(subject).build(user);
+
+        Assert.assertEquals("Email recipients didn't match!", user.getEmail(),
+                emailNotification.getTo().getEmail());
+        Assert.assertEquals("Subjects didn't match!", subject, emailNotification.getSubject());
+        Assert.assertEquals("HTML parts didn't match!", expectedHtmlRender,
+                emailNotification.getContent().getBodyPart(0).getContent().toString());
+    }
 
 }
