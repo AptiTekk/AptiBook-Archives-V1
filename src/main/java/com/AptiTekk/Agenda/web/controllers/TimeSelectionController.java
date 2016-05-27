@@ -2,8 +2,7 @@ package com.AptiTekk.Agenda.web.controllers;
 
 import com.AptiTekk.Agenda.core.AssetTypeService;
 import com.AptiTekk.Agenda.core.ReservationService;
-import com.AptiTekk.Agenda.core.entity.Asset;
-import com.AptiTekk.Agenda.core.entity.AssetType;
+import com.AptiTekk.Agenda.core.entity.*;
 import com.AptiTekk.Agenda.core.utilities.AgendaLogger;
 import com.AptiTekk.Agenda.core.utilities.TimeRange;
 
@@ -14,10 +13,7 @@ import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @ManagedBean(name = "TimeSelectionController")
 @ViewScoped
@@ -27,6 +23,10 @@ public class TimeSelectionController {
 
     private List<String> startTimes;
     private String startTime;
+
+
+   public Date startDateTime;
+    public Date endDateTime;
 
 
     private List<String> endTimes;
@@ -42,11 +42,14 @@ public class TimeSelectionController {
 
     private List<Asset> results;
 
+    private Map<Asset, Boolean> checkMap = new HashMap<Asset, Boolean>();
+
     @Inject
     private ReservationService reservationService;
 
     @Inject
     private AssetTypeService assetTypeService;
+
 
     @PostConstruct
     public void init() {
@@ -64,6 +67,9 @@ public class TimeSelectionController {
         calculateStartTimes();
 
         assetTypes = assetTypeService.getAll();
+
+
+
     }
 
     /**
@@ -117,6 +123,41 @@ public class TimeSelectionController {
             e.printStackTrace();
             endTimes.add("--- Internal Server Error ---");
         }
+    }
+
+
+    public void onPicked( User user){
+  ;
+        DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/YYYY h:mm a");
+        try {
+            startDateTime  = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
+            endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if(user == null){
+            System.out.println("User is null in onPicked() in TimeSelectionController");
+        }
+        for(Asset asset : getSelectedAssets()){
+            Reservation reservation = new Reservation();
+            reservation.setAsset(asset);
+            reservation.setTimeStart(startDateTime);
+            reservation.setTimeEnd(endDateTime);
+            reservation.setUser(user);
+            reservationService.insert(reservation);
+        }
+
+    }
+
+    public List<Asset> getSelectedAssets() {
+        List<Asset> result = new ArrayList<Asset>();
+        for (Map.Entry<Asset, Boolean> entry : checkMap.entrySet()) {
+            if (entry.getValue()) {
+                result.add(entry.getKey());
+            }
+        }
+        System.out.println("result size in getSelectedAssets: " + result.size());
+        return result;
     }
 
     public void searchForReservable() {
@@ -213,4 +254,11 @@ public class TimeSelectionController {
         return this.results;
     }
 
+    public Map<Asset, Boolean> getCheckMap() {
+        return checkMap;
+    }
+
+    public void setCheckMap(Map<Asset, Boolean> checkMap) {
+        this.checkMap = checkMap;
+    }
 }

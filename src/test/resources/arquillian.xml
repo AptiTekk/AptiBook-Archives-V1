@@ -8,7 +8,7 @@
             <property name="jbossHome">target/wildfly-10.0.0.Final</property>
             <property name="modulePath">target/wildfly-10.0.0.Final/modules</property>
             <property name="javaVmArguments">-Djboss.socket.binding.port-offset=10000 -Xms512m -Xmx1024m
-                -agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+                -Djava.util.logging.manager=org.jboss.logmanager.LogManager
             </property>
             <property name="managementPort">19990</property>
         </configuration>

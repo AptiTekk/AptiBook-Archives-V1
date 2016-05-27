@@ -114,6 +114,9 @@ public class Reservation implements Serializable {
     }
 
     public Asset getAsset() {
+        if(this.asset == null) {
+            System.out.println("asset is null");
+        }
         return this.asset;
     }
 

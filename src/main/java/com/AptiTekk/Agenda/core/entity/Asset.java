@@ -120,7 +120,11 @@ public class Asset implements Serializable {
     }
 
     public UserGroup getOwner() {
+        if(owner == null){
+            System.out.println("owner is null in Asset entity");
+        }
         return owner;
+
     }
 
     public void setOwner(UserGroup owner) {

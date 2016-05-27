@@ -32,9 +32,25 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     @Inject
     UserGroupService userGroupService;
 
+
+    public String startTime;
+    public String endTime;
+
     public ReservationServiceImpl() {
         super(Reservation.class);
     }
+
+
+
+/*
+    @Override
+    public void timeAvailable(String startTime, String endTime){
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+*/
+
 
     @Override
     public void insert(Reservation reservation) {
@@ -46,6 +62,14 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
             String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
 
+            if(reservation.getAsset() == null){
+                System.out.println("reservation.getAsset() is null");
+            }
+            if(reservation.getAsset().getOwner() == null){
+                System.out.println("reservation.getAsset().getOwner*() is null");
+            }
+
+/*
             List<UserGroup> userGroups = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
 
             for (UserGroup group : userGroups) {
@@ -62,10 +86,11 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                         e.printStackTrace();
                     }
                 }
-            }
+            }*/
 
             super.insert(reservation);
         } catch (IOException e) {
+            System.out.println("Catch in insert(reservation) is thrown");
             e.printStackTrace();
         }
     }
