@@ -24,13 +24,13 @@ public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements As
     }
 
     @Override
-    public Asset findByName(String roomName) {
-        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.name.eq(roomName)).fetchOne();
+    public Asset findByName(String assetName) {
+        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.name.eq(assetName)).fetchOne();
     }
 
     @Override
-    public List<Asset> getAllByType(AssetType type) {
-        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.type.eq(type)).fetch();
+    public List<Asset> getAllByType(AssetType assetType) {
+        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.type.eq(assetType)).fetch();
     }
 
 
