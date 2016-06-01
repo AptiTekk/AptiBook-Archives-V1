@@ -22,7 +22,8 @@
 
                 <!--<pf:outputLabel for="typeSelect" value="Grouping: " />-->
                 <b:selectOneMenu id="typeSelect" value="#{ReservationFieldEditorController.type}"
-                                 styleClass="pull-right">
+                                 styleClass="pull-right"
+                                 valueChangeListener="#{ReservationFieldEditorController.resetSettings()}">
                     <f:selectItem itemLabel="- Global -" itemValue=""/>
                     <f:selectItems value="#{ReservationFieldEditorController.reservableTypes}" var="t"
                                    itemLabel="#{t.name}" itemValue="#{t}"/>

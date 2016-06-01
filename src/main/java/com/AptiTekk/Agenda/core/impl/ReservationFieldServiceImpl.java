@@ -6,8 +6,10 @@ import com.AptiTekk.Agenda.core.entity.QReservationField;
 import com.AptiTekk.Agenda.core.entity.ReservationField;
 import com.querydsl.jpa.impl.JPAQuery;
 
+import javax.ejb.Stateless;
 import java.util.List;
 
+@Stateless
 public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService {
 
     QReservationField table = QReservationField.reservationField;

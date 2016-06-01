@@ -28,7 +28,6 @@ public class TimeSelectionController {
     private List<String> startTimes;
     private String startTime;
 
-
     private List<String> endTimes;
     private String endTime;
     private String lastStartTimeCalculated;
@@ -127,7 +126,7 @@ public class TimeSelectionController {
         Date startDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
         Date endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
 
-            this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime);
+            this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime, 0f);
         AgendaLogger.logVerbose(results.toString());
         } catch(ParseException e) {
             e.printStackTrace();

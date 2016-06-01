@@ -17,7 +17,7 @@ public interface ReservationService extends EntityService<Reservation> {
                     + "\n\t {reservation.timeStart}"
                     + "\n\t {reservation.timeEnd}");
 
-    List<Asset> findAvailableAssets(AssetType type, Date startDateTime, Date endDateTime);
+    List<Asset> findAvailableAssets(AssetType type, Date startDateTime, Date endDateTime, float cushionInHours);
 
     Set<Reservation> getAllUnderUser(User user);
     

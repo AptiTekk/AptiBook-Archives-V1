@@ -120,28 +120,42 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     }
 
     @Override
-    public List<Asset> findAvailableAssets(AssetType type, Date startDateTime, Date endDateTime) {
-        List<Asset> assets = assetService.getAllByType(type);
+    public List<Asset> findAvailableAssets(AssetType type, Date specifiedStartDateTime, Date specifiedEndDateTime, float cushionInHours) {
+        List<Asset> assetsGivenByType = assetService.getAllByType(type);
         List<Asset> result = new ArrayList<>();
 
-        for (Asset asset : assets) {
-            boolean openSlot = true;
-            for (Reservation reservation : asset.getReservations()) {
-                if (reservation.getTimeStart().before(startDateTime)
-                        && reservation.getTimeEnd().before(startDateTime)) {
-                    openSlot = true;
-                } else if (reservation.getTimeStart().after(startDateTime)
-                        && reservation.getTimeEnd().after(startDateTime)) {
-                    openSlot = true;
+        for (Asset assetOfGivenType : assetsGivenByType) {
+            //Make sure given times are in between availability for that asset
+            if (specifiedEndDateTime.before(assetOfGivenType.getAvailabilityEnd()) && specifiedStartDateTime.after(assetOfGivenType.getAvailabilityStart())) {
+                //Now lets make sure we aren't stepping on already-made reservations
+                if (freeOfOtherReservations(assetOfGivenType, specifiedStartDateTime)) {
+                    result.add(assetOfGivenType);
                 } else {
-                    openSlot = false;
+                    Calendar cl = Calendar.getInstance();
+                    cl.setTime(specifiedStartDateTime);
+                    cl.add(Calendar.HOUR, (int) (cushionInHours * 10));
+                    if (freeOfOtherReservations(assetOfGivenType, cl.getTime())) {
+                        result.add(assetOfGivenType);
+                    }
                 }
-            }
-            if (openSlot) {
-                result.add(asset);
             }
         }
         return result;
+    }
+
+    private boolean freeOfOtherReservations(Asset asset, Date specifiedStartDateTime) {
+        for (Reservation alreadyMadeReservation : asset.getReservations()) {
+            if (alreadyMadeReservation.getTimeStart().before(specifiedStartDateTime)
+                    && alreadyMadeReservation.getTimeEnd().before(specifiedStartDateTime)) {
+                return true;
+            } else if (alreadyMadeReservation.getTimeStart().after(specifiedStartDateTime)
+                    && alreadyMadeReservation.getTimeEnd().after(specifiedStartDateTime)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
