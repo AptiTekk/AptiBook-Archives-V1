@@ -172,8 +172,11 @@ public class AccountController {
                 FacesContext.getCurrentInstance().addMessage("accountSettingsForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
             }
-
-            user = userService.merge(user);
+            try {
+                user = userService.merge(user);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             editSuccess = true;
         }

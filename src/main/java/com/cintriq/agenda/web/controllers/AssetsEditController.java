@@ -62,10 +62,15 @@ public class AssetsEditController {
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
 
             if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
-                getSelectedAssetType().setName(getEditableAssetTypeName());
-                setSelectedAssetType(assetTypeService.merge(getSelectedAssetType()));
-                refreshAssetTypeList();
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
+                try {
+                    getSelectedAssetType().setName(getEditableAssetTypeName());
+                    setSelectedAssetType(assetTypeService.merge(getSelectedAssetType()));
+                    refreshAssetTypeList();
+                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                }
             }
         }
     }
@@ -103,12 +108,16 @@ public class AssetsEditController {
                     refreshAssetTypeList();
                     return;
                 }
+                try {
+                    getSelectedTabAsset().setOwner((UserGroup) editableTabAssetOwnerGroup.getData());
 
-                getSelectedTabAsset().setOwner((UserGroup) editableTabAssetOwnerGroup.getData());
-
-                setSelectedTabAsset(assetService.merge(getSelectedTabAsset()));
-                refreshAssetTypeList();
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Updated"));
+                    setSelectedTabAsset(assetService.merge(getSelectedTabAsset()));
+                    refreshAssetTypeList();
+                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Updated"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                }
             }
         }
     }
@@ -131,7 +140,12 @@ public class AssetsEditController {
 
     public void addNewAssetType() {
         AssetType assetType = new AssetType("New Asset Type");
-        assetTypeService.insert(assetType);
+        try {
+            assetTypeService.insert(assetType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+        }
 
         refreshAssetTypeList();
     }
@@ -179,13 +193,19 @@ public class AssetsEditController {
 
     public void addNewAsset() {
         if (getSelectedAssetType() != null) {
-            Asset asset = new Asset("New Asset");
-            asset.setType(getSelectedAssetType());
-            assetService.insert(asset);
+            try {
+                Asset asset = new Asset("New Asset");
+                asset.setType(getSelectedAssetType());
+                assetService.insert(asset);
 
-            setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
+                setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            }
 
             refreshAssetTypeList();
+
         }
     }
 

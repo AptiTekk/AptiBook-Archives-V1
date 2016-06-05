@@ -1,8 +1,8 @@
 package com.cintriq.agenda.core.impl;
 
-import com.cintriq.agenda.core.utilities.NotificationFactory;
 import com.cintriq.agenda.core.*;
 import com.cintriq.agenda.core.entity.*;
+import com.cintriq.agenda.core.utilities.NotificationFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -36,7 +36,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     }
 
     @Override
-    public void insert(Reservation reservation) {
+    public void insert(Reservation reservation) throws Exception {
         try {
             if (!properties.get(GoogleService.ACCESS_TOKEN_PROPERTY.getKey()).isEmpty()) {
                 googleCalendarService.insert(googleCalendarService.getCalendarService(), reservation);
@@ -70,7 +70,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     }
 
     @Override
-    public void update(Reservation reservation, int id) {
+    public void update(Reservation reservation, int id) throws Exception {
         try {
             if (!properties.get(GoogleService.ACCESS_TOKEN_PROPERTY.getKey()).isEmpty()) {
                 googleCalendarService.update(googleCalendarService.getCalendarService(), reservation);
@@ -101,7 +101,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws Exception {
         Reservation reservation = get(id);
         try {
             if (!properties.get(GoogleService.ACCESS_TOKEN_PROPERTY.getKey()).isEmpty()) {

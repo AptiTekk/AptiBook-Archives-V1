@@ -6,7 +6,6 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.Event;
 
 import javax.ejb.Local;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 @Local
@@ -18,15 +17,15 @@ public interface GoogleCalendarService {
 
     SimpleDateFormat eventDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'");
 
-    Calendar getCalendarService() throws IOException;
+    Calendar getCalendarService() throws Exception;
 
-    void insert(Calendar calendarService, Reservation reservation) throws IOException;
+    void insert(Calendar calendarService, Reservation reservation) throws Exception;
 
-    Event get(Calendar calendarService, Reservation reservation) throws IOException;
+    Event get(Calendar calendarService, Reservation reservation) throws Exception;
 
-    void update(Calendar calendarService, Reservation reservation) throws IOException;
+    void update(Calendar calendarService, Reservation reservation) throws Exception;
 
-    void delete(Calendar calendarService, Reservation reservation) throws IOException;
+    void delete(Calendar calendarService, Reservation reservation) throws Exception;
 
 
 }

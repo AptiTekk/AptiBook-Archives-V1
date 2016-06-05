@@ -15,7 +15,6 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -33,7 +32,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     ReservationService reservationService;
 
     @Override
-    public Calendar getCalendarService() throws IOException {
+    public Calendar getCalendarService() throws Exception {
         Credential cred = googleService.authorize(CALENDAR_USER_ID);
         if (cred == null) { //reauthorize
             AgendaLogger.logMessage("Google Calendar Credential was null");
@@ -47,7 +46,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public void insert(Calendar calendarService, Reservation reservation) throws IOException {
+    public void insert(Calendar calendarService, Reservation reservation) throws Exception {
         UUID eventId = UUID.randomUUID();
 
         EventDateTime start = new EventDateTime();
@@ -71,12 +70,12 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public Event get(Calendar calendarService, Reservation reservation) throws IOException {
+    public Event get(Calendar calendarService, Reservation reservation) throws Exception {
         return calendarService.events().get(properties.get(CALENDAR_ID_PROPERTY.getKey()), reservation.getGoogleEventId()).execute();
     }
 
     @Override
-    public void update(Calendar calendarService, Reservation reservation) throws IOException {
+    public void update(Calendar calendarService, Reservation reservation) throws Exception {
         EventDateTime start = new EventDateTime();
         EventDateTime end = new EventDateTime();
 
@@ -94,7 +93,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     }
 
     @Override
-    public void delete(Calendar calendarService, Reservation reservation) throws IOException {
+    public void delete(Calendar calendarService, Reservation reservation) throws Exception {
         calendarService.events().delete(properties.get(CALENDAR_ID_PROPERTY.getKey()), reservation.getGoogleEventId()).execute();
     }
 }

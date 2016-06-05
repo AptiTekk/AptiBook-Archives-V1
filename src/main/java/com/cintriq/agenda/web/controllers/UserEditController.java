@@ -1,16 +1,15 @@
 package com.cintriq.agenda.web.controllers;
 
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
-import javax.faces.bean.ViewScoped;
-import javax.inject.Inject;
-
 import com.cintriq.agenda.core.UserService;
 import com.cintriq.agenda.core.entity.User;
 import com.cintriq.agenda.core.utilities.Sha256Helper;
 
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.util.List;
 
 @ManagedBean(name = "UserEditController")
@@ -39,7 +38,7 @@ public class UserEditController {
         refreshUserList();
         resetSettings();
     }
-    
+
     public void refreshUserList() {
         users = (List) userService.getAll();
     }
@@ -60,13 +59,12 @@ public class UserEditController {
 
     public void updateSettings() {
         editSuccess = false;
-        if(getEditableUsername().isEmpty())
-        {
+        if (getEditableUsername().isEmpty()) {
             FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage("Username cannot be empty."));
         }
-        
+
         //TODO: Check if username already exists, check regex
-        
+
         if (!getEditableFirstName().isEmpty() && !getEditableFirstName().matches("[A-Za-z'-]+")) {
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage("First Name may only contain A-Z, a-z, apostrophe, and dash."));
@@ -113,16 +111,20 @@ public class UserEditController {
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
                         new FacesMessage("Password Changed Successfully."));
             }
+            try {
+                user = userService.merge(user);
+                refreshUserList();
+                editSuccess = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                FacesContext.getCurrentInstance().addMessage("userEditForm",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            }
 
-            user = userService.merge(user);
-            refreshUserList();
-
-            editSuccess = true;
         }
     }
-    
-    public void addNewUser()
-    {
+
+    public void addNewUser() {
         FacesContext context = FacesContext.getCurrentInstance();
 
         try {
@@ -139,12 +141,11 @@ public class UserEditController {
             e.printStackTrace();
             context.addMessage("accountSettingsForm", new FacesMessage("Failure", "Error While Adding User!"));
         }
-        
+
         refreshUserList();
     }
-    
-    public void deleteSelectedUser()
-    {
+
+    public void deleteSelectedUser() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (userService.get(getUser().getId()) != null) {
@@ -158,10 +159,10 @@ public class UserEditController {
             e.printStackTrace();
             context.addMessage("accountSettingsForm", new FacesMessage("Failure", "Error While Deleting User!"));
         }
-        
+
         refreshUserList();
     }
-    
+
     public User getUser() {
         return user;
     }
@@ -170,12 +171,11 @@ public class UserEditController {
         this.user = user;
         resetSettings();
     }
-    
-    public List<User> getUsers()
-    {
+
+    public List<User> getUsers() {
         return users;
     }
-    
+
     public String getEditableUsername() {
         return editableUsername;
     }

@@ -40,11 +40,19 @@ public class ReservationFieldEditorController {
     }
 
     public void updateSettings() {
+
         fields.forEach(field -> {
-            reservationFieldService.merge(field);
+            try {
+                reservationFieldService.merge(field);
+            } catch (Exception e) {
+                e.printStackTrace();
+                FacesContext.getCurrentInstance().addMessage("pageMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            }
         });
         FacesContext.getCurrentInstance().addMessage("pageMessages",
                 new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Saved Changes"));
+
+
     }
 
     public void addField() {
@@ -55,10 +63,15 @@ public class ReservationFieldEditorController {
     }
 
     public void deleteField() {
-        fields.remove(field);
-        reservationFieldService.delete(field.getId());
-        FacesContext.getCurrentInstance().addMessage("pageMessages",
-                new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field Deleted"));
+        try {
+            fields.remove(field);
+            reservationFieldService.delete(field.getId());
+            FacesContext.getCurrentInstance().addMessage("pageMessages",
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field Deleted"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage("pageMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+        }
     }
 
     public void resetSettings() {

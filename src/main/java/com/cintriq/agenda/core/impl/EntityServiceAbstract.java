@@ -22,7 +22,7 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T> {
     }
 
     @Override
-    public void insert(T o) {
+    public void insert(T o) throws Exception {
         this.entityManager.persist(o);
     }
 
@@ -38,7 +38,7 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T> {
     }
 
     @Override
-    public void update(T newEntity, int id) {
+    public void update(T newEntity, int id) throws Exception {
         T old = entityManager.find(entityType, id);
         if (old != null) {
             old = newEntity;
@@ -47,15 +47,17 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T> {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws Exception {
         T entity = entityManager.getReference(entityType, id);
         if (entity != null) {
             entityManager.remove(entity);
+        } else {
+            throw new Exception("Entity was not found");
         }
     }
 
     @Override
-    public T merge(T entity) {
+    public T merge(T entity) throws Exception {
         return entityManager.merge(entity);
     }
 
