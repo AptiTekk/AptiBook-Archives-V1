@@ -15,7 +15,7 @@ public class TestUtils {
                 .importRuntimeDependencies().resolve().withTransitivity().asFile();
 
         return ShrinkWrap.create(WebArchive.class)
-                .addPackages(true, "com.AptiTekk.Agenda.core")
+                .addPackages(true, "com.cintriq.agenda")
                 .addClasses(clazz)
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource("wildfly-ds.xml")
