@@ -3,17 +3,17 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="Agenda" transaction-type="JTA">
-        <jta-data-source>java:jboss/Resource/AgendaDS</jta-data-source>
+        <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
-        <class>com.AptiTekk.Agenda.core.entity.AppProperty</class>
-        <class>com.AptiTekk.Agenda.core.entity.Asset</class>
-        <class>com.AptiTekk.Agenda.core.entity.AssetType</class>
-        <class>com.AptiTekk.Agenda.core.entity.Reservation</class>
-        <class>com.AptiTekk.Agenda.core.entity.ReservationApproval</class>
-        <class>com.AptiTekk.Agenda.core.entity.ReservationField</class>
-        <class>com.AptiTekk.Agenda.core.entity.ReservationFieldEntry</class>
-        <class>com.AptiTekk.Agenda.core.entity.User</class>
-        <class>com.AptiTekk.Agenda.core.entity.UserGroup</class>
+        <class>com.cintriq.agenda.core.entity.AppProperty</class>
+        <class>com.cintriq.agenda.core.entity.Asset</class>
+        <class>com.cintriq.agenda.core.entity.AssetType</class>
+        <class>com.cintriq.agenda.core.entity.Reservation</class>
+        <class>com.cintriq.agenda.core.entity.ReservationApproval</class>
+        <class>com.cintriq.agenda.core.entity.ReservationField</class>
+        <class>com.cintriq.agenda.core.entity.ReservationFieldEntry</class>
+        <class>com.cintriq.agenda.core.entity.User</class>
+        <class>com.cintriq.agenda.core.entity.UserGroup</class>
 
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
