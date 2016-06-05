@@ -64,7 +64,13 @@ public class NotificationController implements NotificationListener {
     public void markUnreadRead() {
         System.out.println("Marking all unread as read");
         if (unread != null)
-            unread.forEach(notification -> notificationService.markAsRead(notification));
+            unread.forEach(notification -> {
+                try {
+                    notificationService.markAsRead(notification);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         pullNotifications();
     }
 

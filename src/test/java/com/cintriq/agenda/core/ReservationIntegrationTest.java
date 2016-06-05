@@ -40,7 +40,7 @@ public class ReservationIntegrationTest {
     Properties properties;
 
     @Test
-    public void test() {
+    public void test() throws Exception {
         User testOwner = new User();
         testOwner.setFirstName("Test");
         testOwner.setLastName("Owner");

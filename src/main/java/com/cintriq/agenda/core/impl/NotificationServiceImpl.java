@@ -39,7 +39,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
     }
 
     @Override
-    public void insert(Notification n) {
+    public void insert(Notification n) throws Exception {
         super.insert(n);
         notificationListeners.forEach(notificationListener -> notificationListener.pushNotification(n));
     }
@@ -53,7 +53,7 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
     }
 
     @Override
-    public void markAsRead(Notification n) {
+    public void markAsRead(Notification n) throws Exception {
         n.setRead(Boolean.TRUE);
         merge(n);
     }

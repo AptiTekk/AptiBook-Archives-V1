@@ -30,7 +30,7 @@ public class NotificationSorterTest {
     }
 
     @Test
-    public void testSorted() {
+    public void testSorted() throws Exception {
         // ARRANGE
         User testUser = new User();
         testUser.setUsername("testUser");

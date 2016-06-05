@@ -48,13 +48,21 @@ public class StartupServiceImpl implements StartupService {
     public void checkForRootGroup() {
         if (userGroupService.findByName(UserGroupService.ROOT_GROUP_NAME) == null) {
             UserGroup rootGroup = new UserGroup(UserGroupService.ROOT_GROUP_NAME);
-            userGroupService.insert(rootGroup);
+            try {
+                userGroupService.insert(rootGroup);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             User adminUser = userService.findByName(UserService.ADMIN_USERNAME);
             if (adminUser != null) {
-                rootGroup.addUser(adminUser);
-                adminUser.addGroup(rootGroup);
-                userGroupService.merge(rootGroup);
-                userService.merge(adminUser);
+                try {
+                    rootGroup.addUser(adminUser);
+                    adminUser.addGroup(rootGroup);
+                    userGroupService.merge(rootGroup);
+                    userService.merge(adminUser);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -62,17 +70,26 @@ public class StartupServiceImpl implements StartupService {
     @Override
     public void checkForAdminUser() {
         if (userService.findByName(UserService.ADMIN_USERNAME) == null) {
+
             User adminUser = new User();
             adminUser.setUsername(UserService.ADMIN_USERNAME);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
             adminUser.setEnabled(true);
-            userService.insert(adminUser);
+            try {
+                userService.insert(adminUser);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             UserGroup rootGroup = userGroupService.findByName(UserGroupService.ROOT_GROUP_NAME);
             if (rootGroup != null) {
-                rootGroup.addUser(adminUser);
-                adminUser.addGroup(rootGroup);
-                userGroupService.merge(rootGroup);
-                userService.merge(adminUser);
+                try {
+                    rootGroup.addUser(adminUser);
+                    adminUser.addGroup(rootGroup);
+                    userGroupService.merge(rootGroup);
+                    userService.merge(adminUser);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -80,8 +97,12 @@ public class StartupServiceImpl implements StartupService {
     @Override
     public void checkForReservableTypes() {
         if (assetTypeService.getAll().isEmpty()) {
-            AssetType assetType = new AssetType("Rooms");
-            assetTypeService.insert(assetType);
+            try {
+                AssetType assetType = new AssetType("Rooms");
+                assetTypeService.insert(assetType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

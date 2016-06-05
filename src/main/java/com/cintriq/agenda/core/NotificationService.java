@@ -24,8 +24,8 @@ public interface NotificationService extends EntityService<Notification> {
             throws MessagingException, NoSuchMethodException, SecurityException,
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException;
-    
-    void markAsRead(Notification n);
+
+    void markAsRead(Notification n) throws Exception;
     
     List<Notification> getUnread(User user);
 
