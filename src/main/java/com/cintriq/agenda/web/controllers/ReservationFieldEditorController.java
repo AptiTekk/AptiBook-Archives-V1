@@ -36,7 +36,7 @@ public class ReservationFieldEditorController {
 
     @PostConstruct
     public void init() {
-        resetSettings();
+        refreshSettings();
     }
 
     public void updateSettings() {
@@ -74,7 +74,8 @@ public class ReservationFieldEditorController {
         }
     }
 
-    public void resetSettings() {
+    public void refreshSettings() {
+        System.out.println("refreshed for type " + ((type == null) ? "Global" : type.getName()));
         fields = reservationFieldService.getByType(type);
         assetTypes = assetTypeService.getAll();
     }
