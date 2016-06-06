@@ -35,9 +35,9 @@ public class TimeSelectionController {
     private String lastStartTimeCalculated;
 
     private TimeRange allowedTimes;
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
-    private static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/YYYY h:mm a");
+    private static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/yyyy h:mm a");
 
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;

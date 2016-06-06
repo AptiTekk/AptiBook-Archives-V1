@@ -56,6 +56,7 @@ public class Reservation implements Serializable {
     private String googleEventId;
 
     public Reservation() {
+        this.setDateCreated(Calendar.getInstance());
     }
 
     public int getId() {
