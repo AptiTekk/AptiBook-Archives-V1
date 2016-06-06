@@ -22,8 +22,8 @@
 
                 <!--<pf:outputLabel for="typeSelect" value="Grouping: " />-->
                 <b:selectOneMenu id="typeSelect" value="#{ReservationFieldEditorController.type}"
-                                 styleClass="pull-right"
-                                 valueChangeListener="#{ReservationFieldEditorController.resetSettings()}">
+                                 styleClass="pull-right" onchange="submit()"
+                                 valueChangeListener="#{ReservationFieldEditorController.refreshSettings}">
                     <f:selectItem itemLabel="- Global -" itemValue=""/>
                     <f:selectItems value="#{ReservationFieldEditorController.reservableTypes}" var="t"
                                    itemLabel="#{t.name}" itemValue="#{t}"/>
@@ -72,7 +72,7 @@
                         <f:ajax render=":page" onevent="loading"/>
                     </b:commandButton>
 
-                    <b:commandButton look="default" action="#{ReservationFieldEditorController.resetSettings}"
+                    <b:commandButton look="default" action="#{ReservationFieldEditorController.refreshSettings}"
                                      value="Revert Changes" styleClass="pull-right">
                         <f:ajax render=":page" onevent="loading"/>
                     </b:commandButton>
