@@ -148,16 +148,27 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         List<Asset> assetsGivenByType = assetService.getAllByType(type);
         List<Asset> result = new ArrayList<>();
 
+        Calendar specifiedStartTime = Calendar.getInstance();
+        specifiedStartTime.setTime(specifiedStartDateTime);
+
+        Calendar specifiedEndTime = Calendar.getInstance();
+        specifiedEndTime.setTime(specifiedEndDateTime);
+
+        Calendar assetMinTime = Calendar.getInstance();
+        Calendar assetMaxTime = Calendar.getInstance();
         for (Asset assetOfGivenType : assetsGivenByType) {
+            assetMinTime.setTime(assetOfGivenType.getAvailabilityStart());
+            assetMaxTime.setTime(assetOfGivenType.getAvailabilityEnd());
+
             //Make sure given times are in between availability for that asset
-            if (specifiedEndDateTime.before(assetOfGivenType.getAvailabilityEnd()) && specifiedStartDateTime.after(assetOfGivenType.getAvailabilityStart())) {
+            if (specifiedEndTime.get(Calendar.HOUR_OF_DAY) <= assetMaxTime.get(Calendar.HOUR_OF_DAY) && specifiedStartTime.get(Calendar.HOUR_OF_DAY) >= assetMinTime.get(Calendar.HOUR_OF_DAY)) {
                 //Now lets make sure we aren't stepping on already-made reservations
                 if (freeOfOtherReservations(assetOfGivenType, specifiedStartDateTime)) {
                     result.add(assetOfGivenType);
                 } else {
                     Calendar cl = Calendar.getInstance();
                     cl.setTime(specifiedStartDateTime);
-                    cl.add(Calendar.HOUR, (int) (cushionInHours * 10));
+                    cl.add(Calendar.MINUTE, (int) (cushionInHours * 60));
                     if (freeOfOtherReservations(assetOfGivenType, cl.getTime())) {
                         result.add(assetOfGivenType);
                     }

@@ -1,9 +1,10 @@
 package com.AptiTekk.Agenda.core;
 
-import com.AptiTekk.Agenda.core.AssetService;
-import com.AptiTekk.Agenda.core.entity.Asset;
-import com.AptiTekk.Agenda.core.entity.AssetType;
-import com.AptiTekk.Agenda.core.testingUtil.TestUtils;
+import com.cintriq.agenda.core.AssetService;
+import com.cintriq.agenda.core.AssetTypeService;
+import com.cintriq.agenda.core.entity.Asset;
+import com.cintriq.agenda.core.entity.AssetType;
+import com.cintriq.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

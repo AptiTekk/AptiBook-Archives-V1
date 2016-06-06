@@ -4,6 +4,8 @@ import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.ReservationService;
 import com.cintriq.agenda.core.entity.Asset;
 import com.cintriq.agenda.core.entity.AssetType;
+import com.cintriq.agenda.core.entity.Reservation;
+import com.cintriq.agenda.core.entity.User;
 import com.cintriq.agenda.core.utilities.AgendaLogger;
 import com.cintriq.agenda.core.utilities.TimeRange;
 
@@ -141,7 +143,11 @@ public class TimeSelectionController {
             reservation.setTimeStart(startDateTime);
             reservation.setTimeEnd(endDateTime);
             reservation.setUser(user);
-            reservationService.insert(reservation);
+            try {
+                reservationService.insert(reservation);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
