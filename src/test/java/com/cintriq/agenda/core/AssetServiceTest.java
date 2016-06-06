@@ -5,6 +5,7 @@ import com.cintriq.agenda.core.entity.AssetType;
 import com.cintriq.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +45,8 @@ public class AssetServiceTest {
     }
 
     @Test
-    public void getAllByTypeReturnsCorrectAssets() throws Exception {
+    @Transactional
+    public void getAssetsFromTypeReturnsCorrectAssets() throws Exception {
         List<Asset> assetList = new ArrayList<>();
         AssetType assetType = new AssetType("Test Type");
         assetTypeService.insert(assetType);
@@ -57,7 +59,12 @@ public class AssetServiceTest {
             assetList.add(asset);
         }
 
-        List<Asset> returnedAssets = assetService.getAllByType(assetType);
+        //Refresh asset type
+        assetType = assetTypeService.get(assetType.getId());
+
+        //Get assets from asset type
+        List<Asset> returnedAssets = assetType.getAssets();
+        assertTrue("List is empty!", returnedAssets.size() > 0);
 
         assertNotNull("The returned asset list was null!", returnedAssets);
         for(Asset asset : returnedAssets)

@@ -40,7 +40,7 @@ public class StartupServiceImpl implements StartupService {
     public void init() {
         checkForRootGroup();
         checkForAdminUser();
-        checkForReservableTypes();
+        checkForAssetTypes();
         persistServiceDefaultProperties();
     }
 
@@ -95,7 +95,7 @@ public class StartupServiceImpl implements StartupService {
     }
 
     @Override
-    public void checkForReservableTypes() {
+    public void checkForAssetTypes() {
         if (assetTypeService.getAll().isEmpty()) {
             try {
                 AssetType assetType = new AssetType("Rooms");

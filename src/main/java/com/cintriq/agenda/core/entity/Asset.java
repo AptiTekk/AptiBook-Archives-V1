@@ -4,6 +4,7 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * The persistent class for the Room database table.
  */
 @Entity
-@NamedQuery(name = "Reservable.findAll", query = "SELECT r FROM Asset r")
+@NamedQuery(name = "Asset.findAll", query = "SELECT r FROM Asset r")
 public class Asset implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -21,10 +22,10 @@ public class Asset implements Serializable {
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date availabilityEnd;
+    private Calendar availabilityEnd;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date availabilityStart;
+    private Calendar availabilityStart;
 
     private String name;
 
@@ -57,19 +58,19 @@ public class Asset implements Serializable {
         this.id = id;
     }
 
-    public Date getAvailabilityEnd() {
+    public Calendar getAvailabilityEnd() {
         return this.availabilityEnd;
     }
 
-    public void setAvailabilityEnd(Date availabilityEnd) {
+    public void setAvailabilityEnd(Calendar availabilityEnd) {
         this.availabilityEnd = availabilityEnd;
     }
 
-    public Date getAvailabilityStart() {
+    public Calendar getAvailabilityStart() {
         return this.availabilityStart;
     }
 
-    public void setAvailabilityStart(Date availabilityStart) {
+    public void setAvailabilityStart(Calendar availabilityStart) {
         this.availabilityStart = availabilityStart;
     }
 

@@ -17,6 +17,4 @@ public interface AssetService extends EntityService<Asset> {
      */
     Asset findByName(String assetName);
 
-    List<Asset> getAllByType(AssetType type);
-
 }

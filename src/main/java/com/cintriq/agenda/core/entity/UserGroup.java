@@ -65,16 +65,6 @@ public class UserGroup implements Serializable {
         this.assets = rooms;
     }
 
-    public Asset addReservable(Asset room) {
-        getAssets().add(room);
-        return room;
-    }
-
-    public Asset removeReservable(Asset room) {
-        getAssets().remove(room);
-        return room;
-    }
-
     public List<User> getUsers() {
         return this.users;
     }

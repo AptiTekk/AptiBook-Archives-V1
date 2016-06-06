@@ -16,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "AssetsEditController")
@@ -92,24 +93,19 @@ public class AssetsEditController {
             else if (!getEditableTabAssetName().matches("[A-Za-z0-9 #]+"))
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name may only contain A-Z, a-z, 0-9, #, and space!"));
 
-            if (editableTabAssetOwnerGroup == null)
+            if (editableTabAssetOwnerGroup == null && tabAssetCurrentOwnerGroup == null)
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset!"));
 
             if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
                 getSelectedTabAsset().setName(getEditableTabAssetName());
                 getSelectedTabAsset().setNeedsApproval(isEditableTabAssetApproval());
 
+                getSelectedTabAsset().setAvailabilityStart(getEditableTabAssetAvailabilityStart() == null ? null : TimeSelectionController.convertDateAndTimeStringToCalendar(new Date(), getEditableTabAssetAvailabilityStart()));
+                getSelectedTabAsset().setAvailabilityEnd(getEditableTabAssetAvailabilityEnd() == null ? null : TimeSelectionController.convertDateAndTimeStringToCalendar(new Date(), getEditableTabAssetAvailabilityEnd()));
+
                 try {
-                    getSelectedTabAsset().setAvailabilityStart(getEditableTabAssetAvailabilityStart() == null ? null : TimeSelectionController.TIME_FORMAT.parse(getEditableTabAssetAvailabilityStart()));
-                    getSelectedTabAsset().setAvailabilityEnd(getEditableTabAssetAvailabilityEnd() == null ? null : TimeSelectionController.TIME_FORMAT.parse(getEditableTabAssetAvailabilityEnd()));
-                } catch (ParseException e) {
-                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An internal error occurred while updating Asset! (Time selection invalid)"));
-                    e.printStackTrace();
-                    refreshAssetTypeList();
-                    return;
-                }
-                try {
-                    getSelectedTabAsset().setOwner((UserGroup) editableTabAssetOwnerGroup.getData());
+                    if (editableTabAssetOwnerGroup != null)
+                        getSelectedTabAsset().setOwner((UserGroup) editableTabAssetOwnerGroup.getData());
 
                     setSelectedTabAsset(assetService.merge(getSelectedTabAsset()));
                     refreshAssetTypeList();
@@ -126,8 +122,10 @@ public class AssetsEditController {
         if (getSelectedTabAsset() != null) {
             setEditableTabAssetName(getSelectedTabAsset().getName());
             setEditableTabAssetApproval(getSelectedTabAsset().getNeedsApproval());
-            setEditableTabAssetAvailabilityStart(getSelectedTabAsset().getAvailabilityStart() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabAsset().getAvailabilityStart()));
-            setEditableTabAssetAvailabilityEnd(getSelectedTabAsset().getAvailabilityEnd() == null ? null : TimeSelectionController.TIME_FORMAT.format(getSelectedTabAsset().getAvailabilityEnd()));
+
+            setEditableTabAssetAvailabilityStart(getSelectedTabAsset().getAvailabilityStart() == null ? null : TimeSelectionController.convertCalendarToTimeString(getSelectedTabAsset().getAvailabilityStart()));
+            setEditableTabAssetAvailabilityEnd(getSelectedTabAsset().getAvailabilityEnd() == null ? null : TimeSelectionController.convertCalendarToTimeString(getSelectedTabAsset().getAvailabilityEnd()));
+
             this.tabAssetCurrentOwnerGroup = getSelectedTabAsset().getOwner();
         } else {
             setEditableTabAssetName("");

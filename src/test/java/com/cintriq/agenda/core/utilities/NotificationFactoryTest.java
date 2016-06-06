@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Date;
 
 @RunWith(Arquillian.class)
@@ -45,7 +46,7 @@ public class NotificationFactoryTest {
         item.setType(type);
 
         Reservation res = new Reservation();
-        res.setDateCreated(new Date());
+        res.setDateCreated(Calendar.getInstance());
         res.setAsset(item);
 
         String body =

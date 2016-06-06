@@ -2,6 +2,7 @@ package com.cintriq.agenda.core.impl;
 
 import com.cintriq.agenda.core.*;
 import com.cintriq.agenda.core.entity.*;
+import com.cintriq.agenda.core.utilities.AgendaLogger;
 import com.cintriq.agenda.core.utilities.NotificationFactory;
 
 import javax.ejb.Stateless;
@@ -31,25 +32,9 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     @Inject
     UserGroupService userGroupService;
 
-
-    public String startTime;
-    public String endTime;
-
     public ReservationServiceImpl() {
         super(Reservation.class);
     }
-
-
-
-/*
-    @Override
-    public void timeAvailable(String startTime, String endTime){
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-*/
-
 
     @Override
     public void insert(Reservation reservation) throws Exception {
@@ -61,18 +46,9 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
             String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
             String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
 
-            if(reservation.getAsset() == null){
-                System.out.println("reservation.getAsset() is null");
-            }
-            if(reservation.getAsset().getOwner() == null){
-                System.out.println("reservation.getAsset().getOwner*() is null");
-            }
-
-/*
             List<UserGroup> userGroups = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
 
             for (UserGroup group : userGroups) {
-                System.out.println("Group: " + group.getName());
                 for (User user : group.getUsers()) {
                     try {
                         Notification n = (Notification) NotificationFactory.createDefaultNotificationBuilder()
@@ -85,11 +61,10 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                         e.printStackTrace();
                     }
                 }
-            }*/
+            }
 
             super.insert(reservation);
         } catch (IOException e) {
-            System.out.println("Catch in insert(reservation) is thrown");
             e.printStackTrace();
         }
     }
@@ -143,52 +118,58 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         }
     }
 
+    /**
+     * Finds and returns a list of assets that are available for reservation at the given times from the given asset type.
+     *
+     * @param assetType            The asset type that a reservation is desired to be made from
+     * @param startTime            The start of the desired reservation time
+     * @param endTime              The end of the desired reservation time
+     * @param hoursOffsetAllowance An amount of time in hours that the start and end times may be offset in case of not finding any available assets.
+     * @return A list of available assets during the selected times.
+     */
     @Override
-    public List<Asset> findAvailableAssets(AssetType type, Date specifiedStartDateTime, Date specifiedEndDateTime, float cushionInHours) {
-        List<Asset> assetsGivenByType = assetService.getAllByType(type);
-        List<Asset> result = new ArrayList<>();
+    public List<Asset> findAvailableAssets(AssetType assetType, Calendar startTime, Calendar endTime, float hoursOffsetAllowance) {
+        //This list contains all the assets for the given asset type.
+        List<Asset> assetsOfType = assetType.getAssets();
+        //This list is what will be returned, it will contain all of the assets that are available for reservation.
+        List<Asset> availableAssets = new ArrayList<>();
 
-        Calendar specifiedStartTime = Calendar.getInstance();
-        specifiedStartTime.setTime(specifiedStartDateTime);
-
-        Calendar specifiedEndTime = Calendar.getInstance();
-        specifiedEndTime.setTime(specifiedEndDateTime);
-
-        Calendar assetMinTime = Calendar.getInstance();
-        Calendar assetMaxTime = Calendar.getInstance();
-        for (Asset assetOfGivenType : assetsGivenByType) {
-            assetMinTime.setTime(assetOfGivenType.getAvailabilityStart());
-            assetMaxTime.setTime(assetOfGivenType.getAvailabilityEnd());
-
-            //Make sure given times are in between availability for that asset
-            if (specifiedEndTime.get(Calendar.HOUR_OF_DAY) <= assetMaxTime.get(Calendar.HOUR_OF_DAY) && specifiedStartTime.get(Calendar.HOUR_OF_DAY) >= assetMinTime.get(Calendar.HOUR_OF_DAY)) {
-                //Now lets make sure we aren't stepping on already-made reservations
-                if (freeOfOtherReservations(assetOfGivenType, specifiedStartDateTime)) {
-                    result.add(assetOfGivenType);
-                } else {
-                    Calendar cl = Calendar.getInstance();
-                    cl.setTime(specifiedStartDateTime);
-                    cl.add(Calendar.MINUTE, (int) (cushionInHours * 60));
-                    if (freeOfOtherReservations(assetOfGivenType, cl.getTime())) {
-                        result.add(assetOfGivenType);
-                    }
-                }
+        for (Asset asset : assetsOfType) {
+            //Check for intersections of previous reservations.
+            if (isAssetAvailableForReservationAtTime(asset, startTime, endTime)) {
+                availableAssets.add(asset);
+                AgendaLogger.logVerbose("Found available Asset: "+asset.getName());
+            } else {
+                AgendaLogger.logVerbose("unavailable Asset: "+asset.getName());
+                //TODO: Offset time in 30 min intervals
             }
         }
-        return result;
+        return availableAssets;
     }
 
-    private boolean freeOfOtherReservations(Asset asset, Date specifiedStartDateTime) {
-        for (Reservation alreadyMadeReservation : asset.getReservations()) {
-            if (alreadyMadeReservation.getTimeStart().before(specifiedStartDateTime)
-                    && alreadyMadeReservation.getTimeEnd().before(specifiedStartDateTime)) {
-                return true;
-            } else if (alreadyMadeReservation.getTimeStart().after(specifiedStartDateTime)
-                    && alreadyMadeReservation.getTimeEnd().after(specifiedStartDateTime)) {
-                return true;
-            } else {
+    /**
+     * Checks if the specified asset is available for reservation during the specified times.
+     *
+     * @param asset     The asset to check
+     * @param startTime The start of the reservation time
+     * @param endTime   The end of the reservation time
+     * @return true if available, false if not.
+     */
+    private boolean isAssetAvailableForReservationAtTime(Asset asset, Calendar startTime, Calendar endTime) {
+        //Begin by checking the assets availability times
+        if (endTime.get(Calendar.HOUR_OF_DAY) * 2 + endTime.get(Calendar.MINUTE) / 30 > asset.getAvailabilityEnd().get(Calendar.HOUR_OF_DAY) * 2 +  asset.getAvailabilityEnd().get(Calendar.MINUTE) / 30
+                || startTime.get(Calendar.HOUR_OF_DAY) * 2 + startTime.get(Calendar.MINUTE) / 30 < asset.getAvailabilityStart().get(Calendar.HOUR_OF_DAY) * 2 + asset.getAvailabilityStart().get(Calendar.MINUTE) / 30)
+            return false;
+
+        //Iterate over all reservations of the asset and check for intersections
+        for (Reservation reservation : asset.getReservations()) {
+            //Check for intersection: a ---XX___ b
+            if (reservation.getTimeEnd().compareTo(startTime) > 0 && reservation.getTimeStart().compareTo(endTime) < 0)
                 return false;
-            }
+
+            //Check for intersection: b ___XX--- a
+            if (startTime.compareTo(reservation.getTimeEnd()) > 0 && endTime.compareTo(reservation.getTimeStart()) < 0)
+                return false;
         }
         return true;
     }
@@ -198,7 +179,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         final Set<Reservation> result = new HashSet<>();
         UserGroup[] seniors = userGroupService.getSenior(user.getUserGroups());
         for (UserGroup group : seniors) {
-            group.getAssets().forEach(reservable -> result.addAll(reservable.getReservations()));
+            group.getAssets().forEach(asset -> result.addAll(asset.getReservations()));
             result.addAll(getDecendantsReservation(result, group));
         }
         return result;
@@ -206,8 +187,8 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     private Set<Reservation> getDecendantsReservation(Set<Reservation> set, UserGroup group) {
         group.getChildren().forEach(userGroup -> {
-            userGroup.getAssets().forEach(reservable
-                    -> reservable.getReservations().forEach(set::add));
+                    userGroup.getAssets().forEach(asset
+                            -> asset.getReservations().forEach(set::add));
                     getDecendantsReservation(set, userGroup);
                 }
         );

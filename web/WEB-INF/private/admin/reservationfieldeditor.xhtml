@@ -25,7 +25,7 @@
                                  styleClass="pull-right"
                                  valueChangeListener="#{ReservationFieldEditorController.resetSettings()}">
                     <f:selectItem itemLabel="- Global -" itemValue=""/>
-                    <f:selectItems value="#{ReservationFieldEditorController.reservableTypes}" var="t"
+                    <f:selectItems value="#{ReservationFieldEditorController.assetTypes}" var="t"
                                    itemLabel="#{t.name}" itemValue="#{t}"/>
                     <f:ajax render=":page" onevent="loading"/>
                 </b:selectOneMenu>

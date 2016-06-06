@@ -57,7 +57,7 @@
                         <!-- Column 2: Inline Date Selection -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
-                            <pf:calendar value="#{TimeSelectionController.date}"
+                            <pf:calendar value="#{TimeSelectionController.selectedDate}"
                                          mode="inline" styleClass="datepicker-fullwidth">
                                 <f:ajax event="dateSelect" render=":timeForm" onevent="loading"/>
                             </pf:calendar>
@@ -66,7 +66,7 @@
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.startTime}" styleClass="big-select"
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}" styleClass="big-select"
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
@@ -75,10 +75,10 @@
                                 <f:ajax render=":timeForm" onevent="loading"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.endTime}"
-                                             disabled="#{TimeSelectionController.startTime == null}"
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedEndTimeString}"
+                                             disabled="#{TimeSelectionController.selectedStartTimeString == null}"
                                              styleClass="big-select">
-                                <f:selectItems value="#{TimeSelectionController.getEndTimes(TimeSelectionController.startTime)}"
+                                <f:selectItems value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
                                                var="time"/>
                                 <f:ajax render=":timeForm" onevent="loading"/>
                             </h:selectOneMenu>
@@ -89,8 +89,8 @@
                             <h:commandButton
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
-                                    disabled="#{TimeSelectionController.startTime == null}"
-                                    action="#{TimeSelectionController.searchForReservable()}">
+                                    disabled="#{TimeSelectionController.selectedStartTimeString == null}"
+                                    action="#{TimeSelectionController.searchForAssets()}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </b:column>

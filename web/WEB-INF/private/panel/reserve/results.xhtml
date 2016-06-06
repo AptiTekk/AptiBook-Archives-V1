@@ -18,7 +18,7 @@
                     </b:panel>
                 </b:column>
                 <b:column colXs="8">
-                    <p> <h:outputText value="#{TimeSelectionController.startTime}"/> - <h:outputText value="#{TimeSelectionController.endTime}" /></p>
+                    <p> <h:outputText value="#{TimeSelectionController.selectedStartTimeString}"/> - <h:outputText value="#{TimeSelectionController.selectedEndTimeString}" /></p>
                     <ui:repeat value="#{TimeSelectionController.results}" var="asset">
                         <tr>
                             <td>
@@ -29,7 +29,7 @@
                             <td><h:outputText value="#{asset.name}" /></td>
                         </tr>
                         <!--<b:panel look="info" title="#{asset.name}">
-                           <p> <h:outputText value="#{TimeSelectionController.startTime}"/> - <h:outputText value="#{TimeSelectionController.endTime}" /></p>
+                           <p> <h:outputText value="#{TimeSelectionController.selectedStartTimeString}"/> - <h:outputText value="#{TimeSelectionController.selectedEndTimeString}" /></p>
                             <br />
                             <br />
                         </b:panel>-->

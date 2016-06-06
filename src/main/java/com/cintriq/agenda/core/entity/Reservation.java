@@ -4,6 +4,7 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Reservation implements Serializable {
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    private Calendar dateCreated;
 
     @Column(length = 32)
     private String title;
@@ -32,10 +33,10 @@ public class Reservation implements Serializable {
     private byte pendingApproval;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date timeEnd;
+    private Calendar timeEnd;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date timeStart;
+    private Calendar timeStart;
 
     // bi-directional many-to-one association to Room
     @ManyToOne
@@ -65,11 +66,11 @@ public class Reservation implements Serializable {
         this.id = id;
     }
 
-    public Date getDateCreated() {
+    public Calendar getDateCreated() {
         return this.dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(Calendar dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -97,19 +98,19 @@ public class Reservation implements Serializable {
         this.pendingApproval = pendingApproval;
     }
 
-    public Date getTimeEnd() {
+    public Calendar getTimeEnd() {
         return this.timeEnd;
     }
 
-    public void setTimeEnd(Date timeEnd) {
+    public void setTimeEnd(Calendar timeEnd) {
         this.timeEnd = timeEnd;
     }
 
-    public Date getTimeStart() {
+    public Calendar getTimeStart() {
         return this.timeStart;
     }
 
-    public void setTimeStart(Date timeStart) {
+    public void setTimeStart(Calendar timeStart) {
         this.timeStart = timeStart;
     }
 

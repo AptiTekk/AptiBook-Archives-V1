@@ -9,7 +9,7 @@ public interface StartupService {
   
   public void checkForAdminUser();
   
-  public void checkForReservableTypes();
+  public void checkForAssetTypes();
   
   public void persistServiceDefaultProperties();
 }

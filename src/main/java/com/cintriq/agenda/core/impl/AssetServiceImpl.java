@@ -14,7 +14,7 @@ import java.util.List;
 @Stateless
 public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements AssetService {
 
-    private QAsset reservableTable = QAsset.asset;
+    private QAsset assetTable = QAsset.asset;
 
     @Inject
     private AssetTypeService assetTypeService;
@@ -25,13 +25,7 @@ public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements As
 
     @Override
     public Asset findByName(String assetName) {
-        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.name.eq(assetName)).fetchOne();
+        return new JPAQuery<Asset>(entityManager).from(assetTable).where(assetTable.name.eq(assetName)).fetchOne();
     }
-
-    @Override
-    public List<Asset> getAllByType(AssetType assetType) {
-        return new JPAQuery<Asset>(entityManager).from(reservableTable).where(reservableTable.type.eq(assetType)).fetch();
-    }
-
 
 }

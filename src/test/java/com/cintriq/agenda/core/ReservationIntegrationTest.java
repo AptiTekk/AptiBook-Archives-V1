@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -76,13 +77,12 @@ public class ReservationIntegrationTest {
         Reservation reservation = new Reservation();
         reservation.setTitle("Test Reservation");
         reservation.setDescription("Test Reservation Description");
-        reservation.setDateCreated(new Date());
-        reservation.setTimeStart(new Date());
+        reservation.setDateCreated(Calendar.getInstance());
+        reservation.setTimeStart(Calendar.getInstance());
 
-        //TODO constrain to availability
-        Date timeEnd = new Date();
-        timeEnd.setTime(timeEnd.getTime() + 100000);
-        reservation.setTimeEnd(timeEnd);
+        Calendar endTime = Calendar.getInstance();
+        endTime.add(Calendar.HOUR, 1);
+        reservation.setTimeEnd(endTime);
         reservation.setAsset(testAsset);
         reservation.setUser(testRenter);
 

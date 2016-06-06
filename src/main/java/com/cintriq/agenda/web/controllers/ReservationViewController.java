@@ -30,7 +30,7 @@ public class ReservationViewController {
     private User user;
 
     private ScheduleModel lazyEventModel = new LazyScheduleModel();
-    
+
     private List<Reservation> cardModels = new ArrayList<Reservation>();
 
     @PostConstruct
@@ -45,12 +45,12 @@ public class ReservationViewController {
 
     }
 
-    public static DefaultScheduleEvent toEvent(Reservation res) {
+    private static DefaultScheduleEvent toEvent(Reservation reservation) {
         DefaultScheduleEvent event = new DefaultScheduleEvent();
-        event.setStartDate(res.getTimeStart());
-        event.setEndDate(res.getTimeEnd());
-        event.setTitle(res.getAsset().getName() + " - " + res.getTitle());
-        event.setDescription(res.getDescription());
+        event.setStartDate(reservation.getTimeStart().getTime());
+        event.setEndDate(reservation.getTimeEnd().getTime());
+        event.setTitle(reservation.getAsset().getName() + " - " + reservation.getTitle());
+        event.setDescription(reservation.getDescription());
         return event;
     }
 
@@ -64,21 +64,18 @@ public class ReservationViewController {
         updateCards(user);
     }
 
-    public void updateEvents(User user) {
+    private void updateEvents(User user) {
         AgendaLogger.logVerbose("Changing user, changing event model.");
         lazyEventModel.clear();
         ((user == null) ? resService.getAll()
-                : user.getReservations()).stream().forEach((res) -> {
-                    lazyEventModel.addEvent(toEvent(res));
+                : user.getReservations()).forEach((res) -> {
+            lazyEventModel.addEvent(toEvent(res));
         });
     }
-    
-    public void updateCards(User user) {
+
+    private void updateCards(User user) {
         cardModels.clear();
-        for (Reservation res : ((user == null) ? resService.getAll()
-                : user.getReservations())) {
-            cardModels.add(res);
-        }
+        cardModels.addAll(((user == null) ? resService.getAll() : user.getReservations()));
     }
 
     public ScheduleModel getLazyEventModel() {
@@ -96,7 +93,6 @@ public class ReservationViewController {
     public void setCardModels(List<Reservation> cardModels) {
         this.cardModels = cardModels;
     }
-    
-    
+
 
 }

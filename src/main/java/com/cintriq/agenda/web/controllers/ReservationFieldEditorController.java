@@ -23,7 +23,7 @@ public class ReservationFieldEditorController {
 
     @Inject
     AssetService assetService;
-    List<AssetType> reservableTypes;
+    List<AssetType> assetTypes;
 
     AssetType type;
 
@@ -76,7 +76,7 @@ public class ReservationFieldEditorController {
 
     public void resetSettings() {
         fields = reservationFieldService.getByType(type);
-        reservableTypes = assetTypeService.getAll();
+        assetTypes = assetTypeService.getAll();
     }
 
     public List<ReservationField> getFields() {
@@ -95,12 +95,12 @@ public class ReservationFieldEditorController {
         this.field = field;
     }
 
-    public List<AssetType> getReservableTypes() {
-        return reservableTypes;
+    public List<AssetType> getAssetTypes() {
+        return assetTypes;
     }
 
-    public void setReservableTypes(List<AssetType> reservableTypes) {
-        this.reservableTypes = reservableTypes;
+    public void setAssetTypes(List<AssetType> assetTypes) {
+        this.assetTypes = assetTypes;
     }
 
     public AssetType getType() {

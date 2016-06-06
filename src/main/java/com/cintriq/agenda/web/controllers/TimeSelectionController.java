@@ -8,6 +8,7 @@ import com.cintriq.agenda.core.entity.Reservation;
 import com.cintriq.agenda.core.entity.User;
 import com.cintriq.agenda.core.utilities.AgendaLogger;
 import com.cintriq.agenda.core.utilities.TimeRange;
+import com.sun.javafx.binding.StringFormatter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -22,30 +23,28 @@ import java.util.*;
 @ViewScoped
 public class TimeSelectionController {
 
-    private Date date = Calendar.getInstance().getTime();
+    private Date selectedDate = Calendar.getInstance().getTime();
 
     private List<String> startTimes;
-    private String startTime;
-
-
-   public Date startDateTime;
-    public Date endDateTime;
-
+    private String selectedStartTimeString;
 
     private List<String> endTimes;
-    private String endTime;
+    private String selectedEndTimeString;
+
+    //TODO: Figure out what this is for
     private String lastStartTimeCalculated;
 
     private TimeRange allowedTimes;
-    public static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
-    public static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/YYYY");
+    private static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm a");
+    private static final DateFormat DATETIME_FORMAT = new SimpleDateFormat("dd/MM/YYYY h:mm a");
 
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;
 
     private List<Asset> results;
 
-    private Map<Asset, Boolean> checkMap = new HashMap<Asset, Boolean>();
+    private Map<Asset, Boolean> checkMap = new HashMap<>();
 
     @Inject
     private ReservationService reservationService;
@@ -125,31 +124,40 @@ public class TimeSelectionController {
         }
     }
 
-
-    public void onPicked(User user) {
-        DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/YYYY h:mm a");
+    static Calendar convertDateAndTimeStringToCalendar(Date date, String timeString) {
+        Calendar calendar = Calendar.getInstance();
         try {
-            startDateTime  = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
-            endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
+            calendar.setTime(DATETIME_FORMAT.parse(DATE_FORMAT.format(date) + " " + timeString));
         } catch (ParseException e) {
             e.printStackTrace();
+            return null;
         }
-        if(user == null){
-            System.out.println("User is null in onPicked() in TimeSelectionController");
-        }
-        for(Asset asset : getSelectedAssets()){
-            Reservation reservation = new Reservation();
-            reservation.setAsset(asset);
-            reservation.setTimeStart(startDateTime);
-            reservation.setTimeEnd(endDateTime);
-            reservation.setUser(user);
-            try {
-                reservationService.insert(reservation);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        return calendar;
+    }
+
+    static String convertCalendarToTimeString(Calendar calendar) {
+        if (calendar != null) {
+            return calendar.get(Calendar.HOUR) + ":" + String.format("%02d", calendar.get(Calendar.MINUTE)) + " " + (calendar.get(Calendar.AM_PM) == Calendar.AM ? "AM" : "PM");
         }
 
+        return null;
+    }
+
+    public void onPicked(User user) {
+        if (user != null) {
+            for (Asset asset : getSelectedAssets()) {
+                Reservation reservation = new Reservation();
+                reservation.setAsset(asset);
+                reservation.setTimeStart(convertDateAndTimeStringToCalendar(selectedDate, selectedStartTimeString));
+                reservation.setTimeEnd(convertDateAndTimeStringToCalendar(selectedDate, selectedEndTimeString));
+                reservation.setUser(user);
+                try {
+                    reservationService.insert(reservation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public List<Asset> getSelectedAssets() {
@@ -163,37 +171,33 @@ public class TimeSelectionController {
         return result;
     }
 
-    public void searchForReservable() {
+    public void searchForAssets() {
         AgendaLogger.logVerbose("Searching for Asset");
 
-        try {
-        DateFormat datetimeFormat = new SimpleDateFormat("dd/MM/YYYY h:mm a");
-        Date startDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + startTime);
-        Date endDateTime = datetimeFormat.parse(DATE_FORMAT.format(date) + " " + endTime);
+        this.results = reservationService.findAvailableAssets(
+                selectedAssetType,
+                convertDateAndTimeStringToCalendar(selectedDate, selectedStartTimeString),
+                convertDateAndTimeStringToCalendar(selectedDate, selectedEndTimeString),
+                0f);
 
-            this.results = reservationService.findAvailableAssets(selectedAssetType, startDateTime, endDateTime, 0f);
         AgendaLogger.logVerbose(results.toString());
-        } catch(ParseException e) {
-            e.printStackTrace();
-            this.results = null;
-        }
     }
 
-    public Date getDate() {
-        return date;
+    public Date getSelectedDate() {
+        return selectedDate;
     }
 
-    public void setDate(Date date) {
-        if (date != null) {
-            AgendaLogger.logVerbose("Date Selected: " + DATE_FORMAT.format(date));
+    public void setSelectedDate(Date selectedDate) {
+        if (selectedDate != null) {
+            AgendaLogger.logVerbose("Date Selected: " + DATE_FORMAT.format(selectedDate));
         } else {
             AgendaLogger.logVerbose("Date Empty - Setting to today");
-            date = Calendar.getInstance().getTime();
+            selectedDate = Calendar.getInstance().getTime();
         }
 
-        this.startTime = null;
+        this.selectedStartTimeString = null;
         this.endTimes = null;
-        this.date = date;
+        this.selectedDate = selectedDate;
     }
 
     public List<String> getStartTimes() {
@@ -204,18 +208,18 @@ public class TimeSelectionController {
         this.startTimes = startTimes;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public String getSelectedStartTimeString() {
+        return selectedStartTimeString;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setSelectedStartTimeString(String selectedStartTimeString) {
+        this.selectedStartTimeString = selectedStartTimeString;
     }
 
     public List<String> getEndTimes(String startTime) {
-        if(startTime == null || startTime.isEmpty())
+        if (startTime == null || startTime.isEmpty())
             return null;
-        if(startTime.equals(lastStartTimeCalculated) && endTimes != null)
+        if (startTime.equals(lastStartTimeCalculated) && endTimes != null)
             return endTimes;
         calculateEndTimes(startTime);
         return endTimes;
@@ -225,13 +229,13 @@ public class TimeSelectionController {
         this.endTimes = endTimes;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getSelectedEndTimeString() {
+        return selectedEndTimeString;
     }
 
-    public void setEndTime(String endTime) {
-        AgendaLogger.logVerbose("End Time Selected: " + endTime);
-        this.endTime = endTime;
+    public void setSelectedEndTimeString(String selectedEndTimeString) {
+        AgendaLogger.logVerbose("End Time Selected: " + selectedEndTimeString);
+        this.selectedEndTimeString = selectedEndTimeString;
     }
 
     public List<AssetType> getAssetTypes() {
@@ -249,11 +253,10 @@ public class TimeSelectionController {
     public void setSelectedAssetType(AssetType selectedAssetType) {
         AgendaLogger.logVerbose("Asset Type Selected: " + selectedAssetType.getName());
         this.selectedAssetType = selectedAssetType;
-        this.setDate(getDate());
+        this.setSelectedDate(getSelectedDate());
     }
 
-    public List<Asset> getResults()
-    {
+    public List<Asset> getResults() {
         return this.results;
     }
 
