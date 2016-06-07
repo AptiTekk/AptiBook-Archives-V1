@@ -1,6 +1,7 @@
 package com.cintriq.agenda.core;
 
 import com.cintriq.agenda.core.entity.*;
+import com.cintriq.agenda.core.utilities.TimeRange;
 
 import javax.ejb.Local;
 import java.util.Calendar;
@@ -18,7 +19,7 @@ public interface ReservationService extends EntityService<Reservation> {
                     + "\n\t {reservation.timeStart}"
                     + "\n\t {reservation.timeEnd}");
 
-    List<Asset> findAvailableAssets(AssetType type, Calendar startTime, Calendar endTime, float cushionInHours);
+    List<Asset> findAvailableAssets(AssetType type, TimeRange timeRange, float cushionInHours);
 
     Set<Reservation> getAllUnderUser(User user);
 

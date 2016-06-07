@@ -44,10 +44,8 @@
                                           selectionMode="single"
                                           selection="#{TimeSelectionController.selectedAssetType}"
                                           rowKey="#{assetType.id}" sortBy="#{assetType.name}">
-                                <pf:ajax event="rowSelect" update=":timeForm" onstart="loading_start()"
-                                         oncomplete="loading_complete()"/>
-                                <pf:ajax event="rowUnselect" update=":timeForm" onstart="loading_start()"
-                                         oncomplete="loading_complete()"/>
+                                <pf:ajax event="rowSelect" update=":timeForm"/>
+                                <pf:ajax event="rowUnselect" update=":timeForm"/>
                                 <pf:column headerText="Type" priority="1" style="width:100%">
                                     <h:outputText value="#{assetType.name}"/>
                                 </pf:column>
@@ -59,7 +57,7 @@
                             <h:outputText value="On" styleClass="lead"/>
                             <pf:calendar value="#{TimeSelectionController.selectedDate}"
                                          mode="inline" styleClass="datepicker-fullwidth">
-                                <f:ajax event="dateSelect" render=":timeForm" onevent="loading"/>
+                                <f:ajax event="dateSelect" render=":timeForm"/>
                             </pf:calendar>
                         </b:column>
 
@@ -72,7 +70,7 @@
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
                                 <f:selectItems value="#{TimeSelectionController.startTimes}"
                                                var="time"/>
-                                <f:ajax render=":timeForm" onevent="loading"/>
+                                <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
                             <h:selectOneMenu value="#{TimeSelectionController.selectedEndTimeString}"
@@ -80,7 +78,7 @@
                                              styleClass="big-select">
                                 <f:selectItems value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
                                                var="time"/>
-                                <f:ajax render=":timeForm" onevent="loading"/>
+                                <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                         </b:column>
                     </b:row>
@@ -90,7 +88,7 @@
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
                                     disabled="#{TimeSelectionController.selectedStartTimeString == null}"
-                                    action="#{TimeSelectionController.searchForAssets()}">
+                                    action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </b:column>

@@ -14,9 +14,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.Set;
 
-/**
- * Created by kevint on 5/16/2016.
- */
 @ManagedBean(name = "ReservationManagementController")
 @ViewScoped
 public class ReservationManagementController {

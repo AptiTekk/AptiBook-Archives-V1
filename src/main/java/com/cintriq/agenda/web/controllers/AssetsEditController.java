@@ -5,6 +5,7 @@ import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.entity.Asset;
 import com.cintriq.agenda.core.entity.AssetType;
 import com.cintriq.agenda.core.entity.UserGroup;
+import com.cintriq.agenda.core.utilities.TimeRange;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
@@ -12,11 +13,10 @@ import org.primefaces.model.TreeNode;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 
 @ManagedBean(name = "AssetsEditController")
@@ -37,10 +37,15 @@ public class AssetsEditController {
 
     private String editableTabAssetName;
     private boolean editableTabAssetApproval;
-    private String editableTabAssetAvailabilityStart;
-    private String editableTabAssetAvailabilityEnd;
     private TreeNode editableTabAssetOwnerGroup;
     private UserGroup tabAssetCurrentOwnerGroup;
+
+    @ManagedProperty(value = "#{TimeSelectionController}")
+    private TimeSelectionController timeSelectionController;
+
+    public void setTimeSelectionController(TimeSelectionController timeSelectionController) {
+        this.timeSelectionController = timeSelectionController;
+    }
 
     @PostConstruct
     public void init() {
@@ -87,7 +92,7 @@ public class AssetsEditController {
         if (getSelectedTabAsset() != null) {
             Asset asset = assetService.findByName(getEditableTabAssetName());
             if (asset != null && !asset.equals(getSelectedTabAsset()))
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Asset with that name already exists!"));
+                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with that name already exists!"));
             else if (getEditableTabAssetName().isEmpty())
                 FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name cannot be empty!"));
             else if (!getEditableTabAssetName().matches("[A-Za-z0-9 #]+"))
@@ -100,8 +105,9 @@ public class AssetsEditController {
                 getSelectedTabAsset().setName(getEditableTabAssetName());
                 getSelectedTabAsset().setNeedsApproval(isEditableTabAssetApproval());
 
-                getSelectedTabAsset().setAvailabilityStart(getEditableTabAssetAvailabilityStart() == null ? null : TimeSelectionController.convertDateAndTimeStringToCalendar(new Date(), getEditableTabAssetAvailabilityStart()));
-                getSelectedTabAsset().setAvailabilityEnd(getEditableTabAssetAvailabilityEnd() == null ? null : TimeSelectionController.convertDateAndTimeStringToCalendar(new Date(), getEditableTabAssetAvailabilityEnd()));
+                TimeRange availabilityRange = timeSelectionController.getTimeRange();
+                getSelectedTabAsset().setAvailabilityStart(availabilityRange.getStartTime());
+                getSelectedTabAsset().setAvailabilityEnd(availabilityRange.getEndTime());
 
                 try {
                     if (editableTabAssetOwnerGroup != null)
@@ -123,15 +129,16 @@ public class AssetsEditController {
             setEditableTabAssetName(getSelectedTabAsset().getName());
             setEditableTabAssetApproval(getSelectedTabAsset().getNeedsApproval());
 
-            setEditableTabAssetAvailabilityStart(getSelectedTabAsset().getAvailabilityStart() == null ? null : TimeSelectionController.convertCalendarToTimeString(getSelectedTabAsset().getAvailabilityStart()));
-            setEditableTabAssetAvailabilityEnd(getSelectedTabAsset().getAvailabilityEnd() == null ? null : TimeSelectionController.convertCalendarToTimeString(getSelectedTabAsset().getAvailabilityEnd()));
+            TimeRange availabilityRange = new TimeRange(selectedTabAsset.getAvailabilityStart(), selectedTabAsset.getAvailabilityEnd());
+            timeSelectionController.setSelectedStartTimeString(availabilityRange.getStartTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
+            timeSelectionController.setSelectedEndTimeString(availabilityRange.getEndTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
 
             this.tabAssetCurrentOwnerGroup = getSelectedTabAsset().getOwner();
         } else {
             setEditableTabAssetName("");
             setEditableTabAssetApproval(false);
-            setEditableTabAssetAvailabilityStart(null);
-            setEditableTabAssetAvailabilityEnd(null);
+            timeSelectionController.setSelectedStartTimeString(null);
+            timeSelectionController.setSelectedEndTimeString(null);
             this.tabAssetCurrentOwnerGroup = null;
         }
     }
@@ -251,22 +258,6 @@ public class AssetsEditController {
 
     public void setEditableTabAssetApproval(boolean editableTabAssetApproval) {
         this.editableTabAssetApproval = editableTabAssetApproval;
-    }
-
-    public String getEditableTabAssetAvailabilityStart() {
-        return editableTabAssetAvailabilityStart;
-    }
-
-    public void setEditableTabAssetAvailabilityStart(String editableTabAssetAvailabilityStart) {
-        this.editableTabAssetAvailabilityStart = editableTabAssetAvailabilityStart;
-    }
-
-    public String getEditableTabAssetAvailabilityEnd() {
-        return editableTabAssetAvailabilityEnd;
-    }
-
-    public void setEditableTabAssetAvailabilityEnd(String editableTabAssetAvailabilityEnd) {
-        this.editableTabAssetAvailabilityEnd = editableTabAssetAvailabilityEnd;
     }
 
     public void onOwnerSelected(NodeSelectEvent event) {

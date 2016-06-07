@@ -31,12 +31,11 @@ public class ReservationViewController {
 
     private ScheduleModel lazyEventModel = new LazyScheduleModel();
 
-    private List<Reservation> cardModels = new ArrayList<Reservation>();
+    private List<Reservation> cardModels = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        String username
-                = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
+        String username = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
         if (username != null) {
             this.setUser(userService.findByName(username));
             updateEvents(user);
@@ -65,7 +64,6 @@ public class ReservationViewController {
     }
 
     private void updateEvents(User user) {
-        AgendaLogger.logVerbose("Changing user, changing event model.");
         lazyEventModel.clear();
         ((user == null) ? resService.getAll()
                 : user.getReservations()).forEach((res) -> {

@@ -1,46 +1,44 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
-    <ui:composition>
-        <b:container>
-
-            <h:form>
-            <b:row style="margin-top:50px">
+<ui:composition>
+    <b:container>
+        <h:form>
+            <b:row>
+                <b:column colXs="12">
+                    <div class="page-header">
+                        <h2>Available
+                            <span style="color:#4272b7">#{TimeSelectionController.selectedAssetType.name}</span>
+                            on
+                            <span style="color:#4272b7">#{TimeSelectionController.selectedDateFriendly}</span>
+                            from
+                            <span style="color:#4272b7">#{TimeSelectionController.selectedStartTimeString}</span>
+                            to
+                            <span style="color:#4272b7">#{TimeSelectionController.selectedEndTimeString}</span>
+                        </h2>
+                    </div>
+                </b:column>
+            </b:row>
+            <b:row style="margin-top:10px">
                 <b:column colXs="4">
-                    <b:panel look="primary" title="Options">
-                        <b:listLinks>
-                            <b:navLink header="Test" />
-                        </b:listLinks>
+                    <b:panel look="default" title="Filter">
+                        <h4>...</h4>
                     </b:panel>
                 </b:column>
                 <b:column colXs="8">
-                    <p> <h:outputText value="#{TimeSelectionController.selectedStartTimeString}"/> - <h:outputText value="#{TimeSelectionController.selectedEndTimeString}" /></p>
-                    <ui:repeat value="#{TimeSelectionController.results}" var="asset">
-                        <tr>
-                            <td>
-                                <h:selectBooleanCheckbox value="#{TimeSelectionController.checkMap[asset]}">
-
-                                </h:selectBooleanCheckbox>
-                            </td>
-                            <td><h:outputText value="#{asset.name}" /></td>
-                        </tr>
-                        <!--<b:panel look="info" title="#{asset.name}">
-                           <p> <h:outputText value="#{TimeSelectionController.selectedStartTimeString}"/> - <h:outputText value="#{TimeSelectionController.selectedEndTimeString}" /></p>
-                            <br />
-                            <br />
-                        </b:panel>-->
+                    <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
+                        <b:panel look="info" collapsible="false" title="#{asset.name}">
+                            <h:commandButton styleClass="btn btn-default" value="Make Reservation"
+                                             action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.timeRange)}"/>
+                        </b:panel>
                     </ui:repeat>
-                    <h:commandButton  value= "Pick me" action="#{TimeSelectionController.onPicked(AccountController.user)}" styleClass="btn btn-primary">
-
-
-                    </h:commandButton>
                 </b:column>
             </b:row>
-            </h:form>
-        </b:container>
-    </ui:composition>
+        </h:form>
+    </b:container>
+</ui:composition>
 </html>
