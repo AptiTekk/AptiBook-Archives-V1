@@ -6,7 +6,7 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 <ui:composition>
     <b:container>
         <b:row>
@@ -66,14 +66,22 @@
                 </b:panel>
             </b:column>
             <b:column colXs="8">
-                <h:form>
-                    <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
-                        <b:panel look="info" collapsible="false" title="#{asset.name}">
-                            <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                             action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.timeRange)}"/>
-                        </b:panel>
-                    </ui:repeat>
-                </h:form>
+                <c:choose>
+                    <c:when test="#{empty AvailableAssetsController.availableAssets}">
+                        <h2> No Available #{TimeSelectionController.selectedAssetType.name} Found!</h2>
+                        <h4>Try adjusting your reservation time.</h4>
+                    </c:when>
+                    <c:otherwise>
+                        <h:form>
+                            <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
+                                <b:panel look="info" collapsible="false" title="#{asset.name}">
+                                    <h:commandButton styleClass="btn btn-default" value="Make Reservation"
+                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.timeRange)}"/>
+                                </b:panel>
+                            </ui:repeat>
+                        </h:form>
+                    </c:otherwise>
+                </c:choose>
             </b:column>
         </b:row>
     </b:container>
