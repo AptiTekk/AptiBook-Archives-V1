@@ -8,15 +8,16 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-@ManagedBean
+@ManagedBean(name = "AssetTypeConverter")
 @ApplicationScoped
 public class AssetTypeConverter implements Converter {
 
     @Inject
     private AssetTypeService assetTypeService;
-    
+
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string == null || string.isEmpty() || assetTypeService == null)
@@ -27,11 +28,10 @@ public class AssetTypeConverter implements Converter {
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-        if (o instanceof AssetType)
-        {
+        if (o instanceof AssetType) {
             return ((AssetType) o).getName();
         }
         return "";
     }
-    
+
 }

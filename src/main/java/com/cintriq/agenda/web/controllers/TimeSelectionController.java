@@ -153,8 +153,6 @@ public class TimeSelectionController {
         if (selectedDate == null)
             selectedDate = Calendar.getInstance().getTime();
 
-        this.selectedStartTimeString = null;
-        this.endTimes = null;
         this.selectedDate = selectedDate;
     }
 
@@ -210,5 +208,10 @@ public class TimeSelectionController {
     public void setSelectedAssetType(AssetType selectedAssetType) {
         this.selectedAssetType = selectedAssetType;
         this.setSelectedDate(getSelectedDate());
+    }
+
+    public String getFriendlyDatePattern()
+    {
+        return TimeRange.FORMAT_DATE_FRIENDLY.toPattern();
     }
 }
