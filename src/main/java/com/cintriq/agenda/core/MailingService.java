@@ -13,6 +13,6 @@ import com.cintriq.agenda.core.utilities.notification.EmailNotification;
 @Local
 public interface MailingService {
   
-  public boolean send(EmailNotification email);
+  boolean send(EmailNotification email);
 
 }

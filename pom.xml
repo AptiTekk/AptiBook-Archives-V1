@@ -14,6 +14,14 @@
         <version.jboss.bom>10.0.0.Final</version.jboss.bom>
         <version.wildfly>10.0.0.Final</version.wildfly>
 
+        <version.arquillian.bom>1.1.11.Final</version.arquillian.bom>
+        <version.arquillian-warp.bom>1.0.0.Alpha7</version.arquillian-warp.bom>
+        <version.arquillian-drone.bom>2.0.0.Final</version.arquillian-drone.bom>
+        <version.shrinkwrap.bom>1.2.3</version.shrinkwrap.bom>
+        <version.shrinkwrap-resolver.bom>2.2.2</version.shrinkwrap-resolver.bom>
+
+        <version.jsfunit>2.0.0.Beta2</version.jsfunit>
+
         <querydsl.version>4.1.1</querydsl.version>
 
         <!-- maven-compiler-plugin -->
@@ -73,20 +81,41 @@
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-javaee7-with-tools</artifactId>
                 <version>${version.jboss.bom}</version>
-                <type>pom</type>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.1.11.Final</version>
+                <version>${version.arquillian.bom}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-warp-bom</artifactId>
+                <version>${version.arquillian-warp.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-drone-bom</artifactId>
+                <version>${version.arquillian-drone.bom}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap</groupId>
+                <artifactId>shrinkwrap-bom</artifactId>
+                <version>${version.shrinkwrap.bom}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
                 <artifactId>shrinkwrap-resolver-bom</artifactId>
-                <version>2.0.0-alpha-5</version>
+                <version>${version.shrinkwrap-resolver.bom}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -115,7 +144,7 @@
         <profile>
             <id>wildfly-managed</id>
             <properties>
-                <arquillian.serverHome>${project.build.directory}/wildfly-10.0.0.Final</arquillian.serverHome>
+                <arquillian.serverHome>${project.build.directory}/wildfly-${version.wildfly}</arquillian.serverHome>
             </properties>
             <dependencies>
                 <dependency>
@@ -141,7 +170,7 @@
                                         <artifactItem>
                                             <groupId>org.wildfly</groupId>
                                             <artifactId>wildfly-dist</artifactId>
-                                            <version>10.0.0.Final</version>
+                                            <version>${version.wildfly}</version>
                                             <type>zip</type>
                                             <overWrite>false</overWrite>
                                             <outputDirectory>${project.build.directory}</outputDirectory>
@@ -174,6 +203,11 @@
             <id>prime-repo</id>
             <name>Prime Repo</name>
             <url>http://repository.primefaces.org</url>
+        </repository>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
         </repository>
     </repositories>
 
@@ -278,17 +312,63 @@
             <artifactId>arquillian-protocol-servlet</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-container-spi</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-warp</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-drone-webdriver-depchain</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.graphene</groupId>
+            <artifactId>graphene-webdriver-impl</artifactId>
+            <version>2.1.0.CR2</version>
+            <scope>test</scope>
+        </dependency>
         <!-- End Arquillian -->
 
         <!-- Shrinkwrap -->
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <artifactId>shrinkwrap-resolver-depchain</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-depchain</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.descriptors</groupId>
+            <artifactId>shrinkwrap-descriptors-impl</artifactId>
+            <version>1.1.0-beta-1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-depchain</artifactId>
-            <type>pom</type>
+            <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
             <scope>test</scope>
         </dependency>
         <!-- End Shrinkwrap -->

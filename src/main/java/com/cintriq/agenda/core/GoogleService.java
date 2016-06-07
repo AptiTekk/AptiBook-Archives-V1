@@ -15,7 +15,7 @@ public interface GoogleService {
 
     String APP_NAME = "Agenda";
 
-    String INITAL_PATH = "/CalendarServlet";
+    String INITIAL_PATH = "/CalendarServlet";
     String CALLBACK_PATH = "/CalendarCallbackServlet";
 
     AppProperty ACCESS_TOKEN_PROPERTY = new AppProperty("agenda.google.calendar.accessToken", "");

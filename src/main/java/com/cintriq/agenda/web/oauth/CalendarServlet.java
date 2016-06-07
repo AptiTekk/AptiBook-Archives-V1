@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.cintriq.agenda.core.GoogleService.INITAL_PATH;
+import static com.cintriq.agenda.core.GoogleService.INITIAL_PATH;
 
 /**
  *
  * @author kevint
  */
-@WebServlet(name = "CalendarServlet", urlPatterns = {INITAL_PATH})
+@WebServlet(name = "CalendarServlet", urlPatterns = {INITIAL_PATH})
 public class CalendarServlet extends AbstractAuthorizationCodeServlet {
 
     @Inject
