@@ -60,10 +60,10 @@
 
     </h:head>
     <h:body>
-        <div id="loading" />
+        <div id="loading"></div>
         <ui:insert name="default" />
 
-        <script>
+        <script type="text/javascript">
             function loading(data) {
                 var loading = document.getElementById("loading");
                 if (data.status === "begin") {

@@ -12,16 +12,21 @@ import java.util.List;
 public class SettingsController {
 
     public enum SettingsPage {
-        PROPERTIES("Properties", "properties.xhtml"), USERS("Users", "users.xhtml"), GROUPS("Groups",
-                "groups.xhtml"), ASSETS("Assets", "assets.xhtml"),
-        RESERVATIONFIELDEDITOR("Fields Editor", "reservationfieldeditor.xhtml");
+        PROPERTIES("Properties", "properties.xhtml", "cog"),
+        USERS("Users", "users.xhtml", "user"),
+        GROUPS("Groups", "groups.xhtml", "sitemap"),
+        ASSETS("Assets", "assets.xhtml", "tags"),
+        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o"),
+        SERVICES("Services", "services.xhtml", "server");
 
         private String name;
         private String fileName;
+        private String iconAwesomeName;
 
-        SettingsPage(String name, String fileName) {
+        SettingsPage(String name, String fileName, String iconAwesomeName) {
             this.name = name;
             this.fileName = fileName;
+            this.iconAwesomeName = iconAwesomeName;
         }
 
         public String getName() {
@@ -30,6 +35,10 @@ public class SettingsController {
 
         public String getFileName() {
             return fileName;
+        }
+
+        public String getIconAwesomeName() {
+            return iconAwesomeName;
         }
     }
 

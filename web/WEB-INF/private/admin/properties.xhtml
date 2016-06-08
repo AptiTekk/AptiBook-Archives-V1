@@ -10,40 +10,38 @@
       xmlns:b="http://bootsfaces.net/ui">
 
 <ui:composition>
-    <b:container>
-        <b:messages for="propertiesForm" showSummary="false" showDetail="true"/>
-        <b:panel>
-            <h:form>
-                <ui:repeat value="#{PropertiesController.properties}" var="property">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h:outputLabel
-                                    value="#{PropertiesController.formatPropertyTitle(property.key)}"/>
-                        </div>
-                        <div class="panel-body">
-                            <h:inputText value="#{property.value}"/>
-                        </div>
+    <b:messages for="propertiesForm" showSummary="false" showDetail="true"/>
+    <b:panel>
+        <h:form>
+            <ui:repeat value="#{PropertiesController.properties}" var="property">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h:outputLabel
+                                value="#{PropertiesController.formatPropertyTitle(property.key)}"/>
                     </div>
-                </ui:repeat>
+                    <div class="panel-body">
+                        <h:inputText value="#{property.value}"/>
+                    </div>
+                </div>
+            </ui:repeat>
 
-                <h:panelGroup rendered="#{PropertiesController.properties.size() != 0}">
-                    <h:commandButton styleClass="btn btn-primary"
-                                     value="Save Changes" style="display: inline-block"
-                                     action="#{PropertiesController.updateProperties()}">
-                        <f:ajax execute="@form" render=":account :header"/>
-                    </h:commandButton>
-                    <h:commandButton styleClass="btn btn-default"
-                                     value="Reset Fields" style="display: inline-block"
-                                     action="#{PropertiesController.resetProperties()}">
-                        <f:ajax execute="@form" render=":account :header"/>
-                    </h:commandButton>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{PropertiesController.properties.size() == 0}">
-                    <h4>No Application Properties Found</h4>
-                </h:panelGroup>
-            </h:form>
-        </b:panel>
-    </b:container>
+            <h:panelGroup rendered="#{PropertiesController.properties.size() != 0}">
+                <h:commandButton styleClass="btn btn-primary"
+                                 value="Save Changes" style="display: inline-block"
+                                 action="#{PropertiesController.updateProperties()}">
+                    <f:ajax execute="@form" render=":account :header"/>
+                </h:commandButton>
+                <h:commandButton styleClass="btn btn-default"
+                                 value="Reset Fields" style="display: inline-block"
+                                 action="#{PropertiesController.resetProperties()}">
+                    <f:ajax execute="@form" render=":account :header"/>
+                </h:commandButton>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{PropertiesController.properties.size() == 0}">
+                <h4>No Application Properties Found</h4>
+            </h:panelGroup>
+        </h:form>
+    </b:panel>
 </ui:composition>
 
 </html>

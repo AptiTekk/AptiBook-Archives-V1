@@ -60,6 +60,23 @@
 
 /* ---------------------------------- END RESULTS PAGE MODIFICATIONS ---------------------------------- */
 
+/* ---------------------------------- BEGIN SETTINGS PAGE MODIFICATIONS ---------------------------------- */
+
+.nav > li > a {
+    color: #777;
+}
+
+.nav > li.active > a {
+    font-weight: bold;
+    color: #4272b7;
+}
+
+.nav > li > a > span {
+    margin-right: 5px;
+}
+
+/* ---------------------------------- END SETTINGS PAGE MODIFICATIONS ---------------------------------- */
+
 /* ---------------------------------- BEGIN UI MODIFICATIONS ---------------------------------- */
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
