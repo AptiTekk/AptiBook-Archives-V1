@@ -14,6 +14,7 @@
         <class>com.cintriq.agenda.core.entity.ReservationFieldEntry</class>
         <class>com.cintriq.agenda.core.entity.User</class>
         <class>com.cintriq.agenda.core.entity.UserGroup</class>
+        <class>com.cintriq.agenda.core.entity.Tag</class>
 
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
@@ -22,6 +23,10 @@
             <property name="hibernate.cache.use_second_level_cache"
                       value="true"/>
             <property name="hibernate.cache.use_query_cache" value="true"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://ssl.aptitekk.com:3306/aptitekk_AgendaDev3"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.username"/>
+            <property name="hibernate.connection.password"/>
         </properties>
     </persistence-unit>
 </persistence>
