@@ -50,6 +50,8 @@ public class TimeRange {
     }
 
     public String getStartTimeFormatted(DateFormat dateFormat) {
+        if(startTime == null || dateFormat == null)
+            return null;
         return dateFormat.format(startTime.getTime());
     }
 
@@ -62,6 +64,8 @@ public class TimeRange {
     }
 
     public String getEndTimeFormatted(DateFormat dateFormat) {
+        if(endTime == null || dateFormat == null)
+            return null;
         return dateFormat.format(endTime.getTime());
     }
 

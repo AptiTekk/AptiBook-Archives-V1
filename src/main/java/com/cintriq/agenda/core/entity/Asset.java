@@ -4,10 +4,7 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -32,9 +29,8 @@ public class Asset implements Serializable {
 
     private Boolean needsApproval = false;
 
-    // bi-directional many-to-one association to Reservation
-    @OneToMany(mappedBy = "asset")
-    private List<Reservation> reservations;
+    @OneToMany(mappedBy = "asset", cascade = CascadeType.REMOVE)
+    private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne
     private AssetType type;
@@ -42,8 +38,8 @@ public class Asset implements Serializable {
     @ManyToOne
     private UserGroup owner;
 
-    @ManyToMany
-    private List<Tag> tags;
+    @ManyToMany(mappedBy = "assets")
+    private List<Tag> tags = new ArrayList<>();
 
     private String imageFileName;
 
