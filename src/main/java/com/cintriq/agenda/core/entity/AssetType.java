@@ -28,6 +28,7 @@ public class AssetType implements Serializable {
     private List<ReservationField> reservationFields = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetType")
+    @OrderBy(value = "name")
     private List<Tag> tags = new ArrayList<>();
 
     private static final long serialVersionUID = 1L;

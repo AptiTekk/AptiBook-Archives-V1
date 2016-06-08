@@ -4,6 +4,7 @@ import com.cintriq.agenda.core.AssetService;
 import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.entity.Asset;
 import com.cintriq.agenda.core.entity.AssetType;
+import com.cintriq.agenda.core.entity.Tag;
 import com.cintriq.agenda.core.entity.UserGroup;
 import com.cintriq.agenda.core.utilities.TimeRange;
 import org.primefaces.event.NodeSelectEvent;
@@ -17,6 +18,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "AssetsEditController")
@@ -47,6 +49,13 @@ public class AssetsEditController {
         this.timeSelectionController = timeSelectionController;
     }
 
+    @ManagedProperty(value = "#{TagController}")
+    private TagController tagController;
+
+    public void setTagController(TagController tagController) {
+        this.tagController = tagController;
+    }
+
     @PostConstruct
     public void init() {
         refreshAssetTypeList();
@@ -70,7 +79,15 @@ public class AssetsEditController {
             if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
                 try {
                     getSelectedAssetType().setName(getEditableAssetTypeName());
-                    setSelectedAssetType(assetTypeService.merge(getSelectedAssetType()));
+
+                    //Persist name change
+                    assetTypeService.merge(getSelectedAssetType());
+
+                    //Update tags
+                    tagController.updateAssetTypeTags(selectedAssetType);
+
+                    //Refresh AssetType
+                    setSelectedAssetType(assetTypeService.get(selectedAssetType.getId()));
                     refreshAssetTypeList();
                     FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
                 } catch (Exception e) {
@@ -82,10 +99,18 @@ public class AssetsEditController {
     }
 
     public void resetSettings() {
-        if (getSelectedAssetType() != null)
+        if (getSelectedAssetType() != null) {
             setEditableAssetTypeName(getSelectedAssetType().getName());
-        else
+
+            List<Tag> tags = selectedAssetType.getTags();
+            List<String> tagNames = new ArrayList<>();
+            for (Tag tag : tags)
+                tagNames.add(tag.getName());
+            tagController.setSelectedTagNames(tagNames);
+        } else {
             setEditableAssetTypeName("");
+            tagController.setSelectedTagNames(null);
+        }
     }
 
     public void updateTabAssetSettings() {

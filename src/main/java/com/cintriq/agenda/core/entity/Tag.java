@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Tag {
+public class Tag implements Comparable<Tag> {
 
     @Id
     @GeneratedValue
@@ -71,4 +71,8 @@ public class Tag {
         return EqualsHelper.calculateHashCode(getName());
     }
 
+    @Override
+    public int compareTo(Tag o) {
+        return name.compareTo(o.getName());
+    }
 }

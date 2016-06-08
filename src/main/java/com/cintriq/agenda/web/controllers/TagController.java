@@ -12,13 +12,9 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Pasha on 6/7/2016.
- */
 @ManagedBean(name = "TagController")
 @ViewScoped
 public class TagController {
-
 
     @Inject
     private TagService tagService;
@@ -26,54 +22,37 @@ public class TagController {
     @Inject
     private AssetTypeService assetTypeService;
 
+    private List<String> selectedTagNames = new ArrayList<>();
 
-    public void newAssetTypeTag(AssetType assetType, String tagName){
-         if(assetType != null && tagName!= null) {
-             Tag tag = new Tag();
-             tag.setName(tagName);
-             tag.setAssetType(assetType);
-             try {
-                 tagService.insert(tag);
-                 System.out.println("Tag persisted successfully");
-             } catch (Exception e) {
-                 System.out.println("Tag not persisted. An error occurred");
-                 e.printStackTrace();
-             }
-         }else {
-             System.out.print("params are null");
-         }
-        //get latest from assetType
-        assetType = assetTypeService.get(assetType.getId());
-
-        //print tags for test
-        for(Tag tagPrint : assetType.getTags()){
-            System.out.println(tagPrint.getName());
-
+    private void createNewAssetTypeTag(AssetType assetType, String tagName) {
+        if (assetType != null && tagName != null) {
+            Tag tag = new Tag();
+            tag.setName(tagName);
+            tag.setAssetType(assetType);
+            try {
+                tagService.insert(tag);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-
-    //remove tag by string param
-    public void deleteTagfromAssetType(AssetType assetType, String tagName){
-        if(assetType != null && tagName!= null) {
+    private void deleteTagfromAssetType(AssetType assetType, String tagName) {
+        if (assetType != null && tagName != null) {
             Tag tag = tagService.findByName(assetType, tagName);
             try {
-                if(tag != null) {
+                if (tag != null) {
                     tagService.delete(tag.getId());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
-            System.out.println("Params are null");
         }
     }
 
-    public void deleteTag(Tag tag){
-
-       //tag = tagService.get(tag.getId());
+    private void deleteTag(Tag tag) {
         try {
-            if(tag != null) {
+            if (tag != null) {
                 tagService.delete(tag.getId());
             }
         } catch (Exception e) {
@@ -81,5 +60,60 @@ public class TagController {
         }
     }
 
+    /**
+     * Updates the specified AssetType with the selected Tag names from this controller.
+     * <br/><br/>
+     * Note: If you have made any changes to the AssetType, you should merge the AssetType before calling this method.
+     * @param assetType The AssetType to update.
+     */
+    void updateAssetTypeTags(AssetType assetType)
+    {
+        List<Tag> currentTags = assetType.getTags();
 
+        if (selectedTagNames != null) {
+            List<String> currentTagNames = new ArrayList<>();
+            for (Tag tag : currentTags) {
+                if (!selectedTagNames.contains(tag.getName()))
+                    deleteTag(tag);
+                else
+                    currentTagNames.add(tag.getName());
+            }
+
+            for (String tagName : selectedTagNames) {
+                if (!currentTagNames.contains(tagName))
+                    createNewAssetTypeTag(assetType, tagName);
+            }
+        }
+    }
+
+    public List<String> getAssetTypeSuggestions(String input) {
+        return null; //Intentional: we don't want any suggestions, so return null;
+    }
+
+    public List<String> getSelectedTagNames() {
+        return selectedTagNames;
+    }
+
+    public void setSelectedTagNames(List<String> selectedTagNames) {
+        if (selectedTagNames == null) {
+            this.selectedTagNames = null;
+            return;
+        }
+
+        List<String> filteredTags = new ArrayList<>();
+
+        //Remove commas and duplicates
+        for (String tag : selectedTagNames) {
+            tag = tag.trim();
+
+            if (tag.contains(","))
+                tag = tag.substring(0, tag.indexOf(","));
+
+            if (filteredTags.contains(tag) || tag.isEmpty())
+                continue;
+
+            filteredTags.add(tag);
+        }
+        this.selectedTagNames = filteredTags;
+    }
 }

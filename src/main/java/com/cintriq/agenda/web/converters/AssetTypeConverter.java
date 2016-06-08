@@ -1,4 +1,4 @@
-package com.cintriq.agenda.web;
+package com.cintriq.agenda.web.converters;
 
 import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.entity.AssetType;
