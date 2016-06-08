@@ -96,13 +96,34 @@
     margin-top: 40px;
 }
 
+div.ui-autocomplete, div.ui-autocomplete>ul {
+    width: 100%;
+}
+
+.ui-autocomplete-token {
+    font-size: 14px;
+    border: 1px solid #4272b7;
+    background: none;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    opacity: 1;
+    background-color: #eeeeee;
+}
+
 /* ---------------------------------- END UI MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN ACCORDION ---------------------------------- */
 
 .ui-accordion .ui-accordion-header.ui-state-active {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .ui-accordion .ui-accordion-content.ui-widget-content {
