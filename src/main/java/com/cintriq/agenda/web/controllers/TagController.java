@@ -28,45 +28,44 @@ public class TagController {
 
 
     public void newAssetTypeTag(AssetType assetType, String tagName){
-        Tag tag = new Tag();
-        tag.setName(tagName);
-        tag.setAssetType(assetType);
-        try {
-            tagService.insert(tag);
-            System.out.println("Tag persisted successfully");
-        } catch (Exception e) {
-            System.out.println("Tag not persisted. An error occurred");
-            e.printStackTrace();
-        }
+         if(assetType != null && tagName!= null) {
+             Tag tag = new Tag();
+             tag.setName(tagName);
+             tag.setAssetType(assetType);
+             try {
+                 tagService.insert(tag);
+                 System.out.println("Tag persisted successfully");
+             } catch (Exception e) {
+                 System.out.println("Tag not persisted. An error occurred");
+                 e.printStackTrace();
+             }
+         }else {
+             System.out.print("params are null");
+         }
         //get latest from assetType
         assetType = assetTypeService.get(assetType.getId());
 
         //print tags for test
-        for(Tag TagPrint : assetType.getTags()){
-            System.out.println(TagPrint);
-        }
-    }
+        for(Tag tagPrint : assetType.getTags()){
+            System.out.println(tagPrint.getName());
 
-//bad codez
-/*
-    public  void deleteTagFromAssetType(AssetType assetType, Tag tag){
-        try {
-            //not sure if this will delete random assetType?
-            assetTypeService.get(assetType.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
-*/
 
 
     //remove tag by string param
     public void deleteTagfromAssetType(AssetType assetType, String tagName){
-        Tag tag = tagService.findByName(assetType, tagName);
-        try {
-            tagService.delete(tag.getId());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(assetType != null && tagName!= null) {
+            Tag tag = tagService.findByName(assetType, tagName);
+            try {
+                if(tag != null) {
+                    tagService.delete(tag.getId());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("Params are null");
         }
     }
 
@@ -74,7 +73,9 @@ public class TagController {
 
        //tag = tagService.get(tag.getId());
         try {
-            tagService.delete(tag.getId());
+            if(tag != null) {
+                tagService.delete(tag.getId());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
