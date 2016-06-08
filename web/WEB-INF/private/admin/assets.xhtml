@@ -65,7 +65,7 @@
                         <b:column colXs="9">
                             <!--@elvariable id="tag" type="java.lang.String"-->
                             <pf:autoComplete id="tags" multiple="true" value="#{TagController.selectedTagNames}" completeMethod="#{TagController.getAssetTypeSuggestions}"
-                                             var="tag" itemLabel="#{tag}" itemValue="#{tag}" onkeyup="return event.keyCode == 188 || event.keyCode == 13" panelStyle="width:100%;" disabled="#{AssetsEditController.selectedAssetType == null}">
+                                             var="tag" itemLabel="#{tag}" itemValue="#{tag}" onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32"  panelStyle="width:100%;" disabled="#{AssetsEditController.selectedAssetType == null}">
                                 <pf:ajax event="keyup" process="@this" update="@this" />
                             </pf:autoComplete>
                         </b:column>
