@@ -28,7 +28,6 @@ public class UserGroup implements Serializable {
     private List<User> users = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
     private UserGroup parent;
 
     @OneToMany(mappedBy = "parent")

@@ -3,6 +3,7 @@ package com.cintriq.agenda.core.entity;
 import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,8 +18,8 @@ public class Tag {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private AssetType assetType;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<Asset> assets;
+    @ManyToMany()
+    private List<Asset> assets = new ArrayList<>();
 
     public int getId() {
         return id;
