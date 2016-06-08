@@ -4,6 +4,7 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,14 +21,14 @@ public class AssetType implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "type", cascade = CascadeType.REMOVE)
-    private List<Asset> assets;
+    private List<Asset> assets = new ArrayList<>();
 
     @OneToMany(mappedBy = "assetType", cascade = CascadeType.REMOVE)
     @OrderColumn(name = "`Order`")
-    private List<ReservationField> reservationFields;
+    private List<ReservationField> reservationFields = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetType")
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     private static final long serialVersionUID = 1L;
 

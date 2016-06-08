@@ -50,12 +50,9 @@ public class User implements Serializable {
 
     // bi-directional many-to-one association to Reservation
     @OneToMany(mappedBy = "user")
-    private List<Reservation> reservations;
+    private List<Reservation> reservations = new ArrayList<>();
 
-    // bi-directional many-to-many association to Group
     @ManyToMany
-    @JoinTable(name = "User_has_Group", joinColumns = {@JoinColumn(name = "User_id")},
-            inverseJoinColumns = {@JoinColumn(name = "Group_idGroup")})
     private List<UserGroup> userGroups = new ArrayList<>();
 
     private Boolean receiveEmailNotifications;
