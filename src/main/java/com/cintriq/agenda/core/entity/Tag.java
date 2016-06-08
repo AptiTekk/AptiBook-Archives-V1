@@ -1,55 +1,73 @@
 package com.cintriq.agenda.core.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.cintriq.agenda.core.utilities.EqualsHelper;
 
-/**
- * Created by Pasha on 6/7/2016.
- */
+import javax.persistence.*;
+import java.util.List;
+
 @Entity
 public class Tag {
-    private int idTag;
-    private String tag;
 
     @Id
-    @Column(name = "idTag")
-    public int getIdTag() {
-        return idTag;
+    @GeneratedValue
+    private int id;
+
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private AssetType assetType;
+
+    @ManyToMany(mappedBy = "tags")
+    private List<Asset> assets;
+
+    public int getId() {
+        return id;
     }
 
-    public void setIdTag(int idTag) {
-        this.idTag = idTag;
+    public void setId(int idTag) {
+        this.id = idTag;
     }
 
-    @Basic
-    @Column(name = "Tag")
-    public String getTag() {
-        return tag;
+    public String getName() {
+        return name;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+    public void setAssetType(AssetType assetType) {
+        this.assetType = assetType;
+    }
+
+    public List<Asset> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<Asset> assets) {
+        this.assets = assets;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        Tag tag1 = (Tag) o;
+        if (o == null) return false;
 
-        if (idTag != tag1.idTag) return false;
-        if (tag != null ? !tag.equals(tag1.tag) : tag1.tag != null) return false;
+        if (!(o instanceof Tag)) return false;
 
-        return true;
+        Tag other = (Tag) o;
+
+        return EqualsHelper.areEquals(getName(), other.getName());
     }
 
     @Override
     public int hashCode() {
-        int result = idTag;
-        result = 31 * result + (tag != null ? tag.hashCode() : 0);
-        return result;
+        return EqualsHelper.calculateHashCode(getName());
     }
+
 }

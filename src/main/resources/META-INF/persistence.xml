@@ -23,10 +23,6 @@
             <property name="hibernate.cache.use_second_level_cache"
                       value="true"/>
             <property name="hibernate.cache.use_query_cache" value="true"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://ssl.aptitekk.com:3306/aptitekk_AgendaDev3"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username"/>
-            <property name="hibernate.connection.password"/>
         </properties>
     </persistence-unit>
 </persistence>

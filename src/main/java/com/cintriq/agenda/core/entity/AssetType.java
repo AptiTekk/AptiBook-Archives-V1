@@ -4,11 +4,11 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Entity implementation class for Entity: AssetType
- *
  */
 @Entity
 public class AssetType implements Serializable {
@@ -25,6 +25,9 @@ public class AssetType implements Serializable {
     @OneToMany(mappedBy = "assetType", cascade = CascadeType.REMOVE)
     @OrderColumn(name = "`Order`")
     private List<ReservationField> reservationFields;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetType")
+    private List<Tag> tags;
 
     private static final long serialVersionUID = 1L;
 
@@ -67,6 +70,14 @@ public class AssetType implements Serializable {
 
     public void setReservationFields(List<ReservationField> reservationFields) {
         this.reservationFields = reservationFields;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     @Override

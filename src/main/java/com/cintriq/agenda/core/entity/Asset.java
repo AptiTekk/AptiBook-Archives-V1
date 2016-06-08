@@ -5,6 +5,7 @@ import com.cintriq.agenda.core.utilities.EqualsHelper;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class Asset implements Serializable {
 
     @ManyToOne
     private UserGroup owner;
+
+    @ManyToMany
+    private List<Tag> tags;
 
     private String imageFileName;
 
@@ -140,6 +144,14 @@ public class Asset implements Serializable {
         this.imageFileName = imageFileName;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,4 +173,5 @@ public class Asset implements Serializable {
     public int hashCode() {
         return EqualsHelper.calculateHashCode(getName(), getAvailabilityStart(), getAvailabilityEnd(), getNeedsApproval(), getImageFileName());
     }
+
 }
