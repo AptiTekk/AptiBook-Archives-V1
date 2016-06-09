@@ -14,27 +14,27 @@
     <h:panelGroup layout="block" id="assetsPage">
         <b:row>
             <!-- Asset Type Selection List -->
-            <b:column colXs="12" colSm="3">
+            <b:column colXs="12" colSm="5">
                 <h:form>
                     <div class="form-group">
-                        <!--@elvariable id="assetType" type="com.cintriq.agenda.core.entity.AssetType"-->
-                        <pf:dataTable id="assetTypeDT" value="#{AssetTypeEditController.assetTypes}"
-                                      var="assetType"
-                                      selectionMode="single"
-                                      selection="#{AssetTypeEditController.selectedAssetType}"
-                                      rowKey="#{assetType.id}" sortBy="#{assetType.name}">
-                            <pf:ajax event="rowSelect" update=":assetsPage" onstart="loading_start()"
-                                     oncomplete="loading_complete()"/>
-                            <pf:ajax event="rowUnselect" update=":assetsPage" onstart="loading_start()"
-                                     oncomplete="loading_complete()"/>
-                            <pf:column headerText="Asset Type" priority="1" style="width:100%">
-                                <h:outputText value="#{assetType.name}"/>
-                            </pf:column>
-                        </pf:dataTable>
+                        <b:dataTable value="#{AssetTypeEditController.assetTypes}" var="assetType"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     fixedHeader="true" responsive="true">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Asset Type"/>
+                                </f:facet>
+                                <h:commandLink value="#{assetType.name}"
+                                               action="#{AssetTypeEditController.setSelectedAssetType(assetType)}"
+                                               style="font-weight: #{AssetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                    <f:ajax render=":assetsPage" />
+                                </h:commandLink>
+                            </h:column>
+                        </b:dataTable>
                     </div>
                     <div class="form-group">
                         <h:commandButton action="#{AssetTypeEditController.addNewAssetType}"
-                                         styleClass="btn btn-success" value="Add New Asset Type">
+                                         styleClass="btn btn-primary" value="Add New Asset Type">
                             <f:ajax render=":assetsPage" onevent="loading"/>
                         </h:commandButton>
                     </div>
@@ -42,7 +42,7 @@
             </b:column>
 
             <!-- Asset Type Edit Fields -->
-            <b:column colXs="12" colSm="9">
+            <b:column colXs="12" colSm="7">
                 <h:form styleClass="form-horizontal" id="assetTypeEditForm">
 
                     <div class="form-group">
@@ -150,7 +150,8 @@
                                                                          value="#{TagController.selectedAssetTags}"
                                                                          completeMethod="#{TagController.getAssetTagSuggestions}"
                                                                          var="tag" itemLabel="#{tag.name}"
-                                                                         itemValue="#{tag}" converter="#{TagConverter}" queryDelay="100" styleClass="dropdown">
+                                                                         itemValue="#{tag}" converter="#{TagConverter}"
+                                                                         queryDelay="100" styleClass="dropdown">
                                                             <pf:ajax event="itemSelect" process="@this"/>
                                                             <pf:ajax event="itemUnselect" process="@this"/>
                                                             #{tag.name}

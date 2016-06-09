@@ -39,17 +39,28 @@
                         <!-- Column 1: Asset Type Selection -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="I'm looking for" styleClass="lead"/>
-                            <pf:dataTable value="#{TimeSelectionController.assetTypes}"
-                                          var="assetType"
-                                          selectionMode="single"
-                                          selection="#{TimeSelectionController.selectedAssetType}"
-                                          rowKey="#{assetType.id}" sortBy="#{assetType.name}">
-                                <pf:ajax event="rowSelect" update=":timeForm"/>
-                                <pf:ajax event="rowUnselect" update=":timeForm"/>
-                                <pf:column headerText="Type" priority="1" style="width:100%">
-                                    <h:outputText value="#{assetType.name}"/>
-                                </pf:column>
-                            </pf:dataTable>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{TimeSelectionController.assetTypes}" var="assetType">
+                                        <tr>
+                                            <td>
+                                                <h:commandLink value="#{assetType.name}"
+                                                               action="#{TimeSelectionController.setSelectedAssetType(assetType)}"
+                                                               style="font-weight: #{TimeSelectionController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                                    <f:ajax render=":timeForm"/>
+                                                </h:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
                         </b:column>
 
                         <!-- Column 2: Inline Date Selection -->
@@ -64,7 +75,8 @@
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}" styleClass="big-select"
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}"
+                                             styleClass="big-select"
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
@@ -76,8 +88,9 @@
                             <h:selectOneMenu value="#{TimeSelectionController.selectedEndTimeString}"
                                              disabled="#{TimeSelectionController.selectedStartTimeString == null}"
                                              styleClass="big-select">
-                                <f:selectItems value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
-                                               var="time"/>
+                                <f:selectItems
+                                        value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
+                                        var="time"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                         </b:column>

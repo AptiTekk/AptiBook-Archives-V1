@@ -5,7 +5,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:pf="http://primefaces.org/ui"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
@@ -13,35 +12,41 @@
 <ui:composition>
     <h:panelGroup layout="block" id="usersPage">
         <b:row>
-            <b:column colXs="12" colSm="3">
+            <b:column colXs="12" colSm="5">
                 <h:form>
                     <div class="form-group">
-                        <pf:dataTable id="usersDT" var="user" value="#{UserEditController.users}"
-                                      selectionMode="single"
-                                      selection="#{UserEditController.user}" rowKey="#{user.id}">
-                            <pf:ajax event="rowSelect" update=":usersPage" onstart="loading_start()"
-                                     oncomplete="loading_complete()"/>
-                            <pf:ajax event="rowUnselect" update=":usersPage" onstart="loading_start()"
-                                     oncomplete="loading_complete()"/>
-                            <pf:column headerText="Username" priority="1">
-                                <h:outputText value="#{user.username}"/>
-                            </pf:column>
-                            <pf:column headerText="Full Name">
+                        <b:dataTable value="#{UserEditController.users}" var="user"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     fixedHeader="true" responsive="true">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Username"/>
+                                </f:facet>
+                                <h:commandLink value="#{user.username}"
+                                               action="#{UserEditController.setSelectedUser(user)}"
+                                               style="font-weight: #{UserEditController.selectedUser == user ? 'bold' : 'normal'}">
+                                    <f:ajax render=":usersPage" />
+                                </h:commandLink>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Full Name"/>
+                                </f:facet>
                                 <h:outputText value="#{user.fullname}"/>
-                            </pf:column>
-                        </pf:dataTable>
+                            </h:column>
+                        </b:dataTable>
                     </div>
                     <div class="form-group">
                         <h:commandButton action="#{UserEditController.addNewUser}"
-                                         styleClass="btn btn-success" value="Add New User">
+                                         styleClass="btn btn-primary" value="Add New User">
                             <f:ajax render=":usersPage" onevent="loading"/>
                         </h:commandButton>
                     </div>
                 </h:form>
             </b:column>
 
-            <b:column colXs="12" colSm="9">
-                <h:form styleClass="form-horizontal">
+            <b:column colXs="12" colSm="7">
+                <h:form styleClass="form-horizontal" id="accountSettingsForm">
                     <b:messages for="accountSettingsForm" showSummary="false" showDetail="true"/>
 
                     <b:column colXs="9" offsetXs="3">
@@ -51,14 +56,14 @@
                         <h:outputLabel value="Username:" styleClass="col-xs-3 control-label"/>
                         <b:column colXs="9">
                             <c:choose>
-                                <c:when test="#{UserEditController.user.immutableUsername}">
+                                <c:when test="#{UserEditController.selectedUser.immutableUsername}">
                                     <h:outputText styleClass="form-control"
                                                   value="#{UserEditController.editableUsername}" p:disabled="true"/>
                                 </c:when>
                                 <c:otherwise>
                                     <h:inputText styleClass="form-control"
                                                  value="#{UserEditController.editableUsername}"
-                                                 disabled="#{UserEditController.user == null}"/>
+                                                 disabled="#{UserEditController.selectedUser == null}"/>
                                 </c:otherwise>
                             </c:choose>
                         </b:column>
@@ -68,7 +73,7 @@
                         <b:column colXs="9">
                             <h:inputText styleClass="form-control"
                                          value="#{UserEditController.editableFirstName}"
-                                         disabled="#{UserEditController.user == null}"/>
+                                         disabled="#{UserEditController.selectedUser == null}"/>
                         </b:column>
                     </div>
                     <div class="form-group">
@@ -76,7 +81,7 @@
                         <b:column colXs="9">
                             <h:inputText styleClass="form-control"
                                          value="#{UserEditController.editableLastName}"
-                                         disabled="#{UserEditController.user == null}"/>
+                                         disabled="#{UserEditController.selectedUser == null}"/>
                         </b:column>
                     </div>
                     <div class="form-group">
@@ -87,7 +92,7 @@
                                                 class="glyphicon glyphicon-envelope"/></span>
                                 <h:inputText styleClass="form-control"
                                              value="#{UserEditController.editableEmail}"
-                                             disabled="#{UserEditController.user == null}"/>
+                                             disabled="#{UserEditController.selectedUser == null}"/>
                             </div>
                         </b:column>
                     </div>
@@ -99,7 +104,7 @@
                                                 class="glyphicon glyphicon-earphone"/></span>
                                 <h:inputText styleClass="form-control"
                                              value="#{UserEditController.editablePhoneNumber}"
-                                             disabled="#{UserEditController.user == null}"/>
+                                             disabled="#{UserEditController.selectedUser == null}"/>
                             </div>
                         </b:column>
                     </div>
@@ -111,7 +116,7 @@
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                 <h:inputText styleClass="form-control"
                                              value="#{UserEditController.editableLocation}"
-                                             disabled="#{UserEditController.user == null}"/>
+                                             disabled="#{UserEditController.selectedUser == null}"/>
                             </div>
                         </b:column>
                     </div>
@@ -126,7 +131,7 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                 <h:inputSecret styleClass="form-control"
                                                value="#{UserEditController.newPassword}"
-                                               disabled="#{UserEditController.user == null}"/>
+                                               disabled="#{UserEditController.selectedUser == null}"/>
                             </div>
                         </b:column>
                     </div>
@@ -138,7 +143,7 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                 <h:inputSecret styleClass="form-control"
                                                value="#{UserEditController.confirmPassword}"
-                                               disabled="#{UserEditController.user == null}"/>
+                                               disabled="#{UserEditController.selectedUser == null}"/>
                             </div>
                         </b:column>
                     </div>
@@ -148,13 +153,13 @@
                                 <h:commandButton styleClass="btn btn-primary"
                                                  value="Save Changes" style="display: inline-block"
                                                  action="#{UserEditController.updateSettings()}"
-                                                 disabled="#{UserEditController.user == null}">
+                                                 disabled="#{UserEditController.selectedUser == null}">
                                     <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
                                 </h:commandButton>
                                 <h:commandButton styleClass="btn btn-default"
                                                  value="Reset Fields" style="display: inline-block"
                                                  action="#{UserEditController.resetSettings()}"
-                                                 disabled="#{UserEditController.user == null}">
+                                                 disabled="#{UserEditController.selectedUser == null}">
                                     <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
                                 </h:commandButton>
                                 <b:button styleClass="btn btn-danger"
@@ -162,8 +167,8 @@
                                           style="display: inline-block"
                                           p:data-toggle="modal"
                                           p:data-target="#deletionConfirmModal"
-                                          disabled="#{UserEditController.user == null or
-                                                              UserEditController.user.immutableUsername}"/>
+                                          disabled="#{UserEditController.selectedUser == null or
+                                                              UserEditController.selectedUser.immutableUsername}"/>
                             </div>
                         </div>
                     </div>
@@ -174,7 +179,7 @@
         <!-- Deletion Confirmation Modal -->
         <b:modal id="deletionConfirmModal" title="User
                          Deletion Confirmation">
-            Are you sure you want to delete user '#{UserEditController.user.username}'?
+            Are you sure you want to delete user '#{UserEditController.selectedUser.username}'?
             <f:facet name="footer">
                 <b:button styleClass="btn btn-default"
                           p:data-dismiss="modal" value="Cancel"/>
