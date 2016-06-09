@@ -150,7 +150,7 @@
                                                                          value="#{TagController.selectedAssetTags}"
                                                                          completeMethod="#{TagController.getAssetTagSuggestions}"
                                                                          var="tag" itemLabel="#{tag.name}"
-                                                                         itemValue="#{tag}" converter="#{TagConverter}" queryDelay="300" validator="#{TagValidator.validate}" cache="true" styleClass="dropdown">
+                                                                         itemValue="#{tag}" converter="#{TagConverter}" queryDelay="100" styleClass="dropdown">
                                                             <pf:ajax event="itemSelect" process="@this"/>
                                                             <pf:ajax event="itemUnselect" process="@this"/>
                                                             #{tag.name}

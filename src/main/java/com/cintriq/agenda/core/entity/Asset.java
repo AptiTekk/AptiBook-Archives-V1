@@ -39,6 +39,7 @@ public class Asset implements Serializable {
     private UserGroup owner;
 
     @ManyToMany
+    @OrderBy("name")
     private List<Tag> tags = new ArrayList<>();
 
     private String imageFileName;

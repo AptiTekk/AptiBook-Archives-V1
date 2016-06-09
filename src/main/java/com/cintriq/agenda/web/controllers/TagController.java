@@ -32,7 +32,9 @@ public class TagController {
 
     private List<String> selectedAssetTypeTagNames = new ArrayList<>();
     private List<Tag> selectedAssetTags = new ArrayList<>();
+
     private Asset selectedAsset;
+    private List<Tag> availableTags;
 
     private void createNewAssetTypeTag(AssetType assetType, String tagName) {
         if (assetType != null && tagName != null) {
@@ -136,15 +138,14 @@ public class TagController {
     }
 
     public List<Tag> getAssetTagSuggestions(String input) {
-        if (selectedAsset != null) {
-            List<Tag> allTags = selectedAsset.getAssetType().getTags();
+        if (availableTags != null) {
             List<Tag> filteredTags = new ArrayList<>();
 
-            for (Tag tag : allTags) {
+            for (Tag tag : availableTags) {
                 if (selectedAssetTags != null && selectedAssetTags.contains(tag))
                     continue;
 
-                if (tag.getName().toLowerCase().contains(input.toLowerCase()))
+                if (tag.getName().toLowerCase().startsWith(input.toLowerCase()))
                     filteredTags.add(tag);
             }
 
@@ -203,5 +204,6 @@ public class TagController {
 
     void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
+        this.availableTags = selectedAsset.getAssetType().getTags();
     }
 }
