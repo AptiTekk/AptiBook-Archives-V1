@@ -146,11 +146,11 @@
                                                     <h:outputLabel value="Tags:" styleClass="col-xs-3 control-label"/>
                                                     <b:column colXs="9">
                                                         <!--@elvariable id="tag" type="com.cintriq.agenda.core.entity.Tag"-->
-                                                        <pf:autoComplete multiple="true"
+                                                        <pf:autoComplete multiple="true" dropdown="true"
                                                                          value="#{TagController.selectedAssetTags}"
                                                                          completeMethod="#{TagController.getAssetTagSuggestions}"
                                                                          var="tag" itemLabel="#{tag.name}"
-                                                                         itemValue="#{tag}" converter="#{TagConverter}" queryDelay="300" validator="#{TagValidator.validate}">
+                                                                         itemValue="#{tag}" converter="#{TagConverter}" queryDelay="300" validator="#{TagValidator.validate}" cache="true" styleClass="dropdown">
                                                             <pf:ajax event="itemSelect" process="@this"/>
                                                             <pf:ajax event="itemUnselect" process="@this"/>
                                                             #{tag.name}

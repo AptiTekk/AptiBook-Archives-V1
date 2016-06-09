@@ -100,6 +100,15 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     width: 100%;
 }
 
+.dropdown>.ui-autocomplete-multiple-container.ui-inputfield {
+    display: inline-block;
+    width: calc(100% - 2.4em);
+}
+
+.dropdown.ui-autocomplete .ui-autocomplete-dropdown {
+    height: calc(100% - 4px);
+}
+
 .ui-autocomplete-token {
     font-size: 14px;
     border: 1px solid #4272b7;
