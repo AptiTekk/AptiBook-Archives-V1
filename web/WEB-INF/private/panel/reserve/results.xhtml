@@ -62,7 +62,16 @@
         <b:row style="margin-top:10px">
             <b:column colXs="4">
                 <b:panel look="default" title="Filter">
-                    <h4>...</h4>
+                    <ui:repeat value="#{TagController.filterTags}" var="tag">
+
+
+                        <td><h:selectBooleanCheckbox value="#{TagController.checkMap[tag]}"/></td>
+                        <tr><h:outputText value="#{tag}"/></tr>
+                        <br/>
+                    </ui:repeat>
+
+                    <h:commandButton styleClass="btn btn-default" value="Filter"
+                                     action="#{TagController.filter(TagController.checkMap)}"/>
                 </b:panel>
             </b:column>
             <b:column colXs="8">

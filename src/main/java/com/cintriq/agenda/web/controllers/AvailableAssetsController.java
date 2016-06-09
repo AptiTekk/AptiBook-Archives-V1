@@ -9,6 +9,7 @@ import com.cintriq.agenda.core.utilities.AgendaLogger;
 import com.cintriq.agenda.core.utilities.TimeRange;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.List;
@@ -17,6 +18,13 @@ import java.util.List;
 @ViewScoped
 public class AvailableAssetsController {
 
+    @ManagedProperty(value = "#{TagController}")
+    private TagController tagController;
+
+    public void setTagController(TagController tagController) {
+        this.tagController = tagController;
+    }
+
     @Inject
     private ReservationService reservationService;
 
@@ -24,6 +32,8 @@ public class AvailableAssetsController {
 
     public void searchForAssets(AssetType assetType, TimeRange timeRange) {
         this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+        this.tagController.availableFilterTags(assetType);
+        //TagController.availableFilterTags(assetType);
     }
 
     public void onMakeReservationFired(User user, Asset asset, TimeRange timeRange) {
