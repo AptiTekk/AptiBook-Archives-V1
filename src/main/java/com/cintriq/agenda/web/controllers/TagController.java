@@ -39,16 +39,19 @@ public class TagController {
     private List<String> result = new ArrayList<String>();
 
     public void availableFilterTags(AssetType assetType){
+        filterTags.clear();
+
         for(Tag availableTag : assetType.getTags()){
-            System.out.println("availableTag = "+ availableTag.getName());
-            System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
+           // System.out.println("availableTag = "+ availableTag.getName());
+            //System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
             if(!filterTags.contains(availableTag.getName().toString())) {
                 filterTags.add(availableTag.getName().toString());
             }
         }
     }
 
-    public void filter(){
+    public List<String> filter(){
+        List<String> result = new ArrayList<String>();
         for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
             if (entry.getValue())
                 if (!result.contains(entry.getKey()))
@@ -64,6 +67,7 @@ public class TagController {
         }else{
             System.out.println("result list is empty");
         }
+        return result;
     }
 
     private void createNewAssetTypeTag(AssetType assetType, String tagName) {

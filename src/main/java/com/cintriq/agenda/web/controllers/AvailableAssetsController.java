@@ -36,94 +36,66 @@ public class AvailableAssetsController {
 
     private List<String> result;
 
-  /*  public void filter(Map<String, Boolean> checkMap){
-      //  List<String> result = new ArrayList<String>();
-        for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
-            if (entry.getValue()) {
-                result.add(entry.getKey());
-            }
-        }
-     *//*   for( Asset asset : availableAssets ){
-            if(result != null) {
-                for (int i = 0; i <= result.size(); i++) {
-                    if (asset.getName() == result.get(i)) {
-                        availableAssets.remove(asset);
-                    }
-                }
-            }else {
-                System.out.println("result is null");
-            }
-        }*//*
-        //check if resul;t list is empty
-      *//*  if(result != null){
-            System.out.println("result is not empty");
-            for(String resultItem : result){
-                System.out.println("Printing result: " + result);
-            }
-        }else{
-            System.out.println("result list is empty");
-        }*//*
-       // return result;
-    }
-*/
-
-
-    public void searchForAssets(AssetType assetType, TimeRange timeRange) {
+    public void filterAssets(AssetType assetType, TimeRange timeRange) {
+        System.out.println("filteredAssets after clear: " + filteredAssets.size());
         this.tagController.availableFilterTags(assetType);
-        this.tagController.filter();
-        this.result = tagController.getResult();
-        this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
-        boolean temp;
-        for( Asset asset : availableAssets ){
-            if(result != null && result.size() > 0 ) {
-               temp = false;
-                for(Tag tag : asset.getTags()){
-                    if(result.contains(tag.getName().toString())){
-                        System.out.println("MISSION SUCCESS");
+        this.result = tagController.filter();
+        System.out.println("Result size: " + result.size());
+        if ((!(result.size() == 0)) && !(result == null)) {
+            boolean temp;
+            this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+            for (Asset asset : availableAssets) {
+                //make sure something is checked in filter checkbox
+
+                temp = false;
+                //If Asset tag is found in checked filter
+                for (Tag tag : asset.getTags()) {
+                    if (result.contains(tag.getName().toString())) {
+                        // System.out.println("MISSION SUCCESS");
                         temp = true;
-                        //this.availableAssets = tag.getAssets();
-                        //availableAssets.remove(asset);
                     }
 
                 }
-                if(temp) {
-                    if(asset != null){
+                //Add asset
+                if (temp) {
+                    if (asset != null) {
                         System.out.println("asset is not null");
-                        Asset assetTemp;
-                        assetTemp = asset;
-                        if(!filteredAssets.contains(assetTemp)) {
-                            filteredAssets.add(assetTemp);
-                        }else{
-                            System.out.println("Already contains: " + assetTemp.getName().toString());
+                        if (!filteredAssets.contains(asset)) {
+                            filteredAssets.add(asset);
+                        } else {
+                            System.out.println("Already contains: " + asset.getName().toString());
                         }
-                    }else{
+                    } else {
                         System.out.println("asset is null");
                     }
                 }
-            }else {
-                System.out.println("result is null");
+
             }
-        }
-        if(result != null && result.size() > 0 && filteredAssets.size() > 0) {
-            System.out.println("filteredAsset size: " + filteredAssets.size());
+            System.out.println("Filtered asset size before merge: " + filteredAssets.size());
 
-           for(int i = 0; i < filteredAssets.size(); i++){
-              if(filteredAssets.get(i) != null) {
-                  if(!(availableAssets.size() == filteredAssets.size())){
-                      availableAssets.clear();
-                  }
-                  System.out.println("filteredAssets print: " + filteredAssets.get(i).getName().toString());
-                  availableAssets.add(filteredAssets.get(i));
-              }
-           }
-            System.out.println("availableAssets size: " + availableAssets.size());
-            //this.availableAssets = filteredAssets;
-        }else {
-            System.out.println("Something in result is null");
-        }
+            availableAssets.clear();
+            if(filteredAssets.size() == 0){
+                filteredAssets.clear();
+            }
+            availableAssets = new ArrayList<>(filteredAssets);
+        filteredAssets.clear();
+        //System.out.println("filteredAsset size ..: " + filteredAssets.size());
+        System.out.println("availableAssets size: " + availableAssets.size());
 
-        //TagController.availableFilterTags(assetType);
+        }else{
+            System.out.println("result is null");
+            this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+
+        }
     }
+
+
+
+    public void searchForAssets(AssetType assetType, TimeRange timeRange) {
+        this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+        tagController.availableFilterTags(assetType);
+    }
+
 
     public void onMakeReservationFired(User user, Asset asset, TimeRange timeRange) {
         AgendaLogger.logVerbose("Reserving " + asset.getName() + " for " + user.getUsername() + " on " + timeRange.getStartTimeFormatted(TimeRange.FORMAT_DATE_TIME) + " to " + timeRange.getEndTimeFormatted(TimeRange.FORMAT_DATE_TIME));
