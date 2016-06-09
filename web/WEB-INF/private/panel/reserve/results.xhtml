@@ -61,6 +61,7 @@
         </b:row>
         <b:row style="margin-top:10px">
             <b:column colXs="4">
+                <h:form>
                 <b:panel look="default" title="Filter">
                     <ui:repeat value="#{TagController.filterTags}" var="tag">
 
@@ -71,8 +72,11 @@
                     </ui:repeat>
 
                     <h:commandButton styleClass="btn btn-default" value="Filter"
-                                     action="#{TagController.filter(TagController.checkMap)}"/>
+                                     action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                    <f:ajax execute="@form" render=":thing"/>
+                    </h:commandButton>
                 </b:panel>
+                </h:form>
             </b:column>
             <b:column colXs="8">
                 <c:choose>
@@ -81,7 +85,7 @@
                         <h4>Try adjusting your reservation time.</h4>
                     </c:when>
                     <c:otherwise>
-                        <h:form>
+                        <h:form id="thing">
                             <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
                                     <h:commandButton styleClass="btn btn-default" value="Make Reservation"

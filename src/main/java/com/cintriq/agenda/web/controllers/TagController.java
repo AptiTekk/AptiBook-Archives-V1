@@ -1,38 +1,70 @@
 package com.cintriq.agenda.web.controllers;
 
 
+import com.cintriq.agenda.core.AssetService;
 import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.TagService;
+import com.cintriq.agenda.core.entity.Asset;
 import com.cintriq.agenda.core.entity.AssetType;
 import com.cintriq.agenda.core.entity.Tag;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ManagedBean(name = "TagController")
 @ViewScoped
 public class TagController {
-
-
-  /*  @PostConstruct
-    public void init() {
-        availableFilterTags(TimeSelectionController);
-    }*/
 
     @Inject
     private TagService tagService;
 
     @Inject
     private AssetTypeService assetTypeService;
-    private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
-    private List<String> selectedTagNames = new ArrayList<>();
+
+    @Inject
+    private AssetService assetService;
+
+    private List<String> selectedAssetTypeTagNames = new ArrayList<>();
+    private List<Tag> selectedAssetTags = new ArrayList<>();
+    private Asset selectedAsset;
     private ArrayList<String> filterTags = new ArrayList<>();
+    private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
+
+
+
+    private List<String> result = new ArrayList<String>();
+
+    public void availableFilterTags(AssetType assetType){
+        for(Tag availableTag : assetType.getTags()){
+            System.out.println("availableTag = "+ availableTag.getName());
+            System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
+            if(!filterTags.contains(availableTag.getName().toString())) {
+                filterTags.add(availableTag.getName().toString());
+            }
+        }
+    }
+
+    public void filter(){
+        for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
+            if (entry.getValue())
+                if (!result.contains(entry.getKey()))
+                result.add(entry.getKey());
+
+        }
+        //check if resul;t list is empty
+        if(result != null){
+            System.out.println("result is not empty");
+            for(String resultItem : result){
+                System.out.println("Printing result: " + result);
+            }
+        }else{
+            System.out.println("result list is empty");
+        }
+    }
 
     private void createNewAssetTypeTag(AssetType assetType, String tagName) {
         if (assetType != null && tagName != null) {
@@ -70,68 +102,104 @@ public class TagController {
         }
     }
 
-    public void availableFilterTags(AssetType assetType){
-        for(Tag availableTag : assetType.getTags()){
-            System.out.println("availableTag = "+ availableTag.getName());
-            System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
-            filterTags.add(availableTag.getName().toString());
-        }
-    }
-
-    public void filter(Map<String, Boolean> checkMap){
-        List<String> result = new ArrayList<String>();
-        for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
-            if (entry.getValue()) {
-                result.add(entry.getKey());
-            }
-        }
-    }
-
     /**
-     * Updates the specified AssetType with the selected Tag names from this controller.
+     * Updates the specified AssetType with the selected AssetType Tag names from this controller.
      * <br/><br/>
      * Note: If you have made any changes to the AssetType, you should merge the AssetType before calling this method.
+     *
      * @param assetType The AssetType to update.
      */
-    void updateAssetTypeTags(AssetType assetType)
-    {
+    void updateAssetTags(AssetType assetType) {
         List<Tag> currentTags = assetType.getTags();
 
-        if (selectedTagNames != null) {
+        if (selectedAssetTypeTagNames != null) {
             List<String> currentTagNames = new ArrayList<>();
             for (Tag tag : currentTags) {
-                if (!selectedTagNames.contains(tag.getName()))
+                if (!selectedAssetTypeTagNames.contains(tag.getName()))
                     deleteTag(tag);
                 else
                     currentTagNames.add(tag.getName());
             }
 
-            for (String tagName : selectedTagNames) {
+            for (String tagName : selectedAssetTypeTagNames) {
                 if (!currentTagNames.contains(tagName))
                     createNewAssetTypeTag(assetType, tagName);
             }
         }
     }
 
-    public List<String> getAssetTypeSuggestions(String input) {
+    /**
+     * Updates the specified Asset with the selected Asset Tag names from this controller.
+     *
+     * @param asset The Asset to update.
+     */
+    void updateAssetTags(Asset asset) {
+        List<Tag> currentTags = asset.getTags();
+        if (currentTags == null)
+            currentTags = new ArrayList<>();
+
+        if (selectedAssetTags != null) {
+            Iterator<Tag> iterator = currentTags.iterator();
+
+            //Remove tags that are not selected
+            while (iterator.hasNext()) {
+                if (!selectedAssetTags.contains(iterator.next()))
+                    iterator.remove();
+            }
+
+            //Add tags that are selected and not already added
+            for (Tag tag : selectedAssetTags) {
+                if (!currentTags.contains(tag))
+                    currentTags.add(tag);
+            }
+
+            asset.setTags(currentTags);
+
+            try {
+                assetService.merge(asset);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public List<String> getAssetTypeTagSuggestions(String input) {
         return null; //Intentional: we don't want any suggestions, so return null;
     }
 
-    public List<String> getSelectedTagNames() {
-        return selectedTagNames;
+    public List<Tag> getAssetTagSuggestions(String input) {
+        if (selectedAsset != null) {
+            List<Tag> allTags = selectedAsset.getAssetType().getTags();
+            List<Tag> filteredTags = new ArrayList<>();
+
+            for (Tag tag : allTags) {
+                if (selectedAssetTags != null && selectedAssetTags.contains(tag))
+                    continue;
+
+                if (tag.getName().toLowerCase().contains(input.toLowerCase()))
+                    filteredTags.add(tag);
+            }
+
+            return filteredTags;
+        }
+        return null;
     }
 
-    public void setSelectedTagNames(List<String> selectedTagNames) {
-        if (selectedTagNames == null) {
-            this.selectedTagNames = null;
+    public List<String> getSelectedAssetTypeTagNames() {
+        return selectedAssetTypeTagNames;
+    }
+
+    public void setSelectedAssetTypeTagNames(List<String> selectedAssetTypeTagNames) {
+        if (selectedAssetTypeTagNames == null) {
+            this.selectedAssetTypeTagNames = null;
             return;
         }
 
         List<String> filteredTags = new ArrayList<>();
 
         //Remove commas and duplicates
-        for (String tag : selectedTagNames) {
-            tag = tag.trim();
+        for (String tag : selectedAssetTypeTagNames) {
+            tag = tag.trim().replaceAll("\\|", "");
 
             if (tag.contains(","))
                 tag = tag.substring(0, tag.indexOf(","));
@@ -141,7 +209,32 @@ public class TagController {
 
             filteredTags.add(tag);
         }
-        this.selectedTagNames = filteredTags;
+        this.selectedAssetTypeTagNames = filteredTags;
+    }
+
+    public List<Tag> getSelectedAssetTags() {
+        return selectedAssetTags;
+    }
+
+    public void setSelectedAssetTags(List<Tag> selectedAssetTags) {
+
+        if (selectedAssetTags != null) {
+            List<Tag> filteredTags = new ArrayList<>();
+            for (Tag tag : selectedAssetTags) {
+                if (!filteredTags.contains(tag))
+                    filteredTags.add(tag);
+            }
+            this.selectedAssetTags = filteredTags;
+        } else
+            this.selectedAssetTags = null;
+    }
+
+    public Asset getSelectedAsset() {
+        return selectedAsset;
+    }
+
+    void setSelectedAsset(Asset selectedAsset) {
+        this.selectedAsset = selectedAsset;
     }
 
     public Map<String, Boolean> getCheckMap() {
@@ -155,6 +248,13 @@ public class TagController {
 
     public ArrayList<String> getFilterTags() {
         return filterTags;
+    }
+    public List<String> getResult() {
+        return result;
+    }
+
+    public void setResult(List<String> result) {
+        this.result = result;
     }
 
   /*  public void setFilterTags(ArrayList<String> filterTags) {
