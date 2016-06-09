@@ -70,7 +70,7 @@ public class AssetTypeEditController {
                     assetTypeService.merge(selectedAssetType);
 
                     //Update tags
-                    tagController.updateAssetTypeTags(selectedAssetType);
+                    tagController.updateAssetTags(selectedAssetType);
 
                     //Refresh AssetType
                     setSelectedAssetType(assetTypeService.get(selectedAssetType.getId()));
@@ -92,10 +92,10 @@ public class AssetTypeEditController {
             List<String> tagNames = new ArrayList<>();
             for (Tag tag : tags)
                 tagNames.add(tag.getName());
-            tagController.setSelectedTagNames(tagNames);
+            tagController.setSelectedAssetTypeTagNames(tagNames);
         } else {
             editableAssetTypeName = "";
-            tagController.setSelectedTagNames(null);
+            tagController.setSelectedAssetTypeTagNames(null);
         }
     }
 
@@ -133,7 +133,7 @@ public class AssetTypeEditController {
         if (selectedAssetType != null) {
             try {
                 Asset asset = new Asset("New Asset");
-                asset.setType(selectedAssetType);
+                asset.setAssetType(selectedAssetType);
                 assetService.insert(asset);
 
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));

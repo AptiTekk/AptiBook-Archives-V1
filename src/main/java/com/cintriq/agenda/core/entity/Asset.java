@@ -33,12 +33,12 @@ public class Asset implements Serializable {
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne
-    private AssetType type;
+    private AssetType assetType;
 
     @ManyToOne
     private UserGroup owner;
 
-    @ManyToMany(mappedBy = "assets")
+    @ManyToMany
     private List<Tag> tags = new ArrayList<>();
 
     private String imageFileName;
@@ -112,20 +112,16 @@ public class Asset implements Serializable {
         return reservation;
     }
 
-    public AssetType getType() {
-        return type;
+    public AssetType getAssetType() {
+        return assetType;
     }
 
-    public void setType(AssetType type) {
-        this.type = type;
+    public void setAssetType(AssetType type) {
+        this.assetType = type;
     }
 
     public UserGroup getOwner() {
-        if(owner == null){
-            System.out.println("owner is null in Asset entity");
-        }
         return owner;
-
     }
 
     public void setOwner(UserGroup owner) {

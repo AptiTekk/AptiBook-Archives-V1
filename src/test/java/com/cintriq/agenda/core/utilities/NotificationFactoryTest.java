@@ -19,7 +19,6 @@ import javax.mail.MessagingException;
 import javax.naming.NamingException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
-import java.util.Date;
 
 @RunWith(Arquillian.class)
 public class NotificationFactoryTest {
@@ -43,7 +42,7 @@ public class NotificationFactoryTest {
 
         Asset item = new Asset();
         item.setName("item name!");
-        item.setType(type);
+        item.setAssetType(type);
 
         Reservation res = new Reservation();
         res.setDateCreated(Calendar.getInstance());
@@ -55,7 +54,7 @@ public class NotificationFactoryTest {
         String expectedHtml = html
                 .replace("{body}",
                         "Hello " + user.getFullname() + " " + res.getAsset().getName() + " "
-                                + res.getAsset().getType().getId())
+                                + res.getAsset().getAssetType().getId())
                 .replace("{user.email}", user.getEmail())
                 .replace("{user.password}", VariableInjection.OMITTED_PARAM);
 

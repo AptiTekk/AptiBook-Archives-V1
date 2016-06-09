@@ -54,7 +54,7 @@ public class AssetServiceTest {
         for(int i = 0; i < 5; i++) {
             String assetName = UUID.randomUUID().toString();
             Asset asset = new Asset(assetName);
-            asset.setType(assetType);
+            asset.setAssetType(assetType);
             assetService.insert(asset);
             assetList.add(asset);
         }

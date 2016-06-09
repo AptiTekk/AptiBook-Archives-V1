@@ -8,7 +8,6 @@ import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -66,6 +65,7 @@ public class AssetEditController {
 
             if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
                 selectedAsset.setName(editableAssetName);
+                tagController.updateAssetTags(selectedAsset);
                 selectedAsset.setNeedsApproval(editableAssetApproval);
 
                 TimeRange availabilityRange = timeSelectionController.getTimeRange();
@@ -90,8 +90,9 @@ public class AssetEditController {
     public void resetSettings() {
         if (selectedAsset != null) {
             setEditableAssetName(selectedAsset.getName());
+            tagController.setSelectedAsset(selectedAsset);
+            tagController.setSelectedAssetTags(selectedAsset.getTags());
             setEditableAssetApproval(selectedAsset.getNeedsApproval());
-
             TimeRange availabilityRange = new TimeRange(selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
             timeSelectionController.setSelectedStartTimeString(availabilityRange.getStartTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
             timeSelectionController.setSelectedEndTimeString(availabilityRange.getEndTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
@@ -99,6 +100,8 @@ public class AssetEditController {
             this.currentAssetOwnerGroup = selectedAsset.getOwner();
         } else {
             setEditableAssetName("");
+            tagController.setSelectedAsset(null);
+            tagController.setSelectedAssetTags(null);
             setEditableAssetApproval(false);
             timeSelectionController.setSelectedStartTimeString(null);
             timeSelectionController.setSelectedEndTimeString(null);

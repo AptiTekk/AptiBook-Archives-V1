@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -63,7 +62,7 @@ public class ReservationIntegrationTest {
 
         Asset testAsset = new Asset();
         testAsset.setName("TestReservable");
-        testAsset.setType(testAssetType);
+        testAsset.setAssetType(testAssetType);
         testAsset.setOwner(testOwnerGroup);
 
         userService.insert(testOwner);

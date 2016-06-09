@@ -18,7 +18,7 @@ public class Tag implements Comparable<Tag> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private AssetType assetType;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "tags")
     private List<Asset> assets = new ArrayList<>();
 
     public int getId() {
@@ -63,12 +63,12 @@ public class Tag implements Comparable<Tag> {
 
         Tag other = (Tag) o;
 
-        return EqualsHelper.areEquals(getName(), other.getName());
+        return EqualsHelper.areEquals(getName(), other.getName()) && EqualsHelper.areEquals(getAssetType(), other.getAssetType());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName());
+        return EqualsHelper.calculateHashCode(getName(), getAssetType());
     }
 
     @Override
