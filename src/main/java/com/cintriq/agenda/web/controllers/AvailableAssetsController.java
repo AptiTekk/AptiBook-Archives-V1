@@ -2,9 +2,6 @@ package com.cintriq.agenda.web.controllers;
 
 import com.cintriq.agenda.core.ReservationService;
 import com.cintriq.agenda.core.entity.*;
-import com.cintriq.agenda.core.utilities.AgendaLogger;
-import com.cintriq.agenda.core.utilities.time.CalendarRange;
-import com.cintriq.agenda.core.utilities.time.SegmentedTime;
 import com.cintriq.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.faces.bean.ManagedBean;
@@ -12,69 +9,49 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @ManagedBean(name = "AvailableAssetsController")
 @ViewScoped
 public class AvailableAssetsController {
 
-    @ManagedProperty(value = "#{TagController}")
-    private TagController tagController;
-
-    public void setTagController(TagController tagController) {
-        this.tagController = tagController;
-    }
-
     @Inject
     private ReservationService reservationService;
 
-    //private List<Asset> filteredAssets;
-    public ArrayList<Asset> filteredAssets = new ArrayList<Asset>();
     private List<Asset> availableAssets;
-    private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
-    private List<String> result;
+    private List<Asset> filteredAssets;
 
-    public void filterAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
-        this.tagController.availableFilterTags(assetType);
-        this.result = tagController.filter(); //Get selected checkbox list.
-        if ((!(result.size() == 0)) && !(result == null)) {
-            boolean temp;
-            this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
-            for (Asset asset : availableAssets) {
-                temp = false;
-                //If Asset tag is found in checked filter
-                for (Tag tag : asset.getTags()) {
-                    if (result.contains(tag.getName())) {
-                        temp = true;
-                    }
-                }
-                //If asset tag was found in results list, add asset to the filtered list.
-                if (temp) {
-                    if (!filteredAssets.contains(asset)) {
-                        filteredAssets.add(asset);
-                    } else {
-                        System.out.println("Already contains: " + asset.getName().toString());
-                    }
-                }
-            }
-            availableAssets.clear();
-            if (filteredAssets.size() == 0) {
-                filteredAssets.clear();
-            }
-            availableAssets = new ArrayList<>(filteredAssets);
-            filteredAssets.clear();
-        } else {
-            System.out.println("Result(checkbox) is null");
-            this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
-        }
-    }
-
+    private List<Tag> filterTags;
+    private List<Tag> selectedFilterTags;
 
     public void searchForAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
         this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
-        tagController.availableFilterTags(assetType);
+
+        filterTags = assetType.getTags();
+        selectedFilterTags = new ArrayList<>();
+        filterAssets();
+    }
+
+    /**
+     * Updates the filteredAssets list with only those assets which contain all the selectedFilterTags
+     */
+    private void filterAssets() {
+        filteredAssets = new ArrayList<>();
+
+        for (Asset asset : availableAssets) {
+            boolean skipAsset = false;
+
+            //Make sure the Asset has all the selected filter Tags
+            for (Tag tag : selectedFilterTags) {
+                if (!asset.getTags().contains(tag))
+                    skipAsset = true;
+            }
+
+            if (skipAsset)
+                continue;
+
+            filteredAssets.add(asset);
+        }
     }
 
     public void onMakeReservationFired(User user, Asset asset, SegmentedTimeRange segmentedTimeRange) {
@@ -93,23 +70,25 @@ public class AvailableAssetsController {
         }
     }
 
-    public List<String> getResult() {
-        return result;
-    }
-
-    public void setResult(List<String> result) {
-        this.result = result;
-    }
-
     public List<Asset> getAvailableAssets() {
         return availableAssets;
     }
 
-    public Map<String, Boolean> getCheckMap() {
-        return checkMap;
+    public List<Asset> getFilteredAssets() {
+        return filteredAssets;
     }
 
-    public void setCheckMap(Map<String, Boolean> checkMap) {
-        this.checkMap = checkMap;
+    public List<Tag> getFilterTags() {
+        return filterTags;
+    }
+
+    public List<Tag> getSelectedFilterTags() {
+        return selectedFilterTags;
+    }
+
+    public void setSelectedFilterTags(List<Tag> selectedFilterTags) {
+        this.selectedFilterTags = selectedFilterTags;
+
+        filterAssets();
     }
 }
