@@ -46,8 +46,8 @@ public class ReservationViewController {
 
     private static DefaultScheduleEvent toEvent(Reservation reservation) {
         DefaultScheduleEvent event = new DefaultScheduleEvent();
-        event.setStartDate(reservation.getTimeStart().getTime());
-        event.setEndDate(reservation.getTimeEnd().getTime());
+        event.setStartDate(reservation.getTimeStart().mergeWithCalendar(reservation.getDate()).getTime());
+        event.setEndDate(reservation.getTimeEnd().mergeWithCalendar(reservation.getDate()).getTime());
         event.setTitle(reservation.getAsset().getName() + " - " + reservation.getTitle());
         event.setDescription(reservation.getDescription());
         return event;

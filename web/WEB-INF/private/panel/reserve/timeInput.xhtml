@@ -101,7 +101,7 @@
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
                                     disabled="#{TimeSelectionController.selectedStartTimeString == null}"
-                                    action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                                    action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </b:column>

@@ -1,6 +1,7 @@
 package com.cintriq.agenda.core.entity;
 
 import com.cintriq.agenda.core.utilities.EqualsHelper;
+import com.cintriq.agenda.core.utilities.time.SegmentedTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -32,11 +33,14 @@ public class Reservation implements Serializable {
 
     private byte pendingApproval;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar timeEnd;
+    @Column(columnDefinition = "time")
+    private SegmentedTime timeStart;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar timeStart;
+    @Column(columnDefinition = "time")
+    private SegmentedTime timeEnd;
+
+    @Temporal(TemporalType.DATE)
+    private Calendar date;
 
     // bi-directional many-to-one association to Room
     @ManyToOne
@@ -99,20 +103,28 @@ public class Reservation implements Serializable {
         this.pendingApproval = pendingApproval;
     }
 
-    public Calendar getTimeEnd() {
-        return this.timeEnd;
-    }
-
-    public void setTimeEnd(Calendar timeEnd) {
-        this.timeEnd = timeEnd;
-    }
-
-    public Calendar getTimeStart() {
+    public SegmentedTime getTimeStart() {
         return this.timeStart;
     }
 
-    public void setTimeStart(Calendar timeStart) {
+    public void setTimeStart(SegmentedTime timeStart) {
         this.timeStart = timeStart;
+    }
+
+    public SegmentedTime getTimeEnd() {
+        return this.timeEnd;
+    }
+
+    public void setTimeEnd(SegmentedTime timeEnd) {
+        this.timeEnd = timeEnd;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
     }
 
     public Asset getAsset() {

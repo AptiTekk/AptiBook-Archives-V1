@@ -2,6 +2,7 @@ package com.cintriq.agenda.core;
 
 import com.cintriq.agenda.core.entity.*;
 import com.cintriq.agenda.core.testingUtil.TestUtils;
+import com.cintriq.agenda.core.utilities.time.SegmentedTime;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -77,11 +78,11 @@ public class ReservationIntegrationTest {
         reservation.setTitle("Test Reservation");
         reservation.setDescription("Test Reservation Description");
         reservation.setDateCreated(Calendar.getInstance());
-        reservation.setTimeStart(Calendar.getInstance());
+        reservation.setTimeStart(new SegmentedTime(6, false));
 
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.HOUR, 1);
-        reservation.setTimeEnd(endTime);
+        reservation.setTimeEnd(new SegmentedTime(15, false));
         reservation.setAsset(testAsset);
         reservation.setUser(testRenter);
 

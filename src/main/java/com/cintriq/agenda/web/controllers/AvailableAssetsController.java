@@ -6,7 +6,9 @@ import com.cintriq.agenda.core.entity.AssetType;
 import com.cintriq.agenda.core.entity.Reservation;
 import com.cintriq.agenda.core.entity.User;
 import com.cintriq.agenda.core.utilities.AgendaLogger;
-import com.cintriq.agenda.core.utilities.TimeRange;
+import com.cintriq.agenda.core.utilities.time.CalendarRange;
+import com.cintriq.agenda.core.utilities.time.SegmentedTime;
+import com.cintriq.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -22,17 +24,17 @@ public class AvailableAssetsController {
 
     private List<Asset> availableAssets;
 
-    public void searchForAssets(AssetType assetType, TimeRange timeRange) {
-        this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+    public void searchForAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
+        this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
     }
 
-    public void onMakeReservationFired(User user, Asset asset, TimeRange timeRange) {
-        AgendaLogger.logVerbose("Reserving " + asset.getName() + " for " + user.getUsername() + " on " + timeRange.getStartTimeFormatted(TimeRange.FORMAT_DATE_TIME) + " to " + timeRange.getEndTimeFormatted(TimeRange.FORMAT_DATE_TIME));
+    public void onMakeReservationFired(User user, Asset asset, SegmentedTimeRange segmentedTimeRange) {
         Reservation reservation = new Reservation();
         reservation.setUser(user);
         reservation.setAsset(asset);
-        reservation.setTimeStart(timeRange.getStartTime());
-        reservation.setTimeEnd(timeRange.getEndTime());
+        reservation.setDate(segmentedTimeRange.getDate());
+        reservation.setTimeStart(segmentedTimeRange.getStartTime());
+        reservation.setTimeEnd(segmentedTimeRange.getEndTime());
 
         try {
             reservationService.insert(reservation);

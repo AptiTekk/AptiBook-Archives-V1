@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-group">
                         <h:commandButton styleClass="btn btn-primary" value="Update Time"
-                                         action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                                         action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
                             <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                         </h:commandButton>
                     </div>
@@ -76,7 +76,7 @@
                             <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
                                     <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.timeRange)}"/>
+                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.segmentedTimeRange)}"/>
                                 </b:panel>
                             </ui:repeat>
                         </h:form>
