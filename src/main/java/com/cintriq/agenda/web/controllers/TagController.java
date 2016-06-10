@@ -33,39 +33,27 @@ public class TagController {
     private Asset selectedAsset;
     private ArrayList<String> filterTags = new ArrayList<>();
     private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
-
-
-
     private List<String> result = new ArrayList<String>();
 
-    public void availableFilterTags(AssetType assetType){
+    public void availableFilterTags(AssetType assetType) {
         filterTags.clear();
-
-        for(Tag availableTag : assetType.getTags()){
-           // System.out.println("availableTag = "+ availableTag.getName());
+        for (Tag availableTag : assetType.getTags()) {
+            // System.out.println("availableTag = "+ availableTag.getName());
             //System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
-            if(!filterTags.contains(availableTag.getName().toString())) {
+            if (!filterTags.contains(availableTag.getName().toString())) {
                 filterTags.add(availableTag.getName().toString());
             }
         }
     }
 
-    public List<String> filter(){
+    /* Called from AvailbleAssetsController.
+       Returns List<String> of selected checkboxes from Results page.*/
+    public List<String> filter() {
         List<String> result = new ArrayList<String>();
         for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
             if (entry.getValue())
                 if (!result.contains(entry.getKey()))
-                result.add(entry.getKey());
-
-        }
-        //check if resul;t list is empty
-        if(result != null){
-            System.out.println("result is not empty");
-            for(String resultItem : result){
-                System.out.println("Printing result: " + result);
-            }
-        }else{
-            System.out.println("result list is empty");
+                    result.add(entry.getKey());
         }
         return result;
     }
@@ -253,6 +241,7 @@ public class TagController {
     public ArrayList<String> getFilterTags() {
         return filterTags;
     }
+
     public List<String> getResult() {
         return result;
     }

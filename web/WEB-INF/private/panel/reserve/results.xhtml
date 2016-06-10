@@ -73,13 +73,13 @@
 
                     <h:commandButton styleClass="btn btn-default" value="Filter"
                                      action="#{AvailableAssetsController.filterAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
-                    <f:ajax execute="@form" render=":thing"/>
+                    <f:ajax execute="@form" render=":availableAssetsList"/>
                     </h:commandButton>
                 </b:panel>
                 </h:form>
             </b:column>
             <b:column colXs="8">
-                <h:form id="thing">
+                <h:form id="availableAssetsList">
                 <c:choose>
                     <c:when test="#{empty AvailableAssetsController.availableAssets}">
                         <h2> No Available #{TimeSelectionController.selectedAssetType.name} Found!</h2>
