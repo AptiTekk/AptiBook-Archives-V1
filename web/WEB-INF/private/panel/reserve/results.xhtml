@@ -72,7 +72,7 @@
                     </ui:repeat>
 
                     <h:commandButton styleClass="btn btn-default" value="Filter"
-                                     action="#{AvailableAssetsController.filterAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                                     action="#{AvailableAssetsController.filterAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
                     <f:ajax execute="@form" render=":availableAssetsList"/>
                     </h:commandButton>
                 </b:panel>

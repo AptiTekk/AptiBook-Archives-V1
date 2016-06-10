@@ -36,30 +36,26 @@ public class AvailableAssetsController {
     private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
     private List<String> result;
 
-    public void filterAssets(AssetType assetType, TimeRange timeRange) {
+    public void filterAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
         this.tagController.availableFilterTags(assetType);
         this.result = tagController.filter(); //Get selected checkbox list.
         if ((!(result.size() == 0)) && !(result == null)) {
             boolean temp;
-            this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+            this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
             for (Asset asset : availableAssets) {
                 temp = false;
                 //If Asset tag is found in checked filter
                 for (Tag tag : asset.getTags()) {
-                    if (result.contains(tag.getName().toString())) {
+                    if (result.contains(tag.getName())) {
                         temp = true;
                     }
                 }
                 //If asset tag was found in results list, add asset to the filtered list.
                 if (temp) {
-                    if (asset != null) {
-                        if (!filteredAssets.contains(asset)) {
-                            filteredAssets.add(asset);
-                        } else {
-                            System.out.println("Already contains: " + asset.getName().toString());
-                        }
+                    if (!filteredAssets.contains(asset)) {
+                        filteredAssets.add(asset);
                     } else {
-                        System.out.println("Asset is null");
+                        System.out.println("Already contains: " + asset.getName().toString());
                     }
                 }
             }
@@ -71,7 +67,7 @@ public class AvailableAssetsController {
             filteredAssets.clear();
         } else {
             System.out.println("Result(checkbox) is null");
-            this.availableAssets = reservationService.findAvailableAssets(assetType, timeRange, 0f);
+            this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
         }
     }
 
