@@ -61,27 +61,42 @@
         </b:row>
         <b:row style="margin-top:10px">
             <b:column colXs="4">
+                <h:form>
                 <b:panel look="default" title="Filter">
-                    <h4>...</h4>
+                    <ui:repeat value="#{TagController.filterTags}" var="tag">
+
+
+                        <td><h:selectBooleanCheckbox value="#{TagController.checkMap[tag]}"/></td>
+                        <tr><h:outputText value="#{tag}"/></tr>
+                        <br/>
+                    </ui:repeat>
+
+                    <h:commandButton styleClass="btn btn-default" value="Filter"
+                                     action="#{AvailableAssetsController.filterAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                    <f:ajax execute="@form" render=":availableAssetsList"/>
+                    </h:commandButton>
                 </b:panel>
+                </h:form>
             </b:column>
             <b:column colXs="8">
+                <h:form id="availableAssetsList">
                 <c:choose>
                     <c:when test="#{empty AvailableAssetsController.availableAssets}">
                         <h2> No Available #{TimeSelectionController.selectedAssetType.name} Found!</h2>
                         <h4>Try adjusting your reservation time.</h4>
                     </c:when>
                     <c:otherwise>
-                        <h:form>
+
                             <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
                                     <h:commandButton styleClass="btn btn-default" value="Make Reservation"
                                                      action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.segmentedTimeRange)}"/>
                                 </b:panel>
                             </ui:repeat>
-                        </h:form>
+
                     </c:otherwise>
                 </c:choose>
+                </h:form>
             </b:column>
         </b:row>
     </b:container>

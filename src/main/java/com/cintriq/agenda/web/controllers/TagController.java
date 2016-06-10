@@ -12,9 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ManagedBean(name = "TagController")
@@ -35,6 +33,32 @@ public class TagController {
 
     private Asset selectedAsset;
     private List<Tag> availableTags;
+    private ArrayList<String> filterTags = new ArrayList<>();
+    private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
+    private List<String> result = new ArrayList<String>();
+
+    public void availableFilterTags(AssetType assetType) {
+        filterTags.clear();
+        for (Tag availableTag : assetType.getTags()) {
+            // System.out.println("availableTag = "+ availableTag.getName());
+            //System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
+            if (!filterTags.contains(availableTag.getName().toString())) {
+                filterTags.add(availableTag.getName().toString());
+            }
+        }
+    }
+
+    /* Called from AvailbleAssetsController.
+       Returns List<String> of selected checkboxes from Results page.*/
+    public List<String> filter() {
+        List<String> result = new ArrayList<String>();
+        for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
+            if (entry.getValue())
+                if (!result.contains(entry.getKey()))
+                    result.add(entry.getKey());
+        }
+        return result;
+    }
 
     private void createNewAssetTypeTag(AssetType assetType, String tagName) {
         if (assetType != null && tagName != null) {
@@ -206,4 +230,31 @@ public class TagController {
         this.selectedAsset = selectedAsset;
         this.availableTags = selectedAsset.getAssetType().getTags();
     }
+
+    public Map<String, Boolean> getCheckMap() {
+        return checkMap;
+    }
+
+    public void setCheckMap(Map<String, Boolean> checkMap) {
+        this.checkMap = checkMap;
+    }
+
+
+    public ArrayList<String> getFilterTags() {
+        return filterTags;
+    }
+
+    public List<String> getResult() {
+        return result;
+    }
+
+    public void setResult(List<String> result) {
+        this.result = result;
+    }
+
+  /*  public void setFilterTags(ArrayList<String> filterTags) {
+        TagController.filterTags = filterTags;
+    }*/
+
+
 }
