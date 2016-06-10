@@ -1,5 +1,7 @@
 package com.cintriq.agenda.core.utilities.time;
 
+import com.cintriq.agenda.core.utilities.EqualsHelper;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -163,13 +165,30 @@ public class SegmentedTime implements Comparable<SegmentedTime>, Serializable, C
     public Object clone() {
         try {
             SegmentedTime other = (SegmentedTime) super.clone();
-            other.setHourOfDay(getHourOfDay());
-            other.setThirtyMinute(isThirtyMinute());
+            other.calendar = (Calendar) calendar.clone();
 
             return other;
         } catch (CloneNotSupportedException e) {
             return null;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof SegmentedTime)) return false;
+
+        SegmentedTime other = (SegmentedTime) o;
+
+        return EqualsHelper.areEquals(getCurrentSegment(), other.getCurrentSegment());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getCurrentSegment());
     }
 
     Calendar getCalendar() {

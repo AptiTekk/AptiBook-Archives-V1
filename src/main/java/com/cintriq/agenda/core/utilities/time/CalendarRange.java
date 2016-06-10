@@ -1,5 +1,7 @@
 package com.cintriq.agenda.core.utilities.time;
 
+import com.cintriq.agenda.core.utilities.EqualsHelper;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,7 +53,7 @@ public class CalendarRange {
     }
 
     public String getStartTimeFormatted(DateFormat dateFormat) {
-        if(startTime == null || dateFormat == null)
+        if (startTime == null || dateFormat == null)
             return null;
         return dateFormat.format(startTime.getTime());
     }
@@ -65,13 +67,32 @@ public class CalendarRange {
     }
 
     public String getEndTimeFormatted(DateFormat dateFormat) {
-        if(endTime == null || dateFormat == null)
+        if (endTime == null || dateFormat == null)
             return null;
         return dateFormat.format(endTime.getTime());
     }
 
     public void setEndTime(Calendar endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof CalendarRange)) return false;
+
+        CalendarRange other = (CalendarRange) o;
+
+        return EqualsHelper.areEquals(getStartTime(), other.getStartTime())
+                && EqualsHelper.areEquals(getEndTime(), other.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getStartTime(), getEndTime());
     }
 
 }

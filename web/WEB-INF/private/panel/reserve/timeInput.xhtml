@@ -64,7 +64,6 @@
                         </b:column>
 
 
-
                         <!-- Column 2: Inline Date Selection -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
@@ -77,22 +76,22 @@
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}"
-                                             styleClass="big-select"
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTime}"
+                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
                                 <f:selectItems value="#{TimeSelectionController.startTimes}"
-                                               var="time"/>
+                                               var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedEndTimeString}"
-                                             disabled="#{TimeSelectionController.selectedStartTimeString == null}"
-                                             styleClass="big-select">
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedEndTime}"
+                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
+                                             disabled="#{TimeSelectionController.selectedStartTime == null}">
                                 <f:selectItems
-                                        value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
-                                        var="time"/>
+                                        value="#{TimeSelectionController.endTimes}"
+                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                         </b:column>
@@ -102,7 +101,7 @@
                             <h:commandButton
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
-                                    disabled="#{TimeSelectionController.selectedStartTimeString == null}"
+                                    disabled="#{TimeSelectionController.selectedEndTime == null}"
                                     action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>

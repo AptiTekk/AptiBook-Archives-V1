@@ -1,5 +1,7 @@
 package com.cintriq.agenda.core.utilities.time;
 
+import com.cintriq.agenda.core.utilities.EqualsHelper;
+
 import javax.annotation.Nullable;
 import java.util.Calendar;
 
@@ -49,6 +51,26 @@ public class SegmentedTimeRange {
 
     public void setEndTime(SegmentedTime endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof SegmentedTimeRange)) return false;
+
+        SegmentedTimeRange other = (SegmentedTimeRange) o;
+
+        return EqualsHelper.areEquals(getDate(), other.getDate())
+                && EqualsHelper.areEquals(getStartTime(), other.getStartTime())
+                && EqualsHelper.areEquals(getEndTime(), other.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getDate(), getStartTime(), getEndTime());
     }
 
 }

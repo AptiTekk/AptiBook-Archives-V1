@@ -139,9 +139,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
             //Check for intersections of previous reservations.
             if (isAssetAvailableForReservation(asset, segmentedTimeRange)) {
                 availableAssets.add(asset);
-                AgendaLogger.logVerbose("Available Asset: " + asset.getName());
             } else {
-                AgendaLogger.logVerbose("Un-Available Asset: " + asset.getName());
                 //TODO: Offset time in 30 min intervals
             }
         }

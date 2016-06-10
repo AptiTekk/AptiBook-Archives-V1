@@ -95,8 +95,8 @@ public class AssetEditController {
             tagController.setSelectedAssetTags(selectedAsset.getTags());
             setEditableAssetApproval(selectedAsset.getNeedsApproval());
             SegmentedTimeRange availabilityRange = new SegmentedTimeRange(null, selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
-            timeSelectionController.setSelectedStartTimeString(availabilityRange.getStartTime() == null ? null : availabilityRange.getStartTime().getTimeString());
-            timeSelectionController.setSelectedEndTimeString(availabilityRange.getEndTime() == null ? null : availabilityRange.getEndTime().getTimeString());
+            timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
+            timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
 
             this.currentAssetOwnerGroup = selectedAsset.getOwner();
         } else {
@@ -104,8 +104,8 @@ public class AssetEditController {
             tagController.setSelectedAsset(null);
             tagController.setSelectedAssetTags(null);
             setEditableAssetApproval(false);
-            timeSelectionController.setSelectedStartTimeString(null);
-            timeSelectionController.setSelectedEndTimeString(null);
+            timeSelectionController.setSelectedStartTime(null);
+            timeSelectionController.setSelectedEndTime(null);
             this.currentAssetOwnerGroup = null;
         }
     }

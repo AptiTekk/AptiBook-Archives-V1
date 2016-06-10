@@ -11,7 +11,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
-import java.text.ParseException;
 import java.util.*;
 
 @ManagedBean(name = "TimeSelectionController")
@@ -20,16 +19,16 @@ public class TimeSelectionController {
 
     private Date selectedDate = Calendar.getInstance().getTime();
 
-    private List<String> startTimes;
-    private String selectedStartTimeString;
+    private List<SegmentedTime> startTimes;
+    private SegmentedTime selectedStartTime;
 
-    private List<String> endTimes;
-    private String selectedEndTimeString;
+    private List<SegmentedTime> endTimes;
+    private SegmentedTime selectedEndTime;
 
     /**
      * Used in getEndTimes to ensure that only one set of times is generated for the given start-time.
      */
-    private String lastStartTimeCalculated;
+    private SegmentedTime lastStartTimeUsedForCalculation;
 
     /**
      * Used in getSegmentedTimeRange to ensure that only one SegmentedTimeRange is generated for the selected date, start-time, and end-time.
@@ -43,7 +42,8 @@ public class TimeSelectionController {
     private SegmentedTimeRange segmentedTimeRange;
 
     //TODO: Get from application properties
-    private SegmentedTimeRange allowedTimes;
+    private SegmentedTimeRange allowedTimeRange;
+    private List<SegmentedTime> allowedTimeSegments;
 
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;
@@ -60,63 +60,22 @@ public class TimeSelectionController {
         // ---- Temporary code to generate an allowed time CalendarRange. Should
         // ideally come from a settings page somewhere. ----//
 
-        allowedTimes = new SegmentedTimeRange(null, new SegmentedTime(6, true), new SegmentedTime(20, true));
+        allowedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(6, true), new SegmentedTime(20, true));
 
         // ---- End Temporary Code ----//
-        calculateStartTimes();
+
+        //Build a list of all TimeSegments that can be selected
+        allowedTimeSegments = new ArrayList<>();
+        SegmentedTime counterTime = (SegmentedTime) allowedTimeRange.getStartTime().clone();
+
+        while (counterTime.getCurrentSegment() <= allowedTimeRange.getEndTime().getCurrentSegment()) {
+            allowedTimeSegments.add((SegmentedTime) counterTime.clone());
+            counterTime.increaseSegment();
+        }
+
+        startTimes = allowedTimeSegments.subList(0, allowedTimeSegments.size() - 1);
 
         assetTypes = assetTypeService.getAll();
-    }
-
-    /**
-     * Generates a list of times that can be selected for the "Start Time". This
-     * list will range from the minimum time allowed to 30 minutes before the
-     * maximum time allowed (To allow for the end time to be at least 30 minutes
-     * away from the selected time)
-     */
-    private void calculateStartTimes() {
-        startTimes = new ArrayList<>();
-
-        SegmentedTime counterTime = (SegmentedTime) allowedTimes.getStartTime().clone();
-
-        while (counterTime.getCurrentSegment() < allowedTimes.getEndTime().getCurrentSegment()) {
-            startTimes.add(counterTime.getTimeString());
-            counterTime.increaseSegment();
-        }
-
-    }
-
-    /**
-     * Generates a list of times that can be selected for the "End Time" based
-     * on the currently selected time.
-     */
-    private void calculateEndTimes(String startTime) {
-        endTimes = new ArrayList<>();
-
-        SegmentedTime startSegmentedTime = SegmentedTime.fromTimeString(startTime);
-
-        SegmentedTime counterTime = (SegmentedTime) startSegmentedTime.clone();
-        counterTime.increaseSegment();
-
-        while (counterTime.getCurrentSegment() <= allowedTimes.getEndTime().getCurrentSegment()) {
-            endTimes.add(counterTime.getTimeString());
-            counterTime.increaseSegment();
-        }
-
-        lastStartTimeCalculated = startTime;
-    }
-
-    private Date combineDateAndTimeString(Date date, String timeString) {
-        try {
-            return CalendarRange.FORMAT_DATE_TIME.parse(CalendarRange.FORMAT_DATE_ONLY.format(date) + " " + timeString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String getSelectedDateFriendly() {
-        return CalendarRange.FORMAT_DATE_FRIENDLY.format(selectedDate);
     }
 
     public Date getSelectedDate() {
@@ -131,45 +90,54 @@ public class TimeSelectionController {
         this.selectedDate = selectedDate;
     }
 
-    public List<String> getStartTimes() {
+    public List<SegmentedTime> getStartTimes() {
         return startTimes;
     }
 
-    public String getSelectedStartTimeString() {
-        return selectedStartTimeString;
+    public SegmentedTime getSelectedStartTime() {
+        return selectedStartTime;
     }
 
-    public void setSelectedStartTimeString(String selectedStartTimeString) {
-        this.selectedStartTimeString = selectedStartTimeString;
+    public void setSelectedStartTime(SegmentedTime selectedStartTime) {
+        this.selectedStartTime = selectedStartTime;
     }
 
-    public List<String> getEndTimes(String startTime) {
-        if (startTime == null || startTime.isEmpty())
+    public List<SegmentedTime> getEndTimes() {
+        if (selectedStartTime == null)
             return null;
-        if (startTime.equals(lastStartTimeCalculated) && endTimes != null)
+
+        if (selectedStartTime.equals(lastStartTimeUsedForCalculation) && endTimes != null)
             return endTimes;
-        calculateEndTimes(startTime);
+
+        endTimes = new ArrayList<>();
+
+        int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
+        endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
+
+        lastStartTimeUsedForCalculation = selectedStartTime;
+        selectedEndTime = endTimes.get(0);
+
         return endTimes;
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {
-        int hashcode = selectedDate.hashCode() + selectedStartTimeString.hashCode() + selectedEndTimeString.hashCode();
+        int hashcode = selectedDate.hashCode() + selectedStartTime.hashCode() + selectedEndTime.hashCode();
         if (lastTimeRangeHashcode == hashcode && segmentedTimeRange != null)
             return segmentedTimeRange;
         else {
             Calendar calendarDate = Calendar.getInstance();
             calendarDate.setTime(selectedDate);
 
-            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, SegmentedTime.fromTimeString(selectedStartTimeString), SegmentedTime.fromTimeString(selectedEndTimeString));
+            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, selectedStartTime, selectedEndTime);
         }
     }
 
-    public String getSelectedEndTimeString() {
-        return selectedEndTimeString;
+    public SegmentedTime getSelectedEndTime() {
+        return selectedEndTime;
     }
 
-    public void setSelectedEndTimeString(String selectedEndTimeString) {
-        this.selectedEndTimeString = selectedEndTimeString;
+    public void setSelectedEndTime(SegmentedTime selectedEndTime) {
+        this.selectedEndTime = selectedEndTime;
     }
 
     public List<AssetType> getAssetTypes() {

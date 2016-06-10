@@ -27,7 +27,7 @@
                                 <h:commandLink value="#{assetType.name}"
                                                action="#{AssetTypeEditController.setSelectedAssetType(assetType)}"
                                                style="font-weight: #{AssetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
-                                    <f:ajax render=":assetsPage" />
+                                    <f:ajax render=":assetsPage"/>
                                 </h:commandLink>
                             </h:column>
                         </b:dataTable>
@@ -177,14 +177,15 @@
                                                                    styleClass="col-xs-3 control-label"/>
                                                     <b:column colXs="9">
                                                         <h:selectOneMenu id="startTime"
-                                                                         value="#{TimeSelectionController.selectedStartTimeString}"
-                                                                         styleClass="big-select">
+                                                                         value="#{TimeSelectionController.selectedStartTime}"
+                                                                         styleClass="big-select"
+                                                                         converter="#{SegmentedTimeConverter}">
                                                             <f:selectItem itemValue="#{null}"
                                                                           itemLabel="--- Select a Time ---"
                                                                           noSelectionOption="true"/>
                                                             <f:selectItems
                                                                     value="#{TimeSelectionController.startTimes}"
-                                                                    var="time"/>
+                                                                    var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                                             <f:ajax render="@form"
                                                                     onevent="loading"/>
                                                         </h:selectOneMenu>
@@ -198,12 +199,13 @@
                                                                    styleClass="col-xs-3 control-label"/>
                                                     <b:column colXs="9">
                                                         <h:selectOneMenu id="endTime"
-                                                                         value="#{TimeSelectionController.selectedEndTimeString}"
+                                                                         value="#{TimeSelectionController.selectedEndTime}"
                                                                          styleClass="big-select"
-                                                                         disabled="#{TimeSelectionController.selectedStartTimeString == null}">
+                                                                         converter="#{SegmentedTimeConverter}"
+                                                                         disabled="#{TimeSelectionController.selectedStartTime == null}">
                                                             <f:selectItems
-                                                                    value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
-                                                                    var="time"/>
+                                                                    value="#{TimeSelectionController.endTimes}"
+                                                                    var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                                             <f:ajax render="@form"
                                                                     onevent="loading"/>
                                                         </h:selectOneMenu>
@@ -235,7 +237,7 @@
 
                                                 <!-- Save, Reset, Delete buttons -->
                                                 <div class="form-group"
-                                                     style="background-color:#dddddd; padding:5px; margin-bottom:0;">
+                                                     style="background-color: #dddddd; padding: 5px; margin-bottom: 0;">
                                                     <div class="col-xs-12">
                                                         <div class="btn-toolbar">
                                                             <h:commandButton styleClass="btn btn-primary"
