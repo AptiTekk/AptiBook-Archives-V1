@@ -139,7 +139,9 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
             //Check for intersections of previous reservations.
             if (isAssetAvailableForReservation(asset, segmentedTimeRange)) {
                 availableAssets.add(asset);
+                AgendaLogger.logVerbose("Available.");
             } else {
+                AgendaLogger.logVerbose("Unavailable.");
                 //TODO: Offset time in 30 min intervals
             }
         }
@@ -154,12 +156,18 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
      * @return true if available, false if not.
      */
     private boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
+        AgendaLogger.logVerbose("Checking " + asset.getName());
+
         //Return false if the reservation start or end time is not within the availability time of the asset
-        if (segmentedTimeRange.getEndTime().compareTo(asset.getAvailabilityEnd()) > 0 || segmentedTimeRange.getStartTime().compareTo(asset.getAvailabilityStart()) < 0)
+        if (asset.getAvailabilityStart().compareTo(segmentedTimeRange.getStartTime()) > 0 || asset.getAvailabilityEnd().compareTo(segmentedTimeRange.getEndTime()) < 0)
             return false;
 
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {
+            //Check date of reservation -- Skip if it's not same day as requested.
+            if (reservation.getDate().get(Calendar.DAY_OF_YEAR) != segmentedTimeRange.getDate().get(Calendar.DAY_OF_YEAR) || reservation.getDate().get(Calendar.YEAR) != segmentedTimeRange.getDate().get(Calendar.YEAR))
+                continue;
+
             //Check for intersection: a ---XX___ b
             if (reservation.getTimeEnd().compareTo(segmentedTimeRange.getStartTime()) > 0 && reservation.getTimeStart().compareTo(segmentedTimeRange.getEndTime()) < 0)
                 return false;
