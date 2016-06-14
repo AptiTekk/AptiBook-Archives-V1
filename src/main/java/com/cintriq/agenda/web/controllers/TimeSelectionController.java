@@ -62,6 +62,7 @@ public class TimeSelectionController {
     public void init() {
         // ---- Temporary code to generate an allowed time TimeRange. Should
         // ideally come from a settings page somewhere. ----//
+
         Calendar startTime = Calendar.getInstance();
         startTime.set(0, 0, 0, 6, 30);
 
@@ -209,9 +210,14 @@ public class TimeSelectionController {
         this.selectedAssetType = selectedAssetType;
         this.setSelectedDate(getSelectedDate());
     }
+    public Date getToday() {
+        Calendar c = Calendar.getInstance();
+        return c.getTime();
+    }
 
     public String getFriendlyDatePattern()
     {
         return TimeRange.FORMAT_DATE_FRIENDLY.toPattern();
     }
 }
+

@@ -58,15 +58,16 @@
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
                             <pf:calendar value="#{TimeSelectionController.selectedDate}"
-                                         mode="inline" styleClass="datepicker-fullwidth">
-                                <f:ajax event="dateSelect" render=":timeForm"/>
-                            </pf:calendar>
+                                                       mindate="#{TimeSelectionController.today}"
+                                                       mode="inline" styleClass="datepicker-fullwidth">
+                            <f:ajax event="dateSelect" render=":timeForm"/>
+                        </pf:calendar>
                         </b:column>
 
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}" styleClass="big-select"
+                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}"  styleClass="big-select"
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>

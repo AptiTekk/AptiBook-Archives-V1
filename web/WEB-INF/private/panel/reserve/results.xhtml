@@ -24,6 +24,7 @@
                     <div class="form-group">
                         on
                         <p:calendar mode="popup" value="#{TimeSelectionController.selectedDate}"
+                                    mindate="#{TimeSelectionController.today}"
                                     pattern="#{TimeSelectionController.friendlyDatePattern}"
                                     styleClass="inline-calendar-form-control">
                             <f:ajax event="dateSelect" render="@form"/>
