@@ -82,7 +82,7 @@
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems value="#{TimeSelectionController.startTimes(TimeSelectionController.todaySelected)}"
+                                <f:selectItems value="#{TimeSelectionController.getStartTimes(TimeSelectionController.todaySelected)}"
                                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
@@ -91,7 +91,7 @@
                                              styleClass="big-select" converter="#{SegmentedTimeConverter}"
                                              disabled="#{TimeSelectionController.selectedStartTime == null}">
                                 <f:selectItems
-                                        value="#{TimeSelectionController.endTimes}"
+                                        value="#{TimeSelectionController.getEndTimes(TimeSelectionController.todaySelected)}"
                                         var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>

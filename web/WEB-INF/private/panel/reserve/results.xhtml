@@ -35,7 +35,7 @@
                         <h:selectOneMenu value="#{TimeSelectionController.selectedStartTime}"
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
                                          disabled="#{TimeSelectionController.selectedAssetType == null}">
-                            <f:selectItems value="#{TimeSelectionController.startTimes}"
+                            <f:selectItems value="#{TimeSelectionController.getStartTimes(TimeSelectionController.todaySelected)}"
                                            var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
@@ -46,7 +46,7 @@
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
                                          disabled="#{TimeSelectionController.selectedStartTime == null}">
                             <f:selectItems
-                                    value="#{TimeSelectionController.endTimes}"
+                                    value="#{TimeSelectionController.getEndTimes(TimeSelectionController.todaySelected)}"
                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>

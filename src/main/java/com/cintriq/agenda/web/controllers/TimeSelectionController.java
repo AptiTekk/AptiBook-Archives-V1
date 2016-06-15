@@ -46,6 +46,9 @@ public class TimeSelectionController {
     private SegmentedTimeRange allowedTimeRange;
     private List<SegmentedTime> allowedTimeSegments;
 
+    private SegmentedTimeRange prunedTimeRange;
+    private List<SegmentedTime> prunedTimeSegments;
+
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;
 
@@ -92,17 +95,17 @@ public class TimeSelectionController {
                 }
 
 
-        allowedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(hour, thirtyMinSegment), new SegmentedTime(20, true));
+        prunedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(hour, thirtyMinSegment), new SegmentedTime(20, true));
 
         //Build a list of all TimeSegments that can be selected
-        allowedTimeSegments = new ArrayList<>();
-        SegmentedTime counterTimePrune = (SegmentedTime) allowedTimeRange.getStartTime().clone();
+        prunedTimeSegments = new ArrayList<>();
+        SegmentedTime counterTimePrune = (SegmentedTime) prunedTimeRange.getStartTime().clone();
 
-        while (counterTime.getCurrentSegment() <= allowedTimeRange.getEndTime().getCurrentSegment()) {
-            allowedTimeSegments.add((SegmentedTime) counterTime.clone());
-            counterTime.increaseSegment();
+        while (counterTimePrune.getCurrentSegment() <= prunedTimeRange.getEndTime().getCurrentSegment()) {
+            prunedTimeSegments.add((SegmentedTime) counterTimePrune.clone());
+            counterTimePrune.increaseSegment();
         }
-        prunedTimes = allowedTimeSegments.subList(0, allowedTimeSegments.size() - 1);
+        prunedTimes = prunedTimeSegments.subList(0, prunedTimeSegments.size() - 1);
 
 
         //--End Duplicated code--//
@@ -137,7 +140,7 @@ public class TimeSelectionController {
         this.selectedStartTime = selectedStartTime;
     }
 
-    public List<SegmentedTime> getEndTimes() {
+    public List<SegmentedTime> getEndTimes(Boolean isToday) {
         if (selectedStartTime == null)
             return null;
 
@@ -146,9 +149,13 @@ public class TimeSelectionController {
 
         endTimes = new ArrayList<>();
 
-        int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
-        endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
-
+        if(isToday) {
+            int selectedTimeIndex = prunedTimeSegments.indexOf(selectedStartTime);
+            endTimes = prunedTimeSegments.subList(selectedTimeIndex + 1, prunedTimeSegments.size());
+        }else {
+            int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
+            endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
+        }
         lastStartTimeUsedForCalculation = selectedStartTime;
         selectedEndTime = endTimes.get(0);
 
@@ -200,11 +207,11 @@ public class TimeSelectionController {
         return c.getTime();
     }
     public boolean isTodaySelected(){
-        Date date = new Date();
-        if(getSelectedDate() == date){
-            return true;
-        }else{
-            return false;
-        }
+
+        Calendar selectedCalendar = Calendar.getInstance();
+        selectedCalendar.setTime(selectedDate);
+        Calendar today = Calendar.getInstance();
+        return selectedCalendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
+
     }
 }
