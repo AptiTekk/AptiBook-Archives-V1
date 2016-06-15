@@ -3,7 +3,8 @@ package com.cintriq.agenda.web.controllers;
 import com.cintriq.agenda.core.AssetService;
 import com.cintriq.agenda.core.entity.Asset;
 import com.cintriq.agenda.core.entity.UserGroup;
-import com.cintriq.agenda.core.utilities.TimeRange;
+import com.cintriq.agenda.core.utilities.time.CalendarRange;
+import com.cintriq.agenda.core.utilities.time.SegmentedTimeRange;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
@@ -68,7 +69,7 @@ public class AssetEditController {
                 tagController.updateAssetTags(selectedAsset);
                 selectedAsset.setNeedsApproval(editableAssetApproval);
 
-                TimeRange availabilityRange = timeSelectionController.getTimeRange();
+                SegmentedTimeRange availabilityRange = timeSelectionController.getSegmentedTimeRange();
                 selectedAsset.setAvailabilityStart(availabilityRange.getStartTime());
                 selectedAsset.setAvailabilityEnd(availabilityRange.getEndTime());
 
@@ -93,9 +94,9 @@ public class AssetEditController {
             tagController.setSelectedAsset(selectedAsset);
             tagController.setSelectedAssetTags(selectedAsset.getTags());
             setEditableAssetApproval(selectedAsset.getNeedsApproval());
-            TimeRange availabilityRange = new TimeRange(selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
-            timeSelectionController.setSelectedStartTimeString(availabilityRange.getStartTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
-            timeSelectionController.setSelectedEndTimeString(availabilityRange.getEndTimeFormatted(TimeRange.FORMAT_TIME_ONLY));
+            SegmentedTimeRange availabilityRange = new SegmentedTimeRange(null, selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
+            timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
+            timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
 
             this.currentAssetOwnerGroup = selectedAsset.getOwner();
         } else {
@@ -103,8 +104,8 @@ public class AssetEditController {
             tagController.setSelectedAsset(null);
             tagController.setSelectedAssetTags(null);
             setEditableAssetApproval(false);
-            timeSelectionController.setSelectedStartTimeString(null);
-            timeSelectionController.setSelectedEndTimeString(null);
+            timeSelectionController.setSelectedStartTime(null);
+            timeSelectionController.setSelectedEndTime(null);
             this.currentAssetOwnerGroup = null;
         }
     }

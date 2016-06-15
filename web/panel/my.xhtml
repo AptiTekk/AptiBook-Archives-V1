@@ -20,8 +20,9 @@
                         <b:panel title="#{reservation.title} - #{reservation.asset.name}" look="info">
                             <h4>#{reservation.title}</h4>
                             <h6>#{reservation.description}</h6>
-                            <p>#{reservation.timeStart.time}</p>
-                            <p>#{reservation.timeEnd.time}</p>
+                            <p>#{reservation.date}</p>
+                            <p>#{reservation.timeStart.timeString}</p>
+                            <p>#{reservation.timeEnd.timeString}</p>
                         </b:panel>
                     </ui:repeat>
                 </ui:fragment>

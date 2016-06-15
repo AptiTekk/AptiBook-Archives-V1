@@ -1,16 +1,19 @@
-package com.cintriq.agenda.core.utilities;
+package com.cintriq.agenda.core.utilities.time;
+
+import com.cintriq.agenda.core.utilities.EqualsHelper;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Used to specify a time range, for example, all of April, first week of March,
  * 12 AM to 12 PM of a certain day... Contains a start time and an end time,
  * using the Calendar object.
  */
-public class TimeRange {
+public class CalendarRange {
 
     public final static SimpleDateFormat FORMAT_TIME_ONLY = new SimpleDateFormat("h:mm a");
     public final static SimpleDateFormat FORMAT_DATE_ONLY = new SimpleDateFormat("dd/MM/yyyy");
@@ -21,23 +24,23 @@ public class TimeRange {
     private Calendar endTime;
 
     /**
-     * Creates a TimeRange using Calendars
+     * Creates a CalendarRange using Calendars
      *
      * @param startTime The start of the time range
      * @param endTime   The end of the time range
      */
-    public TimeRange(Calendar startTime, Calendar endTime) {
+    public CalendarRange(Calendar startTime, Calendar endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     /**
-     * Creates a TimeRange using Dates
+     * Creates a CalendarRange using Dates
      *
      * @param startDate The start of the time range
      * @param endDate   The end of the time range
      */
-    public TimeRange(Date startDate, Date endDate) {
+    public CalendarRange(Date startDate, Date endDate) {
         startTime = Calendar.getInstance();
         startTime.setTime(startDate);
 
@@ -50,7 +53,7 @@ public class TimeRange {
     }
 
     public String getStartTimeFormatted(DateFormat dateFormat) {
-        if(startTime == null || dateFormat == null)
+        if (startTime == null || dateFormat == null)
             return null;
         return dateFormat.format(startTime.getTime());
     }
@@ -64,13 +67,32 @@ public class TimeRange {
     }
 
     public String getEndTimeFormatted(DateFormat dateFormat) {
-        if(endTime == null || dateFormat == null)
+        if (endTime == null || dateFormat == null)
             return null;
         return dateFormat.format(endTime.getTime());
     }
 
     public void setEndTime(Calendar endTime) {
         this.endTime = endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof CalendarRange)) return false;
+
+        CalendarRange other = (CalendarRange) o;
+
+        return EqualsHelper.areEquals(getStartTime(), other.getStartTime())
+                && EqualsHelper.areEquals(getEndTime(), other.getEndTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getStartTime(), getEndTime());
     }
 
 }

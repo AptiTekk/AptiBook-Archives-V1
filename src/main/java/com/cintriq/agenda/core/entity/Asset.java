@@ -1,6 +1,7 @@
 package com.cintriq.agenda.core.entity;
 
 import com.cintriq.agenda.core.utilities.EqualsHelper;
+import com.cintriq.agenda.core.utilities.time.SegmentedTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,11 +20,11 @@ public class Asset implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar availabilityEnd;
+    @Column(columnDefinition = "time")
+    private SegmentedTime availabilityEnd;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar availabilityStart;
+    @Column(columnDefinition = "time")
+    private SegmentedTime availabilityStart;
 
     private String name;
 
@@ -39,6 +40,7 @@ public class Asset implements Serializable {
     private UserGroup owner;
 
     @ManyToMany
+    @OrderBy("name")
     private List<Tag> tags = new ArrayList<>();
 
     private String imageFileName;
@@ -58,19 +60,19 @@ public class Asset implements Serializable {
         this.id = id;
     }
 
-    public Calendar getAvailabilityEnd() {
+    public SegmentedTime getAvailabilityEnd() {
         return this.availabilityEnd;
     }
 
-    public void setAvailabilityEnd(Calendar availabilityEnd) {
+    public void setAvailabilityEnd(SegmentedTime availabilityEnd) {
         this.availabilityEnd = availabilityEnd;
     }
 
-    public Calendar getAvailabilityStart() {
+    public SegmentedTime getAvailabilityStart() {
         return this.availabilityStart;
     }
 
-    public void setAvailabilityStart(Calendar availabilityStart) {
+    public void setAvailabilityStart(SegmentedTime availabilityStart) {
         this.availabilityStart = availabilityStart;
     }
 

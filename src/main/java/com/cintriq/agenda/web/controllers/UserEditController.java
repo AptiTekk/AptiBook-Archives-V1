@@ -19,7 +19,7 @@ public class UserEditController {
     @Inject
     private UserService userService;
 
-    private User user;
+    private User selectedUser;
     private List<User> users;
 
     private String editableUsername;
@@ -40,17 +40,17 @@ public class UserEditController {
     }
 
     public void refreshUserList() {
-        users = (List) userService.getAll();
+        users = userService.getAll();
     }
 
     public void resetSettings() {
-        if (this.user != null) {
-            setEditableUsername(user.getUsername());
-            setEditableFirstName(user.getFirstName());
-            setEditableLastName(user.getLastName());
-            setEditableEmail(user.getEmail());
-            setEditablePhoneNumber(user.getPhoneNumber());
-            setEditableLocation(user.getLocation());
+        if (this.selectedUser != null) {
+            setEditableUsername(selectedUser.getUsername());
+            setEditableFirstName(selectedUser.getFirstName());
+            setEditableLastName(selectedUser.getLastName());
+            setEditableEmail(selectedUser.getEmail());
+            setEditablePhoneNumber(selectedUser.getPhoneNumber());
+            setEditableLocation(selectedUser.getLocation());
 
             setNewPassword("");
             setConfirmPassword("");
@@ -96,23 +96,23 @@ public class UserEditController {
         }
 
         if (FacesContext.getCurrentInstance().getMessageList("userEditForm").isEmpty()) {
-            user.setUsername(editableUsername);
-            user.setFirstName(editableFirstName);
-            user.setLastName(editableLastName);
-            user.setEmail(editableEmail);
-            user.setPhoneNumber(getEditablePhoneNumber());
-            user.setLocation(editableLocation);
+            selectedUser.setUsername(editableUsername);
+            selectedUser.setFirstName(editableFirstName);
+            selectedUser.setLastName(editableLastName);
+            selectedUser.setEmail(editableEmail);
+            selectedUser.setPhoneNumber(getEditablePhoneNumber());
+            selectedUser.setLocation(editableLocation);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage("Account Settings Updated."));
 
             if (!getNewPassword().isEmpty()) {
-                user.setPassword(Sha256Helper.rawToSha(getNewPassword()));
+                selectedUser.setPassword(Sha256Helper.rawToSha(getNewPassword()));
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
                         new FacesMessage("Password Changed Successfully."));
             }
             try {
-                user = userService.merge(user);
+                selectedUser = userService.merge(selectedUser);
                 refreshUserList();
                 editSuccess = true;
             } catch (Exception e) {
@@ -129,11 +129,12 @@ public class UserEditController {
 
         try {
             User newUser = new User();
+            newUser.setUsername("new_user");
             userService.insert(newUser);
 
             if (userService.get(newUser.getId()) != null) {
                 context.addMessage("accountSettingsForm", new FacesMessage("Successful", "New User Added!"));
-                setUser(newUser);
+                setSelectedUser(newUser);
             } else {
                 throw new Exception("User not found!");
             }
@@ -148,10 +149,10 @@ public class UserEditController {
     public void deleteSelectedUser() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            if (userService.get(getUser().getId()) != null) {
+            if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("accountSettingsForm", new FacesMessage("Successful", "User Deleted!"));
-                userService.delete(getUser().getId());
-                setUser(null);
+                userService.delete(getSelectedUser().getId());
+                setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");
             }
@@ -163,12 +164,12 @@ public class UserEditController {
         refreshUserList();
     }
 
-    public User getUser() {
-        return user;
+    public User getSelectedUser() {
+        return selectedUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
         resetSettings();
     }
 

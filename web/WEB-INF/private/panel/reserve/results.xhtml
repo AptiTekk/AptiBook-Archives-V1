@@ -32,28 +32,28 @@
                     </div>
                     <div class="form-group">
                         from
-                        <h:selectOneMenu value="#{TimeSelectionController.selectedStartTimeString}"
-                                         disabled="#{TimeSelectionController.selectedAssetType == null}"
-                                         styleClass="form-control">
+                        <h:selectOneMenu value="#{TimeSelectionController.selectedStartTime}"
+                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
+                                         disabled="#{TimeSelectionController.selectedAssetType == null}">
                             <f:selectItems value="#{TimeSelectionController.startTimes}"
-                                           var="time"/>
+                                           var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
                         to
-                        <h:selectOneMenu value="#{TimeSelectionController.selectedEndTimeString}"
-                                         disabled="#{TimeSelectionController.selectedStartTimeString == null}"
-                                         styleClass="form-control">
+                        <h:selectOneMenu value="#{TimeSelectionController.selectedEndTime}"
+                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
+                                         disabled="#{TimeSelectionController.selectedStartTime == null}">
                             <f:selectItems
-                                    value="#{TimeSelectionController.getEndTimes(TimeSelectionController.selectedStartTimeString)}"
-                                    var="time"/>
+                                    value="#{TimeSelectionController.endTimes}"
+                                    var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
                         <h:commandButton styleClass="btn btn-primary" value="Update Time"
-                                         action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
+                                         action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
                             <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                         </h:commandButton>
                     </div>
@@ -63,35 +63,27 @@
         <b:row style="margin-top:10px">
             <b:column colXs="4">
                 <h:form>
-                <b:panel look="default" title="Filter">
-                    <ui:repeat value="#{TagController.filterTags}" var="tag">
-
-
-                        <td><h:selectBooleanCheckbox value="#{TagController.checkMap[tag]}"/></td>
-                        <tr><h:outputText value="#{tag}"/></tr>
-                        <br/>
-                    </ui:repeat>
-
-                    <h:commandButton styleClass="btn btn-default" value="Filter"
-                                     action="#{AvailableAssetsController.filterAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.timeRange)}">
-                    <f:ajax execute="@form" render=":availableAssetsList"/>
-                    </h:commandButton>
+                <b:panel look="default" title="Filters">
+                    <h:selectManyCheckbox value="#{AvailableAssetsController.selectedFilterTags}" converter="#{TagConverter}" layout="pageDirection">
+                        <f:ajax render=":availableAssetsList" />
+                        <f:selectItems value="#{AvailableAssetsController.filterTags}" var="tag" itemValue="#{tag}" itemLabel="#{tag.name}"/>
+                    </h:selectManyCheckbox>
                 </b:panel>
                 </h:form>
             </b:column>
             <b:column colXs="8">
                 <h:form id="availableAssetsList">
                 <c:choose>
-                    <c:when test="#{empty AvailableAssetsController.availableAssets}">
-                        <h2> No Available #{TimeSelectionController.selectedAssetType.name} Found!</h2>
-                        <h4>Try adjusting your reservation time.</h4>
+                    <c:when test="#{empty AvailableAssetsController.filteredAssets}">
+                        <h2>No Available #{TimeSelectionController.selectedAssetType.name} Found!</h2>
+                        <h4>Try adjusting your reservation time or filters.</h4>
                     </c:when>
                     <c:otherwise>
 
-                            <ui:repeat value="#{AvailableAssetsController.availableAssets}" var="asset">
+                            <ui:repeat value="#{AvailableAssetsController.filteredAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
                                     <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.timeRange)}"/>
+                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.segmentedTimeRange)}"/>
                                 </b:panel>
                             </ui:repeat>
 

@@ -48,7 +48,10 @@ public class GroupEditController {
             try {
                 UserGroup selectedGroup = (UserGroup) selectedNode.getData();
                 selectedGroup.setName(editableGroupName);
+                selectedGroup.setParent((UserGroup) editableGroupParentNode.getData());
+
                 groupService.merge(selectedGroup);
+                resetSettings();
 
                 FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
             } catch (Exception e) {

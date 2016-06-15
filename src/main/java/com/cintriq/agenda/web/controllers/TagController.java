@@ -30,33 +30,9 @@ public class TagController {
 
     private List<String> selectedAssetTypeTagNames = new ArrayList<>();
     private List<Tag> selectedAssetTags = new ArrayList<>();
+
     private Asset selectedAsset;
-    private ArrayList<String> filterTags = new ArrayList<>();
-    private Map<String, Boolean> checkMap = new HashMap<String, Boolean>();
-    private List<String> result = new ArrayList<String>();
-
-    public void availableFilterTags(AssetType assetType) {
-        filterTags.clear();
-        for (Tag availableTag : assetType.getTags()) {
-            // System.out.println("availableTag = "+ availableTag.getName());
-            //System.out.println("availableTag .toString() = "+ availableTag.getName().toString());
-            if (!filterTags.contains(availableTag.getName().toString())) {
-                filterTags.add(availableTag.getName().toString());
-            }
-        }
-    }
-
-    /* Called from AvailbleAssetsController.
-       Returns List<String> of selected checkboxes from Results page.*/
-    public List<String> filter() {
-        List<String> result = new ArrayList<String>();
-        for (Map.Entry<String, Boolean> entry : checkMap.entrySet()) {
-            if (entry.getValue())
-                if (!result.contains(entry.getKey()))
-                    result.add(entry.getKey());
-        }
-        return result;
-    }
+    private List<Tag> availableTags;
 
     private void createNewAssetTypeTag(AssetType assetType, String tagName) {
         if (assetType != null && tagName != null) {
@@ -160,15 +136,14 @@ public class TagController {
     }
 
     public List<Tag> getAssetTagSuggestions(String input) {
-        if (selectedAsset != null) {
-            List<Tag> allTags = selectedAsset.getAssetType().getTags();
+        if (availableTags != null) {
             List<Tag> filteredTags = new ArrayList<>();
 
-            for (Tag tag : allTags) {
+            for (Tag tag : availableTags) {
                 if (selectedAssetTags != null && selectedAssetTags.contains(tag))
                     continue;
 
-                if (tag.getName().toLowerCase().contains(input.toLowerCase()))
+                if (tag.getName().toLowerCase().startsWith(input.toLowerCase()))
                     filteredTags.add(tag);
             }
 
@@ -227,32 +202,7 @@ public class TagController {
 
     void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
+        this.availableTags = selectedAsset.getAssetType().getTags();
     }
-
-    public Map<String, Boolean> getCheckMap() {
-        return checkMap;
-    }
-
-    public void setCheckMap(Map<String, Boolean> checkMap) {
-        this.checkMap = checkMap;
-    }
-
-
-    public ArrayList<String> getFilterTags() {
-        return filterTags;
-    }
-
-    public List<String> getResult() {
-        return result;
-    }
-
-    public void setResult(List<String> result) {
-        this.result = result;
-    }
-
-  /*  public void setFilterTags(ArrayList<String> filterTags) {
-        TagController.filterTags = filterTags;
-    }*/
-
 
 }

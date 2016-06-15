@@ -4,7 +4,8 @@ import com.cintriq.agenda.core.*;
 import com.cintriq.agenda.core.entity.*;
 import com.cintriq.agenda.core.utilities.AgendaLogger;
 import com.cintriq.agenda.core.utilities.NotificationFactory;
-import com.cintriq.agenda.core.utilities.TimeRange;
+import com.cintriq.agenda.core.utilities.time.CalendarRange;
+import com.cintriq.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -123,12 +124,12 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
      * Finds and returns a list of assets that are available for reservation at the given times from the given asset type.
      *
      * @param assetType            The asset type that a reservation is desired to be made from
-     * @param timeRange            The time range of the reservation
+     * @param segmentedTimeRange   The time range of the reservation
      * @param hoursOffsetAllowance An amount of time in hours that the start and end times may be offset in case of not finding any available assets.
      * @return A list of available assets during the selected times.
      */
     @Override
-    public List<Asset> findAvailableAssets(AssetType assetType, TimeRange timeRange, float hoursOffsetAllowance) {
+    public List<Asset> findAvailableAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange, float hoursOffsetAllowance) {
         //This list contains all the assets for the given asset type.
         List<Asset> assetsOfType = assetType.getAssets();
         //This list is what will be returned, it will contain all of the assets that are available for reservation.
@@ -136,11 +137,11 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
         for (Asset asset : assetsOfType) {
             //Check for intersections of previous reservations.
-            if (isAssetAvailableForReservation(asset, timeRange)) {
+            if (isAssetAvailableForReservation(asset, segmentedTimeRange)) {
                 availableAssets.add(asset);
-                AgendaLogger.logVerbose("Available Asset: "+asset.getName());
+                AgendaLogger.logVerbose("Available.");
             } else {
-                AgendaLogger.logVerbose("Un-Available Asset: "+asset.getName());
+                AgendaLogger.logVerbose("Unavailable.");
                 //TODO: Offset time in 30 min intervals
             }
         }
@@ -150,24 +151,29 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
     /**
      * Checks if the specified asset is available for reservation during the specified times.
      *
-     * @param asset     The asset to check
-     * @param timeRange The time range of the reservation
+     * @param asset              The asset to check
+     * @param segmentedTimeRange The time range of the reservation
      * @return true if available, false if not.
      */
-    private boolean isAssetAvailableForReservation(Asset asset, TimeRange timeRange) {
-        //Begin by checking the assets availability times
-        if (timeRange.getEndTime().get(Calendar.HOUR_OF_DAY) * 2 + timeRange.getEndTime().get(Calendar.MINUTE) / 30 > asset.getAvailabilityEnd().get(Calendar.HOUR_OF_DAY) * 2 +  asset.getAvailabilityEnd().get(Calendar.MINUTE) / 30
-                || timeRange.getStartTime().get(Calendar.HOUR_OF_DAY) * 2 + timeRange.getStartTime().get(Calendar.MINUTE) / 30 < asset.getAvailabilityStart().get(Calendar.HOUR_OF_DAY) * 2 + asset.getAvailabilityStart().get(Calendar.MINUTE) / 30)
+    private boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
+        AgendaLogger.logVerbose("Checking " + asset.getName());
+
+        //Return false if the reservation start or end time is not within the availability time of the asset
+        if (asset.getAvailabilityStart().compareTo(segmentedTimeRange.getStartTime()) > 0 || asset.getAvailabilityEnd().compareTo(segmentedTimeRange.getEndTime()) < 0)
             return false;
 
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {
+            //Check date of reservation -- Skip if it's not same day as requested.
+            if (reservation.getDate().get(Calendar.DAY_OF_YEAR) != segmentedTimeRange.getDate().get(Calendar.DAY_OF_YEAR) || reservation.getDate().get(Calendar.YEAR) != segmentedTimeRange.getDate().get(Calendar.YEAR))
+                continue;
+
             //Check for intersection: a ---XX___ b
-            if (reservation.getTimeEnd().compareTo(timeRange.getStartTime()) > 0 && reservation.getTimeStart().compareTo(timeRange.getEndTime()) < 0)
+            if (reservation.getTimeEnd().compareTo(segmentedTimeRange.getStartTime()) > 0 && reservation.getTimeStart().compareTo(segmentedTimeRange.getEndTime()) < 0)
                 return false;
 
             //Check for intersection: b ___XX--- a
-            if (timeRange.getStartTime().compareTo(reservation.getTimeEnd()) > 0 && timeRange.getEndTime().compareTo(reservation.getTimeStart()) < 0)
+            if (segmentedTimeRange.getStartTime().compareTo(reservation.getTimeEnd()) > 0 && segmentedTimeRange.getEndTime().compareTo(reservation.getTimeStart()) < 0)
                 return false;
         }
         return true;

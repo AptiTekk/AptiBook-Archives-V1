@@ -17,9 +17,6 @@ import com.google.api.services.calendar.model.EventDateTime;
 import javax.inject.Inject;
 import java.util.UUID;
 
-/**
- * Created by kevint on 5/16/2016.
- */
 public class GoogleCalendarServiceImpl implements GoogleCalendarService {
 
     @Inject
@@ -52,8 +49,8 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         EventDateTime start = new EventDateTime();
         EventDateTime end = new EventDateTime();
 
-        start.setDateTime(new DateTime(reservation.getTimeStart().getTime()));
-        end.setDateTime(new DateTime(reservation.getTimeEnd().getTime()));
+        start.setDateTime(new DateTime(reservation.getTimeStart().mergeWithCalendar(reservation.getDate()).getTime()));
+        end.setDateTime(new DateTime(reservation.getTimeEnd().mergeWithCalendar(reservation.getDate()).getTime()));
 
         Event reservationEvent = new Event();
         reservationEvent.setId(eventId.toString());
@@ -79,8 +76,8 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
         EventDateTime start = new EventDateTime();
         EventDateTime end = new EventDateTime();
 
-        start.setDateTime(new DateTime(reservation.getTimeStart().getTime()));
-        end.setDateTime(new DateTime(reservation.getTimeEnd().getTime()));
+        start.setDateTime(new DateTime(reservation.getTimeStart().mergeWithCalendar(reservation.getDate()).getTime()));
+        end.setDateTime(new DateTime(reservation.getTimeEnd().mergeWithCalendar(reservation.getDate()).getTime()));
 
         Event reservationEvent = calendarService.events().get(properties.get(CALENDAR_ID_PROPERTY.getKey()), reservation.getGoogleEventId()).execute();
         reservationEvent.setSummary(reservation.getTitle());
