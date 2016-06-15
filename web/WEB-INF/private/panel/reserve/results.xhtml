@@ -24,7 +24,7 @@
                     <div class="form-group">
                         on
                         <p:calendar mode="popup" value="#{TimeSelectionController.selectedDate}"
-                                    mindate="#{TimeSelectionController.today}"
+                                    mindate="#{TimeSelectionController.minDate}"
                                     pattern="#{TimeSelectionController.friendlyDatePattern}"
                                     styleClass="inline-calendar-form-control">
                             <f:ajax event="dateSelect" render="@form"/>
@@ -46,7 +46,7 @@
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
                                          disabled="#{TimeSelectionController.selectedStartTime == null}">
                             <f:selectItems
-                                    value="#{TimeSelectionController.getEndTimes(TimeSelectionController.todaySelected)}"
+                                    value="#{TimeSelectionController.endTimes}"
                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>

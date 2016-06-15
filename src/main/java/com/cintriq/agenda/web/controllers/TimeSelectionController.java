@@ -46,9 +46,6 @@ public class TimeSelectionController {
     private SegmentedTimeRange allowedTimeRange;
     private List<SegmentedTime> allowedTimeSegments;
 
-    private SegmentedTimeRange prunedTimeRange;
-    private List<SegmentedTime> prunedTimeSegments;
-
     private List<AssetType> assetTypes;
     private AssetType selectedAssetType;
 
@@ -58,14 +55,12 @@ public class TimeSelectionController {
     @Inject
     private AssetTypeService assetTypeService;
 
-
     @PostConstruct
     public void init() {
         // ---- Temporary code to generate an allowed time CalendarRange. Should
         // ideally come from a settings page somewhere. ----//
 
         allowedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(6, true), new SegmentedTime(20, true));
-
 
 
         // ---- End Temporary Code ----//
@@ -80,33 +75,15 @@ public class TimeSelectionController {
         }
         startTimes = allowedTimeSegments.subList(0, allowedTimeSegments.size() - 1);
 
-
-        // ---- Pruned Time Range ---- //
-        // Duplicate code for now, will later pass argument into init() from config
-
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        boolean thirtyMinSegment;
-                if(calendar.get(Calendar.MINUTE) < 30){
-                    thirtyMinSegment = true;
-                }else{
-                    thirtyMinSegment = false;
-                    hour += 1;
-                }
-
-
-        prunedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(hour, thirtyMinSegment), new SegmentedTime(20, true));
-
-        //Build a list of all TimeSegments that can be selected
-        prunedTimeSegments = new ArrayList<>();
-        SegmentedTime counterTimePrune = (SegmentedTime) prunedTimeRange.getStartTime().clone();
-
-        while (counterTimePrune.getCurrentSegment() <= prunedTimeRange.getEndTime().getCurrentSegment()) {
-            prunedTimeSegments.add((SegmentedTime) counterTimePrune.clone());
-            counterTimePrune.increaseSegment();
+        SegmentedTime currentSegmentedTime = new SegmentedTime();
+        prunedTimes = new ArrayList<>();
+        for (SegmentedTime time : allowedTimeSegments) {
+            if (time.compareTo(currentSegmentedTime) >= 0)
+                prunedTimes.add(time);
         }
-        prunedTimes = prunedTimeSegments.subList(0, prunedTimeSegments.size() - 1);
 
+        if (prunedTimes.size() > 0)
+            prunedTimes.remove(prunedTimes.size() - 1);
 
         //--End Duplicated code--//
         assetTypes = assetTypeService.getAll();
@@ -122,12 +99,15 @@ public class TimeSelectionController {
             selectedDate = Calendar.getInstance().getTime();
 
         this.selectedDate = selectedDate;
+        calculateEndTimes();
     }
 
-    public List<SegmentedTime> getStartTimes(Boolean isToday) {
-        if(isToday){
-        return prunedTimes;
-        }else{
+    public List<SegmentedTime> getStartTimes(boolean pruneTimes) {
+        if (pruneTimes) {
+            if (!prunedTimes.contains(selectedStartTime))
+                selectedStartTime = null;
+            return prunedTimes;
+        } else {
             return startTimes;
         }
     }
@@ -138,28 +118,30 @@ public class TimeSelectionController {
 
     public void setSelectedStartTime(SegmentedTime selectedStartTime) {
         this.selectedStartTime = selectedStartTime;
+        calculateEndTimes();
     }
 
-    public List<SegmentedTime> getEndTimes(Boolean isToday) {
+    public List<SegmentedTime> getEndTimes() {
         if (selectedStartTime == null)
             return null;
 
         if (selectedStartTime.equals(lastStartTimeUsedForCalculation) && endTimes != null)
             return endTimes;
 
+        return null;
+    }
+
+    private void calculateEndTimes() {
+        lastStartTimeUsedForCalculation = selectedStartTime;
         endTimes = new ArrayList<>();
 
-        if(isToday) {
-            int selectedTimeIndex = prunedTimeSegments.indexOf(selectedStartTime);
-            endTimes = prunedTimeSegments.subList(selectedTimeIndex + 1, prunedTimeSegments.size());
-        }else {
-            int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
-            endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
+        if (selectedStartTime == null) {
+            endTimes = null;
+            return;
         }
-        lastStartTimeUsedForCalculation = selectedStartTime;
-        selectedEndTime = endTimes.get(0);
 
-        return endTimes;
+        int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
+        endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {
@@ -202,16 +184,20 @@ public class TimeSelectionController {
     public String getFriendlyDatePattern() {
         return CalendarRange.FORMAT_DATE_FRIENDLY.toPattern();
     }
-    public Date getToday() {
-        Calendar c = Calendar.getInstance();
-        return c.getTime();
-    }
-    public boolean isTodaySelected(){
 
+    public Date getMinDate() {
+        Calendar minDate = Calendar.getInstance();
+        if (prunedTimes.isEmpty()) //We've passed all the allowed times today.
+            minDate.add(Calendar.DAY_OF_YEAR, 1); //Go to next day.
+
+        return minDate.getTime();
+    }
+
+    public boolean isTodaySelected() {
         Calendar selectedCalendar = Calendar.getInstance();
         selectedCalendar.setTime(selectedDate);
-        Calendar today = Calendar.getInstance();
-        return selectedCalendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR);
 
+        Calendar today = Calendar.getInstance();
+        return selectedCalendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) && selectedCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR);
     }
 }

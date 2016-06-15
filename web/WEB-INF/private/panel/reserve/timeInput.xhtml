@@ -68,7 +68,7 @@
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
                             <pf:calendar value="#{TimeSelectionController.selectedDate}"
-                                         mindate="#{TimeSelectionController.today}"
+                                         mindate="#{TimeSelectionController.minDate}"
                                          mode="inline" styleClass="datepicker-fullwidth">
                                 <f:ajax event="dateSelect" render=":timeForm"/>
                             </pf:calendar>
@@ -91,7 +91,7 @@
                                              styleClass="big-select" converter="#{SegmentedTimeConverter}"
                                              disabled="#{TimeSelectionController.selectedStartTime == null}">
                                 <f:selectItems
-                                        value="#{TimeSelectionController.getEndTimes(TimeSelectionController.todaySelected)}"
+                                        value="#{TimeSelectionController.endTimes}"
                                         var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>

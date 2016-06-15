@@ -19,6 +19,7 @@ public class SegmentedTime implements Comparable<SegmentedTime>, Serializable, C
 
     public SegmentedTime() {
         this.calendar = Calendar.getInstance();
+        this.calendar.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE) < 30 ? 0 : 30);
         cleanCalendar();
     }
 
