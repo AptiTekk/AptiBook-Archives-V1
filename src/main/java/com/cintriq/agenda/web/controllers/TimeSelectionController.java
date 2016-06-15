@@ -20,6 +20,7 @@ public class TimeSelectionController {
     private Date selectedDate = Calendar.getInstance().getTime();
 
     private List<SegmentedTime> startTimes;
+    private List<SegmentedTime> prunedTimes;
     private SegmentedTime selectedStartTime;
 
     private List<SegmentedTime> endTimes;
@@ -54,13 +55,13 @@ public class TimeSelectionController {
     @Inject
     private AssetTypeService assetTypeService;
 
-
     @PostConstruct
     public void init() {
         // ---- Temporary code to generate an allowed time CalendarRange. Should
         // ideally come from a settings page somewhere. ----//
 
         allowedTimeRange = new SegmentedTimeRange(null, new SegmentedTime(6, true), new SegmentedTime(20, true));
+
 
         // ---- End Temporary Code ----//
 
@@ -72,9 +73,19 @@ public class TimeSelectionController {
             allowedTimeSegments.add((SegmentedTime) counterTime.clone());
             counterTime.increaseSegment();
         }
-
         startTimes = allowedTimeSegments.subList(0, allowedTimeSegments.size() - 1);
 
+        SegmentedTime currentSegmentedTime = new SegmentedTime();
+        prunedTimes = new ArrayList<>();
+        for (SegmentedTime time : allowedTimeSegments) {
+            if (time.compareTo(currentSegmentedTime) >= 0)
+                prunedTimes.add(time);
+        }
+
+        if (prunedTimes.size() > 0)
+            prunedTimes.remove(prunedTimes.size() - 1);
+
+        //--End Duplicated code--//
         assetTypes = assetTypeService.getAll();
     }
 
@@ -88,10 +99,17 @@ public class TimeSelectionController {
             selectedDate = Calendar.getInstance().getTime();
 
         this.selectedDate = selectedDate;
+        calculateEndTimes();
     }
 
-    public List<SegmentedTime> getStartTimes() {
-        return startTimes;
+    public List<SegmentedTime> getStartTimes(boolean pruneTimes) {
+        if (pruneTimes) {
+            if (!prunedTimes.contains(selectedStartTime))
+                selectedStartTime = null;
+            return prunedTimes;
+        } else {
+            return startTimes;
+        }
     }
 
     public SegmentedTime getSelectedStartTime() {
@@ -100,6 +118,7 @@ public class TimeSelectionController {
 
     public void setSelectedStartTime(SegmentedTime selectedStartTime) {
         this.selectedStartTime = selectedStartTime;
+        calculateEndTimes();
     }
 
     public List<SegmentedTime> getEndTimes() {
@@ -109,15 +128,20 @@ public class TimeSelectionController {
         if (selectedStartTime.equals(lastStartTimeUsedForCalculation) && endTimes != null)
             return endTimes;
 
+        return null;
+    }
+
+    private void calculateEndTimes() {
+        lastStartTimeUsedForCalculation = selectedStartTime;
         endTimes = new ArrayList<>();
+
+        if (selectedStartTime == null) {
+            endTimes = null;
+            return;
+        }
 
         int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
         endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
-
-        lastStartTimeUsedForCalculation = selectedStartTime;
-        selectedEndTime = endTimes.get(0);
-
-        return endTimes;
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {
@@ -159,5 +183,21 @@ public class TimeSelectionController {
 
     public String getFriendlyDatePattern() {
         return CalendarRange.FORMAT_DATE_FRIENDLY.toPattern();
+    }
+
+    public Date getMinDate() {
+        Calendar minDate = Calendar.getInstance();
+        if (prunedTimes.isEmpty()) //We've passed all the allowed times today.
+            minDate.add(Calendar.DAY_OF_YEAR, 1); //Go to next day.
+
+        return minDate.getTime();
+    }
+
+    public boolean isTodaySelected() {
+        Calendar selectedCalendar = Calendar.getInstance();
+        selectedCalendar.setTime(selectedDate);
+
+        Calendar today = Calendar.getInstance();
+        return selectedCalendar.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR) && selectedCalendar.get(Calendar.YEAR) == today.get(Calendar.YEAR);
     }
 }

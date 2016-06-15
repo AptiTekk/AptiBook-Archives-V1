@@ -68,6 +68,7 @@
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
                             <pf:calendar value="#{TimeSelectionController.selectedDate}"
+                                         mindate="#{TimeSelectionController.minDate}"
                                          mode="inline" styleClass="datepicker-fullwidth">
                                 <f:ajax event="dateSelect" render=":timeForm"/>
                             </pf:calendar>
@@ -81,7 +82,7 @@
                                              disabled="#{TimeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems value="#{TimeSelectionController.startTimes}"
+                                <f:selectItems value="#{TimeSelectionController.getStartTimes(TimeSelectionController.todaySelected)}"
                                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
