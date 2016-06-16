@@ -2,18 +2,13 @@ package com.cintriq.agenda.core.entity;
 
 import com.cintriq.agenda.core.utilities.EqualsHelper;
 
+import javax.persistence.*;
 import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 
 /**
  * Entity implementation class for Entity: ReservationFieldEntry
  */
 @Entity
-
 public class ReservationFieldEntry implements Serializable {
 
     @Id
@@ -23,6 +18,7 @@ public class ReservationFieldEntry implements Serializable {
     private Reservation reservation;
     @ManyToOne
     private ReservationField field;
+    @Lob
     private String content;
     private static final long serialVersionUID = 1L;
 

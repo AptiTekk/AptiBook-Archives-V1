@@ -26,6 +26,9 @@ public class ReservationField implements Serializable {
     @ManyToOne
     private AssetType assetType;
 
+    @Basic
+    private Boolean largeField;
+
     public ReservationField() {
         super();
     }
@@ -60,6 +63,14 @@ public class ReservationField implements Serializable {
 
     public void setAssetType(AssetType assetType) {
         this.assetType = assetType;
+    }
+
+    public Boolean getLargeField() {
+        return largeField;
+    }
+
+    public void setLargeField(Boolean largeField) {
+        this.largeField = largeField;
     }
 
     @Override

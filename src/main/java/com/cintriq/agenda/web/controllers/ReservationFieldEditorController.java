@@ -5,6 +5,7 @@ import com.cintriq.agenda.core.AssetTypeService;
 import com.cintriq.agenda.core.ReservationFieldService;
 import com.cintriq.agenda.core.entity.AssetType;
 import com.cintriq.agenda.core.entity.ReservationField;
+import com.cintriq.agenda.core.utilities.AgendaLogger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "ReservationFieldEditorController")
@@ -30,7 +32,7 @@ public class ReservationFieldEditorController {
     @Inject
     ReservationFieldService reservationFieldService;
 
-    List<ReservationField> fields;
+    List<ReservationField> fields = new ArrayList<>();
 
     ReservationField field;
 
@@ -40,10 +42,11 @@ public class ReservationFieldEditorController {
     }
 
     public void updateSettings() {
-
+        AgendaLogger.logVerbose("Saving " + fields.size() + " fields");
         fields.forEach(field -> {
             try {
                 reservationFieldService.merge(field);
+                AgendaLogger.logVerbose("Saved " + field.getName());
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("pageMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
@@ -56,9 +59,10 @@ public class ReservationFieldEditorController {
     }
 
     public void addField() {
+        AgendaLogger.logVerbose("Adding new field");
         ReservationField field = new ReservationField();
         field.setName("New Field");
-        field.setDescription("Field needs a description so they know what to add.");
+        field.setDescription("Fields need a description so people can add data to their reservation");
         fields.add(field);
     }
 
@@ -110,5 +114,6 @@ public class ReservationFieldEditorController {
 
     public void setType(AssetType type) {
         this.type = type;
+        refreshSettings();
     }
 }
