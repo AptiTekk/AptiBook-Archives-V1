@@ -5,8 +5,8 @@
  */
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
@@ -48,7 +48,7 @@ public class GroupEditController {
             try {
                 UserGroup selectedGroup = (UserGroup) selectedNode.getData();
                 selectedGroup.setName(editableGroupName);
-                selectedGroup.setParent((UserGroup) editableGroupParentNode.getData());
+                selectedGroup.setParent((editableGroupParentNode == null || editableGroupParentNode.getData() == null) ? null : (UserGroup) editableGroupParentNode.getData());
 
                 groupService.merge(selectedGroup);
                 resetSettings();
