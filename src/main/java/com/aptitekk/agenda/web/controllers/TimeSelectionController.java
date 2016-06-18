@@ -142,6 +142,12 @@ public class TimeSelectionController {
 
         int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
         endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
+
+        if(selectedEndTime != null)
+            if(endTimes.contains(selectedEndTime))
+                return;
+
+        selectedEndTime = endTimes.get(0);
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {

@@ -51,7 +51,7 @@ public class AuthenticationFilter implements Filter {
             user = userService.findByName(sessionUsername);
         }
 
-        if (uri.contains("/panel")) {
+        if (uri.contains("/secure")) {
             if (user != null) {
                 chain.doFilter(request, response);
                 return;
@@ -62,7 +62,7 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         } else if (uri.contains(context.getContextPath() + "/index.xhtml") && user != null) {
-            currentRes.sendRedirect(context.getContextPath() + "/panel/reserve.xhtml");
+            currentRes.sendRedirect(context.getContextPath() + "/secure/index.xhtml");
             return;
         } else {
             chain.doFilter(request, response);

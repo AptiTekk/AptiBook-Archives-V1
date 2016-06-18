@@ -116,7 +116,7 @@ public class AccountController {
         if (user != null) {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-            externalContext.redirect(externalContext.getRequestContextPath() + "/panel/reserve.xhtml");
+            externalContext.redirect(externalContext.getRequestContextPath() + "/secure/index.xhtml");
         }
     }
 
