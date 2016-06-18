@@ -8,6 +8,9 @@
       xmlns:b="http://bootsfaces.net/ui">
 
     <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
+        <ui:define name="preRender">
+            <f:event type="preRenderView" listener="#{AccountController.redirectIfLoggedIn()}" />
+        </ui:define>
         <ui:define name="content">
             <div class="texture-bg" style="height: 100%">
                 <b:container id="main-login">

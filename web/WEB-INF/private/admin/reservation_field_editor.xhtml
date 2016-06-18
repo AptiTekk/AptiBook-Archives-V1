@@ -11,79 +11,91 @@
 
 <ui:composition>
     <h:panelGroup id="page">
-        <h2 style="margin-top:50px">Reservation Field Editor</h2>
-
-        <i>Click to edit</i>
-
         <b:messages id="pageMessages"/>
 
-        <h:form id="fieldEditorForm">
+        <b:row>
+            <b:column colXs="12" colSm="5">
+                <h:form>
+                    <div class="form-group">
+                        <b:dataTable value="#{ReservationFieldEditorController.assetTypes}" var="assetType"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     fixedHeader="true" responsive="true">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Asset Type"/>
+                                </f:facet>
+                                <h:commandLink value="#{assetType.name}"
+                                               action="#{ReservationFieldEditorController.setType(assetType)}"
+                                               style="font-weight: #{AssetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                    <f:ajax render=":assetsPage"/>
+                                </h:commandLink>
+                            </h:column>
+                        </b:dataTable>
+                    </div>
+                </h:form>
+            </b:column>
 
-            <!--<pf:outputLabel for="typeSelect" value="Grouping: " />-->
-            <b:selectOneMenu id="typeSelect" value="#{ReservationFieldEditorController.type}"
-                             styleClass="pull-right" onchange="loading">
-                <f:selectItem itemLabel="- Global -" itemValue=""/>
-                <f:selectItems value="#{ReservationFieldEditorController.assetTypes}" var="t"
-                               itemLabel="#{t.name}" itemValue="#{t}"/>
-                <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
-            </b:selectOneMenu>
+            <b:column colXs="12" colSm="7">
 
-            <br/>
+                <h:form id="fieldEditorForm">
+                    <h:panelGroup id="dataTable">
 
-            <h:panelGroup id="dataTable">
+                        <pf:contextMenu for="fieldsDT">
+                            <pf:menuitem value="Add New" update="fieldsDT" icon="ui-icon-plusthick"
+                                         actionListener="#{ReservationFieldEditorController.addField}">
+                                <pf:ajax update=":dataTable" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                            </pf:menuitem>
+                            <pf:menuitem value="Delete" update="fieldsDT" icon="ui-icon-close"
+                                         actionListener="#{ReservationFieldEditorController.deleteField}">
+                                <pf:ajax update=":dataTable" onstart="loading_start()"
+                                         oncomplete="loading_complete()"/>
+                            </pf:menuitem>
+                        </pf:contextMenu>
 
-                <pf:contextMenu for="fieldsDT">
-                    <pf:menuitem value="Add New" update="fieldsDT" icon="ui-icon-plusthick"
-                                 actionListener="#{ReservationFieldEditorController.addField}">
-                        <pf:ajax update=":dataTable" onstart="loading_start()"
-                                 oncomplete="loading_complete()"/>
-                    </pf:menuitem>
-                    <pf:menuitem value="Delete" update="fieldsDT" icon="ui-icon-close"
-                                 actionListener="#{ReservationFieldEditorController.deleteField}">
-                        <pf:ajax update=":dataTable" onstart="loading_start()"
-                                 oncomplete="loading_complete()"/>
-                    </pf:menuitem>
-                </pf:contextMenu>
+                        <pf:dataTable id="fieldsDT" var="field" value="#{ReservationFieldEditorController.fields}"
+                                      rowKey="#{field.id}" editable="true" editMode="cell"
+                                      selection="#{ReservationFieldEditorController.field}" selectionMode="single">
+                            <pf:column headerText="Field Name" priority="1" style="width:30%;">
+                                <pf:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{field.name}"/></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{field.name}"
+                                                                       style="width:96%;color:black;"/></f:facet>
+                                </pf:cellEditor>
+                            </pf:column>
+                            <pf:column headerText="Field Description">
+                                <pf:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{field.description}"/></f:facet>
+                                    <f:facet name="input"><h:inputText value="#{field.description}"
+                                                                       style="width:96%;color:black;"/></f:facet>
+                                </pf:cellEditor>
+                            </pf:column>
+                        </pf:dataTable>
 
-                <pf:dataTable id="fieldsDT" var="field" value="#{ReservationFieldEditorController.fields}"
-                              rowKey="#{field.id}" editable="true" editMode="cell"
-                              selection="#{ReservationFieldEditorController.field}" selectionMode="single">
-                    <pf:column headerText="Field Name" priority="1" style="width:30%;">
-                        <pf:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{field.name}"/></f:facet>
-                            <f:facet name="input"><h:inputText value="#{field.name}"
-                                                               style="width:96%;color:black;"/></f:facet>
-                        </pf:cellEditor>
-                    </pf:column>
-                    <pf:column headerText="Field Description">
-                        <pf:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{field.description}"/></f:facet>
-                            <f:facet name="input"><h:inputText value="#{field.description}"
-                                                               style="width:96%;color:black;"/></f:facet>
-                        </pf:cellEditor>
-                    </pf:column>
-                </pf:dataTable>
+                    </h:panelGroup>
 
-            </h:panelGroup>
+                    <br/>
 
-            <br/>
+                    <b:buttonToolbar>
+                        <b:commandButton look="success" action="#{ReservationFieldEditorController.addField}"
+                                         value="Add New Field">
+                            <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
+                        </b:commandButton>
 
-            <b:buttonToolbar>
-                <b:commandButton look="success" action="#{ReservationFieldEditorController.addField}"
-                                 value="Add New Field">
-                    <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
-                </b:commandButton>
+                        <b:commandButton look="default" action="#{ReservationFieldEditorController.refreshSettings}"
+                                         value="Revert Changes" styleClass="pull-right">
+                            <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
+                        </b:commandButton>
+                        <b:commandButton look="primary" action="#{ReservationFieldEditorController.updateSettings}"
+                                         value="Save Changes" styleClass="pull-right">
+                            <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
+                        </b:commandButton>
+                    </b:buttonToolbar>
+                </h:form>
 
-                <b:commandButton look="default" action="#{ReservationFieldEditorController.refreshSettings}"
-                                 value="Revert Changes" styleClass="pull-right">
-                    <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
-                </b:commandButton>
-                <b:commandButton look="primary" action="#{ReservationFieldEditorController.updateSettings}"
-                                 value="Save Changes" styleClass="pull-right">
-                    <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
-                </b:commandButton>
-            </b:buttonToolbar>
-        </h:form>
+            </b:column>
+
+        </b:row>
 
     </h:panelGroup>
 </ui:composition>

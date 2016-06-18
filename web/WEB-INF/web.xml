@@ -20,7 +20,7 @@
     </servlet>
     <servlet>
         <servlet-name>CalendarCallbackServlet</servlet-name>
-        <servlet-class>com.cintriq.agenda.web.oauth.CalendarCallbackServlet</servlet-class>
+        <servlet-class>com.aptitekk.agenda.web.oauth.CalendarCallbackServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
@@ -28,7 +28,7 @@
     </servlet-mapping>
     <filter>
         <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>com.cintriq.agenda.web.AuthenticationFilter</filter-class>
+        <filter-class>com.aptitekk.agenda.web.AuthenticationFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>

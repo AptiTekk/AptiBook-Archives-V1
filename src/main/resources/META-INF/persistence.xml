@@ -5,16 +5,16 @@
     <persistence-unit name="Agenda" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
-        <class>com.cintriq.agenda.core.entity.AppProperty</class>
-        <class>com.cintriq.agenda.core.entity.Asset</class>
-        <class>com.cintriq.agenda.core.entity.AssetType</class>
-        <class>com.cintriq.agenda.core.entity.Reservation</class>
-        <class>com.cintriq.agenda.core.entity.ReservationApproval</class>
-        <class>com.cintriq.agenda.core.entity.ReservationField</class>
-        <class>com.cintriq.agenda.core.entity.ReservationFieldEntry</class>
-        <class>com.cintriq.agenda.core.entity.User</class>
-        <class>com.cintriq.agenda.core.entity.UserGroup</class>
-        <class>com.cintriq.agenda.core.entity.Tag</class>
+        <class>com.aptitekk.agenda.core.entity.AppProperty</class>
+        <class>com.aptitekk.agenda.core.entity.Asset</class>
+        <class>com.aptitekk.agenda.core.entity.AssetType</class>
+        <class>com.aptitekk.agenda.core.entity.Reservation</class>
+        <class>com.aptitekk.agenda.core.entity.ReservationApproval</class>
+        <class>com.aptitekk.agenda.core.entity.ReservationField</class>
+        <class>com.aptitekk.agenda.core.entity.ReservationFieldEntry</class>
+        <class>com.aptitekk.agenda.core.entity.User</class>
+        <class>com.aptitekk.agenda.core.entity.UserGroup</class>
+        <class>com.aptitekk.agenda.core.entity.Tag</class>
 
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
