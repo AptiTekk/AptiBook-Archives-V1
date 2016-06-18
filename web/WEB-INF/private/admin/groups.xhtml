@@ -45,7 +45,7 @@
                         </c:when>
                         <c:otherwise>
                             <b:column colXs="9" offsetXs="3">
-                                <b:messages for=":groupEditForm"/>
+                                <b:messages for=":groupEditForm" showSummary="false"/>
                                 <h4>Group Settings</h4>
                             </b:column>
 
@@ -60,7 +60,10 @@
                                         </c:when>
                                         <c:otherwise>
                                             <h:inputText styleClass="form-control"
-                                                         value="#{GroupEditController.editableGroupName}"/>
+                                                         value="#{GroupEditController.editableGroupName}" validatorMessage="Group Names must be from 1 to 32 characters and may only contain A-Z, a-z, 0-9, and #">
+                                                <f:validateLength minimum="1" maximum="32" />
+                                                <f:validateRegex pattern="[A-Za-z0-9 #]+"/>
+                                            </h:inputText>
                                         </c:otherwise>
                                     </c:choose>
                                 </b:column>
