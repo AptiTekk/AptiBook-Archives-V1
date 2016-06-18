@@ -22,7 +22,7 @@ import javax.inject.Inject;
 public class GroupEditController {
 
     @Inject
-    private UserGroupService groupService;
+    private UserGroupService userGroupService;
 
     private TreeNode selectedNode;
 
@@ -36,7 +36,7 @@ public class GroupEditController {
     }
 
     public void updateSettings() {
-        UserGroup group = groupService.findByName(editableGroupName);
+        UserGroup group = userGroupService.findByName(editableGroupName);
         if (group != null && !group.equals(selectedNode.getData()))
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Group with that name already exists!"));
         else if (editableGroupName.isEmpty())
@@ -48,9 +48,9 @@ public class GroupEditController {
             try {
                 UserGroup selectedGroup = (UserGroup) selectedNode.getData();
                 selectedGroup.setName(editableGroupName);
-                selectedGroup.setParent((editableGroupParentNode == null || editableGroupParentNode.getData() == null) ? null : (UserGroup) editableGroupParentNode.getData());
+                selectedGroup.setParent((editableGroupParentNode == null || editableGroupParentNode.getData() == null) ? userGroupService.getRootGroup() : (UserGroup) editableGroupParentNode.getData());
 
-                groupService.merge(selectedGroup);
+                userGroupService.merge(selectedGroup);
                 resetSettings();
 
                 FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
@@ -82,14 +82,14 @@ public class GroupEditController {
                 UserGroup childGroup = (UserGroup) child.getData();
                 childGroup.setParent(parentGroup);
                 try {
-                    groupService.merge(childGroup);
+                    userGroupService.merge(childGroup);
                 } catch (Exception e) {
                     e.printStackTrace();
                     FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
             try {
-                groupService.delete(selectedGroup.getId()); //Remove selected group from database
+                userGroupService.delete(selectedGroup.getId()); //Remove selected group from database
                 selectedNode = null;
 
                 FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
@@ -104,11 +104,11 @@ public class GroupEditController {
         try {
             UserGroup newGroup = new UserGroup();
             newGroup.setName("New Group");
-            UserGroup parentGroup = selectedNode == null ? groupService.getRootGroup() : (UserGroup) selectedNode.getData();
+            UserGroup parentGroup = selectedNode == null ? userGroupService.getRootGroup() : (UserGroup) selectedNode.getData();
             newGroup.setParent(parentGroup);
             parentGroup.getChildren().add(newGroup);
-            groupService.insert(newGroup);
-            groupService.merge(parentGroup);
+            userGroupService.insert(newGroup);
+            userGroupService.merge(parentGroup);
 
             FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
         } catch (Exception e) {
