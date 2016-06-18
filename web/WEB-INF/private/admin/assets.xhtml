@@ -184,7 +184,7 @@
                                                                           itemLabel="--- Select a Time ---"
                                                                           noSelectionOption="true"/>
                                                             <f:selectItems
-                                                                    value="#{TimeSelectionController.startTimes}"
+                                                                    value="#{TimeSelectionController.getStartTimes(false)}"
                                                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                                             <f:ajax render="@form"
                                                                     onevent="loading"/>
