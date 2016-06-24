@@ -12,11 +12,11 @@ import java.util.List;
 public class SettingsController {
 
     public enum SettingsPage {
-        PROPERTIES("Properties", "properties.xhtml", "cog"),
-        USERS("Users", "users.xhtml", "user"),
-        GROUPS("Groups", "groups.xhtml", "sitemap"),
         ASSETS("Assets", "assets.xhtml", "tags"),
         RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o"),
+        GROUPS("User Groups", "groups.xhtml", "sitemap"),
+        USERS("Users", "users.xhtml", "user"),
+        PROPERTIES("Properties", "properties.xhtml", "cog"),
         SERVICES("Services", "services.xhtml", "server");
 
         private String name;

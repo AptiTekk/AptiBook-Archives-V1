@@ -25,9 +25,14 @@ public class GroupTreeController {
         Queue<TreeNode> queue = new LinkedList<>();
         TreeNode rootNode = new DefaultTreeNode(rootGroup);
         rootNode.setExpanded(true);
-        if (currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
-            rootNode.setSelected(true);
-        queue.add(rootNode);
+        if (allowRootSelection) {
+            TreeNode artificialRootNode = new DefaultTreeNode(rootGroup, rootNode);
+            artificialRootNode.setExpanded(true);
+            if (currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
+                artificialRootNode.setSelected(true);
+            queue.add(artificialRootNode);
+        } else
+            queue.add(rootNode);
 
         TreeNode currEntry;
 
