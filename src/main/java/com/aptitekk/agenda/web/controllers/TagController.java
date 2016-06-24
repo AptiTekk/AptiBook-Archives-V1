@@ -156,7 +156,10 @@ public class TagController {
 
     public void setSelectedAssetTypeTagNames(List<String> selectedAssetTypeTagNames) {
         if (selectedAssetTypeTagNames == null) {
-            this.selectedAssetTypeTagNames = null;
+            if (this.selectedAssetTypeTagNames != null)
+                this.selectedAssetTypeTagNames.clear();
+            else
+                this.selectedAssetTypeTagNames = new ArrayList<>();
             return;
         }
 

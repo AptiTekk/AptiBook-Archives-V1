@@ -62,8 +62,8 @@
                                         <c:otherwise>
                                             <h:inputText styleClass="form-control"
                                                          value="#{GroupEditController.editableGroupName}"
-                                                         required="true" requiredMessage="The Group Name is required."
-                                                         validatorMessage="Group Names must be unique, a maximum of 32 characters long, and may only contain A-Z, a-z, 0-9, spaces, and #">
+                                                         required="true" requiredMessage="The Group Name is Required."
+                                                         validatorMessage="The Group Name must be unique, have a maximum of 32 characters, and may only contain A-Z, a-z, 0-9, spaces, and #">
                                                 <f:validateLength maximum="32"/>
                                                 <f:validateRegex pattern="[A-Za-z0-9 #]+"/>
                                             </h:inputText>
