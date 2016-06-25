@@ -59,37 +59,11 @@ public class UserEditController {
 
     public void updateSettings() {
         editSuccess = false;
-        if (getEditableUsername().isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage("Username cannot be empty."));
-        }
-
-        //TODO: Check if username already exists, check regex
-
-        if (!getEditableFirstName().isEmpty() && !getEditableFirstName().matches("[A-Za-z'-]+")) {
-            FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage("First Name may only contain A-Z, a-z, apostrophe, and dash."));
-        }
-
-        if (!getEditableLastName().isEmpty() && !getEditableLastName().matches("[A-Za-z'-]+")) {
-            FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage("Last Name may only contain A-Z, a-z, apostrophe, and dash."));
-        }
-
-        if (!getEditableEmail().isEmpty() && !getEditableEmail().matches("[A-Za-z\\.\\+0-9@]+")) {
-            FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage("Invalid Email Format."));
-        }
-
-        if (!getEditablePhoneNumber().isEmpty()
-                && !getEditablePhoneNumber().matches("[0-9\\- \\(\\)]+")) {
-            FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage("Invalid Phone Number Format."));
-        }
 
         if (!getNewPassword().isEmpty()) {
             if (!getConfirmPassword().equals(getNewPassword())) {
-                FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage("Passwords do not match."));
+                FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Passwords do not match."));
                 setNewPassword("");
                 setConfirmPassword("");
             }
@@ -104,12 +78,12 @@ public class UserEditController {
             selectedUser.setLocation(editableLocation);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage("Account Settings Updated."));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
 
-            if (!getNewPassword().isEmpty()) {
+            if (!getNewPassword().isEmpty() && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
                 selectedUser.setPassword(Sha256Helper.rawToSha(getNewPassword()));
-                FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage("Password Changed Successfully."));
+                FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
             }
             try {
                 selectedUser = userService.merge(selectedUser);
@@ -118,7 +92,7 @@ public class UserEditController {
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
             }
 
         }
@@ -133,14 +107,14 @@ public class UserEditController {
             userService.insert(newUser);
 
             if (userService.get(newUser.getId()) != null) {
-                context.addMessage("userEditForm", new FacesMessage("Successful", "New User Added!"));
+                context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New User Added!"));
                 setSelectedUser(newUser);
             } else {
                 throw new Exception("User not found!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage("userEditForm", new FacesMessage("Failure", "Error While Adding User!"));
+            context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
         }
 
         refreshUserList();
@@ -150,7 +124,7 @@ public class UserEditController {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (userService.get(getSelectedUser().getId()) != null) {
-                context.addMessage("userEditForm", new FacesMessage("Successful", "User Deleted!"));
+                context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
                 setSelectedUser(null);
             } else {
@@ -158,7 +132,7 @@ public class UserEditController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage("userEditForm", new FacesMessage("Failure", "Error While Deleting User!"));
+            context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
         }
 
         refreshUserList();

@@ -163,7 +163,7 @@ public class User implements Serializable {
         if (getFirstName() == null || getFirstName().isEmpty())
             return getUsername();
         else
-            return getFirstName() + " " + (getLastName() == null ? "" : getLastName());
+            return getFirstName() + (getLastName() == null ? "" : " " + getLastName());
     }
 
     public boolean isAdmin() {

@@ -17,8 +17,8 @@
         <display-name>*</display-name>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-outcome>account</from-outcome>
-            <to-view-id>/secure/account.xhtml</to-view-id>
+            <from-outcome>userSettings</from-outcome>
+            <to-view-id>/secure/userSettings.xhtml</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -47,15 +47,6 @@
             <from-outcome>settings</from-outcome>
             <to-view-id>/admin/settings.xhtml</to-view-id>
             <redirect />
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
-        <display-name>*</display-name>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
-            <from-outcome>reserve</from-outcome>
-            <to-view-id>/secure/reserve.xhtml</to-view-id>
-            <redirect/>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>

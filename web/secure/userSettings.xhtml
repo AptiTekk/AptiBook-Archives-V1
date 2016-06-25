@@ -6,83 +6,40 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:b="http://bootsfaces.net/ui">
 
-<ui:composition>
-    <h:panelGroup layout="block" id="usersPage">
-        <b:row>
-            <b:column colXs="12" colSm="5">
-                <h:form>
-                    <div class="form-group">
-                        <b:dataTable value="#{UserEditController.users}" var="authenticatedUser"
-                                     styleClass="table table-striped table-bordered" style="width:100%;"
-                                     fixedHeader="true" responsive="true">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Username"/>
-                                </f:facet>
-                                <h:commandLink value="#{authenticatedUser.username}"
-                                               action="#{UserEditController.setSelectedUser(authenticatedUser)}"
-                                               style="font-weight: #{UserEditController.selectedUser == authenticatedUser ? 'bold' : 'normal'}">
-                                    <f:ajax render=":usersPage"/>
-                                </h:commandLink>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Full Name"/>
-                                </f:facet>
-                                <h:outputText value="#{authenticatedUser.fullname}"/>
-                            </h:column>
-                        </b:dataTable>
-                    </div>
-                    <div class="form-group">
-                        <h:commandButton action="#{UserEditController.addNewUser}"
-                                         styleClass="btn btn-primary" value="Add New User">
-                            <f:ajax render=":usersPage" onevent="loading"/>
-                        </h:commandButton>
-                    </div>
-                </h:form>
-            </b:column>
+<ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="preRender">
+        <f:event type="preRenderView"
+                 listener="#{UserEditController.setSelectedUser(AuthenticationController.authenticatedUser)}"/>
+    </ui:define>
+    <ui:define name="content">
+        <b:container id="userEditPage">
+            <ol class="breadcrumb" style="margin-top: 20px">
+                <li><h:link outcome="index" value="Home"/></li>
+                <li class="active">User Settings</li>
+            </ol>
 
-            <b:column colXs="12" colSm="7">
-                <c:choose>
-                    <c:when test="#{UserEditController.selectedUser == null}">
-                        <b:column colXs="9" offsetXs="3">
-                            <h4>Please select a User.</h4>
-                            <b:messages showSummary="false" showDetail="true"/>
-                        </b:column>
-                    </c:when>
-                    <c:otherwise>
-                        <h:form styleClass="form-horizontal" id="userEditForm">
+            <ui:fragment rendered="#{UserEditController.selectedUser != null}">
+                <div class="page-header">
+                    <h2>User Settings for #{UserEditController.selectedUser.fullname}</h2>
+                </div>
+
+                <b:row>
+                    <b:column colXs="12" colMd="8">
+                        <h:form id="userEditForm" styleClass="form-horizontal">
                             <div class="form-group">
                                 <b:column colXs="9" offsetXs="3">
                                     <h4>Personal Information:</h4>
-                                    * = Required
                                     <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Username: *" styleClass="col-xs-3 control-label"/>
+                                <h:outputLabel value="Username:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
-                                    <c:choose>
-                                        <c:when test="#{UserEditController.selectedUser.immutableUsername}">
-                                            <h:outputText styleClass="form-control"
-                                                          value="#{UserEditController.editableUsername}"
-                                                          p:disabled="true"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
-                                            <h:inputText id="usernameEdit" styleClass="form-control"
-                                                         value="#{UserEditController.editableUsername}"
-                                                         disabled="#{UserEditController.selectedUser == null}"
-                                                         required="true" requiredMessage="This is required."
-                                                         validatorMessage="Must be unique, have a maximum of 32 characters, and may only contain letters, numbers, underscores, and hyphens.">
-                                                <f:validateLength maximum="32"/>
-                                                <f:validateRegex pattern="[A-Za-z0-9_-]+"/>
-                                            </h:inputText>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <h:outputText styleClass="col-xs-9 form-control"
+                                                  value="#{UserEditController.selectedUser.username}"
+                                                  p:disabled="true"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -91,7 +48,6 @@
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableFirstName}"
-                                                 disabled="#{UserEditController.selectedUser == null}"
                                                  validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
                                         <f:validateLength maximum="32"/>
                                         <f:validateRegex pattern="[A-Za-z'-,.]*"/>
@@ -104,7 +60,6 @@
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableLastName}"
-                                                 disabled="#{UserEditController.selectedUser == null}"
                                                  validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
                                         <f:validateLength maximum="32"/>
                                         <f:validateRegex pattern="[A-Za-z'-,.]*"/>
@@ -116,11 +71,10 @@
                                 <b:column colXs="9">
                                     <b:message for="emailEdit" showSummary="false" showDetail="true"/>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-envelope"/></span>
+                                            <span class="input-group-addon"><span
+                                                    class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableEmail}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      validatorMessage="May be a maximum of 64 characters, and must contain @, a domain, and an extension. (Ex: email@domain.com)">
                                             <f:validateLength maximum="64"/>
                                             <f:validateRegex pattern="(.+@.+\..+)?"/>
@@ -133,11 +87,10 @@
                                 <b:column colXs="9">
                                     <b:message for="phoneEdit" showSummary="false" showDetail="true"/>
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-earphone"/></span>
+                                            <span class="input-group-addon"><span
+                                                    class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
                                                      value="#{UserEditController.editablePhoneNumber}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      validatorMessage="May be a maximum of 32 characters, and may only contain numbers, letters, parentheses, hyphens, spaces, periods, and +.">
                                             <f:validateLength maximum="32"/>
                                             <f:validateRegex pattern="[0-9a-zA-Z-(). +]*"/>
@@ -154,7 +107,6 @@
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableLocation}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      validatorMessage="May be a maximum of 128 characters.">
                                             <f:validateLength maximum="128"/>
                                         </h:inputText>
@@ -171,11 +123,10 @@
                                 <h:outputLabel value="New Password:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk"/></span>
+                                            <span class="input-group-addon"><span
+                                                    class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret id="passwordEdit" styleClass="form-control"
-                                                       value="#{UserEditController.newPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}"/>
+                                                       value="#{UserEditController.newPassword}"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -183,11 +134,10 @@
                                 <h:outputLabel value="Confirm New Password:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk"/></span>
+                                            <span class="input-group-addon"><span
+                                                    class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret styleClass="form-control"
-                                                       value="#{UserEditController.confirmPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}"/>
+                                                       value="#{UserEditController.confirmPassword}"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -196,48 +146,27 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{UserEditController.updateSettings()}"
-                                                         disabled="#{UserEditController.selectedUser == null}">
-                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                                         action="#{UserEditController.updateSettings()}">
+                                            <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{UserEditController.resetSettings()}"
-                                                         disabled="#{UserEditController.selectedUser == null}">
-                                            <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
+                                                         action="#{UserEditController.resetSettings()}">
+                                            <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
                                         </h:commandButton>
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete User"
-                                                  style="display: inline-block"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"
-                                                  disabled="#{UserEditController.selectedUser == null or
-                                                              UserEditController.selectedUser.immutableUsername}"/>
                                     </div>
                                 </div>
                             </div>
                         </h:form>
-                    </c:otherwise>
-                </c:choose>
-            </b:column>
-        </b:row>
+                    </b:column>
+                </b:row>
+            </ui:fragment>
 
-        <!-- Deletion Confirmation Modal -->
-        <b:modal id="deletionConfirmModal" title="User
-                         Deletion Confirmation">
-            Are you sure you want to delete authenticatedUser '#{UserEditController.selectedUser.username}'?
-            <f:facet name="footer">
-                <b:button styleClass="btn btn-default"
-                          p:data-dismiss="modal" value="Cancel"/>
-                <h:commandButton styleClass="btn btn-danger"
-                                 p:data-dismiss="modal" value="Delete"
-                                 action="#{UserEditController.deleteSelectedUser}">
-                    <f:ajax render=":usersPage" onevent="loading"/>
-                </h:commandButton>
-            </f:facet>
-        </b:modal>
-        <!-- End Deletion Confirmation Modal -->
-    </h:panelGroup>
+            <ui:fragment rendered="#{UserEditController.selectedUser == null}">
+                <h2>Not Logged In!</h2>
+            </ui:fragment>
+        </b:container>
+    </ui:define>
 </ui:composition>
 
 </html>

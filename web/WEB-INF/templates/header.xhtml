@@ -13,34 +13,34 @@
               onclick="loading_start()">
         <h:panelGroup
                 layout="block" id="header">
-            <ui:fragment rendered="#{AccountController.user == null}">
+            <ui:fragment rendered="#{AuthenticationController.authenticatedUser == null}">
                 <h:form id="loginForm" styleClass="navbar-form navbar-right"
                         p:aria-expanded="false" style="height: 1px;">
                     <h:message for="loginForm" style="color:red;"/>
                     <div class="form-group">
                         <h:inputText p:placeholder="Username" styleClass="form-control"
-                                     autocomplete="off" value="#{AccountController.username}"/>
+                                     autocomplete="off" value="#{AuthenticationController.username}"/>
                     </div>
                     <div class="form-group">
                         <h:inputSecret p:placeholder="Password" styleClass="form-control"
-                                       autocomplete="off" value="#{AccountController.password}"/>
+                                       autocomplete="off" value="#{AuthenticationController.password}"/>
                     </div>
                     <h:commandButton styleClass="btn btn-success" value="Sign In"
-                                     action="#{AccountController.login}" style="margin-left: 5px;">
+                                     action="#{AuthenticationController.login}" style="margin-left: 5px;">
                         <f:ajax execute="@form" onevent="loading()"/>
                     </h:commandButton>
                 </h:form>
             </ui:fragment>
 
-            <ui:fragment rendered="#{AccountController.user != null}">
+            <ui:fragment rendered="#{AuthenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
                         <b:navLink outcome="manage" value="Manage Reservations" icon="glyphicon-edit"
                                    onclick="loading_start()"
-                                   rendered="#{AccountController.user.userGroups.size() > 0}"/>
+                                   rendered="#{AuthenticationController.authenticatedUser.userGroups.size() > 0}"/>
                         <b:navLink outcome="settings" value="Agenda Settings" icon="glyphicon-cog"
-                                   onclick="loading_start()" rendered="#{AccountController.user.isAdmin()}"/>
-                        <b:dropMenu value="#{AccountController.user.fullname}" icon="glyphicon-user">
+                                   onclick="loading_start()" rendered="#{AuthenticationController.authenticatedUser.isAdmin()}"/>
+                        <b:dropMenu value="#{AuthenticationController.authenticatedUser.fullname}" icon="glyphicon-user">
 
                             <b:navLink outcome="notifications" icon="glyphicon-bell"
                                        onclick="loading_start()">
@@ -53,10 +53,10 @@
                             </b:navLink>
                             <b:navLink outcome="my" value="My Reservations" icon="glyphicon-calendar"
                                        onclick="loading_start()"/>
-                            <b:navLink outcome="account" value="Account Settings" icon="glyphicon-cog"
+                            <b:navLink outcome="userSettings" value="User Settings" icon="glyphicon-cog"
                                        onclick="loading_start()"/>
                             <b:navLink/>
-                            <b:navCommandLink action="#{AccountController.logout}" value="Sign Out"
+                            <b:navCommandLink action="#{AuthenticationController.logout}" value="Sign Out"
                                               icon="glyphicon-log-out"/>
                         </b:dropMenu>
 

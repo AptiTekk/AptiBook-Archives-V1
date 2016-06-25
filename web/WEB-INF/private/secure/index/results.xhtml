@@ -83,7 +83,7 @@
                             <ui:repeat value="#{AvailableAssetsController.filteredAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
                                     <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                     action="#{AvailableAssetsController.onMakeReservationFired(AccountController.user, asset, TimeSelectionController.segmentedTimeRange)}"/>
+                                                     action="#{AvailableAssetsController.onMakeReservationFired(AuthenticationController.authenticatedUser, asset, TimeSelectionController.segmentedTimeRange)}"/>
                                 </b:panel>
                             </ui:repeat>
 

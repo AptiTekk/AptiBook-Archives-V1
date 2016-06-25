@@ -94,9 +94,9 @@
                                 <b:column colXs="9">
                                     <pf:dataList
                                             value="#{GroupEditController.selectedGroup.users}"
-                                            var="user" type="unordered" itemType="none" paginator="true" rows="10"
+                                            var="authenticatedUser" type="unordered" itemType="none" paginator="true" rows="10"
                                             styleClass="paginated">
-                                        <h:outputText value="#{user.username}" style="display:inline-block"/>
+                                        <h:outputText value="#{authenticatedUser.username}" style="display:inline-block"/>
                                     </pf:dataList>
                                 </b:column>
                             </div>

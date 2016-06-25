@@ -38,7 +38,7 @@
         <security-realms>
             <security-realm name="ManagementRealm">
                 <authentication>
-                    <local default-user="$local" skip-group-loading="true"/>
+                    <local default-authenticatedUser="$local" skip-group-loading="true"/>
                     <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
                 </authentication>
                 <authorization map-groups-to-roles="false">
@@ -47,7 +47,7 @@
             </security-realm>
             <security-realm name="ApplicationRealm">
                 <authentication>
-                    <local default-user="$local" allowed-users="*" skip-group-loading="true"/>
+                    <local default-authenticatedUser="$local" allowed-users="*" skip-group-loading="true"/>
                     <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
                 </authentication>
                 <authorization>
@@ -77,7 +77,7 @@
             <role-mapping>
                 <role name="SuperUser">
                     <include>
-                        <user name="$local"/>
+                        <authenticatedUser name="$local"/>
                     </include>
                 </role>
             </role-mapping>
@@ -140,7 +140,7 @@
                     <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
                     <driver>h2</driver>
                     <security>
-                        <user-name>sa</user-name>
+                        <authenticatedUser-name>sa</authenticatedUser-name>
                         <password>sa</password>
                     </security>
                 </datasource>
@@ -148,7 +148,7 @@
                     <connection-url>jdbc:mysql://${env.OPENSHIFT_MYSQL_DB_HOST}:${env.OPENSHIFT_MYSQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
                     <driver>mysql</driver>
                     <security>
-                      <user-name>${env.OPENSHIFT_MYSQL_DB_USERNAME}</user-name>
+                      <authenticatedUser-name>${env.OPENSHIFT_MYSQL_DB_USERNAME}</authenticatedUser-name>
                       <password>${env.OPENSHIFT_MYSQL_DB_PASSWORD}</password>
                     </security>
                     <validation>
@@ -165,7 +165,7 @@
                     <connection-url>jdbc:postgresql://${env.OPENSHIFT_POSTGRESQL_DB_HOST}:${env.OPENSHIFT_POSTGRESQL_DB_PORT}/${env.OPENSHIFT_APP_NAME}</connection-url>
                     <driver>postgresql</driver>
                     <security>
-                      <user-name>${env.OPENSHIFT_POSTGRESQL_DB_USERNAME}</user-name>
+                      <authenticatedUser-name>${env.OPENSHIFT_POSTGRESQL_DB_USERNAME}</authenticatedUser-name>
                       <password>${env.OPENSHIFT_POSTGRESQL_DB_PASSWORD}</password>
                     </security>
                     <validation>

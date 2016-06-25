@@ -1,8 +1,8 @@
 package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.AssetService;
-import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.entity.Asset;
+import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.validation.constraints.*;
 
 @ManagedBean(name = "AssetEditController")
 @ViewScoped
@@ -25,7 +26,10 @@ public class AssetEditController {
     private Asset selectedAsset;
     private int selectedAssetIndex = -1;
 
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[A-Za-z0-9 #]+", message = "This may only contain letters, numbers, spaces, and #.")
     private String editableAssetName;
+
     private boolean editableAssetApproval;
     private TreeNode editableAssetOwnerGroup;
     private UserGroup currentAssetOwnerGroup;
@@ -35,7 +39,7 @@ public class AssetEditController {
 
     public void setAssetTypeEditController(AssetTypeEditController assetTypeEditController) {
         this.assetTypeEditController = assetTypeEditController;
-        if(assetTypeEditController != null)
+        if (assetTypeEditController != null)
             assetTypeEditController.setAssetEditController(this);
     }
 
@@ -55,18 +59,20 @@ public class AssetEditController {
 
     public void updateSettings() {
         if (selectedAsset != null) {
+            boolean update = true;
+
             Asset asset = assetService.findByName(editableAssetName);
-            if (asset != null && !asset.equals(selectedAsset))
-                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with that name already exists!"));
-            else if (editableAssetName.isEmpty())
-                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name cannot be empty!"));
-            else if (!editableAssetName.matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name may only contain A-Z, a-z, 0-9, #, and space!"));
+            if (asset != null && !asset.equals(selectedAsset)) {
+                FacesContext.getCurrentInstance().addMessage("assetEditForm:name", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with that name already exists!"));
+                update = false;
+            }
 
-            if (editableAssetOwnerGroup == null && currentAssetOwnerGroup == null)
-                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset!"));
+            if (editableAssetOwnerGroup == null && currentAssetOwnerGroup == null) {
+                FacesContext.getCurrentInstance().addMessage("assetEditForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This is required. Please select an owner group for this asset."));
+                update = false;
+            }
 
-            if (FacesContext.getCurrentInstance().getMessageList("assetEditForm").isEmpty()) {
+            if (update) {
                 selectedAsset.setName(editableAssetName);
                 tagController.updateAssetTags(selectedAsset);
                 selectedAsset.setNeedsApproval(editableAssetApproval);
@@ -81,7 +87,7 @@ public class AssetEditController {
 
                     setSelectedAsset(assetService.merge(selectedAsset));
                     this.assetTypeEditController.refreshAssetTypes();
-                    FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Updated"));
+                    FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
                     FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
@@ -141,7 +147,7 @@ public class AssetEditController {
     public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
 
-        if(assetTypeEditController != null && assetTypeEditController.getSelectedAssetType() != null)
+        if (assetTypeEditController != null && assetTypeEditController.getSelectedAssetType() != null)
             selectedAssetIndex = assetTypeEditController.getSelectedAssetType().getAssets().indexOf(selectedAsset);
         else
             selectedAssetIndex = -1;
