@@ -100,7 +100,7 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     width: 100%;
 }
 
-.dropdown>.ui-autocomplete-multiple-container.ui-inputfield {
+.dropdown > .ui-autocomplete-multiple-container.ui-inputfield {
     display: inline-block;
     width: calc(100% - 2.4em);
 }
@@ -270,6 +270,29 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 
 .ui-draggable-dragging {
     border: 1px dotted black;
+    height: 25px !important;
+}
+
+.ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable .ui-treenode-icon,
+.ui-tree .ui-treenode-label.ui-state-hover, .ui-tree .ui-treenode-label.ui-state-highlight {
+    border: 1px solid #ccc !important;
+}
+
+.ui-tree-droppoint {
+    height: 10px !important;
+}
+
+.ui-tree.ui-widget-content {
+    border: none !important;
+}
+
+.ui-tree .ui-treenode-label {
+    padding: 2px 5px !important;
+}
+
+.ui-tree .ui-tree-toggler {
+    margin-top: 4px;
+    margin-right: 2px;
 }
 
 /* ---------------------------------- END DRAG DROP ---------------------------------- */

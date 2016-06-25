@@ -23,10 +23,8 @@
                                 <c:otherwise>
                                     <pf:tree id="tree"
                                              value="#{GroupTreeController.getTree(GroupEditController.selectedGroup, null, false)}"
-                                             var="node"
-                                             draggable="true" droppable="true" selectionMode="single"
-                                             dynamic="true"
-                                             selection="#{GroupEditController.selectedNode}">
+                                             var="node" draggable="true" droppable="true" selectionMode="single"
+                                             dynamic="true" selection="#{GroupEditController.selectedNode}">
                                         <pf:ajax event="select" update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
                                         <pf:treeNode>
@@ -41,7 +39,8 @@
                         <h:commandButton styleClass="btn btn-success"
                                          value="Add New User Group"
                                          action="#{GroupEditController.addGroup()}">
-                            <f:ajax render=":groupsPage" onevent="loading" listener="#{GroupTreeController.invalidateTrees()}"/>
+                            <f:ajax render=":groupsPage" onevent="loading"
+                                    listener="#{GroupTreeController.invalidateTrees()}"/>
                         </h:commandButton>
                     </div>
                 </h:form>
