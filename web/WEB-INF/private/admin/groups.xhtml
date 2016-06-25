@@ -40,14 +40,14 @@
                     <c:choose>
                         <c:when test="#{GroupEditController.selectedNode == null}">
                             <b:column colXs="9" offsetXs="3">
-                                <b:messages for=":groupEditForm"/>
                                 <h4>Please select a group.</h4>
+                                <b:message for=":groupEditForm"/>
                             </b:column>
                         </c:when>
                         <c:otherwise>
                             <b:column colXs="9" offsetXs="3">
-                                <b:messages for=":groupEditForm" showSummary="false"/>
                                 <h4>Group Settings</h4>
+                                <b:message for=":groupEditForm" showSummary="false"/>
                             </b:column>
 
                             <div class="form-group">

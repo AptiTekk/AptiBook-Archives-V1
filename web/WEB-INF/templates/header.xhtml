@@ -35,18 +35,14 @@
             <ui:fragment rendered="#{AccountController.user != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
-                        <ui:fragment
-                                rendered="#{AccountController.user.userGroups.size() > 0}">
-                            <b:navLink outcome="manage" value="Manage Reservations" icon="glyphicon-edit"
-                                       onclick="loading_start()"/>
-                        </ui:fragment>
-                        <ui:fragment rendered="#{AccountController.user.isAdmin()}">
-                            <b:navLink outcome="settings" value="Agenda Settings" icon="glyphicon-cog"
-                                       onclick="loading_start()"/>
-                        </ui:fragment>
-                        <b:dropMenu value="#{AccountController.user.fullname}">
+                        <b:navLink outcome="manage" value="Manage Reservations" icon="glyphicon-edit"
+                                   onclick="loading_start()"
+                                   rendered="#{AccountController.user.userGroups.size() > 0}"/>
+                        <b:navLink outcome="settings" value="Agenda Settings" icon="glyphicon-cog"
+                                   onclick="loading_start()" rendered="#{AccountController.user.isAdmin()}"/>
+                        <b:dropMenu value="#{AccountController.user.fullname}" icon="glyphicon-user">
 
-                            <!--<b:navLink outcome="notifications" icon="glyphicon-bell"
+                            <b:navLink outcome="notifications" icon="glyphicon-bell"
                                        onclick="loading_start()">
                                 Notifications
                                 <ui:fragment
@@ -54,7 +50,7 @@
                                     <b:badge styleClass="pull-right"
                                              value="#{NotificationController.notifications.size()}"/>
                                 </ui:fragment>
-                            </b:navLink>-->
+                            </b:navLink>
                             <b:navLink outcome="my" value="My Reservations" icon="glyphicon-calendar"
                                        onclick="loading_start()"/>
                             <b:navLink outcome="account" value="Account Settings" icon="glyphicon-cog"
@@ -63,14 +59,6 @@
                             <b:navCommandLink action="#{AccountController.logout}" value="Sign Out"
                                               icon="glyphicon-log-out"/>
                         </b:dropMenu>
-
-                        <b:navLink outcome="notifications" icon="glyphicon-bell"
-                                   onclick="loading_start()">
-                            <ui:fragment
-                                    rendered="#{NotificationController.unread != null and NotificationController.unread.size() > 0}">
-                                <b:badge value="#{NotificationController.unread.size()}"/>
-                            </ui:fragment>
-                        </b:navLink>
 
                     </b:navbarLinks>
                     <pf:growl p:style="margin-top: 50px;" id="growl" showDetail="true"/>

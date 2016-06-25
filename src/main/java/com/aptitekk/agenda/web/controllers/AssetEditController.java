@@ -34,6 +34,8 @@ public class AssetEditController {
 
     public void setAssetTypeEditController(AssetTypeEditController assetTypeEditController) {
         this.assetTypeEditController = assetTypeEditController;
+        if(assetTypeEditController != null)
+            assetTypeEditController.setAssetEditController(this);
     }
 
     @ManagedProperty(value = "#{TimeSelectionController}")
@@ -54,16 +56,16 @@ public class AssetEditController {
         if (selectedAsset != null) {
             Asset asset = assetService.findByName(editableAssetName);
             if (asset != null && !asset.equals(selectedAsset))
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with that name already exists!"));
+                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with that name already exists!"));
             else if (editableAssetName.isEmpty())
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name cannot be empty!"));
+                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name cannot be empty!"));
             else if (!editableAssetName.matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name may only contain A-Z, a-z, 0-9, #, and space!"));
+                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset's name may only contain A-Z, a-z, 0-9, #, and space!"));
 
             if (editableAssetOwnerGroup == null && currentAssetOwnerGroup == null)
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset!"));
+                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset!"));
 
-            if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
+            if (FacesContext.getCurrentInstance().getMessageList("assetEditForm").isEmpty()) {
                 selectedAsset.setName(editableAssetName);
                 tagController.updateAssetTags(selectedAsset);
                 selectedAsset.setNeedsApproval(editableAssetApproval);
@@ -78,10 +80,10 @@ public class AssetEditController {
 
                     setSelectedAsset(assetService.merge(selectedAsset));
                     this.assetTypeEditController.refreshAssetTypes();
-                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Updated"));
+                    FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
         }
@@ -118,14 +120,14 @@ public class AssetEditController {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
-                context.addMessage(":assetTypeEditForm", new FacesMessage("Successful", "Asset Deleted!"));
+                context.addMessage("assetEditForm", new FacesMessage("Successful", "Asset Deleted!"));
                 assetService.delete(selectedAsset.getId());
             } else {
                 throw new Exception("Asset not found!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage(":assetTypeEditForm", new FacesMessage("Failure", "Error While Deleting Asset!"));
+            context.addMessage("assetEditForm", new FacesMessage("Failure", "Error While Deleting Asset!"));
         }
 
         assetTypeEditController.refreshAssetTypes();

@@ -46,10 +46,9 @@
             </b:column>
 
             <b:column colXs="12" colSm="7">
-                <h:form styleClass="form-horizontal" id="accountSettingsForm">
-                    <b:messages for="accountSettingsForm" showSummary="false" showDetail="true"/>
-
+                <h:form styleClass="form-horizontal" id="userEditForm">
                     <b:column colXs="9" offsetXs="3">
+                        <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                         <h4>Personal Information:</h4>
                     </b:column>
                     <div class="form-group">
@@ -160,7 +159,7 @@
                                                  value="Reset Fields" style="display: inline-block"
                                                  action="#{UserEditController.resetSettings()}"
                                                  disabled="#{UserEditController.selectedUser == null}">
-                                    <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                    <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
                                 </h:commandButton>
                                 <b:button styleClass="btn btn-danger"
                                           value="Delete User"

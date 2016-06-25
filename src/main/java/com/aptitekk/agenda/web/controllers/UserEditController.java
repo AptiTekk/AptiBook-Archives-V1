@@ -133,14 +133,14 @@ public class UserEditController {
             userService.insert(newUser);
 
             if (userService.get(newUser.getId()) != null) {
-                context.addMessage("accountSettingsForm", new FacesMessage("Successful", "New User Added!"));
+                context.addMessage("userEditForm", new FacesMessage("Successful", "New User Added!"));
                 setSelectedUser(newUser);
             } else {
                 throw new Exception("User not found!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage("accountSettingsForm", new FacesMessage("Failure", "Error While Adding User!"));
+            context.addMessage("userEditForm", new FacesMessage("Failure", "Error While Adding User!"));
         }
 
         refreshUserList();
@@ -150,7 +150,7 @@ public class UserEditController {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (userService.get(getSelectedUser().getId()) != null) {
-                context.addMessage("accountSettingsForm", new FacesMessage("Successful", "User Deleted!"));
+                context.addMessage("userEditForm", new FacesMessage("Successful", "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
                 setSelectedUser(null);
             } else {
@@ -158,7 +158,7 @@ public class UserEditController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage("accountSettingsForm", new FacesMessage("Failure", "Error While Deleting User!"));
+            context.addMessage("userEditForm", new FacesMessage("Failure", "Error While Deleting User!"));
         }
 
         refreshUserList();

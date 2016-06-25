@@ -11,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -38,6 +39,12 @@ public class AssetTypeEditController {
         this.tagController = tagController;
     }
 
+    private AssetEditController assetEditController;
+
+    void setAssetEditController(AssetEditController assetEditController) {
+        this.assetEditController = assetEditController;
+    }
+
     @PostConstruct
     public void init() {
         refreshAssetTypes();
@@ -56,13 +63,13 @@ public class AssetTypeEditController {
         if (selectedAssetType != null) {
             AssetType assetType = assetTypeService.findByName(editableAssetTypeName);
             if (assetType != null && !assetType.equals(selectedAssetType))
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Asset Type with that name already exists!"));
+                FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Asset Type with that name already exists!"));
             else if (editableAssetTypeName.isEmpty())
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset Type's name cannot be empty!"));
+                FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset Type's name cannot be empty!"));
             else if (!editableAssetTypeName.matches("[A-Za-z0-9 #]+"))
-                FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
+                FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Asset Type's name may only contain A-Z, a-z, 0-9, #, and spaces!"));
 
-            if (FacesContext.getCurrentInstance().getMessageList(":assetTypeEditForm").isEmpty()) {
+            if (FacesContext.getCurrentInstance().getMessageList("assetTypeEditForm").isEmpty()) {
                 try {
                     selectedAssetType.setName(editableAssetTypeName);
 
@@ -75,10 +82,10 @@ public class AssetTypeEditController {
                     //Refresh AssetType
                     setSelectedAssetType(assetTypeService.get(selectedAssetType.getId()));
                     refreshAssetTypes();
-                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
+                    FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
         }
@@ -105,7 +112,7 @@ public class AssetTypeEditController {
             assetTypeService.insert(assetType);
         } catch (Exception e) {
             e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(":assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
         }
 
         refreshAssetTypes();
@@ -115,7 +122,7 @@ public class AssetTypeEditController {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetTypeService.get(getSelectedAssetType().getId()) != null) {
-                context.addMessage(":assetTypeEditForm", new FacesMessage("Successful", "Asset Type Deleted!"));
+                context.addMessage("assetTypeEditForm", new FacesMessage("Successful", "Asset Type Deleted!"));
                 assetTypeService.delete(getSelectedAssetType().getId());
                 setSelectedAssetType(null);
             } else {
@@ -123,7 +130,7 @@ public class AssetTypeEditController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage(":assetTypeEditForm", new FacesMessage("Failure", "Error While Deleting Asset Type!"));
+            context.addMessage("assetTypeEditForm", new FacesMessage("Failure", "Error While Deleting Asset Type!"));
         }
 
         refreshAssetTypes();
@@ -137,6 +144,9 @@ public class AssetTypeEditController {
                 assetService.insert(asset);
 
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
+
+                if(assetEditController != null)
+                    assetEditController.setSelectedAsset(asset);
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
@@ -170,4 +180,5 @@ public class AssetTypeEditController {
     public void setEditableAssetTypeName(String editableAssetTypeName) {
         this.editableAssetTypeName = editableAssetTypeName;
     }
+
 }

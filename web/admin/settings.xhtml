@@ -6,7 +6,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jstl/core">
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
@@ -16,11 +16,12 @@
                     <!-- Sidebar -->
                     <b:column colXs="12" colMd="2">
                         <b:listLinks style="margin-top:20px">
-                            <ui:repeat value="#{SettingsController.pages}" var="page">
-                                <b:navLink active="#{SettingsController.currentPage == page}" value="#{page.name}" onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}">
+                            <c:forEach items="#{SettingsController.pages}" var="page">
+                                <b:navLink active="#{SettingsController.currentPage == page}" value="#{page.name}"
+                                           onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}">
                                     <f:param name="tab" value="#{page.name}"/>
                                 </b:navLink>
-                            </ui:repeat>
+                            </c:forEach>
                         </b:listLinks>
                     </b:column>
                     <b:column colXs="12" colMd="9">
