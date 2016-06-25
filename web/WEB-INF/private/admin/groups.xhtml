@@ -12,7 +12,7 @@
 <ui:composition>
     <h:panelGroup layout="block" id="groupsPage">
         <b:row>
-            <b:column colSm="3">
+            <b:column colSm="4">
                 <h:form>
                     <div class="form-group">
                         <b:panel title="Select a Group" collapsible="false">
@@ -24,9 +24,11 @@
                                     <pf:tree id="tree"
                                              value="#{GroupTreeController.getTree(GroupEditController.selectedGroup, null, false)}"
                                              var="node" draggable="true" droppable="true" selectionMode="single"
-                                             dynamic="true" selection="#{GroupEditController.selectedNode}">
-                                        <pf:ajax event="select" update=":groupsPage" onstart="loading_start()"
+                                             dynamic="true">
+                                        <pf:ajax event="select" listener="#{GroupEditController.onNodeSelect}"
+                                                 update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
+                                        <pf:ajax event="dragdrop" listener="#{GroupTreeController.onDragDrop}"/>
                                         <pf:treeNode>
                                             <h:outputText value="#{node.name}"/>
                                         </pf:treeNode>
@@ -45,10 +47,10 @@
                     </div>
                 </h:form>
             </b:column>
-            <b:column colSm="9">
+            <b:column colSm="8">
                 <h:form styleClass="form-horizontal" id="groupEditForm">
                     <c:choose>
-                        <c:when test="#{GroupEditController.selectedNode == null}">
+                        <c:when test="#{GroupEditController.selectedGroup == null}">
                             <b:column colXs="9" offsetXs="3">
                                 <h4>Please select a User Group.</h4>
                                 <b:message for=":groupEditForm"/>

@@ -24,11 +24,9 @@ public class GroupEditController {
     @Inject
     private UserGroupService userGroupService;
 
-    private TreeNode selectedNode;
+    private UserGroup selectedGroup;
 
     private String editableGroupName = "";
-    private TreeNode editableGroupParentNode;
-    private UserGroup currentGroupParent;
 
     @PostConstruct
     public void init() {
@@ -37,65 +35,57 @@ public class GroupEditController {
 
     public void updateSettings() {
         UserGroup group = userGroupService.findByName(editableGroupName);
-        if (group != null && !group.equals(selectedNode.getData()))
-            FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Group with that name already exists!"));
+        if (group != null && !group.equals(selectedGroup))
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Group with that name already exists!"));
         else if (editableGroupName.isEmpty())
-            FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name cannot be empty!"));
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name cannot be empty!"));
         else if (!editableGroupName.matches("[A-Za-z0-9 #]+"))
-            FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name may only contain A-Z, a-z, 0-9, #, and space!"));
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name may only contain A-Z, a-z, 0-9, #, and space!"));
 
-        if (FacesContext.getCurrentInstance().getMessageList(":groupEditForm").isEmpty()) {
+        if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
             try {
-                UserGroup selectedGroup = (UserGroup) selectedNode.getData();
                 selectedGroup.setName(editableGroupName);
-                selectedGroup.setParent((editableGroupParentNode == null || editableGroupParentNode.getData() == null) ? userGroupService.getRootGroup() : (UserGroup) editableGroupParentNode.getData());
 
-                userGroupService.merge(selectedGroup);
+                selectedGroup = userGroupService.merge(selectedGroup);
                 resetSettings();
 
-                FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
             } catch (Exception e) {
                 e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
     }
 
     public void resetSettings() {
-        if (selectedNode != null) {
-            editableGroupName = getSelectedGroup().getName();
-            currentGroupParent = getSelectedGroup().getParent();
-            editableGroupParentNode = null;
+        if (selectedGroup != null) {
+            editableGroupName = selectedGroup.getName();
         } else {
             editableGroupName = "";
-            currentGroupParent = null;
-            editableGroupParentNode = null;
         }
     }
 
     public void deleteSelectedGroup() {
-        if (this.selectedNode != null) {
-            UserGroup selectedGroup = (UserGroup) selectedNode.getData();
-            UserGroup parentGroup = (UserGroup) selectedNode.getParent().getData();
+        if (this.selectedGroup != null) {
+            UserGroup parentGroup = selectedGroup.getParent();
 
-            for (TreeNode child : selectedNode.getChildren()) { //Reassign parents of the children of the node to be deleted.
-                UserGroup childGroup = (UserGroup) child.getData();
-                childGroup.setParent(parentGroup);
+            for (UserGroup child : selectedGroup.getChildren()) { //Reassign parents of the children of the node to be deleted.
+                child.setParent(parentGroup);
                 try {
-                    userGroupService.merge(childGroup);
+                    userGroupService.merge(child);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
             try {
                 userGroupService.delete(selectedGroup.getId()); //Remove selected group from database
-                selectedNode = null;
+                selectedGroup = null;
 
-                FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
             } catch (Exception e) {
                 e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
     }
@@ -104,36 +94,34 @@ public class GroupEditController {
         try {
             UserGroup newGroup = new UserGroup();
             newGroup.setName("New Group");
-            UserGroup parentGroup = selectedNode == null ? userGroupService.getRootGroup() : (UserGroup) selectedNode.getData();
+            UserGroup parentGroup = selectedGroup == null ? userGroupService.getRootGroup() : selectedGroup;
             newGroup.setParent(parentGroup);
-            parentGroup.getChildren().add(newGroup);
             userGroupService.insert(newGroup);
-            userGroupService.merge(parentGroup);
 
-            FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
+            setSelectedGroup(newGroup);
+
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
         } catch (Exception e) {
             e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage(":groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
         }
     }
 
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
-        resetSettings();
+    public void onNodeSelect(NodeSelectEvent event) {
+        if (event.getTreeNode().getData() instanceof UserGroup)
+            setSelectedGroup((UserGroup) event.getTreeNode().getData());
+        else
+            setSelectedGroup(null);
     }
 
     public UserGroup getSelectedGroup() {
-        if (selectedNode != null)
-            return (UserGroup) selectedNode.getData();
-        return null;
+        return selectedGroup;
     }
 
-    public void onParentSelected(NodeSelectEvent event) {
-        this.editableGroupParentNode = event.getTreeNode();
+    public void setSelectedGroup(UserGroup selectedGroup) {
+        this.selectedGroup = selectedGroup;
+
+        resetSettings();
     }
 
     public String getEditableGroupName() {
@@ -142,9 +130,5 @@ public class GroupEditController {
 
     public void setEditableGroupName(String editableGroupName) {
         this.editableGroupName = editableGroupName;
-    }
-
-    public UserGroup getCurrentGroupParent() {
-        return currentGroupParent;
     }
 }

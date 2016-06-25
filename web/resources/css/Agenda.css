@@ -268,6 +268,10 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 
 /* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
 
+.ui-tree {
+    width: 100% !important;
+}
+
 .ui-draggable-dragging {
     border: 1px dotted black;
     height: 25px !important;

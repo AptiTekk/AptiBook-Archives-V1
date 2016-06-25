@@ -2,6 +2,7 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.UserGroupService;
+import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
@@ -75,6 +76,16 @@ public class GroupTreeController {
             cache.put(hashCode, newTree);
 
             return newTree;
+        }
+    }
+
+    public void onDragDrop(TreeDragDropEvent event) throws Exception {
+        TreeNode dragNode = event.getDragNode();
+        TreeNode dropNode = event.getDropNode();
+
+        if(dragNode.getData() instanceof UserGroup && dropNode.getData() instanceof UserGroup) {
+            ((UserGroup) dragNode.getData()).setParent((UserGroup) dropNode.getData());
+            groupService.merge((UserGroup) dragNode.getData());
         }
     }
 
