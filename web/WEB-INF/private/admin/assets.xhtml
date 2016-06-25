@@ -211,7 +211,7 @@
                                                                                 value="#{TimeSelectionController.getStartTimes(false)}"
                                                                                 var="time" itemValue="#{time}"
                                                                                 itemLabel="#{time.timeString}"/>
-                                                                        <f:ajax render="assetEditForm:assetAvailability"
+                                                                        <f:ajax render="assetAvailability"
                                                                                 onevent="loading"/>
                                                                     </h:selectOneMenu>
                                                                     <pf:tooltip for="startTime"
@@ -232,7 +232,7 @@
                                                                                 value="#{TimeSelectionController.endTimes}"
                                                                                 var="time" itemValue="#{time}"
                                                                                 itemLabel="#{time.timeString}"/>
-                                                                        <f:ajax render=":assetEditForm:assetAvailability"
+                                                                        <f:ajax render="assetAvailability"
                                                                                 onevent="loading"/>
                                                                     </h:selectOneMenu>
                                                                     <pf:tooltip for="endTime"
@@ -248,7 +248,6 @@
                                                                 <pf:tree id="tree"
                                                                          value="#{GroupTreeController.getTree(AssetEditController.currentAssetOwnerGroup, null, false)}"
                                                                          var="node" dynamic="true"
-                                                                         orientation="horizontal"
                                                                          selectionMode="single">
                                                                     <pf:ajax event="select" onstart="loading_start()"
                                                                              oncomplete="loading_complete()"
