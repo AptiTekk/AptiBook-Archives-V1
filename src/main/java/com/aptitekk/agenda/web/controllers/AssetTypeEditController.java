@@ -170,6 +170,9 @@ public class AssetTypeEditController {
 
     public void setSelectedAssetType(AssetType selectedAssetType) {
         this.selectedAssetType = selectedAssetType;
+        if(assetEditController != null)
+            assetEditController.setSelectedAsset(null);
+
         resetSettings();
     }
 

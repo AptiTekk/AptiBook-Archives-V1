@@ -7,6 +7,7 @@ import org.primefaces.model.TreeNode;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
 import java.util.*;
 
@@ -75,6 +76,11 @@ public class GroupTreeController {
 
             return newTree;
         }
+    }
+
+    public void invalidateTrees()
+    {
+        cache.clear();
     }
 
 }

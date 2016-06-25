@@ -23,6 +23,7 @@ public class AssetEditController {
     private AssetService assetService;
 
     private Asset selectedAsset;
+    private int selectedAssetIndex = -1;
 
     private String editableAssetName;
     private boolean editableAssetApproval;
@@ -139,6 +140,12 @@ public class AssetEditController {
 
     public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
+
+        if(assetTypeEditController != null && assetTypeEditController.getSelectedAssetType() != null)
+            selectedAssetIndex = assetTypeEditController.getSelectedAssetType().getAssets().indexOf(selectedAsset);
+        else
+            selectedAssetIndex = -1;
+
         resetSettings();
     }
 
@@ -164,5 +171,13 @@ public class AssetEditController {
 
     public UserGroup getCurrentAssetOwnerGroup() {
         return currentAssetOwnerGroup;
+    }
+
+    public int getSelectedAssetIndex() {
+        return selectedAssetIndex;
+    }
+
+    public void setSelectedAssetIndex(int selectedAssetIndex) {
+        this.selectedAssetIndex = selectedAssetIndex;
     }
 }

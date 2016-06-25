@@ -203,7 +203,7 @@ public class TagController {
 
     void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
-        this.availableTags = selectedAsset.getAssetType().getTags();
+        this.availableTags = selectedAsset != null ? selectedAsset.getAssetType().getTags() : null;
     }
 
 }

@@ -266,6 +266,14 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 
 /* ---------------------------------- END DATEPICKER ---------------------------------- */
 
+/* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
+
+.ui-draggable-dragging {
+    border: 1px dotted black;
+}
+
+/* ---------------------------------- END DRAG DROP ---------------------------------- */
+
 select.big-select {
     display: block;
     font-size: 20px;
