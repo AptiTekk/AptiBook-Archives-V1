@@ -27,7 +27,7 @@ public class AssetEditController {
     private int selectedAssetIndex = -1;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z0-9 #]+", message = "This may only contain letters, numbers, spaces, and #.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableAssetName;
 
     private boolean editableAssetApproval;

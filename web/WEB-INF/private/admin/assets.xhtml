@@ -69,7 +69,7 @@
                                                  value="#{AssetTypeEditController.editableAssetTypeName}"
                                                  disabled="#{AssetTypeEditController.selectedAssetType == null}"
                                                  required="true"
-                                                 requiredMessage="This is required."/>
+                                                 requiredMessage="This is required." maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -157,7 +157,7 @@
                                                                 <h:inputText id="name" styleClass="form-control"
                                                                              value="#{AssetEditController.editableAssetName}"
                                                                              required="true"
-                                                                             requiredMessage="This is required."/>
+                                                                             requiredMessage="This is required." maxlength="32"/>
                                                                 <pf:tooltip for="name" position="left"
                                                                             value="The name as will be shown to users making reservations. E.g.: 'Library'"/>
                                                             </b:column>

@@ -47,7 +47,7 @@
                                 <b:column colXs="9">
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableFirstName}" />
+                                                 value="#{UserEditController.editableFirstName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -55,7 +55,7 @@
                                 <b:column colXs="9">
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableLastName}" />
+                                                 value="#{UserEditController.editableLastName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -66,7 +66,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableEmail}" />
+                                                     value="#{UserEditController.editableEmail}" maxlength="64"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -78,7 +78,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editablePhoneNumber}" />
+                                                     value="#{UserEditController.editablePhoneNumber}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -90,7 +90,7 @@
                                         <span class="input-group-addon"><span
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableLocation}" />
+                                                     value="#{UserEditController.editableLocation}" maxlength="256"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -107,7 +107,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret id="passwordEdit" styleClass="form-control"
-                                                       value="#{UserEditController.newPassword}"/>
+                                                       value="#{UserEditController.newPassword}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -118,7 +118,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret styleClass="form-control"
-                                                       value="#{UserEditController.confirmPassword}"/>
+                                                       value="#{UserEditController.confirmPassword}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
