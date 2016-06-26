@@ -8,7 +8,6 @@ package com.aptitekk.agenda.web.controllers;
 import com.aptitekk.agenda.core.UserGroupService;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -16,6 +15,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @ManagedBean(name = "GroupEditController")
 @ViewScoped
@@ -24,9 +25,11 @@ public class GroupEditController {
     @Inject
     private UserGroupService userGroupService;
 
-    private UserGroup selectedGroup;
+    private UserGroup selectedUserGroup;
 
-    private String editableGroupName = "";
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
+    private String editableGroupName;
 
     @PostConstruct
     public void init() {
@@ -34,42 +37,42 @@ public class GroupEditController {
     }
 
     public void updateSettings() {
-        UserGroup group = userGroupService.findByName(editableGroupName);
-        if (group != null && !group.equals(selectedGroup))
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Group with that name already exists!"));
-        else if (editableGroupName.isEmpty())
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name cannot be empty!"));
-        else if (!editableGroupName.matches("[A-Za-z0-9 #]+"))
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The Group's name may only contain A-Z, a-z, 0-9, #, and space!"));
+        if (editableGroupName != null) {
 
-        if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
-            try {
-                selectedGroup.setName(editableGroupName);
+            //Check if another Asset Type has the same name.
+            UserGroup userGroup = userGroupService.findByName(editableGroupName);
+            if (userGroup != null && !userGroup.equals(selectedUserGroup))
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User Group with that name already exists!"));
 
-                selectedGroup = userGroupService.merge(selectedGroup);
-                resetSettings();
+            if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
+                try {
+                    selectedUserGroup.setName(editableGroupName);
 
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Updated"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    selectedUserGroup = userGroupService.merge(selectedUserGroup);
+                    resetSettings();
+
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
+                }
             }
         }
     }
 
     public void resetSettings() {
-        if (selectedGroup != null) {
-            editableGroupName = selectedGroup.getName();
+        if (selectedUserGroup != null) {
+            editableGroupName = selectedUserGroup.getName();
         } else {
-            editableGroupName = "";
+            editableGroupName = null;
         }
     }
 
     public void deleteSelectedGroup() {
-        if (this.selectedGroup != null) {
-            UserGroup parentGroup = selectedGroup.getParent();
+        if (this.selectedUserGroup != null) {
+            UserGroup parentGroup = selectedUserGroup.getParent();
 
-            for (UserGroup child : selectedGroup.getChildren()) { //Reassign parents of the children of the node to be deleted.
+            for (UserGroup child : selectedUserGroup.getChildren()) { //Reassign parents of the children of the node to be deleted.
                 child.setParent(parentGroup);
                 try {
                     userGroupService.merge(child);
@@ -79,8 +82,8 @@ public class GroupEditController {
                 }
             }
             try {
-                userGroupService.delete(selectedGroup.getId()); //Remove selected group from database
-                selectedGroup = null;
+                userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
+                selectedUserGroup = null;
 
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
             } catch (Exception e) {
@@ -94,11 +97,11 @@ public class GroupEditController {
         try {
             UserGroup newGroup = new UserGroup();
             newGroup.setName("New Group");
-            UserGroup parentGroup = selectedGroup == null ? userGroupService.getRootGroup() : selectedGroup;
+            UserGroup parentGroup = selectedUserGroup == null ? userGroupService.getRootGroup() : selectedUserGroup;
             newGroup.setParent(parentGroup);
             userGroupService.insert(newGroup);
 
-            setSelectedGroup(newGroup);
+            setSelectedUserGroup(newGroup);
 
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
         } catch (Exception e) {
@@ -109,17 +112,17 @@ public class GroupEditController {
 
     public void onNodeSelect(NodeSelectEvent event) {
         if (event.getTreeNode().getData() instanceof UserGroup)
-            setSelectedGroup((UserGroup) event.getTreeNode().getData());
+            setSelectedUserGroup((UserGroup) event.getTreeNode().getData());
         else
-            setSelectedGroup(null);
+            setSelectedUserGroup(null);
     }
 
-    public UserGroup getSelectedGroup() {
-        return selectedGroup;
+    public UserGroup getSelectedUserGroup() {
+        return selectedUserGroup;
     }
 
-    public void setSelectedGroup(UserGroup selectedGroup) {
-        this.selectedGroup = selectedGroup;
+    public void setSelectedUserGroup(UserGroup selectedUserGroup) {
+        this.selectedUserGroup = selectedUserGroup;
 
         resetSettings();
     }
