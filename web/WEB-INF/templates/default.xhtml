@@ -44,20 +44,19 @@
 
     <script type="text/javascript">
         function loading(data) {
-            var loading = document.getElementById("loading");
             if (data.status === "begin") {
-                loading.style.display = "block";
+                loading_start();
             } else if (data.status === "success") {
-                loading.style.display = "none";
+                loading_complete();
             }
         }
         function loading_start() {
             var loading = document.getElementById("loading");
-            loading.style.display = "block";
+            loading.style.opacity = "1";
         }
         function loading_complete() {
             var loading = document.getElementById("loading");
-            loading.style.display = "none";
+            loading.style.opacity = "0";
         }
     </script>
 

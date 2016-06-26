@@ -29,23 +29,23 @@ public class UserEditController {
     private String editableUsername;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z'-,.]*", message = "This may only contain letters, apostrophes, hyphens, commas, and periods.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableFirstName;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z'-,.]*", message = "This may only contain letters, apostrophes, hyphens, commas, and periods.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableLastName;
 
     @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "(.+@.+\\..+)?", message = "This must contain @, a domain, and an extension. (Ex: email@domain.com)")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableEmail;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[0-9a-zA-Z-(). +]*", message = "This may only contain numbers, letters, hyphens, parentheses, periods, spaces and +")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editablePhoneNumber;
 
     @Size(max = 256, message = "This may only be 256 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "This cannot contain <, >, ;, or =.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableLocation;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -121,7 +121,7 @@ public class UserEditController {
 
         try {
             User newUser = new User();
-            newUser.setUsername("new_user");
+            newUser.setUsername("new-user");
             userService.insert(newUser);
 
             if (userService.get(newUser.getId()) != null) {
