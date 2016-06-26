@@ -87,6 +87,8 @@ public class GroupTreeController {
             ((UserGroup) dragNode.getData()).setParent((UserGroup) dropNode.getData());
             groupService.merge((UserGroup) dragNode.getData());
         }
+
+        invalidateTrees();
     }
 
     public void invalidateTrees()

@@ -28,7 +28,7 @@
                                         <pf:ajax event="select" listener="#{GroupEditController.onNodeSelect}"
                                                  update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
-                                        <pf:ajax event="dragdrop" update=":groupsPage" listener="#{GroupTreeController.onDragDrop}"/>
+                                        <pf:ajax event="dragdrop" update=":groupsPage" listener="#{GroupTreeController.onDragDrop}" />
                                         <pf:treeNode>
                                             <h:outputText value="#{node.name}"/>
                                         </pf:treeNode>
