@@ -76,11 +76,7 @@
                                             <h:inputText id="usernameEdit" styleClass="form-control"
                                                          value="#{UserEditController.editableUsername}"
                                                          disabled="#{UserEditController.selectedUser == null}"
-                                                         required="true" requiredMessage="This is required."
-                                                         validatorMessage="Must be unique, have a maximum of 32 characters, and may only contain letters, numbers, underscores, and hyphens.">
-                                                <f:validateLength maximum="32"/>
-                                                <f:validateRegex pattern="[A-Za-z0-9_-]+"/>
-                                            </h:inputText>
+                                                         required="true" requiredMessage="This is required."/>
                                         </c:otherwise>
                                     </c:choose>
                                 </b:column>
@@ -91,11 +87,7 @@
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableFirstName}"
-                                                 disabled="#{UserEditController.selectedUser == null}"
-                                                 validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
-                                        <f:validateLength maximum="32"/>
-                                        <f:validateRegex pattern="[A-Za-z'-,.]*"/>
-                                    </h:inputText>
+                                                 disabled="#{UserEditController.selectedUser == null}" />
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -104,11 +96,7 @@
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableLastName}"
-                                                 disabled="#{UserEditController.selectedUser == null}"
-                                                 validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
-                                        <f:validateLength maximum="32"/>
-                                        <f:validateRegex pattern="[A-Za-z'-,.]*"/>
-                                    </h:inputText>
+                                                 disabled="#{UserEditController.selectedUser == null}" />
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -120,11 +108,7 @@
                                                 class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableEmail}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
-                                                     validatorMessage="May be a maximum of 64 characters, and must contain @, a domain, and an extension. (Ex: email@domain.com)">
-                                            <f:validateLength maximum="64"/>
-                                            <f:validateRegex pattern="(.+@.+\..+)?"/>
-                                        </h:inputText>
+                                                     disabled="#{UserEditController.selectedUser == null}" />
                                     </div>
                                 </b:column>
                             </div>
@@ -137,11 +121,7 @@
                                                 class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
                                                      value="#{UserEditController.editablePhoneNumber}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
-                                                     validatorMessage="May be a maximum of 32 characters, and may only contain numbers, letters, parentheses, hyphens, spaces, periods, and +.">
-                                            <f:validateLength maximum="32"/>
-                                            <f:validateRegex pattern="[0-9a-zA-Z-(). +]*"/>
-                                        </h:inputText>
+                                                     disabled="#{UserEditController.selectedUser == null}" />
                                     </div>
                                 </b:column>
                             </div>
@@ -154,10 +134,7 @@
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableLocation}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
-                                                     validatorMessage="May be a maximum of 128 characters.">
-                                            <f:validateLength maximum="128"/>
-                                        </h:inputText>
+                                                     disabled="#{UserEditController.selectedUser == null}" />
                                     </div>
                                 </b:column>
                             </div>

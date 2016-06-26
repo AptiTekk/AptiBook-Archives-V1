@@ -10,6 +10,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @ManagedBean(name = "UserEditController")
@@ -22,16 +24,35 @@ public class UserEditController {
     private User selectedUser;
     private List<User> users;
 
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")
     private String editableUsername;
-    private String editableFirstName;
-    private String editableLastName;
-    private String editableEmail;
-    private String editablePhoneNumber;
-    private String editableLocation;
-    private String newPassword;
-    private String confirmPassword;
 
-    private boolean editSuccess;
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[A-Za-z'-,.]*", message = "This may only contain letters, apostrophes, hyphens, commas, and periods.")
+    private String editableFirstName;
+
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[A-Za-z'-,.]*", message = "This may only contain letters, apostrophes, hyphens, commas, and periods.")
+    private String editableLastName;
+
+    @Size(max = 64, message = "This may only be 64 characters long.")
+    @Pattern(regexp = "(.+@.+\\..+)?", message = "This must contain @, a domain, and an extension. (Ex: email@domain.com)")
+    private String editableEmail;
+
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[0-9a-zA-Z-(). +]*", message = "This may only contain numbers, letters, hyphens, parentheses, periods, spaces and +")
+    private String editablePhoneNumber;
+
+    @Size(max = 256, message = "This may only be 256 characters long.")
+    @Pattern(regexp = "[^<>;=]*", message = "This cannot contain <, >, ;, or =.")
+    private String editableLocation;
+
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    private String newPassword;
+
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    private String confirmPassword;
 
     @PostConstruct
     public void init() {
@@ -58,8 +79,6 @@ public class UserEditController {
     }
 
     public void updateSettings() {
-        editSuccess = false;
-
         if (!getNewPassword().isEmpty()) {
             if (!getConfirmPassword().equals(getNewPassword())) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
@@ -88,7 +107,6 @@ public class UserEditController {
             try {
                 selectedUser = userService.merge(selectedUser);
                 refreshUserList();
-                editSuccess = true;
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
@@ -213,10 +231,6 @@ public class UserEditController {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
-    }
-
-    public boolean isEditSuccess() {
-        return editSuccess;
     }
 
 }

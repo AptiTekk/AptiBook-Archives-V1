@@ -47,11 +47,7 @@
                                 <b:column colXs="9">
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableFirstName}"
-                                                 validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
-                                        <f:validateLength maximum="32"/>
-                                        <f:validateRegex pattern="[A-Za-z'-,.]*"/>
-                                    </h:inputText>
+                                                 value="#{UserEditController.editableFirstName}" />
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -59,11 +55,7 @@
                                 <b:column colXs="9">
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableLastName}"
-                                                 validatorMessage="May be a maximum of 32 characters, and may only contain letters, apostrophes, hypens, commas, and periods.">
-                                        <f:validateLength maximum="32"/>
-                                        <f:validateRegex pattern="[A-Za-z'-,.]*"/>
-                                    </h:inputText>
+                                                 value="#{UserEditController.editableLastName}" />
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -74,11 +66,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableEmail}"
-                                                     validatorMessage="May be a maximum of 64 characters, and must contain @, a domain, and an extension. (Ex: email@domain.com)">
-                                            <f:validateLength maximum="64"/>
-                                            <f:validateRegex pattern="(.+@.+\..+)?"/>
-                                        </h:inputText>
+                                                     value="#{UserEditController.editableEmail}" />
                                     </div>
                                 </b:column>
                             </div>
@@ -90,11 +78,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editablePhoneNumber}"
-                                                     validatorMessage="May be a maximum of 32 characters, and may only contain numbers, letters, parentheses, hyphens, spaces, periods, and +.">
-                                            <f:validateLength maximum="32"/>
-                                            <f:validateRegex pattern="[0-9a-zA-Z-(). +]*"/>
-                                        </h:inputText>
+                                                     value="#{UserEditController.editablePhoneNumber}" />
                                     </div>
                                 </b:column>
                             </div>
@@ -106,10 +90,7 @@
                                         <span class="input-group-addon"><span
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableLocation}"
-                                                     validatorMessage="May be a maximum of 128 characters.">
-                                            <f:validateLength maximum="128"/>
-                                        </h:inputText>
+                                                     value="#{UserEditController.editableLocation}" />
                                     </div>
                                 </b:column>
                             </div>
