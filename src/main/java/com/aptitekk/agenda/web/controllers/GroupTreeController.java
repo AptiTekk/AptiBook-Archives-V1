@@ -1,15 +1,15 @@
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Inject;
+import java.lang.reflect.Array;
 import java.util.*;
 
 @ManagedBean(name = "GroupTreeController")
@@ -21,7 +21,7 @@ public class GroupTreeController {
     @Inject
     private UserGroupService groupService;
 
-    private TreeNode buildTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, boolean allowRootSelection) {
+    private TreeNode buildTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, boolean allowRootSelection) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
@@ -30,7 +30,7 @@ public class GroupTreeController {
         if (allowRootSelection) {
             TreeNode artificialRootNode = new DefaultTreeNode(rootGroup, rootNode);
             artificialRootNode.setExpanded(true);
-            if (currentlySelectedGroup != null && rootGroup.equals(currentlySelectedGroup))
+            if (currentlySelectedGroups != null && currentlySelectedGroups.contains(rootGroup))
                 artificialRootNode.setSelected(true);
             queue.add(artificialRootNode);
         } else
@@ -49,7 +49,7 @@ public class GroupTreeController {
 
                     TreeNode node = new DefaultTreeNode(child, currEntry);
                     node.setExpanded(true);
-                    if (currentlySelectedGroup != null && child.equals(currentlySelectedGroup)) {
+                    if (currentlySelectedGroups != null && currentlySelectedGroups.contains(child)) {
                         node.setSelected(true);
                     }
                     queue.add(node);
@@ -63,16 +63,27 @@ public class GroupTreeController {
     }
 
     public TreeNode getTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, Boolean allowRootSelection) {
+        List<UserGroup> userGroups = null;
+
+        if (currentlySelectedGroup != null) {
+            userGroups = new ArrayList<>();
+            userGroups.add(currentlySelectedGroup);
+        }
+
+        return getMultipleSelectedTree(userGroups, userGroupToExclude, allowRootSelection);
+    }
+
+    public TreeNode getMultipleSelectedTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection) {
         int hashCode = 0;
 
-        hashCode += currentlySelectedGroup == null ? 0 : currentlySelectedGroup.hashCode();
+        hashCode += currentlySelectedGroups == null ? 0 : currentlySelectedGroups.hashCode();
         hashCode += userGroupToExclude == null ? 0 : userGroupToExclude.hashCode();
         hashCode += allowRootSelection.hashCode();
 
         if (cache.containsKey(hashCode)) {
             return cache.get(hashCode);
         } else {
-            TreeNode newTree = buildTree(currentlySelectedGroup, userGroupToExclude, allowRootSelection);
+            TreeNode newTree = buildTree(currentlySelectedGroups, userGroupToExclude, allowRootSelection);
             cache.put(hashCode, newTree);
 
             return newTree;
@@ -83,7 +94,7 @@ public class GroupTreeController {
         TreeNode dragNode = event.getDragNode();
         TreeNode dropNode = event.getDropNode();
 
-        if(dragNode.getData() instanceof UserGroup && dropNode.getData() instanceof UserGroup) {
+        if (dragNode.getData() instanceof UserGroup && dropNode.getData() instanceof UserGroup) {
             ((UserGroup) dragNode.getData()).setParent((UserGroup) dropNode.getData());
             groupService.merge((UserGroup) dragNode.getData());
         }
@@ -91,8 +102,7 @@ public class GroupTreeController {
         invalidateTrees();
     }
 
-    public void invalidateTrees()
-    {
+    public void invalidateTrees() {
         cache.clear();
     }
 
