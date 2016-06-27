@@ -301,6 +301,16 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     margin-right: 2px;
 }
 
+.ui-tree .ui-chkbox-box {
+    width: 20px !important;
+    height: 22px !important;
+    margin-top: 2px;
+}
+
+.ui-chkbox-icon.ui-icon {
+    margin-left: 1px;
+}
+
 /* ---------------------------------- END DRAG DROP ---------------------------------- */
 
 select.big-select {

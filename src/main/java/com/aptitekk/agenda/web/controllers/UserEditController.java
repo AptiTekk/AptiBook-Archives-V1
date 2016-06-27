@@ -2,7 +2,9 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -12,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean(name = "UserEditController")
@@ -53,6 +56,8 @@ public class UserEditController {
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     private String confirmPassword;
+
+    private TreeNode[] editableUserGroupNodes;
 
     @PostConstruct
     public void init() {
@@ -102,6 +107,31 @@ public class UserEditController {
                 FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
             }
+
+            if (editableUserGroupNodes != null) {
+                boolean changesDiscovered = false;
+
+                List<UserGroup> selectedUserGroups = new ArrayList<>();
+                for (TreeNode node : editableUserGroupNodes) {
+                    if (node.getData() instanceof UserGroup) {
+                        UserGroup userGroup = (UserGroup) node.getData();
+                        selectedUserGroups.add(userGroup);
+                        if (!selectedUser.getUserGroups().contains(userGroup))
+                            changesDiscovered = true;
+                    }
+                }
+
+                for (UserGroup userGroup : selectedUser.getUserGroups())
+                    if (!selectedUserGroups.contains(userGroup))
+                        changesDiscovered = true;
+
+                if (changesDiscovered) {
+                    selectedUser.setUserGroups(selectedUserGroups);
+                    FacesContext.getCurrentInstance().addMessage("userEditForm:memberGroups",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Memberships Updated Successfully."));
+                }
+            }
+
             try {
                 selectedUser = userService.merge(selectedUser);
                 refreshUserList();
@@ -231,4 +261,11 @@ public class UserEditController {
         this.confirmPassword = confirmPassword;
     }
 
+    public void setEditableUserGroupNodes(TreeNode[] editableUserGroupNodes) {
+        this.editableUserGroupNodes = editableUserGroupNodes;
+    }
+
+    public TreeNode[] getEditableUserGroupNodes() {
+        return editableUserGroupNodes;
+    }
 }

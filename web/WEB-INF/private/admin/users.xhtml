@@ -7,10 +7,14 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" xmlns:pf="http://primefaces.org/ui">
 
 <ui:composition>
     <h:panelGroup layout="block" id="usersPage">
+
+        <!-- This invisible panel is meant to initialize the proper bootsfaces css classes for later use. Don't remove it. -->
+        <b:panel rendered="false"/>
+
         <b:row>
             <b:column colXs="12" colSm="5">
                 <h:form>
@@ -76,7 +80,8 @@
                                             <h:inputText id="usernameEdit" styleClass="form-control"
                                                          value="#{UserEditController.editableUsername}"
                                                          disabled="#{UserEditController.selectedUser == null}"
-                                                         required="true" requiredMessage="This is required." maxlength="32"/>
+                                                         required="true" requiredMessage="This is required."
+                                                         maxlength="32"/>
                                         </c:otherwise>
                                     </c:choose>
                                 </b:column>
@@ -87,7 +92,7 @@
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableFirstName}"
-                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32" />
+                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -96,7 +101,7 @@
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
                                                  value="#{UserEditController.editableLastName}"
-                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32" />
+                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -108,7 +113,8 @@
                                                 class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableEmail}"
-                                                     disabled="#{UserEditController.selectedUser == null}" maxlength="64" />
+                                                     disabled="#{UserEditController.selectedUser == null}"
+                                                     maxlength="64"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -121,7 +127,8 @@
                                                 class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
                                                      value="#{UserEditController.editablePhoneNumber}"
-                                                     disabled="#{UserEditController.selectedUser == null}" maxlength="32" />
+                                                     disabled="#{UserEditController.selectedUser == null}"
+                                                     maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -134,7 +141,8 @@
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableLocation}"
-                                                     disabled="#{UserEditController.selectedUser == null}"  maxlength="256" />
+                                                     disabled="#{UserEditController.selectedUser == null}"
+                                                     maxlength="256"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -152,7 +160,8 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret id="passwordEdit" styleClass="form-control"
                                                        value="#{UserEditController.newPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
+                                                       disabled="#{UserEditController.selectedUser == null}"
+                                                       maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -164,8 +173,40 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret styleClass="form-control"
                                                        value="#{UserEditController.confirmPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
+                                                       disabled="#{UserEditController.selectedUser == null}"
+                                                       maxlength="32"/>
                                     </div>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <h4>User Groups:</h4>
+                                    <b:message for="userEditForm:memberGroups"
+                                               showSummary="false" showDetail="true"/>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <c:choose>
+                                        <c:when test="#{UserEditController.selectedUser.immutableUsername}">
+                                            <h:outputText style="font-style: italic"
+                                                          value="Administrators are automatically granted full permissions. No User Groups need be assigned."/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <b:panel title="Member Of" collapsible="false">
+                                                Toggle the selection of User Groups by clicking on them.
+
+                                                <pf:tree id="memberGroups"
+                                                         value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false)}"
+                                                         var="node" dynamic="true" selectionMode="checkbox"
+                                                         selection="#{UserEditController.editableUserGroupNodes}">
+                                                    <pf:treeNode>
+                                                        <h:outputText value="#{node.name}"/>
+                                                    </pf:treeNode>
+                                                </pf:tree>
+                                            </b:panel>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </b:column>
                             </div>
                             <div class="form-group">
