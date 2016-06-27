@@ -1,5 +1,6 @@
 package com.aptitekk.agenda.web.controllers;
 
+import com.aptitekk.agenda.core.AssetService;
 import com.aptitekk.agenda.core.ReservationService;
 import com.aptitekk.agenda.core.entity.*;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
@@ -16,6 +17,9 @@ public class AvailableAssetsController {
 
     @Inject
     private ReservationService reservationService;
+
+    @Inject
+    private AssetService assetService;
 
     private List<Asset> availableAssets;
     private List<Asset> filteredAssets;
@@ -54,18 +58,27 @@ public class AvailableAssetsController {
     }
 
     public void onMakeReservationFired(User user, Asset asset, SegmentedTimeRange segmentedTimeRange) {
-        Reservation reservation = new Reservation();
-        reservation.setUser(user);
-        reservation.setAsset(asset);
-        reservation.setDate(segmentedTimeRange.getDate());
-        reservation.setTimeStart(segmentedTimeRange.getStartTime());
-        reservation.setTimeEnd(segmentedTimeRange.getEndTime());
 
-        try {
-            reservationService.insert(reservation);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //TODO: Tell user
+        //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
+        //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
+        if (availableAssets != null && availableAssets.contains(asset)) {
+            asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
+
+            if (reservationService.isAssetAvailableForReservation(asset, segmentedTimeRange)) {
+                Reservation reservation = new Reservation();
+                reservation.setUser(user);
+                reservation.setAsset(asset);
+                reservation.setDate(segmentedTimeRange.getDate());
+                reservation.setTimeStart(segmentedTimeRange.getStartTime());
+                reservation.setTimeEnd(segmentedTimeRange.getEndTime());
+
+                try {
+                    reservationService.insert(reservation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    //TODO: Tell user
+                }
+            }
         }
     }
 

@@ -19,6 +19,8 @@ public interface ReservationService extends EntityService<Reservation> {
 
     List<Asset> findAvailableAssets(AssetType type, SegmentedTimeRange segmentedTimeRange, float cushionInHours);
 
+    boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange);
+
     Set<Reservation> getAllUnderUser(User user);
 
 }

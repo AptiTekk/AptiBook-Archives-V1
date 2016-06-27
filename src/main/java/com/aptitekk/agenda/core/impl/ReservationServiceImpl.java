@@ -154,7 +154,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
      * @param segmentedTimeRange The time range of the reservation
      * @return true if available, false if not.
      */
-    private boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
+    public boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
         AgendaLogger.logVerbose("Checking " + asset.getName());
 
         //If the asset does not specify a start/end time, return false.

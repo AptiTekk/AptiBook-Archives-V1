@@ -85,6 +85,8 @@ public class TimeSelectionController {
         if (prunedTimes.size() > 0)
             prunedTimes.remove(prunedTimes.size() - 1);
 
+        setSelectedDate(getMinDate());
+
         //--End Duplicated code--//
         assetTypes = assetTypeService.getAll();
     }
@@ -193,7 +195,7 @@ public class TimeSelectionController {
 
     public Date getMinDate() {
         Calendar minDate = Calendar.getInstance();
-        if (prunedTimes.isEmpty()) //We've passed all the allowed times today.
+        if (prunedTimes.isEmpty()) //We've passed all the available times today.
             minDate.add(Calendar.DAY_OF_YEAR, 1); //Go to next day.
 
         return minDate.getTime();
