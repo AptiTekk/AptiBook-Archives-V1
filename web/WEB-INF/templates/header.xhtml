@@ -43,16 +43,6 @@
                                    rendered="#{AuthenticationController.authenticatedUser.isAdmin()}"/>
                         <b:dropMenu value="#{AuthenticationController.authenticatedUser.fullname}"
                                     icon="glyphicon-user">
-
-                            <b:navLink outcome="notifications" icon="glyphicon-bell"
-                                       onclick="loading_start()">
-                                Notifications
-                                <ui:fragment
-                                        rendered="#{NotificationController.notifications != null}">
-                                    <b:badge styleClass="pull-right"
-                                             value="#{NotificationController.notifications.size()}"/>
-                                </ui:fragment>
-                            </b:navLink>
                             <b:navLink outcome="my" value="My Reservations" icon="glyphicon-calendar"
                                        onclick="loading_start()"/>
                             <b:navLink outcome="userSettings" value="User Settings" icon="glyphicon-cog"
@@ -61,7 +51,14 @@
                             <b:navCommandLink action="#{AuthenticationController.logout}" value="Sign Out"
                                               icon="glyphicon-log-out"/>
                         </b:dropMenu>
-
+                        <b:navLink outcome="notifications" icon="glyphicon-bell"
+                                   onclick="loading_start()">
+                            <ui:fragment
+                                    rendered="#{NotificationController.notifications != null}">
+                                <b:badge styleClass="pull-right"
+                                         value="#{NotificationController.notifications.size()}"/>
+                            </ui:fragment>
+                        </b:navLink>
                     </b:navbarLinks>
                 </h:form>
             </ui:fragment>
