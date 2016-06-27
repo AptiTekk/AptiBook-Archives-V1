@@ -73,19 +73,17 @@ public class UserEditController {
             setEditablePhoneNumber(selectedUser.getPhoneNumber());
             setEditableLocation(selectedUser.getLocation());
 
-            setNewPassword("");
-            setConfirmPassword("");
+            setNewPassword(null);
+            setConfirmPassword(null);
         }
     }
 
     public void updateSettings() {
-        if (!getNewPassword().isEmpty()) {
-            if (!getConfirmPassword().equals(getNewPassword())) {
-                FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Passwords do not match."));
-                setNewPassword("");
-                setConfirmPassword("");
-            }
+        if ((getNewPassword() == null && getConfirmPassword() != null) || (getNewPassword() != null && !getNewPassword().equals(getConfirmPassword()))) {
+            FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Passwords do not match."));
+            setNewPassword(null);
+            setConfirmPassword(null);
         }
 
         if (FacesContext.getCurrentInstance().getMessageList("userEditForm").isEmpty()) {
@@ -99,7 +97,7 @@ public class UserEditController {
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
 
-            if (!getNewPassword().isEmpty() && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
+            if (getNewPassword() != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
                 selectedUser.setPassword(Sha256Helper.rawToSha(getNewPassword()));
                 FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
