@@ -9,7 +9,9 @@
 
 <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
     <ui:define name="pre-body">
-        <f:viewAction action="#{AuthenticationController.redirectIfLoggedIn()}"/>
+        <f:metadata>
+            <f:viewAction action="#{AuthenticationController.redirectIfLoggedIn()}"/>
+        </f:metadata>
     </ui:define>
     <ui:define name="content">
         <div class="texture-bg" style="height: 100%">

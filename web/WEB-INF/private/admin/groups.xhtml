@@ -7,21 +7,22 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:pf="http://primefaces.org/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition>
     <h:panelGroup layout="block" id="groupsPage">
         <b:row>
             <b:column colSm="4">
-                <h:form>
+                <h:form id="userGroupSelection">
                     <div class="form-group">
-                        <b:panel title="Select a Group" collapsible="false">
+                        <b:panel title="Select a User Group" collapsible="false">
                             <c:choose>
                                 <c:when test="#{empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false).children}">
-                                    There are no User Groups. Get started by adding one below!
+                                    There are no User Groups. Click the button below to add one!
                                 </c:when>
                                 <c:otherwise>
-                                    Drag and drop groups to re-arrange the hierarchy.
+                                    Drag and drop User Groups to re-arrange the hierarchy.
                                     <pf:tree id="tree"
                                              value="#{GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false)}"
                                              var="node" draggable="true" droppable="true" selectionMode="single"
@@ -29,22 +30,21 @@
                                         <pf:ajax event="select" listener="#{GroupEditController.onNodeSelect}"
                                                  update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
-                                        <pf:ajax event="dragdrop" update=":groupsPage" listener="#{GroupTreeController.onDragDrop}" />
+                                        <pf:ajax event="dragdrop" update=":groupsPage"
+                                                 listener="#{GroupTreeController.onDragDrop}"/>
                                         <pf:treeNode>
                                             <h:outputText value="#{node.name}"/>
                                         </pf:treeNode>
                                     </pf:tree>
                                 </c:otherwise>
                             </c:choose>
+                            <div class="form-group" style="padding-top:20px">
+                                <b:button look="primary"
+                                          value="Add New User Group"
+                                          p:data-toggle="modal"
+                                          p:data-target=".newUserGroupModal"/>
+                            </div>
                         </b:panel>
-                    </div>
-                    <div class="form-group">
-                        <h:commandButton styleClass="btn btn-success"
-                                         value="Add New User Group"
-                                         action="#{GroupEditController.addGroup()}">
-                            <f:ajax render=":groupsPage" onevent="loading"
-                                    listener="#{GroupTreeController.invalidateTrees()}"/>
-                        </h:commandButton>
                     </div>
                 </h:form>
             </b:column>
@@ -69,20 +69,11 @@
                             <div class="form-group">
                                 <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
-                                    <c:choose>
-                                        <c:when test="#{GroupEditController.selectedUserGroup.immutable}">
-                                            <h:outputText styleClass="form-control"
-                                                          value="#{GroupEditController.selectedUserGroup.name}"
-                                                          p:disabled="true"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <b:message for="groupNameEdit" showSummary="false" showDetail="true"/>
-                                            <h:inputText id="groupNameEdit" styleClass="form-control"
-                                                         value="#{GroupEditController.editableGroupName}"
-                                                         required="true"
-                                                         requiredMessage="This is required." maxlength="32"/>
-                                        </c:otherwise>
-                                    </c:choose>
+                                    <b:message for="groupNameEdit" showSummary="false" showDetail="true"/>
+                                    <h:inputText id="groupNameEdit" styleClass="form-control"
+                                                 value="#{GroupEditController.editableGroupName}"
+                                                 required="true"
+                                                 requiredMessage="This is required." maxlength="32"/>
                                 </b:column>
                             </div>
 
@@ -119,8 +110,7 @@
                                                   value="Delete User Group"
                                                   style="display: inline-block"
                                                   p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"
-                                                  disabled="#{GroupEditController.selectedUserGroup.immutable}"/>
+                                                  p:data-target="#deletionConfirmModal"/>
 
                                     </div>
                                 </div>
@@ -130,6 +120,61 @@
                 </h:form>
             </b:column>
         </b:row>
+
+        <!-- New User Group Modal -->
+        <h:form styleClass="form-horizontal" id="newUserGroupForm">
+            <b:modal styleClass="newUserGroupModal" title="New User Group">
+                <h:panelGroup id="newUserGroupFields">
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            * = Required. Names must be unique.
+                            <b:message for="newUserGroupForm" showSummary="false"/>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newGroupName" showSummary="false" showDetail="true"/>
+                            <h:inputText id="newGroupName" styleClass="form-control"
+                                         value="#{GroupEditController.newUserGroupName}"
+                                         required="true"
+                                         requiredMessage="This is required." maxlength="32"/>
+                        </b:column>
+                    </div>
+                    <c:if test="#{not empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false).children}">
+                        <div class="form-group">
+                            <h:outputLabel value="Parent: *"
+                                           styleClass="col-xs-3 control-label"/>
+                            <b:column colXs="9">
+                                <b:message for="newGroupParent"
+                                           showSummary="false" showDetail="true"/>
+                                <pf:tree id="newGroupParent"
+                                         value="#{GroupTreeController.getTree(GroupEditController.newUserGroupParent, null, true, false)}"
+                                         var="node" selectionMode="single">
+                                    <pf:ajax event="select" onstart="loading_start()"
+                                             oncomplete="loading_complete()"
+                                             listener="#{GroupEditController.onNewUserGroupParentSelected}"/>
+                                    <pf:treeNode>
+                                        <h:outputText value="#{node.name}"/>
+                                    </pf:treeNode>
+                                </pf:tree>
+                            </b:column>
+                        </div>
+                    </c:if>
+                </h:panelGroup>
+                <f:facet name="footer">
+
+                    <b:button styleClass="btn btn-default"
+                              p:data-dismiss="modal" value="Cancel"/>
+                    <h:commandButton styleClass="btn btn-primary"
+                                     value="Add" action="#{GroupEditController.addGroup()}">
+                        <f:ajax render="newUserGroupFields" execute="@form"
+                                listener="#{GroupTreeController.invalidateTrees()}"/>
+                    </h:commandButton>
+
+                </f:facet>
+            </b:modal>
+        </h:form>
 
         <!-- Deletion Confirmation Modal -->
         <b:modal id="deletionConfirmModal" title="User Group Deletion Confirmation">
@@ -147,7 +192,6 @@
 
             </f:facet>
         </b:modal>
-        <!-- End Deletion Confirmation Modal -->
 
     </h:panelGroup>
 </ui:composition>

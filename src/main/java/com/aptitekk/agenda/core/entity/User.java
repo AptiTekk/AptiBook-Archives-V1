@@ -189,7 +189,6 @@ public class User implements Serializable {
     }
 
     public boolean isImmutableUsername() {
-        System.out.println(this.username != null && this.username.equals(UserService.ADMIN_USERNAME));
         return this.username != null && this.username.equals(UserService.ADMIN_USERNAME);
     }
 

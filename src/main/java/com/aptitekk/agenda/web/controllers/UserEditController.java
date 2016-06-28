@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
@@ -121,13 +122,13 @@ public class UserEditController {
                     //No need to select both parent and child.
                     TreeNode parent = node;
                     boolean skip = false;
-                    while((parent = parent.getParent()) != null) {
+                    while ((parent = parent.getParent()) != null) {
                         if (editableUserGroupNodesList.contains(parent)) {
                             skip = true;
                             break;
                         }
                     }
-                    if(skip)
+                    if (skip)
                         continue;
 
                     if (node.getData() instanceof UserGroup) {

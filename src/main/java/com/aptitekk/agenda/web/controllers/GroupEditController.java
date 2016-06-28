@@ -6,13 +6,17 @@
 package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
@@ -30,6 +34,11 @@ public class GroupEditController {
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableGroupName;
+
+    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
+    private String newUserGroupName;
+    private UserGroup newUserGroupParent;
 
     @PostConstruct
     public void init() {
@@ -63,6 +72,7 @@ public class GroupEditController {
     public void resetSettings() {
         if (selectedUserGroup != null) {
             editableGroupName = selectedUserGroup.getName();
+            newUserGroupParent = selectedUserGroup;
         } else {
             editableGroupName = null;
         }
@@ -83,9 +93,9 @@ public class GroupEditController {
             }
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-                selectedUserGroup = null;
 
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Deleted"));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Deleted"));
+                selectedUserGroup = null;
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
@@ -94,20 +104,40 @@ public class GroupEditController {
     }
 
     public void addGroup() {
-        try {
-            UserGroup newGroup = new UserGroup();
-            newGroup.setName("New Group");
-            UserGroup parentGroup = selectedUserGroup == null ? userGroupService.getRootGroup() : selectedUserGroup;
-            newGroup.setParent(parentGroup);
-            userGroupService.insert(newGroup);
+        if (newUserGroupName != null && !newUserGroupName.isEmpty()) {
+            UserGroup userGroup = userGroupService.findByName(newUserGroupName);
+            if (userGroup != null) {
+                FacesContext.getCurrentInstance().addMessage("newUserGroupForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User Group with that name already exists!"));
+                return;
+            }
 
-            setSelectedUserGroup(newGroup);
+            try {
+                UserGroup newGroup = new UserGroup();
+                newGroup.setName(newUserGroupName);
 
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group Added"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                if(newUserGroupParent != null)
+                    newGroup.setParent(newUserGroupParent);
+                else
+                    newGroup.setParent(userGroupService.getRootGroup());
+
+                userGroupService.insert(newGroup);
+                setSelectedUserGroup(newGroup);
+
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Added"));
+            } catch (Exception e) {
+                e.printStackTrace();
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            }
         }
+        closeNewUserGroupModal();
+    }
+
+    private void closeNewUserGroupModal() {
+        newUserGroupName = null;
+        RequestContext.getCurrentInstance().execute("$('.newUserGroupModal').modal('hide');");
+        RequestContext.getCurrentInstance().update("newUserGroupForm:newUserGroupFields");
+        RequestContext.getCurrentInstance().update("userGroupSelection");
+        RequestContext.getCurrentInstance().update("groupEditForm");
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -133,5 +163,24 @@ public class GroupEditController {
 
     public void setEditableGroupName(String editableGroupName) {
         this.editableGroupName = editableGroupName;
+    }
+
+    public String getNewUserGroupName() {
+        return newUserGroupName;
+    }
+
+    public void setNewUserGroupName(String newUserGroupName) {
+        this.newUserGroupName = newUserGroupName;
+    }
+
+    public UserGroup getNewUserGroupParent() {
+        return newUserGroupParent;
+    }
+
+    public void onNewUserGroupParentSelected(NodeSelectEvent event) {
+        if(event.getTreeNode() != null && event.getTreeNode().getData() instanceof UserGroup)
+            this.newUserGroupParent = (UserGroup) event.getTreeNode().getData();
+        else
+            this.newUserGroupParent = null;
     }
 }
