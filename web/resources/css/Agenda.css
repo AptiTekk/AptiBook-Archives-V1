@@ -274,6 +274,10 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     width: 100% !important;
 }
 
+.ui-tree .ui-treenode {
+    border-left: 1px dashed #ddd;
+}
+
 .ui-draggable-dragging {
     border: 1px dotted black;
     height: 25px !important;

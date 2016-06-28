@@ -248,7 +248,7 @@
                                                                            showSummary="false" showDetail="true"/>
                                                                 <pf:tree id="ownerGroup" required="true"
                                                                          requiredMessage="This is required."
-                                                                         value="#{GroupTreeController.getTree(AssetEditController.currentAssetOwnerGroup, null, false)}"
+                                                                         value="#{GroupTreeController.getTree(AssetEditController.currentAssetOwnerGroup, null, false, false)}"
                                                                          var="node" dynamic="true"
                                                                          selectionMode="single">
                                                                     <pf:ajax event="select" onstart="loading_start()"

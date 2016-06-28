@@ -207,7 +207,7 @@
                                                 Toggle the selection of User Groups by clicking on them.
 
                                                 <pf:tree id="memberGroups"
-                                                         value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false)}"
+                                                         value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, false)}"
                                                          var="node" selectionMode="checkbox" showUnselectableCheckbox="true"
                                                          selection="#{UserEditController.editableUserGroupNodes}" propagateSelectionDown="false" propagateSelectionUp="false">
                                                     <pf:treeNode>

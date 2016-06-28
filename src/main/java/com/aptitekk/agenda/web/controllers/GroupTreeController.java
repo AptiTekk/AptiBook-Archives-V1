@@ -21,17 +21,20 @@ public class GroupTreeController {
     @Inject
     private UserGroupService groupService;
 
-    private TreeNode buildTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, boolean allowRootSelection) {
+    private TreeNode buildTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, boolean allowRootSelection, boolean readOnly) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
         TreeNode rootNode = new DefaultTreeNode(rootGroup);
         rootNode.setExpanded(true);
+        rootNode.setSelectable(allowRootSelection);
         if (allowRootSelection) {
             TreeNode artificialRootNode = new DefaultTreeNode(rootGroup, rootNode);
             artificialRootNode.setExpanded(true);
             if (currentlySelectedGroups != null && currentlySelectedGroups.contains(rootGroup))
                 artificialRootNode.setSelected(true);
+            artificialRootNode.setSelectable(true);
+
             queue.add(artificialRootNode);
         } else
             queue.add(rootNode);
@@ -52,17 +55,17 @@ public class GroupTreeController {
                     if (currentlySelectedGroups != null && currentlySelectedGroups.contains(child)) {
                         node.setSelected(true);
                     }
+                    if(readOnly)
+                        node.setSelectable(false);
+
                     queue.add(node);
                 }
             }
         }
-
-        rootNode.setSelectable(allowRootSelection);
-
         return rootNode;
     }
 
-    public TreeNode getTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, Boolean allowRootSelection) {
+    public TreeNode getTree(UserGroup currentlySelectedGroup, UserGroup userGroupToExclude, Boolean allowRootSelection, Boolean readOnly) {
         List<UserGroup> userGroups = null;
 
         if (currentlySelectedGroup != null) {
@@ -70,20 +73,21 @@ public class GroupTreeController {
             userGroups.add(currentlySelectedGroup);
         }
 
-        return getMultipleSelectedTree(userGroups, userGroupToExclude, allowRootSelection);
+        return getMultipleSelectedTree(userGroups, userGroupToExclude, allowRootSelection, readOnly);
     }
 
-    public TreeNode getMultipleSelectedTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection) {
+    public TreeNode getMultipleSelectedTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection, Boolean readOnly) {
         int hashCode = 0;
 
         hashCode += currentlySelectedGroups == null ? 0 : currentlySelectedGroups.hashCode();
         hashCode += userGroupToExclude == null ? 0 : userGroupToExclude.hashCode();
         hashCode += allowRootSelection.hashCode();
+        hashCode += readOnly.hashCode();
 
         if (cache.containsKey(hashCode)) {
             return cache.get(hashCode);
         } else {
-            TreeNode newTree = buildTree(currentlySelectedGroups, userGroupToExclude, allowRootSelection);
+            TreeNode newTree = buildTree(currentlySelectedGroups, userGroupToExclude, allowRootSelection, readOnly);
             cache.put(hashCode, newTree);
 
             return newTree;

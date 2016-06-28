@@ -8,8 +8,8 @@
       xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
-    <ui:define name="preRender">
-        <f:event type="preRenderView" listener="#{AuthenticationController.redirectIfLoggedIn()}"/>
+    <ui:define name="pre-body">
+        <f:viewAction action="#{AuthenticationController.redirectIfLoggedIn()}"/>
     </ui:define>
     <ui:define name="content">
         <div class="texture-bg" style="height: 100%">

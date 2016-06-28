@@ -16,14 +16,14 @@
                 <h:form>
                     <div class="form-group">
                         <b:panel title="Select a Group" collapsible="false">
-                            Drag and drop groups to re-arrange the hierarchy.
                             <c:choose>
-                                <c:when test="#{empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false).children}">
-                                    Add a new User Group below!
+                                <c:when test="#{empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false).children}">
+                                    There are no User Groups. Get started by adding one below!
                                 </c:when>
                                 <c:otherwise>
+                                    Drag and drop groups to re-arrange the hierarchy.
                                     <pf:tree id="tree"
-                                             value="#{GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false)}"
+                                             value="#{GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false)}"
                                              var="node" draggable="true" droppable="true" selectionMode="single"
                                              dynamic="true">
                                         <pf:ajax event="select" listener="#{GroupEditController.onNodeSelect}"

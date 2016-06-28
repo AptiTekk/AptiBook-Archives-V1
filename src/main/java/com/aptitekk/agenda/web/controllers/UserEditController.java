@@ -62,6 +62,7 @@ public class UserEditController {
 
     @PostConstruct
     public void init() {
+
         refreshUserList();
         resetSettings();
     }
