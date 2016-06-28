@@ -13,29 +13,88 @@
     <b:messages for="propertiesForm" showSummary="false" showDetail="true"/>
     <b:panel>
         <h:form>
+            <div>
             <ui:repeat value="#{PropertiesController.properties}" var="property">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h:outputLabel
-                                value="#{PropertiesController.formatPropertyTitle(property.key)}"/>
-                    </div>
-                    <div class="panel-body">
-                        <h:inputText value="#{property.value}"/>
-                    </div>
-                </div>
+
+                <ui:fragment rendered="${property.id == 4}" id="Notification_Reservation_Subject">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="2" cols="55"  value="#{property.value}" />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 5}" id="Notification_Reservation_Body">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="7" cols="50"  value="#{property.value}"  />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 6}" id="Notificaton_Date_Format">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="2" cols="20"  value="#{property.value}"  />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 7}" id="Google_Calendar_Access_Token">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="1" cols="30"  value="#{property.value}"  />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 8}" id="Google_Client_Id">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="4" cols="30"  value="#{property.value}"  />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 9}" id="Google_Client_Secret">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="1" cols="35"  value="#{property.value}"  />
+                    <br/>
+                    <br/>
+                </ui:fragment>
+                <ui:fragment rendered="${property.id == 10}" id="Google_Calendar_Calendar_Id">
+                    <h:outputLabel
+                            value="#{PropertiesController.formatPropertyTitle(property.key)}" />
+                    <br/>
+                    <h:inputTextarea rows="1" cols="15"  value="#{property.value}"  />
+                    <br/>
+                </ui:fragment>
             </ui:repeat>
+        </div>
+            <br/>
+
 
             <h:panelGroup rendered="#{PropertiesController.properties.size() != 0}">
+                <div class="form-group">
+                    <div class="form-inline">
+                        <div class="form-group">
                 <h:commandButton styleClass="btn btn-primary"
                                  value="Save Changes" style="display: inline-block"
                                  action="#{PropertiesController.updateProperties()}">
                     <f:ajax execute="@form" render=":account :header"/>
                 </h:commandButton>
+                </div>
+                <div class="form-group">
                 <h:commandButton styleClass="btn btn-default"
                                  value="Reset Fields" style="display: inline-block"
                                  action="#{PropertiesController.resetProperties()}">
                     <f:ajax execute="@form" render=":account :header"/>
                 </h:commandButton>
+                        </div>
+                    </div>
+                </div>
             </h:panelGroup>
             <h:panelGroup rendered="#{PropertiesController.properties.size() == 0}">
                 <h4>No Application Properties Found</h4>
