@@ -4,6 +4,7 @@ import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import org.primefaces.component.tree.Tree;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @ManagedBean(name = "UserEditController")
@@ -112,7 +114,22 @@ public class UserEditController {
                 boolean changesDiscovered = false;
 
                 List<UserGroup> selectedUserGroups = new ArrayList<>();
-                for (TreeNode node : editableUserGroupNodes) {
+                List<TreeNode> editableUserGroupNodesList = Arrays.asList(editableUserGroupNodes);
+                for (TreeNode node : editableUserGroupNodesList) {
+
+                    //Check to see if any parents are selected, and skip if they are.
+                    //No need to select both parent and child.
+                    TreeNode parent = node;
+                    boolean skip = false;
+                    while((parent = parent.getParent()) != null) {
+                        if (editableUserGroupNodesList.contains(parent)) {
+                            skip = true;
+                            break;
+                        }
+                    }
+                    if(skip)
+                        continue;
+
                     if (node.getData() instanceof UserGroup) {
                         UserGroup userGroup = (UserGroup) node.getData();
                         selectedUserGroups.add(userGroup);

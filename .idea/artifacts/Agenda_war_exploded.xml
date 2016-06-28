@@ -15,7 +15,7 @@
           <element id="library" level="project" name="Maven: com.mysema.commons:mysema-commons-lang:0.2.4" />
           <element id="library" level="project" name="Maven: com.infradna.tool:bridge-method-annotation:1.13" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.6.1" />
-          <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.8.6" />
+          <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.9.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.0" />
           <element id="library" level="project" name="Maven: org.primefaces.themes:bootstrap:1.0.10" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.7" />
