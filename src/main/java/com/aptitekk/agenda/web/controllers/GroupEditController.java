@@ -6,17 +6,16 @@
 package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;
@@ -28,6 +27,9 @@ public class GroupEditController {
 
     @Inject
     private UserGroupService userGroupService;
+
+    @Inject
+    private UserService userService;
 
     private UserGroup selectedUserGroup;
 
@@ -115,7 +117,7 @@ public class GroupEditController {
                 UserGroup newGroup = new UserGroup();
                 newGroup.setName(newUserGroupName);
 
-                if(newUserGroupParent != null)
+                if (newUserGroupParent != null)
                     newGroup.setParent(newUserGroupParent);
                 else
                     newGroup.setParent(userGroupService.getRootGroup());
@@ -138,6 +140,17 @@ public class GroupEditController {
         RequestContext.getCurrentInstance().update("newUserGroupForm:newUserGroupFields");
         RequestContext.getCurrentInstance().update("userGroupSelection");
         RequestContext.getCurrentInstance().update("groupEditForm");
+    }
+
+    public void removeUserFromSelectedGroup(User user) throws Exception {
+        if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
+            user.getUserGroups().remove(selectedUserGroup);
+            userService.merge(user);
+            selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
+            resetSettings();
+
+            FacesContext.getCurrentInstance().addMessage("groupEditForm:usersTable", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been removed from '" + selectedUserGroup.getName() + "'"));
+        }
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
@@ -178,7 +191,7 @@ public class GroupEditController {
     }
 
     public void onNewUserGroupParentSelected(NodeSelectEvent event) {
-        if(event.getTreeNode() != null && event.getTreeNode().getData() instanceof UserGroup)
+        if (event.getTreeNode() != null && event.getTreeNode().getData() instanceof UserGroup)
             this.newUserGroupParent = (UserGroup) event.getTreeNode().getData();
         else
             this.newUserGroupParent = null;
