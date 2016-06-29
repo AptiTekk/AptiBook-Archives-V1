@@ -1,4 +1,5 @@
 node {
+    def mvnHome = tool "Maven"
     def agendaqaUrl = "https://agendaqa-aptitekk.rhcloud.com"
 
     try {
@@ -6,7 +7,6 @@ node {
         checkout([$class: "GitSCM", branches: [[name: "*/stable"]], browser: [$class: "GogsGit"], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: "542239bb-3d63-40bc-9cfa-e5ed56a1fc5b", url: "ssh://git@core.aptitekk.com:28/AptiTekk/Agenda.git"]]])
 
         stage "Test Stable"
-        def mvnHome = tool "Maven"
         sh "${mvnHome}/bin/mvn clean install -P wildfly-managed -U"
 
         stage "Build Stable WAR"
@@ -31,7 +31,7 @@ node {
         }
 
         if (i == 10) {
-            error "Could not connect to agenda qa deployment after 5 minutes. Did it deploy?"
+            error "Could not connect to QA deployment after 5 minutes. Did it deploy?"
         }
 
         stage "Stable QA"
