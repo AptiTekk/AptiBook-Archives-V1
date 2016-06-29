@@ -147,6 +147,7 @@
             <properties>
                 <arquillian.serverHome>${project.build.directory}/wildfly-${version.wildfly}</arquillian.serverHome>
             </properties>
+
             <dependencies>
                 <dependency>
                     <groupId>org.wildfly.arquillian</groupId>
@@ -233,8 +234,6 @@
         <repository>
             <id>maven-central</id>
             <url>http://repo1.maven.org/maven2</url>
-            <snapshots><enabled>true</enabled></snapshots>
-            <releases><enabled>true</enabled></releases>
         </repository>
         <repository>
             <id>prime-repo</id>
