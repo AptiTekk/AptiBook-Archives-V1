@@ -22,7 +22,7 @@
                         <b:panel title="Select a User Group" collapsible="false">
                             <c:choose>
                                 <c:when test="#{empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false).children}">
-                                    There are no User Groups. Click the button below to add one!
+                                    There are no User Groups. Click the button below to add one.
                                 </c:when>
                                 <c:otherwise>
                                     Drag and drop User Groups to re-arrange the hierarchy.

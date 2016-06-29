@@ -1,4 +1,4 @@
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.users;
 
 import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;

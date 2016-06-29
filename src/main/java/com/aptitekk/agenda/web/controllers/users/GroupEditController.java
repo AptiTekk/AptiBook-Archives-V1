@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.users;
 
 import com.aptitekk.agenda.core.UserGroupService;
 import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;

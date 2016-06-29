@@ -1,9 +1,10 @@
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.assets;
 
 import com.aptitekk.agenda.core.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
+import com.aptitekk.agenda.web.controllers.TimeSelectionController;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;

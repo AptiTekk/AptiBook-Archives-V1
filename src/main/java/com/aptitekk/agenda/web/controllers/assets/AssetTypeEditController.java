@@ -1,4 +1,4 @@
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.assets;
 
 import com.aptitekk.agenda.core.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
@@ -11,7 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.constraints.Pattern;

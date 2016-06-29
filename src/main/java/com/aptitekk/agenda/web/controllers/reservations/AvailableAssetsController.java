@@ -1,4 +1,4 @@
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.reservations;
 
 import com.aptitekk.agenda.core.AssetService;
 import com.aptitekk.agenda.core.ReservationService;

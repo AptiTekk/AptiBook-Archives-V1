@@ -181,8 +181,14 @@
                                 <c:when test="#{UserEditController.selectedUser.immutableUsername}">
                                     <div class="form-group">
                                         <b:column colXs="9" offsetXs="3">
-                                            <h:outputText style="font-style: italic"
-                                                          value="Administrators are automatically granted full permissions. No User Groups need be assigned."/>
+                                            Administrators are automatically granted full permissions. No User Groups need be assigned.
+                                        </b:column>
+                                    </div>
+                                </c:when>
+                                <c:when test="#{empty GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, false).children}">
+                                    <div class="form-group">
+                                        <b:column colXs="9" offsetXs="3">
+                                            There are no User Groups. You may create them on the User Groups page.
                                         </b:column>
                                     </div>
                                 </c:when>
@@ -346,7 +352,7 @@
                         </b:column>
                     </div>
                     <div class="form-group">
-                        <h:outputLabel value="Confirm Password: *" styleClass="col-xs-3 control-label"/>
+                        <h:outputLabel value="Confirm: *" styleClass="col-xs-3 control-label"/>
                         <b:column colXs="9">
                             <b:message for="newPasswordConfirm" showSummary="false" showDetail="true"/>
                             <div class="input-group">
@@ -365,30 +371,41 @@
                         </b:column>
                     </div>
 
-                    <div class="form-group">
-                        <b:column colXs="9" offsetXs="3">
-                            <b:message for="newMemberGroups"
-                                       showSummary="false" showDetail="true"/>
-                        </b:column>
-                    </div>
-                    <div class="form-group">
-                        <b:column colXs="9" offsetXs="3">
-                            <b:panel title="Member Of" collapsible="false">
-                                Toggle the selection of User Groups by clicking on them.
+                    <c:choose>
+                        <c:when test="#{empty GroupTreeController.getMultipleSelectedTree(null, null, false, false).children}">
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    There are no User Groups. You may create them on the User Groups page.
+                                </b:column>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <b:message for="newMemberGroups"
+                                               showSummary="false" showDetail="true"/>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <b:panel title="Member Of" collapsible="false">
+                                        Toggle the selection of User Groups by clicking on them.
 
-                                <pf:tree id="newMemberGroups"
-                                         value="#{GroupTreeController.getMultipleSelectedTree(null, null, false, false)}"
-                                         var="node" selectionMode="checkbox"
-                                         showUnselectableCheckbox="true"
-                                         selection="#{NewUserController.userGroupNodes}"
-                                         propagateSelectionDown="false" propagateSelectionUp="false">
-                                    <pf:treeNode>
-                                        <h:outputText value="#{node.name}"/>
-                                    </pf:treeNode>
-                                </pf:tree>
-                            </b:panel>
-                        </b:column>
-                    </div>
+                                        <pf:tree id="newMemberGroups"
+                                                 value="#{GroupTreeController.getMultipleSelectedTree(null, null, false, false)}"
+                                                 var="node" selectionMode="checkbox"
+                                                 showUnselectableCheckbox="true"
+                                                 selection="#{NewUserController.userGroupNodes}"
+                                                 propagateSelectionDown="false" propagateSelectionUp="false">
+                                            <pf:treeNode>
+                                                <h:outputText value="#{node.name}"/>
+                                            </pf:treeNode>
+                                        </pf:tree>
+                                    </b:panel>
+                                </b:column>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                     <b:fetchBeanInfos/>
                 </h:panelGroup>
                 <f:facet name="footer">

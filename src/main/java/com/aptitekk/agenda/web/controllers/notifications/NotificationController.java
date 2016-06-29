@@ -1,4 +1,4 @@
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.notifications;
 
 import com.aptitekk.agenda.core.NotificationService;
 import com.aptitekk.agenda.core.Properties;

@@ -142,33 +142,33 @@
                             </div>
                         </h:form>
                     </b:column>
-                    <b:column colXs="12" colMd="4">
-                        <div class="form-group">
-                            <h4>User Groups:</h4>
-                        </div>
+                    <c:if test="#{not empty UserEditController.selectedUser.userGroups}">
+                        <b:column colXs="12" colMd="4">
+                            <div class="form-group">
+                                <h4>User Groups:</h4>
+                            </div>
 
-                        <c:choose>
-                            <c:when test="#{UserEditController.selectedUser.immutableUsername}">
-                                <div class="form-group">
-                                    <h:outputText style="font-style: italic"
-                                                  value="Administrators are automatically granted full permissions. No User Groups need be assigned."/>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="form-group">
-                                    <b:panel title="Member Of" collapsible="false">
-                                        <pf:tree id="memberGroups"
-                                                 value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, true)}"
-                                                 var="node" selection="#{UserEditController.editableUserGroupNodes}">
-                                            <pf:treeNode>
-                                                <h:outputText value="#{node.name}"/>
-                                            </pf:treeNode>
-                                        </pf:tree>
-                                    </b:panel>
-                                </div>
-                            </c:otherwise>
-                        </c:choose>
-                    </b:column>
+                            <c:choose>
+                                <c:when test="#{UserEditController.selectedUser.immutableUsername}">
+                                    Administrators are automatically granted full permissions. No User Groups need be assigned.
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="form-group">
+                                        <b:panel title="Member Of" collapsible="false">
+                                            <pf:tree id="memberGroups"
+                                                     value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, true)}"
+                                                     var="node"
+                                                     selection="#{UserEditController.editableUserGroupNodes}">
+                                                <pf:treeNode>
+                                                    <h:outputText value="#{node.name}"/>
+                                                </pf:treeNode>
+                                            </pf:tree>
+                                        </b:panel>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </b:column>
+                    </c:if>
                 </b:row>
             </ui:fragment>
 
