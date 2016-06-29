@@ -162,28 +162,6 @@ public class UserEditController {
         }
     }
 
-    public void addNewUser() {
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        try {
-            User newUser = new User();
-            newUser.setUsername("new-user");
-            userService.insert(newUser);
-
-            if (userService.get(newUser.getId()) != null) {
-                context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New User Added!"));
-                setSelectedUser(newUser);
-            } else {
-                throw new Exception("User not found!");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
-        }
-
-        refreshUserList();
-    }
-
     public void deleteSelectedUser() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {

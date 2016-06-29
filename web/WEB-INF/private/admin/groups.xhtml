@@ -15,7 +15,7 @@
     <b:dataTable rendered="false"/>
 
     <h:panelGroup layout="block" id="groupsPage">
-        <b:row>
+        <b:row id="groupsPageContent">
             <b:column colSm="4">
                 <h:form id="userGroupSelection">
                     <div class="form-group">
@@ -57,14 +57,14 @@
                         <c:when test="#{GroupEditController.selectedUserGroup == null}">
                             <b:column colXs="9" offsetXs="3">
                                 <h4>Please select a User Group.</h4>
-                                <b:message for="groupEditForm"/>
+                                <b:message for="groupEditForm" showSummary="false" showDetail="true"/>
                             </b:column>
                         </c:when>
                         <c:otherwise>
                             <div class="form-group">
                                 <b:column colXs="9" offsetXs="3">
                                     <h4>User Group Settings</h4>
-                                    * = Required
+                                    * = Required. Name must be unique.
                                     <b:message for="groupEditForm" showSummary="false"/>
                                 </b:column>
                             </div>
@@ -137,13 +137,12 @@
         </b:row>
 
         <!-- New User Group Modal -->
-        <h:form styleClass="form-horizontal" id="newUserGroupForm">
+        <h:form styleClass="form-horizontal">
             <b:modal styleClass="newUserGroupModal" title="New User Group">
                 <h:panelGroup id="newUserGroupFields">
                     <div class="form-group">
                         <b:column colXs="9" offsetXs="3">
-                            * = Required. Names must be unique.
-                            <b:message for="newUserGroupForm" showSummary="false"/>
+                            * = Required. Name must be unique.
                         </b:column>
                     </div>
                     <div class="form-group">
@@ -151,9 +150,11 @@
                         <b:column colXs="9">
                             <b:message for="newGroupName" showSummary="false" showDetail="true"/>
                             <h:inputText id="newGroupName" styleClass="form-control"
-                                         value="#{GroupEditController.newUserGroupName}"
+                                         value="#{NewGroupController.name}"
                                          required="true"
-                                         requiredMessage="This is required." maxlength="32"/>
+                                         requiredMessage="This is required." maxlength="32">
+                                <f:validator binding="#{UniqueUserGroupValidator}" />
+                            </h:inputText>
                         </b:column>
                     </div>
                     <c:if test="#{not empty GroupTreeController.getTree(GroupEditController.selectedUserGroup, null, false, false).children}">
@@ -164,11 +165,11 @@
                                 <b:message for="newGroupParent"
                                            showSummary="false" showDetail="true"/>
                                 <pf:tree id="newGroupParent"
-                                         value="#{GroupTreeController.getTree(GroupEditController.newUserGroupParent, null, true, false)}"
+                                         value="#{GroupTreeController.getTree(NewGroupController.parentGroup, null, true, false)}"
                                          var="node" selectionMode="single">
                                     <pf:ajax event="select" onstart="loading_start()"
                                              oncomplete="loading_complete()"
-                                             listener="#{GroupEditController.onNewUserGroupParentSelected}"/>
+                                             listener="#{NewGroupController.onParentGroupSelected}"/>
                                     <pf:treeNode>
                                         <h:outputText value="#{node.name}"/>
                                     </pf:treeNode>
@@ -176,17 +177,17 @@
                             </b:column>
                         </div>
                     </c:if>
+                    <b:fetchBeanInfos/>
                 </h:panelGroup>
                 <f:facet name="footer">
 
                     <b:button styleClass="btn btn-default"
                               p:data-dismiss="modal" value="Cancel"/>
-                    <h:commandButton styleClass="btn btn-primary"
-                                     value="Add" action="#{GroupEditController.addGroup()}">
-                        <f:ajax render="newUserGroupFields" execute="@form"
-                                listener="#{GroupTreeController.invalidateTrees()}"/>
-                    </h:commandButton>
-
+                    <b:commandButton value="Add" look="primary" ajax="true"
+                                     update="newUserGroupFields :groupsPageContent :deletionConfirmModal"
+                                     oncomplete="if(!validationFailed) $('.newUserGroupModal').modal('hide')"
+                                     action="#{NewGroupController.addGroup}"
+                                     actionListener="#{GroupTreeController.invalidateTrees()}"/>
                 </f:facet>
             </b:modal>
         </h:form>

@@ -14,9 +14,9 @@
 
         <!-- This invisible panel is meant to initialize the proper bootsfaces css classes for later use. Don't remove it. -->
         <b:panel rendered="false"/>
-        <b:commandButton ajax="true" rendered="false" />
+        <b:commandButton ajax="true" rendered="false"/>
 
-        <b:row>
+        <b:row id="usersPageContent">
             <b:column colXs="12" colSm="5">
                 <h:form>
                     <div class="form-group">
@@ -42,28 +42,28 @@
                         </b:dataTable>
                     </div>
                     <div class="form-group">
-                        <h:commandButton action="#{UserEditController.addNewUser}"
-                                         styleClass="btn btn-primary" value="Add New User">
-                            <f:ajax render=":usersPage" onevent="loading"/>
-                        </h:commandButton>
+                        <b:button look="primary"
+                                  value="Add New User"
+                                  p:data-toggle="modal"
+                                  p:data-target=".newUserModal"/>
                     </div>
                 </h:form>
             </b:column>
 
             <b:column colXs="12" colSm="7">
-                <c:choose>
-                    <c:when test="#{UserEditController.selectedUser == null}">
-                        <b:column colXs="9" offsetXs="3">
-                            <h4>Please select a User.</h4>
-                            <b:messages showSummary="false" showDetail="true"/>
-                        </b:column>
-                    </c:when>
-                    <c:otherwise>
-                        <h:form styleClass="form-horizontal" id="userEditForm">
+                <h:form styleClass="form-horizontal" id="userEditForm">
+                    <c:choose>
+                        <c:when test="#{UserEditController.selectedUser == null}">
+                            <b:column colXs="9" offsetXs="3">
+                                <h4>Please select a User.</h4>
+                                <b:message for="userEditForm" showSummary="false" showDetail="true"/>
+                            </b:column>
+                        </c:when>
+                        <c:otherwise>
                             <div class="form-group">
                                 <b:column colXs="9" offsetXs="3">
                                     <h4>Personal Information:</h4>
-                                    * = Required
+                                    * = Required. Username must be unique.
                                     <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                                 </b:column>
                             </div>
@@ -80,7 +80,6 @@
                                             <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
                                             <h:inputText id="usernameEdit" styleClass="form-control"
                                                          value="#{UserEditController.editableUsername}"
-                                                         disabled="#{UserEditController.selectedUser == null}"
                                                          required="true" requiredMessage="This is required."
                                                          maxlength="32"/>
                                         </c:otherwise>
@@ -92,8 +91,7 @@
                                 <b:column colXs="9">
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableFirstName}"
-                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
+                                                 value="#{UserEditController.editableFirstName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -101,8 +99,7 @@
                                 <b:column colXs="9">
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableLastName}"
-                                                 disabled="#{UserEditController.selectedUser == null}" maxlength="32"/>
+                                                 value="#{UserEditController.editableLastName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -114,7 +111,6 @@
                                                 class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableEmail}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      maxlength="64"/>
                                     </div>
                                 </b:column>
@@ -128,7 +124,6 @@
                                                 class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
                                                      value="#{UserEditController.editablePhoneNumber}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      maxlength="32"/>
                                     </div>
                                 </b:column>
@@ -142,7 +137,6 @@
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
                                                      value="#{UserEditController.editableLocation}"
-                                                     disabled="#{UserEditController.selectedUser == null}"
                                                      maxlength="256"/>
                                     </div>
                                 </b:column>
@@ -161,7 +155,6 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret id="passwordEdit" styleClass="form-control"
                                                        value="#{UserEditController.newPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}"
                                                        maxlength="32"/>
                                     </div>
                                 </b:column>
@@ -174,7 +167,6 @@
                                                 class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret styleClass="form-control"
                                                        value="#{UserEditController.confirmPassword}"
-                                                       disabled="#{UserEditController.selectedUser == null}"
                                                        maxlength="32"/>
                                     </div>
                                 </b:column>
@@ -208,8 +200,10 @@
 
                                                 <pf:tree id="memberGroups"
                                                          value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, false)}"
-                                                         var="node" selectionMode="checkbox" showUnselectableCheckbox="true"
-                                                         selection="#{UserEditController.editableUserGroupNodes}" propagateSelectionDown="false" propagateSelectionUp="false">
+                                                         var="node" selectionMode="checkbox"
+                                                         showUnselectableCheckbox="true"
+                                                         selection="#{UserEditController.editableUserGroupNodes}"
+                                                         propagateSelectionDown="false" propagateSelectionUp="false">
                                                     <pf:treeNode>
                                                         <h:outputText value="#{node.name}"/>
                                                     </pf:treeNode>
@@ -245,16 +239,175 @@
                                     </div>
                                 </div>
                             </div>
-                        </h:form>
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </h:form>
             </b:column>
         </b:row>
+
+        <!-- New User Modal -->
+        <h:form styleClass="form-horizontal">
+            <b:modal styleClass="newUserModal" title="New User">
+                <h:panelGroup id="newUserFields">
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            <h4>Personal Information:</h4>
+                            * = Required. Username must be unique.
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Username: *" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newUsername" showSummary="false" showDetail="true"/>
+                            <h:inputText id="newUsername" styleClass="form-control"
+                                         value="#{NewUserController.username}"
+                                         required="true"
+                                         requiredMessage="This is required." maxlength="32">
+                                <f:validator binding="#{UniqueUserValidator}"/>
+                            </h:inputText>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="First Name:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newFirstName" showSummary="false" showDetail="true"/>
+                            <h:inputText id="newFirstName" styleClass="form-control"
+                                         value="#{NewUserController.firstName}" maxlength="32"/>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Last Name:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newLastName" showSummary="false" showDetail="true"/>
+                            <h:inputText id="newLastName" styleClass="form-control"
+                                         value="#{NewUserController.lastName}" maxlength="32"/>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="E-Mail:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newEmail" showSummary="false" showDetail="true"/>
+                            <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-envelope"/></span>
+                                <h:inputText id="newEmail" styleClass="form-control"
+                                             value="#{NewUserController.email}"
+                                             maxlength="64"/>
+                            </div>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Phone Number:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newPhoneNumber" showSummary="false" showDetail="true"/>
+                            <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-earphone"/></span>
+                                <h:inputText id="newPhoneNumber" styleClass="form-control"
+                                             value="#{NewUserController.phoneNumber}"
+                                             maxlength="32"/>
+                            </div>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Location:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newLocation" showSummary="false" showDetail="true"/>
+                            <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-map-marker"/></span>
+                                <h:inputText id="newLocation" styleClass="form-control"
+                                             value="#{NewUserController.location}"
+                                             maxlength="256"/>
+                            </div>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            <h4>Password:</h4>
+                        </b:column>
+                    </div>
+                    <!--@elvariable id="confirmationField" type="javax.faces.component.UIInput"-->
+                    <div class="form-group">
+                        <h:outputLabel value="Password: *" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newPassword" showSummary="false" showDetail="true"/>
+                            <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-asterisk"/></span>
+                                <h:inputSecret id="newPassword" styleClass="form-control"
+                                               value="#{NewUserController.password}" required="true"
+                                               requiredMessage="This is required."
+                                               maxlength="32">
+                                    <f:validator binding="#{PasswordsMatchValidator}"/>
+                                    <f:attribute name="confirmationField" value="#{confirmationField}"/>
+                                </h:inputSecret>
+                            </div>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Confirm Password: *" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newPasswordConfirm" showSummary="false" showDetail="true"/>
+                            <div class="input-group">
+                                        <span class="input-group-addon"><span
+                                                class="glyphicon glyphicon-asterisk"/></span>
+                                <h:inputSecret id="newPasswordConfirm" styleClass="form-control"
+                                               value="#{NewUserController.confirmPassword}" required="true"
+                                               requiredMessage="This is required."
+                                               maxlength="32" binding="#{confirmationField}"/>
+                            </div>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            <h4>User Groups:</h4>
+                        </b:column>
+                    </div>
+
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            <b:message for="newMemberGroups"
+                                       showSummary="false" showDetail="true"/>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            <b:panel title="Member Of" collapsible="false">
+                                Toggle the selection of User Groups by clicking on them.
+
+                                <pf:tree id="newMemberGroups"
+                                         value="#{GroupTreeController.getMultipleSelectedTree(null, null, false, false)}"
+                                         var="node" selectionMode="checkbox"
+                                         showUnselectableCheckbox="true"
+                                         selection="#{NewUserController.userGroupNodes}"
+                                         propagateSelectionDown="false" propagateSelectionUp="false">
+                                    <pf:treeNode>
+                                        <h:outputText value="#{node.name}"/>
+                                    </pf:treeNode>
+                                </pf:tree>
+                            </b:panel>
+                        </b:column>
+                    </div>
+                    <b:fetchBeanInfos/>
+                </h:panelGroup>
+                <f:facet name="footer">
+
+                    <b:button styleClass="btn btn-default"
+                              p:data-dismiss="modal" value="Cancel"/>
+                    <b:commandButton value="Add" look="primary" ajax="true"
+                                     update="newUserFields :usersPageContent :deletionConfirmModal"
+                                     oncomplete="if(!validationFailed) $('.newUserModal').modal('hide')"
+                                     action="#{NewUserController.addUser}"
+                                     actionListener="#{GroupTreeController.invalidateTrees()}"/>
+                </f:facet>
+            </b:modal>
+        </h:form>
 
         <!-- Deletion Confirmation Modal -->
         <b:modal id="deletionConfirmModal" title="User
                          Deletion Confirmation">
-            Are you sure you want to delete authenticatedUser '#{UserEditController.selectedUser.username}'?
+            Are you sure you want to delete User '#{UserEditController.selectedUser.username}'?
             <f:facet name="footer">
                 <b:button styleClass="btn btn-default"
                           p:data-dismiss="modal" value="Cancel"/>

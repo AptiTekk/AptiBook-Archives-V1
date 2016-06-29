@@ -36,11 +36,7 @@ public class GroupEditController {
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableGroupName;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String newUserGroupName;
-    private UserGroup newUserGroupParent;
+    private NewGroupController newGroupController;
 
     @PostConstruct
     public void init() {
@@ -74,7 +70,6 @@ public class GroupEditController {
     public void resetSettings() {
         if (selectedUserGroup != null) {
             editableGroupName = selectedUserGroup.getName();
-            newUserGroupParent = selectedUserGroup;
         } else {
             editableGroupName = null;
         }
@@ -105,43 +100,6 @@ public class GroupEditController {
         }
     }
 
-    public void addGroup() {
-        if (newUserGroupName != null && !newUserGroupName.isEmpty()) {
-            UserGroup userGroup = userGroupService.findByName(newUserGroupName);
-            if (userGroup != null) {
-                FacesContext.getCurrentInstance().addMessage("newUserGroupForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User Group with that name already exists!"));
-                return;
-            }
-
-            try {
-                UserGroup newGroup = new UserGroup();
-                newGroup.setName(newUserGroupName);
-
-                if (newUserGroupParent != null)
-                    newGroup.setParent(newUserGroupParent);
-                else
-                    newGroup.setParent(userGroupService.getRootGroup());
-
-                userGroupService.insert(newGroup);
-                setSelectedUserGroup(newGroup);
-
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Added"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
-            }
-        }
-        closeNewUserGroupModal();
-    }
-
-    private void closeNewUserGroupModal() {
-        newUserGroupName = null;
-        RequestContext.getCurrentInstance().execute("$('.newUserGroupModal').modal('hide');");
-        RequestContext.getCurrentInstance().update("newUserGroupForm:newUserGroupFields");
-        RequestContext.getCurrentInstance().update("userGroupSelection");
-        RequestContext.getCurrentInstance().update("groupEditForm");
-    }
-
     public void removeUserFromSelectedGroup(User user) throws Exception {
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
@@ -166,6 +124,8 @@ public class GroupEditController {
 
     public void setSelectedUserGroup(UserGroup selectedUserGroup) {
         this.selectedUserGroup = selectedUserGroup;
+        if(newGroupController != null)
+            newGroupController.setParentGroup(selectedUserGroup);
 
         resetSettings();
     }
@@ -178,22 +138,7 @@ public class GroupEditController {
         this.editableGroupName = editableGroupName;
     }
 
-    public String getNewUserGroupName() {
-        return newUserGroupName;
-    }
-
-    public void setNewUserGroupName(String newUserGroupName) {
-        this.newUserGroupName = newUserGroupName;
-    }
-
-    public UserGroup getNewUserGroupParent() {
-        return newUserGroupParent;
-    }
-
-    public void onNewUserGroupParentSelected(NodeSelectEvent event) {
-        if (event.getTreeNode() != null && event.getTreeNode().getData() instanceof UserGroup)
-            this.newUserGroupParent = (UserGroup) event.getTreeNode().getData();
-        else
-            this.newUserGroupParent = null;
+    public void setNewGroupController(NewGroupController newGroupController) {
+        this.newGroupController = newGroupController;
     }
 }
