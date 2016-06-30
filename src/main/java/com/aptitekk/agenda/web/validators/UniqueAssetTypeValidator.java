@@ -29,7 +29,7 @@ public class UniqueAssetTypeValidator implements Validator {
         if (inputText != null && inputText instanceof String && assetTypeService != null) {
             AssetType otherAssetType = assetTypeService.findByName((String) inputText);
             if (otherAssetType != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof UserGroup && otherAssetType.equals(exemptionAttribute))
+                if (exemptionAttribute != null && exemptionAttribute instanceof AssetType && otherAssetType.equals(exemptionAttribute))
                     return;
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset Type with this name already exists."));
             }

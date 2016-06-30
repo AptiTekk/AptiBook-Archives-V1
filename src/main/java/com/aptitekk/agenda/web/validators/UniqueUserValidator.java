@@ -27,7 +27,7 @@ public class UniqueUserValidator implements Validator {
         if (inputText != null && inputText instanceof String && userService != null) {
             User otherUser = userService.findByName((String) inputText);
             if (otherUser != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof UserGroup && otherUser.equals(exemptionAttribute))
+                if (exemptionAttribute != null && exemptionAttribute instanceof User && otherUser.equals(exemptionAttribute))
                     return;
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User with this name already exists."));
             }

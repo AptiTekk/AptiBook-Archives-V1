@@ -88,22 +88,19 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{AssetTypeEditController.updateSettings()}"
-                                                         disabled="#{AssetTypeEditController.selectedAssetType == null}">
+                                                         action="#{AssetTypeEditController.updateSettings()}">
                                             <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{AssetTypeEditController.resetSettings()}"
-                                                         disabled="#{AssetTypeEditController.selectedAssetType == null}">
+                                                         action="#{AssetTypeEditController.resetSettings()}">
                                             <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
                                         </h:commandButton>
                                         <b:button styleClass="btn btn-danger"
                                                   value="Delete Asset Type"
                                                   style="display: inline-block"
                                                   p:data-toggle="modal"
-                                                  p:data-target="#assetTypeDeletionConfirmModal"
-                                                  disabled="#{AssetTypeEditController.selectedAssetType == null}"/>
+                                                  p:data-target="#assetTypeDeletionConfirmModal"/>
                                     </div>
                                 </div>
                             </div>
@@ -304,8 +301,7 @@
                                         <div class="btn-toolbar">
                                             <h:commandButton styleClass="btn btn-success"
                                                              value="Add New Asset" style="display: inline-block"
-                                                             action="#{AssetTypeEditController.addNewAssetToSelectedType}"
-                                                             disabled="#{AssetTypeEditController.selectedAssetType == null}">
+                                                             action="#{AssetTypeEditController.addNewAssetToSelectedType}">
                                                 <f:ajax render=":assetEditForm" onevent="loading"/>
                                             </h:commandButton>
                                         </div>

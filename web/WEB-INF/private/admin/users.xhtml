@@ -225,14 +225,12 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{UserEditController.updateSettings()}"
-                                                         disabled="#{UserEditController.selectedUser == null}">
+                                                         action="#{UserEditController.updateSettings()}">
                                             <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{UserEditController.resetSettings()}"
-                                                         disabled="#{UserEditController.selectedUser == null}">
+                                                         action="#{UserEditController.resetSettings()}">
                                             <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
                                         </h:commandButton>
                                         <b:button styleClass="btn btn-danger"
@@ -240,8 +238,7 @@
                                                   style="display: inline-block"
                                                   p:data-toggle="modal"
                                                   p:data-target="#deletionConfirmModal"
-                                                  disabled="#{UserEditController.selectedUser == null or
-                                                              UserEditController.selectedUser.immutableUsername}"/>
+                                                  disabled="#{UserEditController.selectedUser.immutableUsername}"/>
                                     </div>
                                 </div>
                             </div>
