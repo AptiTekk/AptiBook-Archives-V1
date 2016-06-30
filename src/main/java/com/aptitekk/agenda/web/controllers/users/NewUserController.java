@@ -103,7 +103,7 @@ public class NewUserController {
             userService.insert(newUser);
 
             if (userService.get(newUser.getId()) != null) {
-                FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New User Added!"));
+                FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
                 if (userEditController != null) {
                     userEditController.refreshUserList();
                     userEditController.setSelectedUser(newUser);

@@ -322,6 +322,8 @@
             <groupId>net.bootsfaces</groupId>
             <artifactId>bootsfaces</artifactId>
             <version>0.9.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bootsfaces.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>

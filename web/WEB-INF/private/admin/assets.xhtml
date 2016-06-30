@@ -12,7 +12,7 @@
 
 <ui:composition>
     <h:panelGroup layout="block" id="assetsPage">
-        <b:row>
+        <b:row id="assetsPageContent">
             <!-- Asset Type Selection List -->
             <b:column colXs="12" colSm="5">
                 <h:form>
@@ -33,10 +33,10 @@
                         </b:dataTable>
                     </div>
                     <div class="form-group">
-                        <h:commandButton action="#{AssetTypeEditController.addNewAssetType}"
-                                         styleClass="btn btn-primary" value="Add New Asset Type">
-                            <f:ajax render=":assetsPage" onevent="loading"/>
-                        </h:commandButton>
+                        <b:button look="primary"
+                                  value="Add New Asset Type"
+                                  p:data-toggle="modal"
+                                  p:data-target=".newAssetTypeModal"/>
                     </div>
                 </h:form>
             </b:column>
@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <b:column colXs="9" offsetXs="3">
                                     <h4>Asset Type Settings:</h4>
-                                    * = Required
+                                    * = Required. Name must be unique.
                                     <b:message for="assetTypeEditForm" showSummary="false"
                                                showDetail="true"/>
                                 </b:column>
@@ -67,7 +67,6 @@
                                     <b:message for="assetTypeNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="assetTypeNameEdit" styleClass="form-control"
                                                  value="#{AssetTypeEditController.editableAssetTypeName}"
-                                                 disabled="#{AssetTypeEditController.selectedAssetType == null}"
                                                  required="true"
                                                  requiredMessage="This is required." maxlength="32"/>
                                 </b:column>
@@ -79,8 +78,7 @@
                                     <pf:autoComplete multiple="true" value="#{TagController.selectedAssetTypeTagNames}"
                                                      completeMethod="#{TagController.getAssetTypeTagSuggestions}"
                                                      var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                                     onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32"
-                                                     disabled="#{AssetTypeEditController.selectedAssetType == null}">
+                                                     onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                                         <pf:ajax event="keyup" process="@this" update="@this"/>
                                     </pf:autoComplete>
                                 </b:column>
@@ -319,6 +317,53 @@
                 </c:choose>
             </b:column>
         </b:row>
+
+        <!-- New Asset Type Modal -->
+        <h:form styleClass="form-horizontal">
+            <b:modal styleClass="newAssetTypeModal" title="New Asset Type">
+                <h:panelGroup id="newAssetTypeFields">
+                    <div class="form-group">
+                        <b:column colXs="9" offsetXs="3">
+                            * = Required. Name must be unique.
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <b:message for="newAssetTypeName" showSummary="false" showDetail="true"/>
+                            <h:inputText id="newAssetTypeName" styleClass="form-control"
+                                         value="#{NewAssetTypeController.name}"
+                                         required="true"
+                                         requiredMessage="This is required." maxlength="32">
+                                <f:validator binding="#{UniqueAssetTypeValidator}" />
+                            </h:inputText>
+                        </b:column>
+                    </div>
+                    <div class="form-group">
+                        <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
+                        <b:column colXs="9">
+                            <!--@elvariable id="tag" type="java.lang.String"-->
+                            <pf:autoComplete multiple="true" value="#{TagController.selectedAssetTypeTagNames}"
+                                             completeMethod="#{TagController.getAssetTypeTagSuggestions}"
+                                             var="tag" itemLabel="#{tag}" itemValue="#{tag}"
+                                             onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
+                                <pf:ajax event="keyup" process="@this" update="@this"/>
+                            </pf:autoComplete>
+                        </b:column>
+                    </div>
+                    <b:fetchBeanInfos/>
+                </h:panelGroup>
+                <f:facet name="footer">
+
+                    <b:button styleClass="btn btn-default"
+                              p:data-dismiss="modal" value="Cancel"/>
+                    <b:commandButton value="Add" look="primary" ajax="true"
+                                     update="newAssetTypeFields :assetsPageContent :assetTypeDeletionConfirmModal"
+                                     oncomplete="if(!validationFailed) $('.newAssetTypeModal').modal('hide')"
+                                     action="#{NewAssetTypeController.addAssetType}"/>
+                </f:facet>
+            </b:modal>
+        </h:form>
 
         <!-- Asset Type Deletion Confirmation Modal -->
         <b:modal id="assetTypeDeletionConfirmModal" title="Asset Type

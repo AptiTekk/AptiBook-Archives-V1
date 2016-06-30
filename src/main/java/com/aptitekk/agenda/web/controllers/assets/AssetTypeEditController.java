@@ -5,6 +5,7 @@ import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;
 import com.aptitekk.agenda.core.AssetTypeService;
+import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -105,18 +106,6 @@ public class AssetTypeEditController {
             editableAssetTypeName = "";
             tagController.setSelectedAssetTypeTagNames(null);
         }
-    }
-
-    public void addNewAssetType() {
-        AssetType assetType = new AssetType("New Asset Type");
-        try {
-            assetTypeService.insert(assetType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
-        }
-
-        refreshAssetTypes();
     }
 
     public void deleteSelectedAssetType() {
