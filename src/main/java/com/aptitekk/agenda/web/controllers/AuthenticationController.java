@@ -2,7 +2,7 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.utilities.AgendaLogger;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.web.AuthenticationFilter;
 
@@ -46,19 +46,18 @@ public class AuthenticationController {
      */
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
-        AgendaLogger.logVerbose("Logging In - User: " + username);
+        LogManager.logDebug("Logging In - User: " + username);
 
         User authenticatedUser = userService.correctCredentials(username, password);
-
-        username = null;
         password = null;
 
         if (authenticatedUser == null) // Invalid Credentials
         {
+            LogManager.logInfo("Login attempt for '" + username + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
             return null;
         } else {
-            AgendaLogger.logVerbose("Login Successful");
+            LogManager.logInfo("'" + username + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesSessionHelper.setSessionVariable(UserService.SESSION_VAR_USERNAME,
                     authenticatedUser.getUsername());
@@ -78,7 +77,7 @@ public class AuthenticationController {
     }
 
     public String logout() {
-        AgendaLogger.logVerbose("Logging Out");
+        LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
         FacesSessionHelper.removeSessionVariable(UserService.SESSION_VAR_USERNAME);
         return "index";

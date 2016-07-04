@@ -5,7 +5,7 @@ import com.aptitekk.agenda.core.GoogleService;
 import com.aptitekk.agenda.core.Properties;
 import com.aptitekk.agenda.core.ReservationService;
 import com.aptitekk.agenda.core.entity.Reservation;
-import com.aptitekk.agenda.core.utilities.AgendaLogger;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -32,7 +32,7 @@ public class GoogleCalendarServiceImpl implements GoogleCalendarService {
     public Calendar getCalendarService() throws Exception {
         Credential cred = googleService.authorize(CALENDAR_USER_ID);
         if (cred == null) { //reauthorize
-            AgendaLogger.logMessage("Google Calendar Credential was null");
+            LogManager.logInfo("Google Calendar Credential was null");
             return null;
         } else {
             return new com.google.api.services.calendar.Calendar.Builder(

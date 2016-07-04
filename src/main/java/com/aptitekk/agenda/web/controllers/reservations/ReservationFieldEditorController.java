@@ -5,7 +5,7 @@ import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.ReservationField;
 import com.aptitekk.agenda.core.AssetTypeService;
 import com.aptitekk.agenda.core.ReservationFieldService;
-import com.aptitekk.agenda.core.utilities.AgendaLogger;
+import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -42,11 +42,11 @@ public class ReservationFieldEditorController {
     }
 
     public void updateSettings() {
-        AgendaLogger.logVerbose("Saving " + fields.size() + " fields");
+        LogManager.logDebug("Saving " + fields.size() + " fields");
         fields.forEach(field -> {
             try {
                 reservationFieldService.merge(field);
-                AgendaLogger.logVerbose("Saved " + field.getName());
+                LogManager.logDebug("Saved " + field.getName());
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("pageMessages", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
@@ -59,7 +59,7 @@ public class ReservationFieldEditorController {
     }
 
     public void addField() {
-        AgendaLogger.logVerbose("Adding new field");
+        LogManager.logDebug("Adding new field");
         ReservationField field = new ReservationField();
         field.setName("New Field");
         field.setDescription("Fields need a description so people can add data to their reservation");

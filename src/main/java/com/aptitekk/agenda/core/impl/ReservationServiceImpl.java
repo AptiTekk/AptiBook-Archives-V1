@@ -2,7 +2,7 @@ package com.aptitekk.agenda.core.impl;
 
 import com.aptitekk.agenda.core.*;
 import com.aptitekk.agenda.core.entity.*;
-import com.aptitekk.agenda.core.utilities.AgendaLogger;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.NotificationFactory;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
@@ -138,9 +138,9 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
             //Check for intersections of previous reservations.
             if (isAssetAvailableForReservation(asset, segmentedTimeRange)) {
                 availableAssets.add(asset);
-                AgendaLogger.logVerbose("Available.");
+                LogManager.logDebug("Available.");
             } else {
-                AgendaLogger.logVerbose("Unavailable.");
+                LogManager.logDebug("Unavailable.");
                 //TODO: Offset time in 30 min intervals
             }
         }
@@ -155,7 +155,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
      * @return true if available, false if not.
      */
     public boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
-        AgendaLogger.logVerbose("Checking " + asset.getName());
+        LogManager.logDebug("Checking " + asset.getName());
 
         //If the asset does not specify a start/end time, return false.
         if(asset.getAvailabilityStart() == null || asset.getAvailabilityEnd() == null)

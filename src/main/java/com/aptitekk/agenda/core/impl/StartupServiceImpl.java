@@ -5,7 +5,7 @@ import com.aptitekk.agenda.core.entity.AppProperty;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
-import com.aptitekk.agenda.core.utilities.AgendaLogger;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 
 import javax.annotation.PostConstruct;
@@ -127,7 +127,7 @@ public class StartupServiceImpl implements StartupService {
                     try {
                         AppProperty property = (AppProperty) field.get(null);
                         if (properties.getProperty(property.getKey()) == null) {
-                            AgendaLogger.logMessage("Persisting Default Value for " + property.getKey());
+                            LogManager.logInfo("Persisting Default Value for " + property.getKey());
                             properties.insert(property);
                         }
                     } catch (IllegalArgumentException | IllegalAccessException ex) {

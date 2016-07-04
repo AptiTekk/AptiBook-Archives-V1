@@ -37,6 +37,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.3" />
           <element id="library" level="project" name="Maven: com.google.guava:guava-jdk5:17.0" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
+          <element id="library" level="module" name="Maven: net.bootsfaces:bootsfaces:0.9.0-SNAPSHOT" module-name="Agenda" />
         </element>
       </element>
       <element id="directory" name="META-INF">
