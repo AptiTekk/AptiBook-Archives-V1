@@ -1,11 +1,10 @@
 package com.aptitekk.agenda.core.entity;
 
+import com.aptitekk.agenda.core.entity.converter.ReservationStatusConverter;
+import com.aptitekk.agenda.core.entity.enums.ReservationStatus;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -22,7 +21,9 @@ public class ReservationApproval implements Serializable {
     private User user;
     @ManyToOne
     private Reservation reservation;
-    private boolean approved;
+    @Convert(converter = ReservationStatusConverter.class)
+    private ReservationStatus approved = ReservationStatus.PENDING;
+
     private static final long serialVersionUID = 1L;
 
     public ReservationApproval() {
@@ -45,11 +46,11 @@ public class ReservationApproval implements Serializable {
         this.user = user;
     }
 
-    public boolean getApproved() {
+    public ReservationStatus getApproved() {
         return this.approved;
     }
 
-    public void setApproved(boolean approved) {
+    public void setApproved(ReservationStatus approved) {
         this.approved = approved;
     }
 

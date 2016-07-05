@@ -1,5 +1,6 @@
 package com.aptitekk.agenda.core.entity;
 
+import com.aptitekk.agenda.core.entity.enums.ReservationStatus;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 
@@ -30,7 +31,8 @@ public class Reservation implements Serializable {
     @Lob
     private String description;
 
-    private byte pendingApproval;
+    @Column(nullable = false)
+    private ReservationStatus status;
 
     @Column(columnDefinition = "time")
     private SegmentedTime timeStart;
@@ -94,12 +96,12 @@ public class Reservation implements Serializable {
         this.description = description;
     }
 
-    public byte getPendingApproval() {
-        return this.pendingApproval;
+    public ReservationStatus getStatus() {
+        return this.status;
     }
 
-    public void setPendingApproval(byte pendingApproval) {
-        this.pendingApproval = pendingApproval;
+    public void setStatus(ReservationStatus pendingApproval) {
+        this.status = pendingApproval;
     }
 
     public SegmentedTime getTimeStart() {
@@ -169,6 +171,11 @@ public class Reservation implements Serializable {
         this.googleEventId = googleEventId;
     }
 
+    @PrePersist
+    public void onCreate() {
+        status = ReservationStatus.PENDING;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -183,13 +190,13 @@ public class Reservation implements Serializable {
                 && EqualsHelper.areEquals(getDescription(), other.getDescription())
                 && EqualsHelper.areEquals(getDateCreated(), other.getDateCreated())
                 && EqualsHelper.areEquals(getGoogleEventId(), other.getGoogleEventId())
-                && EqualsHelper.areEquals(getPendingApproval(), other.getPendingApproval())
+                && EqualsHelper.areEquals(getStatus(), other.getStatus())
                 && EqualsHelper.areEquals(getTimeStart(), other.getTimeStart())
                 && EqualsHelper.areEquals(getTimeEnd(), other.getTimeEnd());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), getDateCreated(), getGoogleEventId(), getPendingApproval(), getTimeStart(), getTimeEnd());
+        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), getDateCreated(), getGoogleEventId(), getStatus(), getTimeStart(), getTimeEnd());
     }
 }

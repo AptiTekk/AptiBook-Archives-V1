@@ -1,9 +1,9 @@
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.Reservation;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 
 import javax.annotation.PostConstruct;
@@ -12,7 +12,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @ManagedBean(name = "ReservationManagementController")
 @ViewScoped
@@ -26,7 +27,7 @@ public class ReservationManagementController {
 
     private User user;
 
-    private Set<Reservation> reservations;
+    private List<Reservation> reservations;
 
     @PostConstruct
     public void init() {
@@ -38,7 +39,7 @@ public class ReservationManagementController {
             this.setUser(userService.findByName(loggedInUser));
         }
 
-        reservations = reservationService.getAllUnderUser(user);
+        reservations = new ArrayList<>(reservationService.getAllUnderUser(user));
     }
 
     public String formatApprovedBy(Reservation reservation) {
@@ -61,11 +62,11 @@ public class ReservationManagementController {
         this.user = user;
     }
 
-    public Set<Reservation> getReservations() {
+    public List<Reservation> getReservations() {
         return reservations;
     }
 
-    public void setReservations(Set<Reservation> reservations) {
+    public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
     }
 }

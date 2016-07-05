@@ -25,18 +25,17 @@
                                      onstart="loading_start()"
                                      oncomplete="loading_complete()"/>
 
-                            <pf:tab title="#{reservation.title} - #{reservation.reservable.name}">
+                            <pf:tab title="#{reservation.title} - #{reservation.asset.name}">
                                 <h4>#{reservation.title}</h4>
                                 <h6>#{reservation.description}</h6>
-                                <p>#{reservation.timeStart}</p>
-                                <p>#{reservation.timeEnd}</p>
+                                <p>#{reservation.timeStart.getTimeString()}</p>
+                                <p>#{reservation.timeEnd.getTimeString()}</p>
                                 <br/>
                                 <i>#{ReservationManagementController.formatApprovedBy(reservation)}</i>
                                 <f:facet name="footer">
                                     <div class="btn-toolbar pull-right">
                                         <h:commandButton styleClass="btn btn-success"
-                                                         value="Approve" style="display: inline-block"
-                                                         action="#{GroupEditController.updateSettings()}">
+                                                         value="Approve" style="display: inline-block">
                                             <f:ajax execute="@form" render=":page" onevent="loading"/>
                                         </h:commandButton>
 

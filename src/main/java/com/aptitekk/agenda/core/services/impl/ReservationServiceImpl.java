@@ -1,6 +1,7 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entity.enums.ReservationStatus;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.NotificationFactory;
@@ -29,6 +30,9 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     @Inject
     UserGroupService userGroupService;
+
+    @Inject
+    UserService userService;
 
     public ReservationServiceImpl() {
         super(Reservation.class);
@@ -116,6 +120,83 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         }
     }
 
+    private void setStatus(Reservation reservation, ReservationStatus reservationStatus) throws Exception {
+        reservation.setStatus(reservationStatus);
+        update(reservation, reservation.getId());
+    }
+
+    @Override
+    public void approveReservation(Reservation reservation, User owner, boolean approved) throws Exception {
+        ReservationApproval approval = new ReservationApproval();
+        approval.setReservation(reservation);
+        approval.setUser(owner);
+        approval.setApproved((approved) ? ReservationStatus.APPROVED : ReservationStatus.REJECTED);
+
+        entityManager.persist(approval);
+
+        resolveStatus(reservation);
+    }
+
+    @Override
+    public void resolveStatus(Reservation reservation) throws Exception {
+        reservation = entityManager.merge(reservation);
+        List<ReservationApproval> approvals = reservation.getApprovals();
+
+        UserGroup highestGroup = getHighestApproval(approvals);
+
+        Boolean answer = getGroupAnswer(highestGroup, approvals, highestGroup.getUsers().size());
+        if (answer == null) {
+            reservation.setStatus(ReservationStatus.PENDING);
+        } else if (answer) {
+            reservation.setStatus(ReservationStatus.APPROVED);
+        } else {
+            reservation.setStatus(ReservationStatus.REJECTED);
+        }
+    }
+
+    private UserGroup getHighestApproval(List<ReservationApproval> approvals) {
+        User user;
+        UserGroup result = null;
+
+        int level = 0;
+        for (ReservationApproval approval : approvals) {
+            user = approval.getUser();
+            UserGroup[] highest = userGroupService.getSenior(user.getUserGroups());
+
+            for (UserGroup group : highest) {
+                List<UserGroup> hierarchy = userGroupService.getHierarchyUp(group);
+
+                if (level < hierarchy.size()) {
+                    level = hierarchy.size();
+                    result = group;
+                }
+            }
+        }
+        return result;
+    }
+
+    private Boolean getGroupAnswer(UserGroup group, List<ReservationApproval> approvals, int minimumForApproval) {
+        List<ReservationApproval> groupOnlyApprovals = filterByGroup(group, approvals);
+        int accepted = 0;
+        for (ReservationApproval approval : groupOnlyApprovals) {
+            if (approval.getApproved().equals(ReservationStatus.APPROVED)) {
+                accepted++;
+            }
+        }
+
+        return accepted >= minimumForApproval;
+    }
+
+    private List<ReservationApproval> filterByGroup(UserGroup group, List<ReservationApproval> approvals) {
+        List<ReservationApproval> groupOnlyApprovals = new ArrayList<>();
+        approvals.forEach(approval -> {
+            if (approval.getUser().getUserGroups().contains(group)) {
+                groupOnlyApprovals.add(approval);
+            }
+        });
+        return groupOnlyApprovals;
+    }
+
     /**
      * Finds and returns a list of assets that are available for reservation at the given times from the given asset type.
      *
@@ -155,7 +236,7 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
         LogManager.logDebug("Checking " + asset.getName());
 
         //If the asset does not specify a start/end time, return false.
-        if(asset.getAvailabilityStart() == null || asset.getAvailabilityEnd() == null)
+        if (asset.getAvailabilityStart() == null || asset.getAvailabilityEnd() == null)
             return false;
 
         //Return false if the reservation start or end time is not within the availability time of the asset
