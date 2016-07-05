@@ -1,6 +1,6 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.event.NodeSelectEvent;
 

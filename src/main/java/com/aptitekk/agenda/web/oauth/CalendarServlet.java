@@ -5,7 +5,7 @@
  */
 package com.aptitekk.agenda.web.oauth;
 
-import com.aptitekk.agenda.core.GoogleService;
+import com.aptitekk.agenda.core.services.GoogleService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.aptitekk.agenda.core.GoogleService.INITIAL_PATH;
+import static com.aptitekk.agenda.core.services.GoogleService.INITIAL_PATH;
 
 /**
  *

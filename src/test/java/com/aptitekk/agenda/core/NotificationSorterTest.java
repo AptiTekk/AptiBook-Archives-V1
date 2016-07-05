@@ -1,6 +1,9 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.services.EntityService;
+import com.aptitekk.agenda.core.services.NotificationService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -26,7 +29,7 @@ public class NotificationSorterTest {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return TestUtils.createDeployment(Notification.class, NotificationService.class, AppProperty.class, NotificationListener.class, UserService.class, EntityService.class, User.class, Reservation.class, Asset.class);
+        return TestUtils.createDeployment();
     }
 
     @Test

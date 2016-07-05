@@ -1,6 +1,6 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.UserGroupService;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -9,7 +9,6 @@ import org.primefaces.model.TreeNode;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
-import java.lang.reflect.Array;
 import java.util.*;
 
 @ManagedBean(name = "GroupTreeController")

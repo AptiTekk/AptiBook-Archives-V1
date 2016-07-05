@@ -1,11 +1,10 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.AssetService;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;
-import com.aptitekk.agenda.core.AssetTypeService;
-import org.primefaces.context.RequestContext;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;

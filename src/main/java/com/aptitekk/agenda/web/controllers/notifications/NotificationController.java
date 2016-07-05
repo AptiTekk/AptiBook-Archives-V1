@@ -1,13 +1,12 @@
 package com.aptitekk.agenda.web.controllers.notifications;
 
-import com.aptitekk.agenda.core.NotificationService;
-import com.aptitekk.agenda.core.Properties;
-import com.aptitekk.agenda.core.UserService;
 import com.aptitekk.agenda.core.entity.Notification;
 import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.services.NotificationService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
+import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -30,9 +29,6 @@ public class NotificationController implements NotificationListener {
 
     @Inject
     private NotificationService notificationService;
-
-    @Inject
-    private Properties properties;
 
     private List<Notification> notifications;
 
@@ -99,11 +95,8 @@ public class NotificationController implements NotificationListener {
     }
 
     public String formatDateTime(Date date) {
-        if (properties.get(NotificationService.NOTIFICATION_DATEFORMAT.getKey()) != null) {
-            DateFormat dateFormat = new SimpleDateFormat(properties.get(NotificationService.NOTIFICATION_DATEFORMAT.getKey()));
-            return dateFormat.format(date);
-        }
-        return date.toString();
+        DateFormat dateFormat = new SimpleDateFormat(NotificationService.NOTIFICATION_DATEFORMAT);
+        return dateFormat.format(date);
     }
 
     @Override

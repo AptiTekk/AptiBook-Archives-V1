@@ -1,6 +1,6 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.AssetTypeService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.entity.AssetType;
 
 import javax.faces.application.FacesMessage;

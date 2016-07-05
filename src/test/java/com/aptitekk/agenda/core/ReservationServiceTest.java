@@ -1,6 +1,7 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;

@@ -1,8 +1,8 @@
 package com.aptitekk.agenda.web.converters;
 
 import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.AssetTypeService;
-import com.aptitekk.agenda.core.TagService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.TagService;
 import com.aptitekk.agenda.core.entity.Tag;
 
 import javax.faces.bean.ManagedBean;

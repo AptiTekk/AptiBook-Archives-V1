@@ -1,7 +1,7 @@
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.ReservationService;
-import com.aptitekk.agenda.core.UserService;
+import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.Reservation;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;

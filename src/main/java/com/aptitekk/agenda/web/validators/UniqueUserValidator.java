@@ -1,8 +1,7 @@
 package com.aptitekk.agenda.web.validators;
 
-import com.aptitekk.agenda.core.UserService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.entity.UserGroup;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;

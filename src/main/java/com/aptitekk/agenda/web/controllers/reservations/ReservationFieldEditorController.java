@@ -1,10 +1,10 @@
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.AssetService;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.ReservationField;
-import com.aptitekk.agenda.core.AssetTypeService;
-import com.aptitekk.agenda.core.ReservationFieldService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.ReservationFieldService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.annotation.PostConstruct;

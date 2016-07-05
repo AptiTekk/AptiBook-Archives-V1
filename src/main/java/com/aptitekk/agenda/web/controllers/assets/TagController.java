@@ -1,9 +1,9 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
 
-import com.aptitekk.agenda.core.AssetService;
-import com.aptitekk.agenda.core.AssetTypeService;
-import com.aptitekk.agenda.core.TagService;
+import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.TagService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;

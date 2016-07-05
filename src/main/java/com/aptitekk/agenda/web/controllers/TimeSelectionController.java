@@ -1,8 +1,8 @@
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.ReservationService;
+import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
-import com.aptitekk.agenda.core.AssetTypeService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.utilities.time.CalendarRange;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;

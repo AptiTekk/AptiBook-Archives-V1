@@ -1,6 +1,6 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.AssetService;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;

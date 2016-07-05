@@ -1,7 +1,7 @@
 package com.aptitekk.agenda.core.entity;
 
-import com.aptitekk.agenda.core.UserGroupService;
-import com.aptitekk.agenda.core.UserService;
+import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.notification.OmitInjection;
 

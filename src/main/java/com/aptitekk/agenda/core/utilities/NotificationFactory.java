@@ -1,7 +1,5 @@
 package com.aptitekk.agenda.core.utilities;
 
-import com.aptitekk.agenda.core.Properties;
-import com.aptitekk.agenda.core.entity.AppProperty;
 import com.aptitekk.agenda.core.entity.Notification;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.utilities.notification.EmailNotification;
@@ -66,22 +64,6 @@ public class NotificationFactory {
 
         public EmailNotificationBuilder setHtml(String html) {
             this.html = html;
-            return this;
-        }
-
-        public EmailNotificationBuilder loadTemplate(Properties properties) {
-            if (properties.get("agenda.notifications.email.template") == null) {
-                try {
-                    InputStream inputStream = NotificationFactory.class.getResourceAsStream("/WEB-INF/templates/notifications/email.html");
-                    StringWriter writer = new StringWriter();
-                    IOUtils.copy(inputStream, writer, "UTF-8");
-                    properties.insert(new AppProperty("agenda.notifications.email.template", writer.toString()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return this;
-                }
-            }
-            setTemplate(properties.get("agenda.notifications.email.template"));
             return this;
         }
 

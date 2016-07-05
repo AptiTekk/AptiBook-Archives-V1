@@ -1,5 +1,8 @@
 package com.aptitekk.agenda.core;
 
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;

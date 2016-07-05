@@ -1,6 +1,6 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.UserService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;

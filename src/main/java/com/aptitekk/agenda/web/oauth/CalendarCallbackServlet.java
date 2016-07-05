@@ -5,9 +5,8 @@
  */
 package com.aptitekk.agenda.web.oauth;
 
-import static com.aptitekk.agenda.core.GoogleService.CALLBACK_PATH;
+import static com.aptitekk.agenda.core.services.GoogleService.CALLBACK_PATH;
 
-import com.aptitekk.agenda.core.Properties;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
@@ -18,8 +17,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.aptitekk.agenda.core.GoogleService;
-import static com.aptitekk.agenda.core.GoogleService.ACCESS_TOKEN_PROPERTY;
+import com.aptitekk.agenda.core.services.GoogleService;
+import static com.aptitekk.agenda.core.services.GoogleService.ACCESS_TOKEN_PROPERTY;
 
 /**
  *
@@ -31,14 +30,11 @@ public class CalendarCallbackServlet extends AbstractAuthorizationCodeCallbackSe
     @Inject
     GoogleService service;
 
-    @Inject
-    Properties properties;
-    
     @Override
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
             throws ServletException, IOException {
         System.out.println("It worked! Welcome token: " + credential.getAccessToken());
-        properties.put(ACCESS_TOKEN_PROPERTY.getKey(), credential.getAccessToken());
+        //properties.put(ACCESS_TOKEN_PROPERTY.getKey(), credential.getAccessToken());
     }
 
     @Override

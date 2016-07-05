@@ -1,5 +1,7 @@
 package com.aptitekk.agenda.core;
 
+import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
