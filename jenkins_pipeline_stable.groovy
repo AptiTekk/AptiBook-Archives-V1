@@ -41,14 +41,17 @@ node {
         for (cause in err.getCauses()) {
             if (cause instanceof org.jenkinsci.plugins.workflow.support.steps.StageStepExecution.CanceledCause) {
                 slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
+                error "Aborted by User.";
                 return;
             }
         }
         slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
+        error err.message;
     } catch (hudson.AbortException ignored) {
         slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
-        return;
+        error "Aborted by User.";
     } catch (err) {
         slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
+        error err.message;
     }
 }
