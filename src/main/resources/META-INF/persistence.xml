@@ -11,7 +11,6 @@
     <persistence-unit name="Agenda" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
-        <class>com.aptitekk.agenda.core.entity.AppProperty</class>
         <class>com.aptitekk.agenda.core.entity.Asset</class>
         <class>com.aptitekk.agenda.core.entity.AssetType</class>
         <class>com.aptitekk.agenda.core.entity.Reservation</class>
@@ -21,6 +20,7 @@
         <class>com.aptitekk.agenda.core.entity.User</class>
         <class>com.aptitekk.agenda.core.entity.UserGroup</class>
         <class>com.aptitekk.agenda.core.entity.Tag</class>
+        <class>com.aptitekk.agenda.core.entity.Permission</class>
 
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>

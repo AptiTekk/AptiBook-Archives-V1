@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -128,5 +129,16 @@ public class UserGroup implements Serializable {
     @Override
     public int hashCode() {
         return EqualsHelper.calculateHashCode(getName());
+    }
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Permission> permissions;
+
+    public Collection<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Collection<Permission> permissions) {
+        this.permissions = permissions;
     }
 }
