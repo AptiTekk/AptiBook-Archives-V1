@@ -36,17 +36,14 @@ node {
 
         stage "Stable QA";
         slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${agendaqaUrl}";
-        input "Please test https://agendaqa-aptitekk.rhcloud.com/ and proceed when ready.";
-    } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException err) {
-        for (cause in err.getCauses()) {
-            if (cause instanceof org.jenkinsci.plugins.workflow.support.steps.StageStepExecution.CanceledCause) {
-                slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
-                error "Aborted by User.";
-                return;
-            }
+
+        try {
+            input "Please test https://agendaqa-aptitekk.rhcloud.com/ and proceed when ready.";
+        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException ignored) {
+            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
+            error "Aborted by User.";
         }
-        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
-        error err.message;
+
     } catch (hudson.AbortException ignored) {
         slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
         error "Aborted by User.";
