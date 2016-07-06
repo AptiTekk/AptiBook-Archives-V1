@@ -1,15 +1,16 @@
 package com.aptitekk.agenda.web.controllers;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-@ManagedBean(name = "SettingsController")
+@Named
 @ViewScoped
-public class SettingsController {
+public class SettingsController implements Serializable {
 
     public enum SettingsPage {
         ASSETS("Assets", "assets.xhtml", "tags"),

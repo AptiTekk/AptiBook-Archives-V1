@@ -10,15 +10,17 @@ import com.aptitekk.agenda.core.utilities.LogManager;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "ReservationFieldEditorController")
+@Named
 @ViewScoped
-public class ReservationFieldEditorController {
+public class ReservationFieldEditorController implements Serializable {
 
     @Inject
     AssetTypeService assetTypeService;

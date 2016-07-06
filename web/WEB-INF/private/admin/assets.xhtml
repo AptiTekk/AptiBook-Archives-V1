@@ -17,7 +17,7 @@
             <b:column colXs="12" colSm="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{AssetTypeEditController.assetTypes}" var="assetType"
+                        <b:dataTable value="#{assetTypeEditController.assetTypes}" var="assetType"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      responsive="true">
                             <h:column>
@@ -25,8 +25,8 @@
                                     <h:outputText value="Asset Type"/>
                                 </f:facet>
                                 <h:commandLink value="#{assetType.name}"
-                                               action="#{AssetTypeEditController.setSelectedAssetType(assetType)}"
-                                               style="font-weight: #{AssetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                               action="#{assetTypeEditController.setSelectedAssetType(assetType)}"
+                                               style="font-weight: #{assetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
                                     <f:ajax render=":assetsPage"/>
                                 </h:commandLink>
                             </h:column>
@@ -44,7 +44,7 @@
             <!-- Asset Type Edit Fields -->
             <b:column colXs="12" colSm="7">
                 <c:choose>
-                    <c:when test="#{AssetTypeEditController.selectedAssetType == null}">
+                    <c:when test="#{assetTypeEditController.selectedAssetType == null}">
                         <b:column colXs="9" offsetXs="3">
                             <h4>Please select an Asset Type.</h4>
                             <b:messages showSummary="false" showDetail="true"/>
@@ -66,7 +66,7 @@
                                 <b:column colXs="9">
                                     <b:message for="assetTypeNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="assetTypeNameEdit" styleClass="form-control"
-                                                 value="#{AssetTypeEditController.editableAssetTypeName}"
+                                                 value="#{assetTypeEditController.editableAssetTypeName}"
                                                  required="true"
                                                  requiredMessage="This is required." maxlength="32"/>
                                 </b:column>
@@ -75,8 +75,8 @@
                                 <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <!--@elvariable id="tag" type="java.lang.String"-->
-                                    <pf:autoComplete multiple="true" value="#{TagController.selectedAssetTypeTagNames}"
-                                                     completeMethod="#{TagController.getAssetTypeTagSuggestions}"
+                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetTypeTagNames}"
+                                                     completeMethod="#{tagController.getAssetTypeTagSuggestions}"
                                                      var="tag" itemLabel="#{tag}" itemValue="#{tag}"
                                                      onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                                         <pf:ajax event="keyup" process="@this" update="@this"/>
@@ -88,12 +88,12 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{AssetTypeEditController.updateSettings()}">
+                                                         action="#{assetTypeEditController.updateSettings()}">
                                             <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{AssetTypeEditController.resetSettings()}">
+                                                         action="#{assetTypeEditController.resetSettings()}">
                                             <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
                                         </h:commandButton>
                                         <b:button styleClass="btn btn-danger"
@@ -123,18 +123,18 @@
                                         <c:choose>
 
                                             <!-- No Assets Found -->
-                                            <c:when test="#{empty AssetTypeEditController.selectedAssetType.assets}">
+                                            <c:when test="#{empty assetTypeEditController.selectedAssetType.assets}">
                                                 <p>This Asset Type has no Assets! Click the button below to get started.</p>
                                             </c:when>
 
                                             <!-- Assets Found -->
                                             <c:otherwise>
                                                 <pf:accordionPanel dynamic="true"
-                                                                   activeIndex="#{AssetEditController.selectedAssetIndex}"
-                                                                   value="#{AssetTypeEditController.selectedAssetType.assets}"
+                                                                   activeIndex="#{assetEditController.selectedAssetIndex}"
+                                                                   value="#{assetTypeEditController.selectedAssetType.assets}"
                                                                    var="asset">
                                                     <pf:ajax event="tabChange"
-                                                             listener="#{AssetEditController.onAssetTabChange}"
+                                                             listener="#{assetEditController.onAssetTabChange}"
                                                              update=":assetDeletionConfirmModal"
                                                              onstart="loading_start()"
                                                              oncomplete="loading_complete()"/>
@@ -150,7 +150,7 @@
                                                                 <b:message for="assetEditForm:name" showSummary="false"
                                                                            showDetail="true"/>
                                                                 <h:inputText id="name" styleClass="form-control"
-                                                                             value="#{AssetEditController.editableAssetName}"
+                                                                             value="#{assetEditController.editableAssetName}"
                                                                              required="true"
                                                                              requiredMessage="This is required."
                                                                              maxlength="32"/>
@@ -165,8 +165,8 @@
                                                             <b:column colXs="9">
                                                                 <!--@elvariable id="tag" type="com.aptitekk.agenda.core.entity.Tag"-->
                                                                 <pf:autoComplete multiple="true" dropdown="true"
-                                                                                 value="#{TagController.selectedAssetTags}"
-                                                                                 completeMethod="#{TagController.getAssetTagSuggestions}"
+                                                                                 value="#{tagController.selectedAssetTags}"
+                                                                                 completeMethod="#{tagController.getAssetTagSuggestions}"
                                                                                  var="tag" itemLabel="#{tag.name}"
                                                                                  itemValue="#{tag}"
                                                                                  converter="#{TagConverter}"
@@ -183,7 +183,7 @@
                                                                            styleClass="col-xs-3 control-label"/>
                                                             <b:column colXs="9">
                                                                 <h:selectBooleanCheckbox id="approvalCheck"
-                                                                                         value="#{AssetEditController.editableAssetApproval}"/>
+                                                                                         value="#{assetEditController.editableAssetApproval}"/>
                                                                 <pf:tooltip for="approvalCheck"
                                                                             value="If checked, any requested reservations for this Asset must be approved by the groups which own it."/>
                                                             </b:column>
@@ -195,14 +195,14 @@
                                                                                styleClass="col-xs-3 control-label"/>
                                                                 <b:column colXs="9">
                                                                     <h:selectOneMenu id="startTime"
-                                                                                     value="#{TimeSelectionController.selectedStartTime}"
+                                                                                     value="#{timeSelectionController.selectedStartTime}"
                                                                                      styleClass="big-select"
                                                                                      converter="#{SegmentedTimeConverter}">
                                                                         <f:selectItem itemValue="#{null}"
                                                                                       itemLabel="--- Select a Time ---"
                                                                                       noSelectionOption="true"/>
                                                                         <f:selectItems
-                                                                                value="#{TimeSelectionController.getStartTimes(false)}"
+                                                                                value="#{timeSelectionController.getStartTimes(false)}"
                                                                                 var="time" itemValue="#{time}"
                                                                                 itemLabel="#{time.timeString}"/>
                                                                         <f:ajax render="assetAvailability"
@@ -218,12 +218,12 @@
                                                                                styleClass="col-xs-3 control-label"/>
                                                                 <b:column colXs="9">
                                                                     <h:selectOneMenu id="endTime"
-                                                                                     value="#{TimeSelectionController.selectedEndTime}"
+                                                                                     value="#{timeSelectionController.selectedEndTime}"
                                                                                      styleClass="big-select"
                                                                                      converter="#{SegmentedTimeConverter}"
-                                                                                     disabled="#{TimeSelectionController.selectedStartTime == null}">
+                                                                                     disabled="#{timeSelectionController.selectedStartTime == null}">
                                                                         <f:selectItems
-                                                                                value="#{TimeSelectionController.endTimes}"
+                                                                                value="#{timeSelectionController.endTimes}"
                                                                                 var="time" itemValue="#{time}"
                                                                                 itemLabel="#{time.timeString}"/>
                                                                         <f:ajax render="assetAvailability"
@@ -243,12 +243,12 @@
                                                                            showSummary="false" showDetail="true"/>
                                                                 <pf:tree id="ownerGroup" required="true"
                                                                          requiredMessage="This is required."
-                                                                         value="#{GroupTreeController.getTree(AssetEditController.currentAssetOwnerGroup, null, false, false)}"
+                                                                         value="#{groupTreeController.getTree(assetEditController.currentAssetOwnerGroup, null, false, false)}"
                                                                          var="node" dynamic="true"
                                                                          selectionMode="single">
                                                                     <pf:ajax event="select" onstart="loading_start()"
                                                                              oncomplete="loading_complete()"
-                                                                             listener="#{AssetEditController.onOwnerSelected}"/>
+                                                                             listener="#{assetEditController.onOwnerSelected}"/>
                                                                     <pf:treeNode>
                                                                         <h:outputText value="#{node.name}"/>
                                                                     </pf:treeNode>
@@ -267,7 +267,7 @@
                                                                     <h:commandButton styleClass="btn btn-primary"
                                                                                      value="Save Changes"
                                                                                      style="display: inline-block"
-                                                                                     action="#{AssetEditController.updateSettings()}">
+                                                                                     action="#{assetEditController.updateSettings()}">
                                                                         <f:ajax execute="@form"
                                                                                 render=":assetEditForm"
                                                                                 onevent="loading"/>
@@ -275,7 +275,7 @@
                                                                     <h:commandButton styleClass="btn btn-default"
                                                                                      value="Reset Fields"
                                                                                      style="display: inline-block"
-                                                                                     action="#{AssetEditController.resetSettings()}">
+                                                                                     action="#{assetEditController.resetSettings()}">
                                                                         <f:ajax render="@form"
                                                                                 onevent="loading"/>
                                                                     </h:commandButton>
@@ -301,7 +301,7 @@
                                         <div class="btn-toolbar">
                                             <h:commandButton styleClass="btn btn-success"
                                                              value="Add New Asset" style="display: inline-block"
-                                                             action="#{AssetTypeEditController.addNewAssetToSelectedType}">
+                                                             action="#{assetTypeEditController.addNewAssetToSelectedType}">
                                                 <f:ajax render=":assetEditForm" onevent="loading"/>
                                             </h:commandButton>
                                         </div>
@@ -328,7 +328,7 @@
                         <b:column colXs="9">
                             <b:message for="newAssetTypeName" showSummary="false" showDetail="true"/>
                             <h:inputText id="newAssetTypeName" styleClass="form-control"
-                                         value="#{NewAssetTypeController.name}"
+                                         value="#{newAssetTypeController.name}"
                                          required="true"
                                          requiredMessage="This is required." maxlength="32">
                                 <f:validator binding="#{UniqueAssetTypeValidator}" />
@@ -339,8 +339,8 @@
                         <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
                         <b:column colXs="9">
                             <!--@elvariable id="tag" type="java.lang.String"-->
-                            <pf:autoComplete multiple="true" value="#{TagController.selectedAssetTypeTagNames}"
-                                             completeMethod="#{TagController.getAssetTypeTagSuggestions}"
+                            <pf:autoComplete multiple="true" value="#{tagController.selectedAssetTypeTagNames}"
+                                             completeMethod="#{tagController.getAssetTypeTagSuggestions}"
                                              var="tag" itemLabel="#{tag}" itemValue="#{tag}"
                                              onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                                 <pf:ajax event="keyup" process="@this" update="@this"/>
@@ -356,7 +356,7 @@
                     <b:commandButton value="Add" look="primary" ajax="true"
                                      update="newAssetTypeFields :assetsPageContent :assetTypeDeletionConfirmModal"
                                      oncomplete="if(!validationFailed) $('.newAssetTypeModal').modal('hide')"
-                                     action="#{NewAssetTypeController.addAssetType}"/>
+                                     action="#{newAssetTypeController.addAssetType}"/>
                 </f:facet>
             </b:modal>
         </h:form>
@@ -364,7 +364,7 @@
         <!-- Asset Type Deletion Confirmation Modal -->
         <b:modal id="assetTypeDeletionConfirmModal" title="Asset Type
                          Deletion Confirmation">
-            Are you sure you want to delete the Asset Type '#{AssetTypeEditController.selectedAssetType.name}'?
+            Are you sure you want to delete the Asset Type '#{assetTypeEditController.selectedAssetType.name}'?
             <br/>
             <p style="text-decoration: underline">All associated Assets and Reservations will be deleted as well!</p>
             <f:facet name="footer">
@@ -372,7 +372,7 @@
                           p:data-dismiss="modal" value="Cancel"/>
                 <h:commandButton styleClass="btn btn-danger"
                                  p:data-dismiss="modal" value="Delete"
-                                 action="#{AssetTypeEditController.deleteSelectedAssetType}">
+                                 action="#{assetTypeEditController.deleteSelectedAssetType}">
                     <f:ajax render=":assetsPage" onevent="loading"/>
                 </h:commandButton>
             </f:facet>
@@ -381,7 +381,7 @@
         <!-- Asset Deletion Confirmation Modal -->
         <b:modal id="assetDeletionConfirmModal" title="Asset
                          Deletion Confirmation">
-            Are you sure you want to delete the Asset '#{AssetEditController.selectedAsset.name}'?
+            Are you sure you want to delete the Asset '#{assetEditController.selectedAsset.name}'?
             <br/>
             <p style="text-decoration: underline">All associated Reservations will be deleted as well!</p>
             <f:facet name="footer">
@@ -389,7 +389,7 @@
                           p:data-dismiss="modal" value="Cancel"/>
                 <h:commandButton styleClass="btn btn-danger"
                                  p:data-dismiss="modal" value="Delete"
-                                 action="#{AssetEditController.deleteSelectedAsset}">
+                                 action="#{assetEditController.deleteSelectedAsset}">
                     <f:ajax render=":assetsPage" onevent="loading"/>
                 </h:commandButton>
             </f:facet>

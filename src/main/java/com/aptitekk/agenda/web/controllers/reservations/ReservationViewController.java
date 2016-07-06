@@ -11,14 +11,16 @@ import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "ReservationViewController")
+@Named
 @ViewScoped
-public class ReservationViewController {
+public class ReservationViewController implements Serializable {
 
     @Inject
     private ReservationService resService;

@@ -8,16 +8,18 @@ import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "ReservationManagementController")
+@Named
 @ViewScoped
-public class ReservationManagementController {
+public class ReservationManagementController implements Serializable {
 
     @Inject
     private UserService userService;
@@ -31,8 +33,6 @@ public class ReservationManagementController {
 
     @PostConstruct
     public void init() {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-
         String loggedInUser
                 = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
         if (loggedInUser != null) {

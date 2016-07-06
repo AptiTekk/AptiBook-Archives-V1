@@ -9,13 +9,15 @@ import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.*;
 
-@ManagedBean(name = "TagController")
+@Named
 @ViewScoped
-public class TagController {
+public class TagController implements Serializable {
 
     @Inject
     private TagService tagService;

@@ -11,7 +11,7 @@
 <ui:composition>
     <b:jumbotron>
         <b:container>
-            <h1>Hello, #{AuthenticationController.authenticatedUser.fullname}!</h1>
+            <h1>Hello, #{authenticationController.authenticatedUser.fullname}!</h1>
             <p>To begin your search, please fill out the form below and let
                 us know what time you need to make a reservation!</p>
         </b:container>
@@ -47,12 +47,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <ui:repeat value="#{TimeSelectionController.assetTypes}" var="assetType">
+                                    <ui:repeat value="#{timeSelectionController.assetTypes}" var="assetType">
                                         <tr>
                                             <td>
                                                 <h:commandLink value="#{assetType.name}"
-                                                               action="#{TimeSelectionController.setSelectedAssetType(assetType)}"
-                                                               style="font-weight: #{TimeSelectionController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                                               action="#{timeSelectionController.setSelectedAssetType(assetType)}"
+                                                               style="font-weight: #{timeSelectionController.selectedAssetType == assetType ? 'bold' : 'normal'}">
                                                     <f:ajax render=":timeForm"/>
                                                 </h:commandLink>
                                             </td>
@@ -67,8 +67,8 @@
                         <!-- Column 2: Inline Date Selection -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
-                            <pf:calendar value="#{TimeSelectionController.selectedDate}"
-                                         mindate="#{TimeSelectionController.minDate}"
+                            <pf:calendar value="#{timeSelectionController.selectedDate}"
+                                         mindate="#{timeSelectionController.minDate}"
                                          mode="inline" styleClass="datepicker-fullwidth">
                                 <f:ajax event="dateSelect" render=":timeForm"/>
                             </pf:calendar>
@@ -77,21 +77,21 @@
                         <!-- Column 3: Time Selection & Submit Button -->
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedStartTime}"
+                            <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
                                              styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                             disabled="#{TimeSelectionController.selectedAssetType == null}">
+                                             disabled="#{timeSelectionController.selectedAssetType == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems value="#{TimeSelectionController.getStartTimes(TimeSelectionController.todaySelected)}"
+                                <f:selectItems value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
                                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
-                            <h:selectOneMenu value="#{TimeSelectionController.selectedEndTime}"
+                            <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
                                              styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                             disabled="#{TimeSelectionController.selectedStartTime == null}">
+                                             disabled="#{timeSelectionController.selectedStartTime == null}">
                                 <f:selectItems
-                                        value="#{TimeSelectionController.endTimes}"
+                                        value="#{timeSelectionController.endTimes}"
                                         var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
@@ -102,8 +102,8 @@
                             <h:commandButton
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
-                                    disabled="#{TimeSelectionController.selectedEndTime == null}"
-                                    action="#{AvailableAssetsController.searchForAssets(TimeSelectionController.selectedAssetType, TimeSelectionController.segmentedTimeRange)}">
+                                    disabled="#{timeSelectionController.selectedEndTime == null}"
+                                    action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetType, timeSelectionController.segmentedTimeRange)}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </b:column>

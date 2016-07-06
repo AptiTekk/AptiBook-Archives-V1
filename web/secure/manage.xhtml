@@ -15,11 +15,11 @@
             <b:container>
                 <h2 style="margin-top:50px">Manage Reservations</h2>
 
-                <ui:fragment rendered="#{not empty ReservationManagementController.reservations}">
+                <ui:fragment rendered="#{not empty reservationManagementController.reservations}">
                     <b:column colMd="6" offsetMd="2">
 
                         <pf:accordionPanel dynamic="true" cache="true" activeIndex="-1"
-                                           value="#{ReservationManagementController.reservations}"
+                                           value="#{reservationManagementController.reservations}"
                                            var="reservation">
                             <pf:ajax event="tabChange"
                                      onstart="loading_start()"
@@ -28,10 +28,10 @@
                             <pf:tab title="#{reservation.title} - #{reservation.asset.name}">
                                 <h4>#{reservation.title}</h4>
                                 <h6>#{reservation.description}</h6>
-                                <p>#{reservation.timeStart.getTimeString()}</p>
-                                <p>#{reservation.timeEnd.getTimeString()}</p>
+                                <p>#{reservation.timeStart.timeString}</p>
+                                <p>#{reservation.timeEnd.timeString}</p>
                                 <br/>
-                                <i>#{ReservationManagementController.formatApprovedBy(reservation)}</i>
+                                <i>#{reservationManagementController.formatApprovedBy(reservation)}</i>
                                 <f:facet name="footer">
                                     <div class="btn-toolbar pull-right">
                                         <h:commandButton styleClass="btn btn-success"
@@ -58,7 +58,7 @@
 
 
                 <b:column colSm="8" offsetSm="1">
-                    <ui:fragment rendered="#{empty ReservationManagementController.reservations}">
+                    <ui:fragment rendered="#{empty reservationManagementController.reservations}">
                         <i>No Reservations</i>
                     </ui:fragment>
                 </b:column>

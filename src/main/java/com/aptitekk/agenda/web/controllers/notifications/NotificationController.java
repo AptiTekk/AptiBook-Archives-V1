@@ -15,14 +15,16 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-@ManagedBean(name = "NotificationController")
+@Named
 @SessionScoped
-public class NotificationController implements NotificationListener {
+public class NotificationController implements NotificationListener, Serializable{
 
     @Inject
     private UserService userService;

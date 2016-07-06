@@ -14,20 +14,20 @@
             <h2 style="margin-top:50px">Notifications</h2>
 
             <b:column colSm="6" offsetSm="3">
-                <ui:fragment rendered="#{not empty NotificationViewController.notifications}">
+                <ui:fragment rendered="#{not empty notificationViewController.notifications}">
                     <!--<b:accordion>-->
-                    <ui:repeat value="#{NotificationViewController.notifications}" var="notification">
+                    <ui:repeat value="#{notificationViewController.notifications}" var="notification">
                         <b:panel id="notification#{notification.id}" title="#{notification.subject}">
                             <f:attribute name="look" value="#{notification.read? 'default' : 'primary'}"/>
                             #{notification.body}
                             <f:facet name="footer">
-                                <h:outputText value="#{NotificationController.formatDateTime(notification.creation)}"/>
+                                <h:outputText value="#{notificationController.formatDateTime(notification.creation)}"/>
                             </f:facet>
                         </b:panel>
                     </ui:repeat>
                     <!--</b:accordion>-->
                 </ui:fragment>
-                <ui:fragment rendered="#{empty NotificationViewController.notifications}">
+                <ui:fragment rendered="#{empty notificationViewController.notifications}">
                     <h5 class="text-center">
                         <small>No Notifications</small>
                     </h5>

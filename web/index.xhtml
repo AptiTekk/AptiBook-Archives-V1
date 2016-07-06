@@ -10,7 +10,7 @@
 <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
     <ui:define name="pre-body">
         <f:metadata>
-            <f:viewAction action="#{AuthenticationController.redirectIfLoggedIn()}"/>
+            <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
         </f:metadata>
     </ui:define>
     <ui:define name="content">
@@ -27,16 +27,16 @@
                             <div class="form-group">
                                 <label for="usernameInput">Username</label>
                                 <h:inputText id="usernameInput" styleClass="form-control"
-                                             autocomplete="off" value="#{AuthenticationController.username}"
+                                             autocomplete="off" value="#{authenticationController.username}"
                                              p:autofocus="true"/>
                             </div>
                             <div class="form-group">
                                 <label for="passwordInput">Password</label>
                                 <h:inputSecret id="passwordInput" styleClass="form-control"
-                                               autocomplete="off" value="#{AuthenticationController.password}"/>
+                                               autocomplete="off" value="#{authenticationController.password}"/>
                             </div>
                             <h:commandButton styleClass="btn btn-primary btn-block btn-large"
-                                             value="Sign In" action="#{AuthenticationController.login}">
+                                             value="Sign In" action="#{authenticationController.login}">
                                 <f:ajax render=":loginForm" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </h:form>

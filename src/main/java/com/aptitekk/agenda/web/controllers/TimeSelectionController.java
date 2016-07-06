@@ -8,14 +8,15 @@ import com.aptitekk.agenda.core.utilities.time.CalendarRange;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.*;
 
-@ManagedBean(name = "TimeSelectionController")
+@Named
 @ViewScoped
-public class TimeSelectionController {
+public class TimeSelectionController implements Serializable {
 
     private Date selectedDate = Calendar.getInstance().getTime();
 

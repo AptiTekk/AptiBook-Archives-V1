@@ -12,19 +12,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * Servlet Filter implementation class AuthenticationFilter
- */
 @WebFilter("/AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
     public static final String SESSION_ORIGINAL_URL = "Original-Url";
 
     private ServletContext context;
-
-    HttpServletRequest currentReq;
-    HttpServletResponse currentRes;
-    HttpSession currentSession;
 
     @Inject
     private UserService userService;

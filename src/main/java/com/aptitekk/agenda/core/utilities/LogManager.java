@@ -1,8 +1,10 @@
 package com.aptitekk.agenda.core.utilities;
 
+import org.jboss.logging.Logger;
+
 public class LogManager {
 
-    private static final org.jboss.logging.Logger LOGGER = org.jboss.logging.Logger.getLogger(LogManager.class);
+    private static final Logger LOGGER = Logger.getLogger(LogManager.class);
 
     public static void logInfo(String message) {
         LOGGER.info(message);

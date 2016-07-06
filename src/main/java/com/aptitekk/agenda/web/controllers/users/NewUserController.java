@@ -1,36 +1,32 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import org.primefaces.model.TreeNode;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ManagedBean(name = "NewUserController")
+@Named
 @RequestScoped
-public class NewUserController {
+public class NewUserController implements Serializable {
 
     @Inject
     UserService userService;
 
-    @ManagedProperty(value = "#{UserEditController}")
+    @Inject
     private UserEditController userEditController;
-
-    public void setUserEditController(UserEditController userEditController) {
-        this.userEditController = userEditController;
-    }
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")

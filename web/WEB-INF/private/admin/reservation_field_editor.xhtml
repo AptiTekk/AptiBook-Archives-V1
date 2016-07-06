@@ -17,7 +17,7 @@
             <b:column colXs="12" colSm="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{ReservationFieldEditorController.assetTypes}" var="assetType"
+                        <b:dataTable value="#{reservationFieldEditorController.assetTypes}" var="assetType"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      responsive="true">
                             <h:column>
@@ -25,8 +25,8 @@
                                     <h:outputText value="Asset Type"/>
                                 </f:facet>
                                 <h:commandLink value="#{assetType.name}"
-                                               action="#{ReservationFieldEditorController.setType(assetType)}"
-                                               style="font-weight: #{AssetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                               action="#{reservationFieldEditorController.setType(assetType)}"
+                                               style="font-weight: #{assetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
                                     <f:ajax render=":assetsPage"/>
                                 </h:commandLink>
                             </h:column>
@@ -42,20 +42,20 @@
 
                         <pf:contextMenu for="fieldsDT">
                             <pf:menuitem value="Add New" update="fieldsDT" icon="ui-icon-plusthick"
-                                         actionListener="#{ReservationFieldEditorController.addField}">
+                                         actionListener="#{reservationFieldEditorController.addField}">
                                 <pf:ajax update=":dataTable" onstart="loading_start()"
                                          oncomplete="loading_complete()"/>
                             </pf:menuitem>
                             <pf:menuitem value="Delete" update="fieldsDT" icon="ui-icon-close"
-                                         actionListener="#{ReservationFieldEditorController.deleteField}">
+                                         actionListener="#{reservationFieldEditorController.deleteField}">
                                 <pf:ajax update=":dataTable" onstart="loading_start()"
                                          oncomplete="loading_complete()"/>
                             </pf:menuitem>
                         </pf:contextMenu>
 
-                        <pf:dataTable id="fieldsDT" var="field" value="#{ReservationFieldEditorController.fields}"
+                        <pf:dataTable id="fieldsDT" var="field" value="#{reservationFieldEditorController.fields}"
                                       rowKey="#{field.id}" editable="true" editMode="cell"
-                                      selection="#{ReservationFieldEditorController.field}" selectionMode="single">
+                                      selection="#{reservationFieldEditorController.field}" selectionMode="single">
                             <pf:column headerText="Field Name" priority="1" style="width:30%;">
                                 <pf:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{field.name}"/></f:facet>
@@ -77,16 +77,16 @@
                     <br/>
 
                     <b:buttonToolbar>
-                        <b:commandButton look="success" action="#{ReservationFieldEditorController.addField}"
+                        <b:commandButton look="success" action="#{reservationFieldEditorController.addField}"
                                          value="Add New Field">
                             <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
                         </b:commandButton>
 
-                        <b:commandButton look="default" action="#{ReservationFieldEditorController.refreshSettings}"
+                        <b:commandButton look="default" action="#{reservationFieldEditorController.refreshSettings}"
                                          value="Revert Changes" styleClass="pull-right">
                             <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
                         </b:commandButton>
-                        <b:commandButton look="primary" action="#{ReservationFieldEditorController.updateSettings}"
+                        <b:commandButton look="primary" action="#{reservationFieldEditorController.updateSettings}"
                                          value="Save Changes" styleClass="pull-right">
                             <f:ajax render=":fieldEditorForm:dataTable" onevent="loading"/>
                         </b:commandButton>

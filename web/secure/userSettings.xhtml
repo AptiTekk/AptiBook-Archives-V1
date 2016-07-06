@@ -12,7 +12,7 @@
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="pre-body">
         <f:metadata>
-            <f:viewAction action="#{UserEditController.setSelectedUser(AuthenticationController.authenticatedUser)}"/>
+            <f:viewAction action="#{userEditController.setSelectedUser(authenticationController.authenticatedUser)}"/>
         </f:metadata>
     </ui:define>
     <ui:define name="content">
@@ -22,9 +22,9 @@
                 <li class="active">User Settings</li>
             </ol>
 
-            <ui:fragment rendered="#{UserEditController.selectedUser != null}">
+            <ui:fragment rendered="#{userEditController.selectedUser != null}">
                 <div class="page-header">
-                    <h2>User Settings for #{UserEditController.selectedUser.fullname}</h2>
+                    <h2>User Settings for #{userEditController.selectedUser.fullname}</h2>
                 </div>
 
                 <b:row>
@@ -40,7 +40,7 @@
                                 <h:outputLabel value="Username:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <h:outputText styleClass="col-xs-9 form-control"
-                                                  value="#{UserEditController.selectedUser.username}"
+                                                  value="#{userEditController.selectedUser.username}"
                                                   p:disabled="true"/>
                                 </b:column>
                             </div>
@@ -49,7 +49,7 @@
                                 <b:column colXs="9">
                                     <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="firstNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableFirstName}" maxlength="32"/>
+                                                 value="#{userEditController.editableFirstName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -57,7 +57,7 @@
                                 <b:column colXs="9">
                                     <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                                     <h:inputText id="lastNameEdit" styleClass="form-control"
-                                                 value="#{UserEditController.editableLastName}" maxlength="32"/>
+                                                 value="#{userEditController.editableLastName}" maxlength="32"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
@@ -68,7 +68,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-envelope"/></span>
                                         <h:inputText id="emailEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableEmail}" maxlength="64"/>
+                                                     value="#{userEditController.editableEmail}" maxlength="64"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -80,7 +80,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-earphone"/></span>
                                         <h:inputText id="phoneEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editablePhoneNumber}" maxlength="32"/>
+                                                     value="#{userEditController.editablePhoneNumber}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -92,7 +92,7 @@
                                         <span class="input-group-addon"><span
                                                 class="glyphicon glyphicon-map-marker"/></span>
                                         <h:inputText id="locationEdit" styleClass="form-control"
-                                                     value="#{UserEditController.editableLocation}" maxlength="256"/>
+                                                     value="#{userEditController.editableLocation}" maxlength="256"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -109,7 +109,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret id="passwordEdit" styleClass="form-control"
-                                                       value="#{UserEditController.newPassword}" maxlength="32"/>
+                                                       value="#{userEditController.newPassword}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -120,7 +120,7 @@
                                             <span class="input-group-addon"><span
                                                     class="glyphicon glyphicon-asterisk"/></span>
                                         <h:inputSecret styleClass="form-control"
-                                                       value="#{UserEditController.confirmPassword}" maxlength="32"/>
+                                                       value="#{userEditController.confirmPassword}" maxlength="32"/>
                                     </div>
                                 </b:column>
                             </div>
@@ -129,12 +129,12 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{UserEditController.updateSettings()}">
+                                                         action="#{userEditController.updateSettings()}">
                                             <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{UserEditController.resetSettings()}">
+                                                         action="#{userEditController.resetSettings()}">
                                             <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
                                         </h:commandButton>
                                     </div>
@@ -142,23 +142,23 @@
                             </div>
                         </h:form>
                     </b:column>
-                    <c:if test="#{not empty UserEditController.selectedUser.userGroups}">
+                    <c:if test="#{not empty userEditController.selectedUser.userGroups}">
                         <b:column colXs="12" colMd="4">
                             <div class="form-group">
                                 <h4>User Groups:</h4>
                             </div>
 
                             <c:choose>
-                                <c:when test="#{UserEditController.selectedUser.immutableUsername}">
+                                <c:when test="#{userEditController.selectedUser.immutableUsername}">
                                     Administrators are automatically granted full permissions. No User Groups need be assigned.
                                 </c:when>
                                 <c:otherwise>
                                     <div class="form-group">
                                         <b:panel title="Member Of" collapsible="false">
                                             <pf:tree id="memberGroups"
-                                                     value="#{GroupTreeController.getMultipleSelectedTree(UserEditController.selectedUser.userGroups, null, false, true)}"
+                                                     value="#{groupTreeController.getMultipleSelectedTree(userEditController.selectedUser.userGroups, null, false, true)}"
                                                      var="node"
-                                                     selection="#{UserEditController.editableUserGroupNodes}">
+                                                     selection="#{userEditController.editableUserGroupNodes}">
                                                 <pf:treeNode>
                                                     <h:outputText value="#{node.name}"/>
                                                 </pf:treeNode>
@@ -172,7 +172,7 @@
                 </b:row>
             </ui:fragment>
 
-            <ui:fragment rendered="#{UserEditController.selectedUser == null}">
+            <ui:fragment rendered="#{userEditController.selectedUser == null}">
                 <h2>Not Logged In!</h2>
             </ui:fragment>
         </b:container>

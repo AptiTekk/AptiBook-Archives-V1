@@ -9,11 +9,13 @@ import org.primefaces.model.TreeNode;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.*;
 
-@ManagedBean(name = "GroupTreeController")
+@Named
 @RequestScoped
-public class GroupTreeController {
+public class GroupTreeController implements Serializable {
 
     private HashMap<Integer, TreeNode> cache = new HashMap<>();
 

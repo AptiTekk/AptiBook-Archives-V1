@@ -1,26 +1,27 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@ManagedBean(name = "UserEditController")
+@Named
 @ViewScoped
-public class UserEditController {
+public class UserEditController implements Serializable {
 
     @Inject
     private UserService userService;

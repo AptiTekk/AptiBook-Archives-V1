@@ -1,19 +1,21 @@
 package com.aptitekk.agenda.web.controllers.reservations;
 
+import com.aptitekk.agenda.core.entity.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.entity.*;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "AvailableAssetsController")
+@Named
 @ViewScoped
-public class AvailableAssetsController {
+public class AvailableAssetsController implements Serializable {
 
     @Inject
     private ReservationService reservationService;

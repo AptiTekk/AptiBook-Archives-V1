@@ -1,26 +1,26 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@ManagedBean(name = "AssetTypeEditController")
+@Named
 @ViewScoped
-public class AssetTypeEditController {
+public class AssetTypeEditController implements Serializable {
 
     @Inject
     private AssetTypeService assetTypeService;
@@ -35,12 +35,8 @@ public class AssetTypeEditController {
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableAssetTypeName;
 
-    @ManagedProperty(value = "#{TagController}")
+    @Inject
     private TagController tagController;
-
-    public void setTagController(TagController tagController) {
-        this.tagController = tagController;
-    }
 
     private AssetEditController assetEditController;
 
@@ -58,7 +54,7 @@ public class AssetTypeEditController {
         assetTypes = assetTypeService.getAll();
 
         //Refresh selected AssetType
-        if(selectedAssetType != null)
+        if (selectedAssetType != null)
             selectedAssetType = assetTypeService.get(selectedAssetType.getId());
     }
 
@@ -134,7 +130,7 @@ public class AssetTypeEditController {
 
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
 
-                if(assetEditController != null)
+                if (assetEditController != null)
                     assetEditController.setSelectedAsset(asset);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -159,7 +155,7 @@ public class AssetTypeEditController {
 
     public void setSelectedAssetType(AssetType selectedAssetType) {
         this.selectedAssetType = selectedAssetType;
-        if(assetEditController != null)
+        if (assetEditController != null)
             assetEditController.setSelectedAsset(null);
 
         resetSettings();

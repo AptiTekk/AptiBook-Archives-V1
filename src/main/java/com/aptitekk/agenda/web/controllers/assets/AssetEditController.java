@@ -1,25 +1,27 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.validation.constraints.*;
+import javax.inject.Named;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-@ManagedBean(name = "AssetEditController")
+@Named
 @ViewScoped
-public class AssetEditController {
+public class AssetEditController implements Serializable {
 
     @Inject
     private AssetService assetService;
@@ -35,27 +37,19 @@ public class AssetEditController {
     private TreeNode editableAssetOwnerGroup;
     private UserGroup currentAssetOwnerGroup;
 
-    @ManagedProperty(value = "#{AssetTypeEditController}")
+    @Inject
     private AssetTypeEditController assetTypeEditController;
 
-    public void setAssetTypeEditController(AssetTypeEditController assetTypeEditController) {
-        this.assetTypeEditController = assetTypeEditController;
-        if (assetTypeEditController != null)
-            assetTypeEditController.setAssetEditController(this);
-    }
-
-    @ManagedProperty(value = "#{TimeSelectionController}")
+    @Inject
     private TimeSelectionController timeSelectionController;
 
-    public void setTimeSelectionController(TimeSelectionController timeSelectionController) {
-        this.timeSelectionController = timeSelectionController;
-    }
-
-    @ManagedProperty(value = "#{TagController}")
+    @Inject
     private TagController tagController;
 
-    public void setTagController(TagController tagController) {
-        this.tagController = tagController;
+    @PostConstruct
+    public void init() {
+        if (assetTypeEditController != null)
+            assetTypeEditController.setAssetEditController(this);
     }
 
     public void updateSettings() {

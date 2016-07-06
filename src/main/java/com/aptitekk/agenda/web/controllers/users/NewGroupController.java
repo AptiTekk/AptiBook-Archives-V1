@@ -1,31 +1,32 @@
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import org.primefaces.event.NodeSelectEvent;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-@ManagedBean(name = "NewGroupController")
+@Named
 @ViewScoped
-public class NewGroupController {
+public class NewGroupController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;
 
-    @ManagedProperty(value = "#{GroupEditController}")
+    @Inject
     private GroupEditController groupEditController;
 
-    public void setGroupEditController(GroupEditController groupEditController) {
-        this.groupEditController = groupEditController;
-        if(groupEditController != null)
+    @PostConstruct
+    public void init() {
+        if (groupEditController != null)
             groupEditController.setNewGroupController(this);
     }
 

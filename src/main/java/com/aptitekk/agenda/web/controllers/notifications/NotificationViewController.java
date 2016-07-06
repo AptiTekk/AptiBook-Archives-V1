@@ -4,16 +4,17 @@ import com.aptitekk.agenda.core.entity.Notification;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 import java.util.List;
 
-@ManagedBean(name = "NotificationViewController")
+@Named
 @ViewScoped
-public class NotificationViewController {
+public class NotificationViewController implements Serializable {
 
-    @ManagedProperty(value = "#{NotificationController}")
+    @Inject
     private NotificationController notificationController;
 
     @PostConstruct
@@ -34,11 +35,4 @@ public class NotificationViewController {
         return notificationController.getNotifications();
     }
 
-    public NotificationController getNotificationController() {
-        return notificationController;
-    }
-
-    public void setNotificationController(NotificationController notificationController) {
-        this.notificationController = notificationController;
-    }
 }

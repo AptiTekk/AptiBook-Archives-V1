@@ -9,15 +9,17 @@ import com.aptitekk.agenda.web.AuthenticationFilter;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.IOException;
+import java.io.Serializable;
 
-@ManagedBean(name = "AuthenticationController")
+@Named
 @ViewScoped
-public class AuthenticationController {
+public class AuthenticationController implements Serializable {
 
     @Inject
     private UserService userService;

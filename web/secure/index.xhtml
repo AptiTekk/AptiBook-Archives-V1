@@ -13,7 +13,7 @@
             <p:outputLabel rendered="false" />
 
             <h:panelGroup layout="block" id="includeGroup">
-                <ui:include src="/WEB-INF/private/secure/index/#{AvailableAssetsController.availableAssets != null ? 'results' : 'timeInput'}.xhtml" />
+                <ui:include src="/WEB-INF/private/secure/index/#{availableAssetsController.availableAssets != null ? 'results' : 'timeInput'}.xhtml" />
             </h:panelGroup>
         </ui:define>
     </ui:composition>

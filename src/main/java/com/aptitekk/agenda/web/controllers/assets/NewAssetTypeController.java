@@ -1,20 +1,20 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.entity.AssetType;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-@ManagedBean(name = "NewAssetTypeController")
+@Named
 @RequestScoped
-public class NewAssetTypeController {
+public class NewAssetTypeController implements Serializable {
 
     @Inject
     private AssetTypeService assetTypeService;
@@ -23,19 +23,11 @@ public class NewAssetTypeController {
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String name;
 
-    @ManagedProperty(value = "#{TagController}")
+    @Inject
     private TagController tagController;
 
-    public void setTagController(TagController tagController) {
-        this.tagController = tagController;
-    }
-
-    @ManagedProperty(value = "#{AssetTypeEditController}")
+    @Inject
     private AssetTypeEditController assetTypeEditController;
-
-    public void setAssetTypeEditController(AssetTypeEditController assetTypeEditController) {
-        this.assetTypeEditController = assetTypeEditController;
-    }
 
     public void addAssetType() throws Exception {
         AssetType assetType = new AssetType();

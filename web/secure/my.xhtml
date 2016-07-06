@@ -12,11 +12,11 @@
             <h2 style="margin-top:50px">My Reservations</h2>
 
             <b:column colMd="9" colXs="12">
-                <p:schedule value="#{ReservationViewController.lazyEventModel}"/>
+                <p:schedule value="#{reservationViewController.lazyEventModel}"/>
             </b:column>
             <b:column colMd="3">
-                <ui:fragment rendered="#{not empty ReservationViewController.cardModels}">
-                    <ui:repeat value="#{ReservationViewController.cardModels}" var="reservation">
+                <ui:fragment rendered="#{not empty reservationViewController.cardModels}">
+                    <ui:repeat value="#{reservationViewController.cardModels}" var="reservation">
                         <b:panel title="#{reservation.title} - #{reservation.asset.name}" look="info">
                             <h4>#{reservation.title}</h4>
                             <h6>#{reservation.description}</h6>
@@ -26,7 +26,7 @@
                         </b:panel>
                     </ui:repeat>
                 </ui:fragment>
-                <ui:fragment rendered="#{empty ReservationViewController.cardModels}">
+                <ui:fragment rendered="#{empty reservationViewController.cardModels}">
                     <i>No Reservations</i>
                 </ui:fragment>
             </b:column>

@@ -16,8 +16,8 @@
                     <!-- Sidebar -->
                     <b:column colXs="12" colMd="2">
                         <b:listLinks style="margin-top:20px">
-                            <c:forEach items="#{SettingsController.pages}" var="page">
-                                <b:navLink active="#{SettingsController.currentPage == page}" value="#{page.name}"
+                            <c:forEach items="#{settingsController.pages}" var="page">
+                                <b:navLink active="#{settingsController.currentPage == page}" value="#{page.name}"
                                            onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}">
                                     <f:param name="tab" value="#{page.name}"/>
                                 </b:navLink>
@@ -28,7 +28,7 @@
                         <ol class="breadcrumb" style="margin-top: 20px">
                             <li><h:link outcome="index" value="Home"/></li>
                             <li class="active">Agenda Settings</li>
-                            <li class="active">#{SettingsController.currentPage.name}</li>
+                            <li class="active">#{settingsController.currentPage.name}</li>
                         </ol>
 
                         <!-- Empty tags to initialize primefaces and bootsfaces components -->
@@ -38,7 +38,7 @@
                         <b:modal/>
 
                         <ui:include
-                                src="/WEB-INF/private/admin/#{SettingsController.currentPage.fileName}"/>
+                                src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}"/>
                     </b:column>
                 </b:row>
             </b:container>
