@@ -7,3 +7,4 @@
 /lib/bin/
 /log.txt
 /deployments/
+.idea/dataSources.*
