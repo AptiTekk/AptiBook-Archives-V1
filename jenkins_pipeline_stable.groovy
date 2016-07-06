@@ -18,8 +18,7 @@ node {
         def i = 0
 
         while (i < 10) {
-            sh "curl -o /dev/null --silent --head --write-out " % { http_code }
-            " ${agendaqaUrl} > .agendaqa-status"
+            sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${agendaqaUrl} > .agendaqa-status"
             def status = readFile ".agendaqa-status"
 
             if (status == "200") {
