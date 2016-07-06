@@ -17,11 +17,12 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Stateless
-public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> implements ReservationService {
+public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> implements ReservationService, Serializable {
 
     QReservation reservationTable = QReservation.reservation;
 

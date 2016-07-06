@@ -13,9 +13,10 @@ import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
+import java.io.Serializable;
 
 @Stateless
-public class UserServiceImpl extends EntityServiceAbstract<User> implements UserService {
+public class UserServiceImpl extends EntityServiceAbstract<User> implements UserService, Serializable {
 
     QUser userTable = QUser.user;
 

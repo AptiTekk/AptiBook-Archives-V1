@@ -11,9 +11,10 @@ import com.aptitekk.agenda.core.services.EntityService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.List;
 
-public abstract class EntityServiceAbstract<T> implements EntityService<T> {
+public abstract class EntityServiceAbstract<T> implements EntityService<T>, Serializable {
 
     @PersistenceContext(unitName = "Agenda")
     EntityManager entityManager;

@@ -13,10 +13,11 @@ import com.aptitekk.agenda.core.entity.ReservationField;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
+import java.io.Serializable;
 import java.util.List;
 
 @Stateless
-public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService {
+public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService, Serializable {
 
     QReservationField table = QReservationField.reservationField;
 

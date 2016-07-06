@@ -20,6 +20,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import java.util.logging.Logger;
 @Startup
 @Singleton
 @ApplicationScoped
-public class StartupServiceImpl implements StartupService {
+public class StartupServiceImpl implements StartupService, Serializable {
 
     @Inject
     private UserGroupService userGroupService;

@@ -44,9 +44,15 @@
                         <b:navLink outcome="manage" value="Manage Reservations" icon="glyphicon-edit"
                                    onclick="loading_start()"
                                    rendered="#{authenticationController.authenticatedUser.userGroups.size() > 0}"/>
-                        <b:navLink outcome="settings" value="Agenda Settings" icon="glyphicon-cog"
-                                   onclick="loading_start()"
-                                   rendered="#{authenticationController.authenticatedUser.isAdmin()}"/>
+                        <b:dropMenu value="Agenda Settings" icon="glyphicon-cog"
+                                    rendered="#{authenticationController.authenticatedUser.isAdmin()}">
+                            <ui:repeat value="#{settingsController.pages}" var="page">
+                                <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
+                                           onclick="loading_start()" active="#{settingsController.currentPage == page}">
+                                    <f:param name="tab" value="#{page.name}"/>
+                                </b:navLink>
+                            </ui:repeat>
+                        </b:dropMenu>
                         <b:dropMenu value="#{authenticationController.authenticatedUser.fullname}"
                                     icon="glyphicon-user">
                             <b:navLink outcome="my" value="My Reservations" icon="glyphicon-calendar"

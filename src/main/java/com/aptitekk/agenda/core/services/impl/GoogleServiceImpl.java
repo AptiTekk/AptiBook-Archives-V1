@@ -30,10 +30,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collections;
 
 @Stateless
-public class GoogleServiceImpl implements GoogleService {
+public class GoogleServiceImpl implements GoogleService, Serializable {
 
 
     String clientID;

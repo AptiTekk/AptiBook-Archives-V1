@@ -9,8 +9,8 @@ package com.aptitekk.agenda.web.controllers.assets;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;

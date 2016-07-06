@@ -9,7 +9,7 @@ package com.aptitekk.agenda.web.converters;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

@@ -14,9 +14,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.io.Serializable;
 
 @Stateless
-public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements AssetService {
+public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements AssetService, Serializable {
 
     private QAsset assetTable = QAsset.asset;
 

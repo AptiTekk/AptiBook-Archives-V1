@@ -13,9 +13,10 @@ import com.aptitekk.agenda.core.services.PropertiesService;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
+import java.io.Serializable;
 
 @Stateless
-public class PropertiesServiceImpl extends EntityServiceAbstract<Property> implements PropertiesService {
+public class PropertiesServiceImpl extends EntityServiceAbstract<Property> implements PropertiesService, Serializable {
 
     private QProperty table = QProperty.property;
 

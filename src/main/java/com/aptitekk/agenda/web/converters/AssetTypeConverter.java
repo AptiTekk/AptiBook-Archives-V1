@@ -10,7 +10,7 @@ import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

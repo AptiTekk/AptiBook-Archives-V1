@@ -20,9 +20,10 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.EventDateTime;
 
 import javax.inject.Inject;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class GoogleCalendarServiceImpl implements GoogleCalendarService {
+public class GoogleCalendarServiceImpl implements GoogleCalendarService, Serializable {
 
     @Inject
     GoogleService googleService;

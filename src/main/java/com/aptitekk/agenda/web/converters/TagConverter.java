@@ -12,7 +12,7 @@ import com.aptitekk.agenda.core.services.TagService;
 import com.aptitekk.agenda.core.entity.Tag;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

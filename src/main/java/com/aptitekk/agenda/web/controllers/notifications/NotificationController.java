@@ -16,9 +16,8 @@ import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -30,7 +29,7 @@ import java.util.List;
 
 @Named
 @SessionScoped
-public class NotificationController implements NotificationListener, Serializable{
+public class NotificationController implements NotificationListener, Serializable {
 
     @Inject
     private UserService userService;

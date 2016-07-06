@@ -23,6 +23,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Stateless
-public class NotificationServiceImpl extends EntityServiceAbstract<Notification> implements NotificationService {
+public class NotificationServiceImpl extends EntityServiceAbstract<Notification> implements NotificationService, Serializable {
 
     QNotification table = QNotification.notification;
 

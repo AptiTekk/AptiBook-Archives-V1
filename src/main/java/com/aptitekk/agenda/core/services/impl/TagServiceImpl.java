@@ -13,9 +13,10 @@ import com.aptitekk.agenda.core.entity.Tag;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
+import java.io.Serializable;
 
 @Stateless
-public class TagServiceImpl extends EntityServiceAbstract<Tag> implements TagService {
+public class TagServiceImpl extends EntityServiceAbstract<Tag> implements TagService, Serializable {
 
     private QTag tagTable = QTag.tag;
 

@@ -6,18 +6,18 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.entity.QUserGroup;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import java.io.Serializable;
 import java.util.*;
 
 @Stateless
-public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
-        implements UserGroupService {
+public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup> implements UserGroupService, Serializable {
 
     QUserGroup userGroupTable = QUserGroup.userGroup;
 
@@ -37,7 +37,7 @@ public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup>
 
     @Override
     public UserGroup findByName(String userGroupName) {
-        if(userGroupName == null)
+        if (userGroupName == null)
             return null;
         return new JPAQuery<UserGroup>(entityManager).from(userGroupTable)
                 .where(userGroupTable.name.eq(userGroupName)).fetchOne();

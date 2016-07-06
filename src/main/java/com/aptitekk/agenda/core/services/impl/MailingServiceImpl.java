@@ -17,9 +17,10 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.Serializable;
 
 @Stateless
-public class MailingServiceImpl implements MailingService {
+public class MailingServiceImpl implements MailingService, Serializable {
 
     @Resource(name = "java:jboss/Resource/AgendaMail")
     private Session mailSession;

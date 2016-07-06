@@ -7,8 +7,8 @@
 package com.aptitekk.agenda.web.controllers;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -23,6 +23,7 @@ public class SettingsController implements Serializable {
         RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o"),
         GROUPS("User Groups", "groups.xhtml", "sitemap"),
         USERS("Users", "users.xhtml", "user"),
+        PERMISSIONS("Permissions", "permissions.xhtml", "unlock"),
         PROPERTIES("Properties", "properties.xhtml", "cog"),
         SERVICES("Services", "services.xhtml", "server");
 
@@ -50,7 +51,7 @@ public class SettingsController implements Serializable {
     }
 
     private List<SettingsPage> pages = Arrays.asList(SettingsPage.values());
-    private SettingsPage currentPage = SettingsPage.values()[0];
+    private SettingsPage currentPage = null;
 
     @PostConstruct
     public void init() {
@@ -60,9 +61,6 @@ public class SettingsController implements Serializable {
                 if (page.name.equalsIgnoreCase(tab))
                     setCurrentPage(page);
         }
-
-        if (getCurrentPage() == null)
-            setCurrentPage(SettingsPage.values()[0]);
     }
 
     public List<SettingsPage> getPages() {

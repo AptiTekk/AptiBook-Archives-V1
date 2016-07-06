@@ -12,9 +12,10 @@ import com.aptitekk.agenda.core.entity.QAssetType;
 import com.querydsl.jpa.impl.JPAQuery;
 
 import javax.ejb.Stateless;
+import java.io.Serializable;
 
 @Stateless
-public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> implements AssetTypeService {
+public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> implements AssetTypeService, Serializable {
 
     QAssetType table = QAssetType.assetType;
 
