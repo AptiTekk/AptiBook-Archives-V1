@@ -8,6 +8,7 @@ node {
 
         stage "Test Stable"
         sh "${mvnHome}/bin/mvn clean install -P wildfly-managed -U"
+        slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job  ${env.BUILD_NUMBER}) have passed. Deploying to QA..."
 
         stage "Build Stable WAR"
         sh "${mvnHome}/bin/mvn clean install -P openshift -U"
@@ -36,8 +37,17 @@ node {
         stage "Stable QA"
         slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${agendaqaUrl}"
         input "Please test https://agendaqa-aptitekk.rhcloud.com/ and proceed when ready."
+    } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException err) {
+        for (cause in err.getCauses()) {
+            if (cause instanceof org.jenkinsci.plugins.workflow.support.steps.StageStepExecution.CanceledCause) {
+                slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted. (Job ${env.BUILD_NUMBER})"
+                return
+            }
+        }
+        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job  ${env.BUILD_NUMBER}). Error: ${err}"
+        err.printStackTrace();
     } catch (err) {
-        slackSend color: "danger", message: "An Error occurred during the Agenda Stable Pipeline. Error: ${err}"
-        error err
+        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job  ${env.BUILD_NUMBER}). Error: ${err}"
+        err.printStackTrace();
     }
 }
