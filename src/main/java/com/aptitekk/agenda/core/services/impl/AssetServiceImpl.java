@@ -30,7 +30,10 @@ public class AssetServiceImpl extends EntityServiceAbstract<Asset> implements As
 
     @Override
     public Asset findByName(String assetName) {
-        return new JPAQuery<Asset>(entityManager).from(assetTable).where(assetTable.name.eq(assetName)).fetchOne();
+        if(assetName == null)
+            return null;
+
+        return new JPAQuery<Asset>(entityManager).from(assetTable).where(assetTable.name.equalsIgnoreCase(assetName)).fetchOne();
     }
 
 }

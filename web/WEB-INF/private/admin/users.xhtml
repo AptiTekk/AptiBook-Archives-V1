@@ -272,7 +272,7 @@
                                          value="#{newUserController.username}"
                                          required="true"
                                          requiredMessage="This is required." maxlength="32">
-                                <f:validator binding="#{UniqueUserValidator}"/>
+                                <f:validator binding="#{uniqueUserValidator}"/>
                             </h:inputText>
                         </b:column>
                     </div>
@@ -348,7 +348,7 @@
                                                value="#{newUserController.password}" required="true"
                                                requiredMessage="This is required."
                                                maxlength="32">
-                                    <f:validator binding="#{PasswordsMatchValidator}"/>
+                                    <f:validator binding="#{passwordsMatchValidator}"/>
                                     <f:attribute name="confirmationField" value="#{confirmationField}"/>
                                 </h:inputSecret>
                             </div>

@@ -28,7 +28,7 @@ public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> imple
         if (name == null)
             return null;
 
-        return new JPAQuery<AssetType>(entityManager).from(table).where(table.name.eq(name)).fetchOne();
+        return new JPAQuery<AssetType>(entityManager).from(table).where(table.name.equalsIgnoreCase(name)).fetchOne();
     }
 
 }

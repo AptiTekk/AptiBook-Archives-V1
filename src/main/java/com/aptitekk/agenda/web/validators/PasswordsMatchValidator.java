@@ -6,18 +6,19 @@
 
 package com.aptitekk.agenda.web.validators;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "PasswordsMatchValidator")
+@Named
 @RequestScoped
-public class PasswordsMatchValidator implements Validator {
+public class PasswordsMatchValidator implements Validator, Serializable {
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputSecret) throws ValidatorException {

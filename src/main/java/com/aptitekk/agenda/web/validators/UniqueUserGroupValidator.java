@@ -6,21 +6,22 @@
 
 package com.aptitekk.agenda.web.validators;
 
-import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserGroupService;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "UniqueUserGroupValidator")
+@Named
 @RequestScoped
-public class UniqueUserGroupValidator implements Validator {
+public class UniqueUserGroupValidator implements Validator, Serializable {
 
     @Inject
     UserGroupService userGroupService;

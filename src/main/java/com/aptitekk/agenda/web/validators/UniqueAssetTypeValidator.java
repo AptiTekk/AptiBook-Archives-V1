@@ -6,21 +6,22 @@
 
 package com.aptitekk.agenda.web.validators;
 
-import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.entity.AssetType;
+import com.aptitekk.agenda.core.services.AssetTypeService;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "UniqueAssetTypeValidator")
+@Named
 @RequestScoped
-public class UniqueAssetTypeValidator implements Validator {
+public class UniqueAssetTypeValidator implements Validator, Serializable {
 
     @Inject
     AssetTypeService assetTypeService;

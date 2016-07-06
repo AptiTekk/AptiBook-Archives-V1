@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web.validators;
 
-import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entity.Asset;
+import com.aptitekk.agenda.core.services.AssetService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -21,21 +21,21 @@ import java.io.Serializable;
 
 @Named
 @RequestScoped
-public class UniqueUserValidator implements Validator, Serializable {
+public class UniqueAssetValidator implements Validator, Serializable {
 
     @Inject
-    UserService userService;
+    AssetService assetService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
         Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
 
-        if (inputText != null && inputText instanceof String && userService != null) {
-            User otherUser = userService.findByName((String) inputText);
-            if (otherUser != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof User && otherUser.equals(exemptionAttribute))
+        if (inputText != null && inputText instanceof String && assetService != null) {
+            Asset otherAsset = assetService.findByName((String) inputText);
+            if (otherAsset != null) {
+                if (exemptionAttribute != null && exemptionAttribute instanceof Asset && otherAsset.equals(exemptionAttribute))
                     return;
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User with this name already exists."));
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with this name already exists."));
             }
         }
     }
