@@ -6,6 +6,7 @@
 
 package com.aptitekk.agenda.core.entity;
 
+import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
 import com.aptitekk.agenda.core.permissions.PermissionGroup;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Permission {
     @GeneratedValue
     private int id;
 
-    private PermissionGroup permissionGroup;
+    private PermissionDescriptor descriptor;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions")
     private List<UserGroup> userGroups;
@@ -34,12 +35,12 @@ public class Permission {
         this.id = id;
     }
 
-    public PermissionGroup getPermissionGroup() {
-        return permissionGroup;
+    public PermissionDescriptor getDescriptor() {
+        return descriptor;
     }
 
-    public void setPermissionGroup(PermissionGroup permissionGroup) {
-        this.permissionGroup = permissionGroup;
+    public void setDescriptor(PermissionDescriptor descriptor) {
+        this.descriptor = descriptor;
     }
 
     public List<UserGroup> getUserGroups() {
