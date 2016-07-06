@@ -3,11 +3,6 @@
     <output-path>$PROJECT_DIR$/target</output-path>
     <root id="archive" name="agenda-1.0-SNAPSHOT.war">
       <element id="artifact" artifact-name="Agenda:war exploded" />
-      <element id="directory" name="WEB-INF">
-        <element id="directory" name="lib">
-          <element id="library" level="module" name="Maven: net.bootsfaces:bootsfaces:0.9.0-SNAPSHOT" module-name="Agenda" />
-        </element>
-      </element>
     </root>
   </artifact>
 </component>
