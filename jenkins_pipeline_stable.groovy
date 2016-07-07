@@ -50,8 +50,8 @@ def checkoutFromGit() {
               extensions                       : [],
               submoduleCfg                     : [],
               userRemoteConfigs                : [[
-                                                          credentialsId: $ { credentialsId },
-                                                          url          : $ { url }
+                                                          credentialsId: "${credentialsId}",
+                                                          url          : "${url}"
                                                   ]]
     ]);
 }
