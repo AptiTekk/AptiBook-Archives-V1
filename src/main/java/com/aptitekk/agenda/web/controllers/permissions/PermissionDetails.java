@@ -7,24 +7,22 @@
 package com.aptitekk.agenda.web.controllers.permissions;
 
 import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
-import com.aptitekk.agenda.core.permissions.PermissionGroup;
 
 import java.util.List;
 
 public class PermissionDetails {
 
-    private PermissionGroup permissionGroup;
+    private Permission.Group group;
     private List<Permission> permissions;
 
-    public PermissionDetails(PermissionGroup permissionGroup, List<Permission> permissions)
+    public PermissionDetails(Permission.Group group, List<Permission> permissions)
     {
-        this.permissionGroup = permissionGroup;
+        this.group = group;
         this.permissions = permissions;
     }
 
-    public PermissionGroup getPermissionGroup() {
-        return permissionGroup;
+    public Permission.Group getGroup() {
+        return group;
     }
 
     public List<Permission> getPermissions() {

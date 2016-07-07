@@ -6,11 +6,11 @@
 
 package com.aptitekk.agenda.core;
 
+import com.aptitekk.agenda.core.entity.Asset;
+import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
-import com.aptitekk.agenda.core.entity.Asset;
-import com.aptitekk.agenda.core.entity.AssetType;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;

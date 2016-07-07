@@ -8,7 +8,6 @@ package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.QPermission;
-import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.querydsl.jpa.impl.JPAQuery;
 
@@ -21,7 +20,7 @@ public class PermissionServiceImpl extends EntityServiceAbstract<Permission> imp
     private QPermission table = QPermission.permission;
 
     @Override
-    public Permission getPermissionByDescriptor(PermissionDescriptor descriptor) {
+    public Permission getPermissionByDescriptor(Permission.Descriptor descriptor) {
         return new JPAQuery<Permission>(entityManager).from(table).where(table.descriptor.eq(descriptor))
                 .fetchOne();
     }

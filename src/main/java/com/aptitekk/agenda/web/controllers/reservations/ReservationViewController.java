@@ -6,17 +6,16 @@
 
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.Reservation;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;

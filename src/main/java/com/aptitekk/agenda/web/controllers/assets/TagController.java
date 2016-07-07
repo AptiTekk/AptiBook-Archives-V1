@@ -7,19 +7,20 @@
 package com.aptitekk.agenda.web.controllers.assets;
 
 
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetTypeService;
-import com.aptitekk.agenda.core.services.TagService;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.Tag;
+import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.TagService;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Named
 @ViewScoped

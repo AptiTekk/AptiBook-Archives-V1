@@ -6,18 +6,17 @@
 
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.AuthenticationFilter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;

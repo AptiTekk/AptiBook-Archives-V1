@@ -11,20 +11,20 @@
  */
 package com.aptitekk.agenda.web.oauth;
 
-import static com.aptitekk.agenda.core.services.GoogleService.CALLBACK_PATH;
-
+import com.aptitekk.agenda.core.services.GoogleService;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import java.io.IOException;
+
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.aptitekk.agenda.core.services.GoogleService;
-import static com.aptitekk.agenda.core.services.GoogleService.ACCESS_TOKEN_PROPERTY;
+import java.io.IOException;
+
+import static com.aptitekk.agenda.core.services.GoogleService.CALLBACK_PATH;
 
 /**
  *

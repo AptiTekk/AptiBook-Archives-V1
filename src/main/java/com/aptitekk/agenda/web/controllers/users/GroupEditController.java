@@ -11,17 +11,16 @@
  */
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.services.UserGroupService;
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.services.UserService;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Pattern;

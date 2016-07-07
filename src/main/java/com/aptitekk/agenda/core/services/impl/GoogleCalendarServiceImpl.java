@@ -6,10 +6,10 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
+import com.aptitekk.agenda.core.entity.Reservation;
 import com.aptitekk.agenda.core.services.GoogleCalendarService;
 import com.aptitekk.agenda.core.services.GoogleService;
 import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.entity.Reservation;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.http.javanet.NetHttpTransport;

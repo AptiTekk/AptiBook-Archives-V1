@@ -6,12 +6,12 @@
 
 package com.aptitekk.agenda.core.utilities;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertFalse;
+import org.junit.Test;
 
 import java.security.NoSuchAlgorithmException;
 
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertFalse;
 
 public class Sha256HelperTest {
 

@@ -7,10 +7,8 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entity.*;
-import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
-import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 
 import javax.annotation.PostConstruct;
@@ -19,11 +17,6 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Startup
 @Singleton
@@ -131,7 +124,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void writeDefaultPermissions() {
-        for(PermissionDescriptor descriptor : PermissionDescriptor.values())
+        for(Permission.Descriptor descriptor : Permission.Descriptor.values())
         {
             if(permissionService.getPermissionByDescriptor(descriptor) == null)
             {

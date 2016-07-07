@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web;
 
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.services.UserService;
 
 import javax.inject.Inject;
 import javax.servlet.*;

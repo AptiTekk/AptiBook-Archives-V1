@@ -6,11 +6,11 @@
 
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
-import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.entity.AssetType;
+import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.utilities.time.CalendarRange;
+import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.annotation.PostConstruct;
@@ -18,7 +18,10 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Named
 @ViewScoped

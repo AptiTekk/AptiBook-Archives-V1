@@ -10,7 +10,6 @@ import com.aptitekk.agenda.core.entity.Notification;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.utilities.notification.EmailNotification;
 import com.aptitekk.agenda.core.utilities.notification.VariableInjection;
-import org.apache.commons.io.IOUtils;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -19,9 +18,6 @@ import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.regex.Matcher;

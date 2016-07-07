@@ -6,12 +6,11 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.entity.*;
-import com.aptitekk.agenda.core.services.EntityService;
+import com.aptitekk.agenda.core.entity.Notification;
+import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
-import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;

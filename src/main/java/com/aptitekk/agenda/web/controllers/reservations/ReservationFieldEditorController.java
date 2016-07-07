@@ -6,18 +6,17 @@
 
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.entity.AssetType;
 import com.aptitekk.agenda.core.entity.ReservationField;
+import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.services.ReservationFieldService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;

@@ -11,7 +11,6 @@ import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
-import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;

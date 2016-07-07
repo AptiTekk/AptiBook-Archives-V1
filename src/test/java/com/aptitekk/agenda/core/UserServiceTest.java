@@ -6,10 +6,10 @@
 
 package com.aptitekk.agenda.core;
 
+import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
-import com.aptitekk.agenda.core.entity.User;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-
 import java.util.UUID;
 
 import static org.junit.Assert.*;

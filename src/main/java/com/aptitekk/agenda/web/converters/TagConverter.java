@@ -7,12 +7,12 @@
 package com.aptitekk.agenda.web.converters;
 
 import com.aptitekk.agenda.core.entity.AssetType;
+import com.aptitekk.agenda.core.entity.Tag;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.services.TagService;
-import com.aptitekk.agenda.core.entity.Tag;
 
-import javax.faces.bean.ManagedBean;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;

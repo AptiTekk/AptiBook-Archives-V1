@@ -7,8 +7,6 @@
 package com.aptitekk.agenda.web.controllers.permissions;
 
 import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
-import com.aptitekk.agenda.core.permissions.PermissionGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
 
 import javax.annotation.PostConstruct;
@@ -37,18 +35,16 @@ public class PermissionsController implements Serializable {
 
     private void buildPermissionDetailsList() {
         permissionDetailsList = new ArrayList<>();
-        Map<PermissionGroup, List<Permission>> permissionGroupMap = new HashMap<>();
+        Map<Permission.Group, List<Permission>> permissionGroupMap = new HashMap<>();
 
-        for (PermissionDescriptor permissionDescriptor : PermissionDescriptor.values()) {
-            if (!permissionGroupMap.containsKey(permissionDescriptor.getPermissionGroup()))
-                permissionGroupMap.put(permissionDescriptor.getPermissionGroup(), new ArrayList<>());
+        for (Permission.Group group : Permission.Group.values())
+            permissionGroupMap.put(group, new ArrayList<>());
 
-            permissionGroupMap.get(permissionDescriptor.getPermissionGroup()).add(permissionService.getPermissionByDescriptor(permissionDescriptor));
-        }
+        for (Permission.Descriptor descriptor : Permission.Descriptor.values())
+            permissionGroupMap.get(descriptor.getGroup()).add(permissionService.getPermissionByDescriptor(descriptor));
 
-        for (Map.Entry<PermissionGroup, List<Permission>> entry : permissionGroupMap.entrySet()) {
+        for (Map.Entry<Permission.Group, List<Permission>> entry : permissionGroupMap.entrySet())
             permissionDetailsList.add(new PermissionDetails(entry.getKey(), entry.getValue()));
-        }
     }
 
     public List<PermissionDetails> getPermissionDetailsList() {
