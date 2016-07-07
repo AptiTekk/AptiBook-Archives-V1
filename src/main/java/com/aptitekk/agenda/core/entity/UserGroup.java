@@ -40,6 +40,9 @@ public class UserGroup implements Serializable {
     @OneToMany(mappedBy = "parent")
     private List<UserGroup> children = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userGroups")
+    private List<Permission> permissions;
+
     public UserGroup() {
     }
 
@@ -131,14 +134,11 @@ public class UserGroup implements Serializable {
         return EqualsHelper.calculateHashCode(getName());
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Permission> permissions;
-
-    public Collection<Permission> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Collection<Permission> permissions) {
+    public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 }

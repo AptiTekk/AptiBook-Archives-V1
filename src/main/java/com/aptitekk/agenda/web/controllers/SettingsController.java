@@ -7,7 +7,6 @@
 package com.aptitekk.agenda.web.controllers;
 
 import javax.annotation.PostConstruct;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -57,14 +56,17 @@ public class SettingsController implements Serializable {
     @PostConstruct
     public void init() {
         String tab = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-        if (tab != null && !tab.isEmpty()) {
+        if (tab != null && !tab.isEmpty())
             for (SettingsPage page : SettingsPage.values())
                 if (page.name.equalsIgnoreCase(tab))
                     setCurrentPage(page);
-        } /*else {
-            *//*ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            externalContext.redirect(externalContext.getRequestContextPath() + "/secure/index.xhtml");*//*
-        }*/
+    }
+
+    public String redirectIfPageIsNull() {
+        if (getCurrentPage() == null) {
+            return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&tab=" + pages.get(0).getName().replaceAll(" ", "+");
+        }
+        return null;
     }
 
     public List<SettingsPage> getPages() {

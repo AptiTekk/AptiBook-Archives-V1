@@ -91,10 +91,10 @@ public class Permission {
 
     private Descriptor descriptor;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions")
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<UserGroup> userGroups;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "permissions")
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> users;
 
     public int getId() {

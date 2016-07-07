@@ -59,6 +59,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    private List<Permission> permissions;
+
     public User() {
     }
 
@@ -242,14 +245,11 @@ public class User implements Serializable {
         return EqualsHelper.calculateHashCode(getUsername(), getPassword(), getFirstName(), getLastName(), getEmail(), getPhoneNumber(), getLocation(), getEnabled());
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Permission> permissions;
-
-    public Collection<Permission> getPermissions() {
+    public List<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(Collection<Permission> permissions) {
+    public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
     }
 }

@@ -93,7 +93,6 @@ public class AuthenticationController implements Serializable {
     public void redirectIfLoggedIn() throws IOException {
         if (authenticatedUser != null) {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-
             externalContext.redirect(externalContext.getRequestContextPath() + "/secure/index.xhtml");
         }
     }

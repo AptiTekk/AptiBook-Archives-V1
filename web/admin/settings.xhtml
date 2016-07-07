@@ -15,6 +15,11 @@
       xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jstl/core">
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="pre-body">
+        <f:metadata>
+            <f:viewAction action="#{settingsController.redirectIfPageIsNull}"/>
+        </f:metadata>
+    </ui:define>
     <ui:define name="content">
         <h:panelGroup layout="block" id="settingsPage">
             <b:container fluid="true">
@@ -40,11 +45,13 @@
                         <!-- Empty tags to initialize primefaces and bootsfaces components -->
                         <p:inputText style="display: none;"/>
                         <p:draggable disabled="true"/>
-                        <p:tree draggable="true" rendered="false" />
+                        <p:tree draggable="true" rendered="false"/>
                         <b:modal/>
 
-                        <ui:include
-                                src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}"/>
+                        <c:if test="#{settingsController.currentPage != null}">
+                            <ui:include
+                                    src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}"/>
+                        </c:if>
                     </b:column>
                 </b:row>
             </b:container>
