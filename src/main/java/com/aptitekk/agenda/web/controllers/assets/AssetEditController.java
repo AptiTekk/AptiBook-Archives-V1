@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
+import org.apache.commons.io.IOUtils;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
@@ -21,8 +22,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.InputStream;
 import java.io.Serializable;
 
 @Named
@@ -42,6 +45,9 @@ public class AssetEditController implements Serializable {
     private boolean editableAssetApproval;
     private TreeNode editableAssetOwnerGroup;
     private UserGroup currentAssetOwnerGroup;
+    private Part file;
+    private String fileName;
+
 
     @Inject
     private AssetTypeEditController assetTypeEditController;
@@ -52,6 +58,45 @@ public class AssetEditController implements Serializable {
     @Inject
     private TagController tagController;
 
+
+
+
+    public boolean validateFile() {
+        boolean passValidation = false;
+        if (file.getSize() < 5000000) { //5 megabytes
+            if ("image/jpeg".equals(file.getContentType())||"image/png".equals(file.getContentType())) {
+                passValidation = true;
+                return passValidation;
+            }else{
+                FacesContext.getCurrentInstance().addMessage(":assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The file uploaded was not an image file! Only jpeg and png file types allowed."));
+                return  passValidation;
+            }
+        }else{
+            FacesContext.getCurrentInstance().addMessage(":assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The file size is to large, please choose a smaller photo."));
+            return  passValidation;
+        }
+    }
+
+    public void uploadPhoto(){
+        if(file != null){
+            if(validateFile()) {
+                try (InputStream inputStream = file.getInputStream()) {
+                    byte[] photoBytes = IOUtils.toByteArray(inputStream);
+                    selectedAsset.setPhoto(photoBytes);
+                    System.out.println("Photo added to selected Asset");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public void fileChosen() {
+        if (file != null) {
+            this.fileName = file.getSubmittedFileName();
+        } else
+            System.out.println("File was null, can't set name");
+    }
+
     @PostConstruct
     public void init() {
         if (assetTypeEditController != null)
@@ -60,6 +105,7 @@ public class AssetEditController implements Serializable {
 
     public void updateSettings() {
         if (selectedAsset != null) {
+            uploadPhoto();
             boolean update = true;
 
             Asset asset = assetService.findByName(editableAssetName);
@@ -187,4 +233,20 @@ public class AssetEditController implements Serializable {
     public void setSelectedAssetIndex(int selectedAssetIndex) {
         this.selectedAssetIndex = selectedAssetIndex;
     }
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
 }

@@ -4,6 +4,9 @@
  * Proprietary and confidential.
  */
 
+
+
+
 #loading {
     position: fixed;
     top: 0;
@@ -15,6 +18,18 @@
     transition: opacity 0.1s ease-in-out;
     opacity: 0;
     pointer-events: none;
+}
+._hiddenUplFile {
+    top: 0;
+    margin-left: -12px !important;
+    cursor: inherit;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    cursor: inherit;
+    height: 30px;
+    width: 80px;
 }
 
 .texture-bg {
