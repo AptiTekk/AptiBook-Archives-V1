@@ -18,4 +18,6 @@ public interface StartupService {
     void checkForAssetTypes();
 
     void writeDefaultProperties();
+
+    void writeDefaultPermissions();
 }

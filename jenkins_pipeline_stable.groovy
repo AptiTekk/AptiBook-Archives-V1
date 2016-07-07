@@ -1,7 +1,3 @@
-mvnHome = tool "Maven";
-agendaqaUrl = "https://agendaqa-aptitekk.rhcloud.com";
-abortHandled = false;
-
 node {
 
     try {
@@ -19,47 +15,63 @@ node {
         deployToQA();
 
         stage "QA Verification";
-        slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${agendaqaUrl}";
         getQAInput();
 
     } catch (hudson.AbortException ignored) {
-        if (!abortHandled) {
+        if (!Global.abortHandled) {
             slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
             error "Aborted by User.";
         }
     } catch (err) {
-        if (!abortHandled) {
+        if (!Global.abortHandled) {
             slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
             error err.message;
         }
     }
 }
 
-def checkoutFromGit()
-{
+class Global {
+    String qaGearName = "agendaqa";
+    GString qaUrl = "https://${qaGearName}-aptitekk.rhcloud.com";
+
+    def mvnHome = tool "Maven";
+    boolean abortHandled = false;
+}
+
+def checkoutFromGit() {
     def branch = "stable";
     def url = "ssh://git@core.aptitekk.com:28/AptiTekk/Agenda.git";
     def credentialsId = "542239bb-3d63-40bc-9cfa-e5ed56a1fc5b";
 
-    checkout([$class: "GitSCM", branches: [[name: "*/${branch}"]], browser: [$class: "GogsGit"], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: ${credentialsId}, url: ${url}]]]);
+    checkout([$class                           : "GitSCM",
+              branches                         : [[name: "*/${branch}"]],
+              browser                          : [$class: "GogsGit"],
+              doGenerateSubmoduleConfigurations: false,
+              extensions                       : [],
+              submoduleCfg                     : [],
+              userRemoteConfigs                : [[
+                                                          credentialsId: $ { credentialsId },
+                                                          url          : $ { url }
+                                                  ]]
+    ]);
 }
 
 def runTests() {
-    sh "${mvnHome}/bin/mvn clean install -P wildfly-managed -U";
+    sh "${Global.mvnHome}/bin/mvn clean install -P wildfly-managed -U";
 }
 
 def buildStableWAR() {
-    sh "${mvnHome}/bin/mvn clean install -P openshift -U";
+    sh "${Global.mvnHome}/bin/mvn clean install -P openshift -U";
 }
 
 def deployToQA() {
-    sh "rhc scp agendaqa upload deployments/ROOT.war wildfly/standalone/deployments/";
+    sh "rhc scp ${Global.qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/";
 
     def i = 0;
 
     while (i < 10) {
-        sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${agendaqaUrl} > .agendaqa-status";
-        def status = readFile ".agendaqa-status";
+        sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${Global.qaUrl} > .${env.JOB_NAME}${env.BUILD_NUMBER}qa-status";
+        def status = readFile ".${env.JOB_NAME}${env.BUILD_NUMBER}qa-status";
 
         if (status == "200") {
             break;
@@ -74,13 +86,13 @@ def deployToQA() {
     }
 }
 
-def getQAInput()
-{
+def getQAInput() {
     try {
-        input "Please test https://agendaqa-aptitekk.rhcloud.com/ and proceed when ready.";
+        slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${Global.qaUrl}";
+        input message: "Please test ${Global.qaUrl} and proceed when ready.", ok: "Proceed";
     } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException ignored) {
         slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
-        abortHandled = true;
+        Global.abortHandled = true;
         error "Aborted by User.";
     }
 }

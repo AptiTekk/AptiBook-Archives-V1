@@ -6,10 +6,8 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.Property;
-import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.permissions.PermissionDescriptor;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.LogManager;
@@ -44,12 +42,16 @@ public class StartupServiceImpl implements StartupService, Serializable {
     @Inject
     private PropertiesService propertiesService;
 
+    @Inject
+    private PermissionService permissionService;
+
     @PostConstruct
     public void init() {
         checkForRootGroup();
         checkForAdminUser();
         checkForAssetTypes();
         writeDefaultProperties();
+        writeDefaultPermissions();
     }
 
     @Override
@@ -127,4 +129,20 @@ public class StartupServiceImpl implements StartupService, Serializable {
         }
     }
 
+    @Override
+    public void writeDefaultPermissions() {
+        for(PermissionDescriptor descriptor : PermissionDescriptor.values())
+        {
+            if(permissionService.getPermissionByDescriptor(descriptor) == null)
+            {
+                Permission permission = new Permission();
+                permission.setDescriptor(descriptor);
+                try {
+                    permissionService.insert(permission);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
