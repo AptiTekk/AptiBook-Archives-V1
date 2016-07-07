@@ -31,11 +31,11 @@ node {
 }
 
 class Global {
-    String qaGearName = "agendaqa";
-    GString qaUrl = "https://${qaGearName}-aptitekk.rhcloud.com";
+    public static String qaGearName = "agendaqa";
+    public static GString qaUrl = "https://${qaGearName}-aptitekk.rhcloud.com";
 
-    def mvnHome = tool "Maven";
-    boolean abortHandled = false;
+    public static def mvnHome = tool "Maven";
+    public static boolean abortHandled = false;
 }
 
 def checkoutFromGit() {
