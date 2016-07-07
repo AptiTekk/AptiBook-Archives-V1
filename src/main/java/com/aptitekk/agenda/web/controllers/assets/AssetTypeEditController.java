@@ -138,6 +138,8 @@ public class AssetTypeEditController implements Serializable {
 
                 if (assetEditController != null)
                     assetEditController.setSelectedAsset(asset);
+
+                FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
             } catch (Exception e) {
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));

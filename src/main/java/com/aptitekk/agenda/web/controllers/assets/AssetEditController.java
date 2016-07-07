@@ -14,7 +14,6 @@ import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +36,6 @@ public class AssetEditController implements Serializable {
     private AssetService assetService;
 
     private Asset selectedAsset;
-    private int selectedAssetIndex = -1;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
@@ -81,6 +79,7 @@ public class AssetEditController implements Serializable {
 
     /**
      * Validates the selected image file.
+     *
      * @return True if valid, false otherwise.
      */
     private boolean validateFile() {
@@ -128,7 +127,8 @@ public class AssetEditController implements Serializable {
                 update = false;
             }
 
-            if (!uploadPhoto())
+            //Upload file if it exists.
+            if (file != null && !uploadPhoto())
                 update = false;
 
             if (update) {
@@ -165,37 +165,25 @@ public class AssetEditController implements Serializable {
             timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
             timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
             this.currentAssetOwnerGroup = selectedAsset.getOwner();
-        } else {
-            setEditableAssetName("");
-            tagController.setSelectedAsset(null);
-            tagController.setSelectedAssetTags(null);
-            setEditableAssetApproval(false);
-            timeSelectionController.setSelectedStartTime(null);
-            timeSelectionController.setSelectedEndTime(null);
-            this.currentAssetOwnerGroup = null;
         }
         this.fileName = null;
-    }
-
-    public void onAssetTabChange(TabChangeEvent event) {
-        if (event.getData() instanceof Asset)
-            setSelectedAsset((Asset) event.getData());
     }
 
     public void deleteSelectedAsset() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
-                context.addMessage("assetEditForm", new FacesMessage("Successful", "Asset Deleted!"));
+                context.addMessage("assetSelectForm", new FacesMessage("Successful", "Asset Deleted!"));
                 assetService.delete(selectedAsset.getId());
             } else {
                 throw new Exception("Asset not found!");
             }
         } catch (Exception e) {
+            context.addMessage("assetSelectForm", new FacesMessage("Failure", "Error While Deleting Asset!"));
             e.printStackTrace();
-            context.addMessage("assetEditForm", new FacesMessage("Failure", "Error While Deleting Asset!"));
         }
 
+        selectedAsset = null;
         assetTypeEditController.refreshAssetTypes();
     }
 
@@ -205,12 +193,6 @@ public class AssetEditController implements Serializable {
 
     public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
-
-        if (assetTypeEditController != null && assetTypeEditController.getSelectedAssetType() != null)
-            selectedAssetIndex = assetTypeEditController.getSelectedAssetType().getAssets().indexOf(selectedAsset);
-        else
-            selectedAssetIndex = -1;
-
         resetSettings();
     }
 
@@ -236,14 +218,6 @@ public class AssetEditController implements Serializable {
 
     public UserGroup getCurrentAssetOwnerGroup() {
         return currentAssetOwnerGroup;
-    }
-
-    public int getSelectedAssetIndex() {
-        return selectedAssetIndex;
-    }
-
-    public void setSelectedAssetIndex(int selectedAssetIndex) {
-        this.selectedAssetIndex = selectedAssetIndex;
     }
 
     public Part getFile() {

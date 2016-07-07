@@ -11,7 +11,6 @@ import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.LogManager;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -40,7 +39,7 @@ public class PermissionsController implements Serializable {
 
     private List<User> allUsers;
     private List<User> assignedUsers;
-    private List<User> unAssignedUsers;
+    private List<User> availableUsers;
     private TreeNode[] assignedGroups;
 
     @PostConstruct
@@ -72,26 +71,26 @@ public class PermissionsController implements Serializable {
         if (assignmentPermission != null) {
             assignedUsers = assignmentPermission.getUsers();
 
-            unAssignedUsers = allUsers.subList(0, allUsers.size() - 1);
-            //Remove any users from the unAssignedUsers list that are already assigned.
-            assignedUsers.stream().filter(user -> unAssignedUsers.contains(user)).forEach(user -> unAssignedUsers.remove(user));
+            availableUsers = allUsers.subList(0, allUsers.size() - 1);
+            //Remove any users from the availableUsers list that are already assigned.
+            assignedUsers.stream().filter(user -> availableUsers.contains(user)).forEach(user -> availableUsers.remove(user));
         }
     }
 
     public void assignUser(User user) {
-        if (assignedUsers != null && unAssignedUsers != null) {
-            if (unAssignedUsers.contains(user) && !assignedUsers.contains(user)) {
+        if (assignedUsers != null && availableUsers != null) {
+            if (availableUsers.contains(user) && !assignedUsers.contains(user)) {
                 assignedUsers.add(user);
-                unAssignedUsers.remove(user);
+                availableUsers.remove(user);
             }
         }
     }
 
     public void unAssignUser(User user) {
-        if (assignedUsers != null && unAssignedUsers != null) {
-            if (!unAssignedUsers.contains(user) && assignedUsers.contains(user)) {
+        if (assignedUsers != null && availableUsers != null) {
+            if (!availableUsers.contains(user) && assignedUsers.contains(user)) {
                 assignedUsers.remove(user);
-                unAssignedUsers.add(user);
+                availableUsers.add(user);
             }
         }
     }
@@ -132,8 +131,8 @@ public class PermissionsController implements Serializable {
         this.assignedUsers = users;
     }
 
-    public List<User> getUnAssignedUsers() {
-        return unAssignedUsers;
+    public List<User> getAvailableUsers() {
+        return availableUsers;
     }
 
     public void setAssignedGroups(TreeNode[] assignedGroups) {

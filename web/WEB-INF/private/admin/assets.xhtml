@@ -104,7 +104,7 @@
                                         </h:commandButton>
                                         <b:button styleClass="btn btn-danger"
                                                   value="Delete Asset Type"
-                                                  style="display: inline-block"
+                                                  style="display: inline-block; float:right;"
                                                   p:data-toggle="modal"
                                                   p:data-target="#assetTypeDeletionConfirmModal"/>
                                     </div>
@@ -114,232 +114,251 @@
 
                         <!-- Assets Accordion -->
                         <div class="form-horizontal">
-                            <h:form id="assetEditForm" enctype="multipart/form-data">
+                            <h:form id="assetSelectForm">
                                 <div class="form-group">
                                     <b:column colXs="9" offsetXs="3">
                                         <h4>Assets:</h4>
-                                        <b:message for="assetEditForm" showSummary="false"
+                                        <b:message for="assetSelectForm" showSummary="false"
                                                    showDetail="true"/>
                                     </b:column>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-xs-offset-3 col-xs-9">
-                                        <p style="font-weight: 600">Expand rows to edit Assets</p>
-                                        <h:messages globalOnly="true"/>
-                                        <c:choose>
+                                        <b:dataTable value="#{assetTypeEditController.selectedAssetType.assets}"
+                                                     var="asset">
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    Asset Name
+                                                </f:facet>
+                                                <b:navCommandLink value="#{asset.name}" iconAlign="left"
+                                                                  iconAwesome="pencil-square-o"
+                                                                  action="#{assetEditController.setSelectedAsset(asset)}"
+                                                                  ajax="true"
+                                                                  update=":assetSelectForm :assetEditForm :assetDeletionConfirmModal"
+                                                                  style="cursor:pointer; font-weight: #{assetEditController.selectedAsset == asset ? 'bold' : 'normal'}"/>
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    Approval Required
+                                                </f:facet>
+                                                #{asset.needsApproval ? 'Yes' : 'No'}
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    Availability
+                                                </f:facet>
+                                                #{asset.availabilityStart.timeString} - #{asset.availabilityEnd.timeString}
+                                            </h:column>
+                                            <h:column>
+                                                <f:facet name="header">
+                                                    Owner Group
+                                                </f:facet>
+                                                #{asset.owner.name}
+                                            </h:column>
+                                        </b:dataTable>
+                                    </div>
+                                </div>
 
-                                            <!-- No Assets Found -->
-                                            <c:when test="#{empty assetTypeEditController.selectedAssetType.assets}">
-                                                <p>This Asset Type has no Assets! Click the button below to get started.</p>
-                                            </c:when>
+                                <div class="form-group">
+                                    <div class="col-xs-offset-3 col-xs-9">
+                                        <!-- Add new Asset Button -->
+                                        <h:commandButton styleClass="btn btn-primary"
+                                                         value="Add New Asset" style="display: inline-block"
+                                                         action="#{assetTypeEditController.addNewAssetToSelectedType}">
+                                            <f:ajax render=":assetSelectForm :assetEditForm :assetDeletionConfirmModal"
+                                                    onevent="loading"/>
+                                        </h:commandButton>
+                                    </div>
+                                </div>
+                            </h:form>
 
-                                            <!-- Assets Found -->
-                                            <c:otherwise>
-                                                <pf:accordionPanel dynamic="true"
-                                                                   activeIndex="#{assetEditController.selectedAssetIndex}"
-                                                                   value="#{assetTypeEditController.selectedAssetType.assets}"
-                                                                   var="asset">
-                                                    <pf:ajax event="tabChange"
-                                                             listener="#{assetEditController.onAssetTabChange}"
-                                                             update=":assetDeletionConfirmModal"
-                                                             onstart="loading_start()"
-                                                             oncomplete="loading_complete()"/>
+                            <h:form id="assetEditForm" enctype="multipart/form-data">
+                                <c:if test="#{assetEditController.selectedAsset != null}">
+                                    <div class="form-group">
+                                        <b:column colXs="9" offsetXs="3">
+                                            <h4>Editing '#{assetEditController.selectedAsset.name}'</h4>
+                                            * = Required. Name must be unique.
+                                            <b:message for="assetEditForm" showSummary="false"
+                                                       showDetail="true"/>
+                                            <hr/>
+                                        </b:column>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-xs-offset-3 col-xs-9">
+                                            <!-- Edit Fields -->
+                                            <div class="form-group">
+                                                <h:outputLabel value="Name: *"
+                                                               styleClass="col-xs-3 control-label"/>
+                                                <b:column colXs="9">
+                                                    <b:message for="assetEditForm:name" showSummary="false"
+                                                               showDetail="true"/>
+                                                    <h:inputText id="name" styleClass="form-control"
+                                                                 value="#{assetEditController.editableAssetName}"
+                                                                 required="true"
+                                                                 requiredMessage="This is required."
+                                                                 maxlength="32"/>
+                                                    <pf:tooltip for="name" position="left"
+                                                                value="The name as will be shown to users making reservations. E.g.: 'Library'"/>
+                                                </b:column>
+                                            </div>
 
-                                                    <pf:tab title="#{asset.name}">
-                                                        * = Required
+                                            <div class="form-group">
+                                                <h:outputLabel value="Tags:"
+                                                               styleClass="col-xs-3 control-label"/>
+                                                <b:column colXs="9">
+                                                    <!--@elvariable id="tag" type="com.aptitekk.agenda.core.entity.Tag"-->
+                                                    <pf:autoComplete multiple="true" dropdown="true"
+                                                                     value="#{tagController.selectedAssetTags}"
+                                                                     completeMethod="#{tagController.getAssetTagSuggestions}"
+                                                                     var="tag" itemLabel="#{tag.name}"
+                                                                     itemValue="#{tag}"
+                                                                     converter="#{TagConverter}"
+                                                                     queryDelay="100" styleClass="dropdown">
+                                                        <pf:ajax event="itemSelect" process="@this"/>
+                                                        <pf:ajax event="itemUnselect" process="@this"/>
+                                                        #{tag.name}
+                                                    </pf:autoComplete>
+                                                </b:column>
+                                            </div>
 
-                                                        <!-- Edit Fields -->
-                                                        <div class="form-group">
-                                                            <h:outputLabel value="Name: *"
-                                                                           styleClass="col-xs-3 control-label"/>
-                                                            <b:column colXs="9">
-                                                                <b:message for="assetEditForm:name" showSummary="false"
-                                                                           showDetail="true"/>
-                                                                <h:inputText id="name" styleClass="form-control"
-                                                                             value="#{assetEditController.editableAssetName}"
-                                                                             required="true"
-                                                                             requiredMessage="This is required."
-                                                                             maxlength="32"/>
-                                                                <pf:tooltip for="name" position="left"
-                                                                            value="The name as will be shown to users making reservations. E.g.: 'Library'"/>
-                                                            </b:column>
-                                                        </div>
+                                            <div class="form-group">
+                                                <h:outputLabel value="Requires Approval:"
+                                                               styleClass="col-xs-3 control-label"/>
+                                                <b:column colXs="9">
+                                                    <h:selectBooleanCheckbox id="approvalCheck"
+                                                                             value="#{assetEditController.editableAssetApproval}"/>
+                                                    <pf:tooltip for="approvalCheck"
+                                                                value="If checked, any requested reservations for this Asset must be approved by the groups which own it."/>
+                                                </b:column>
+                                            </div>
 
-                                                        <div class="form-group">
-                                                            <h:outputLabel value="Tags:"
-                                                                           styleClass="col-xs-3 control-label"/>
-                                                            <b:column colXs="9">
-                                                                <!--@elvariable id="tag" type="com.aptitekk.agenda.core.entity.Tag"-->
-                                                                <pf:autoComplete multiple="true" dropdown="true"
-                                                                                 value="#{tagController.selectedAssetTags}"
-                                                                                 completeMethod="#{tagController.getAssetTagSuggestions}"
-                                                                                 var="tag" itemLabel="#{tag.name}"
-                                                                                 itemValue="#{tag}"
-                                                                                 converter="#{TagConverter}"
-                                                                                 queryDelay="100" styleClass="dropdown">
-                                                                    <pf:ajax event="itemSelect" process="@this"/>
-                                                                    <pf:ajax event="itemUnselect" process="@this"/>
-                                                                    #{tag.name}
-                                                                </pf:autoComplete>
-                                                            </b:column>
-                                                        </div>
+                                            <h:panelGroup id="assetAvailability" layout="block">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Availability Time Start:"
+                                                                   styleClass="col-xs-3 control-label"/>
+                                                    <b:column colXs="9">
+                                                        <h:selectOneMenu id="startTime"
+                                                                         value="#{timeSelectionController.selectedStartTime}"
+                                                                         styleClass="big-select"
+                                                                         converter="#{SegmentedTimeConverter}">
+                                                            <f:selectItem itemValue="#{null}"
+                                                                          itemLabel="--- Select a Time ---"
+                                                                          noSelectionOption="true"/>
+                                                            <f:selectItems
+                                                                    value="#{timeSelectionController.getStartTimes(false)}"
+                                                                    var="time" itemValue="#{time}"
+                                                                    itemLabel="#{time.timeString}"/>
+                                                            <f:ajax render="assetAvailability"
+                                                                    onevent="loading"/>
+                                                        </h:selectOneMenu>
+                                                        <pf:tooltip for="startTime" position="left"
+                                                                    value="No reservations may be made before this time."/>
+                                                    </b:column>
+                                                </div>
 
-                                                        <div class="form-group">
-                                                            <h:outputLabel value="Requires Approval:"
-                                                                           styleClass="col-xs-3 control-label"/>
-                                                            <b:column colXs="9">
-                                                                <h:selectBooleanCheckbox id="approvalCheck"
-                                                                                         value="#{assetEditController.editableAssetApproval}"/>
-                                                                <pf:tooltip for="approvalCheck"
-                                                                            value="If checked, any requested reservations for this Asset must be approved by the groups which own it."/>
-                                                            </b:column>
-                                                        </div>
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Availability Time End:"
+                                                                   styleClass="col-xs-3 control-label"/>
+                                                    <b:column colXs="9">
+                                                        <h:selectOneMenu id="endTime"
+                                                                         value="#{timeSelectionController.selectedEndTime}"
+                                                                         styleClass="big-select"
+                                                                         converter="#{SegmentedTimeConverter}"
+                                                                         disabled="#{timeSelectionController.selectedStartTime == null}">
+                                                            <f:selectItems
+                                                                    value="#{timeSelectionController.endTimes}"
+                                                                    var="time" itemValue="#{time}"
+                                                                    itemLabel="#{time.timeString}"/>
+                                                            <f:ajax render="assetAvailability"
+                                                                    onevent="loading"/>
+                                                        </h:selectOneMenu>
+                                                        <pf:tooltip for="endTime" position="left"
+                                                                    value="No reservations may be made after this time."/>
+                                                    </b:column>
+                                                </div>
+                                            </h:panelGroup>
 
-                                                        <h:panelGroup id="assetAvailability" layout="block">
-                                                            <div class="form-group">
-                                                                <h:outputLabel value="Availability Time Start:"
-                                                                               styleClass="col-xs-3 control-label"/>
-                                                                <b:column colXs="9">
-                                                                    <h:selectOneMenu id="startTime"
-                                                                                     value="#{timeSelectionController.selectedStartTime}"
-                                                                                     styleClass="big-select"
-                                                                                     converter="#{SegmentedTimeConverter}">
-                                                                        <f:selectItem itemValue="#{null}"
-                                                                                      itemLabel="--- Select a Time ---"
-                                                                                      noSelectionOption="true"/>
-                                                                        <f:selectItems
-                                                                                value="#{timeSelectionController.getStartTimes(false)}"
-                                                                                var="time" itemValue="#{time}"
-                                                                                itemLabel="#{time.timeString}"/>
-                                                                        <f:ajax render="assetAvailability"
-                                                                                onevent="loading"/>
-                                                                    </h:selectOneMenu>
-                                                                    <pf:tooltip for="startTime" position="left"
-                                                                                value="No reservations may be made before this time."/>
-                                                                </b:column>
+                                            <div class="form-group">
+                                                <h:outputLabel value="Owner Group: *"
+                                                               styleClass="col-xs-3 control-label"/>
+                                                <b:column colXs="9">
+                                                    <b:message for="assetEditForm:ownerGroup"
+                                                               showSummary="false" showDetail="true"/>
+                                                    <pf:tree id="ownerGroup" required="true"
+                                                             requiredMessage="This is required."
+                                                             value="#{groupTreeController.getTree(assetEditController.currentAssetOwnerGroup, null, false, false)}"
+                                                             var="node" dynamic="true"
+                                                             selectionMode="single">
+                                                        <pf:ajax event="select" onstart="loading_start()"
+                                                                 oncomplete="loading_complete()"
+                                                                 listener="#{assetEditController.onOwnerSelected}"/>
+                                                        <pf:treeNode>
+                                                            <h:outputText value="#{node.name}"/>
+                                                        </pf:treeNode>
+                                                    </pf:tree>
+                                                    <pf:tooltip for="ownerGroup"
+                                                                value="The selected group and its parents will be notified of reservation requests for this Asset."
+                                                                showDelay="1000"/>
+                                                </b:column>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <h:outputLabel value="Add a Photo:"
+                                                               styleClass="col-xs-3 control-label"/>
+                                                <b:column colXs="9" id="imageUpload">
+                                                    <div class="input-group">
+                                                        <div class="input-group-btn">
+                                                            <div class="btn btn-primary">
+                                                                <span>Browse...</span>
+                                                                <h:inputFile
+                                                                        value="#{assetEditController.file}"
+                                                                        class="_hiddenUplFile">
+                                                                    <f:ajax render="fileName"
+                                                                            listener="#{assetEditController.onFileChosen}"/>
+                                                                </h:inputFile>
                                                             </div>
-
-                                                            <div class="form-group">
-                                                                <h:outputLabel value="Availability Time End:"
-                                                                               styleClass="col-xs-3 control-label"/>
-                                                                <b:column colXs="9">
-                                                                    <h:selectOneMenu id="endTime"
-                                                                                     value="#{timeSelectionController.selectedEndTime}"
-                                                                                     styleClass="big-select"
-                                                                                     converter="#{SegmentedTimeConverter}"
-                                                                                     disabled="#{timeSelectionController.selectedStartTime == null}">
-                                                                        <f:selectItems
-                                                                                value="#{timeSelectionController.endTimes}"
-                                                                                var="time" itemValue="#{time}"
-                                                                                itemLabel="#{time.timeString}"/>
-                                                                        <f:ajax render="assetAvailability"
-                                                                                onevent="loading"/>
-                                                                    </h:selectOneMenu>
-                                                                    <pf:tooltip for="endTime" position="left"
-                                                                                value="No reservations may be made after this time."/>
-                                                                </b:column>
-                                                            </div>
-                                                        </h:panelGroup>
-
-                                                        <div class="form-group">
-                                                            <h:outputLabel value="Owner Group: *"
-                                                                           styleClass="col-xs-3 control-label"/>
-                                                            <b:column colXs="9">
-                                                                <b:message for="assetEditForm:ownerGroup"
-                                                                           showSummary="false" showDetail="true"/>
-                                                                <pf:tree id="ownerGroup" required="true"
-                                                                         requiredMessage="This is required."
-                                                                         value="#{groupTreeController.getTree(assetEditController.currentAssetOwnerGroup, null, false, false)}"
-                                                                         var="node" dynamic="true"
-                                                                         selectionMode="single">
-                                                                    <pf:ajax event="select" onstart="loading_start()"
-                                                                             oncomplete="loading_complete()"
-                                                                             listener="#{assetEditController.onOwnerSelected}"/>
-                                                                    <pf:treeNode>
-                                                                        <h:outputText value="#{node.name}"/>
-                                                                    </pf:treeNode>
-                                                                </pf:tree>
-                                                                <pf:tooltip for="ownerGroup"
-                                                                            value="The selected group and its parents will be notified of reservation requests for this Asset."
-                                                                            showDelay="1000"/>
-                                                            </b:column>
                                                         </div>
-
-                                                        <div class="form-group">
-                                                            <h:outputLabel value="Add a Photo:"
-                                                                           styleClass="col-xs-3 control-label"/>
-                                                            <b:column colXs="9" id="imageUpload">
-                                                                <div class="input-group">
-                                                                    <div class="input-group-btn">
-                                                                        <div class="btn btn-primary">
-                                                                            <span>Browse...</span>
-                                                                            <h:inputFile
-                                                                                    value="#{assetEditController.file}"
-                                                                                    class="_hiddenUplFile">
-                                                                                <f:ajax render="fileName"
-                                                                                        listener="#{assetEditController.onFileChosen}"/>
-                                                                            </h:inputFile>
-                                                                        </div>
-                                                                    </div>
-                                                                    <h:panelGroup id="fileName">
+                                                        <h:panelGroup id="fileName">
                                                                         <span class="form-control">
                                                                             <h:outputText
                                                                                     value="#{assetEditController.fileName}"
                                                                                     id="fileUploadNameField"/>
                                                                          </span>
-                                                                    </h:panelGroup>
-                                                                </div>
+                                                        </h:panelGroup>
+                                                    </div>
 
-                                                            </b:column>
-                                                        </div>
-                                                        <!-- Save, Reset, Delete buttons -->
-                                                        <div class="form-group"
-                                                             style="background-color: #dddddd; padding: 5px; margin-bottom: 0;">
-                                                            <div class="col-xs-12">
-                                                                <div class="btn-toolbar">
-                                                                    <h:commandButton styleClass="btn btn-primary"
-                                                                                     value="Save Changes"
-                                                                                     style="display: inline-block"
-                                                                                     action="#{assetEditController.updateSettings()}">
-                                                                        <f:ajax execute="@form"
-                                                                                render=":assetEditForm"
-                                                                                onevent="loading"/>
-                                                                    </h:commandButton>
-                                                                    <h:commandButton styleClass="btn btn-default"
-                                                                                     value="Reset Fields"
-                                                                                     style="display: inline-block"
-                                                                                     action="#{assetEditController.resetSettings()}">
-                                                                        <f:ajax render="@form"
-                                                                                onevent="loading"/>
-                                                                    </h:commandButton>
-                                                                    <b:button styleClass="btn btn-danger"
-                                                                              value="Delete Asset"
-                                                                              style="display: inline-block; float:right;"
-                                                                              p:data-toggle="modal"
-                                                                              p:data-target="#assetDeletionConfirmModal"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </pf:tab>
-                                                </pf:accordionPanel>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
-
-                                <!-- Add new Asset Button -->
-                                <div class="form-group">
-                                    <div class="col-xs-offset-3 col-xs-9">
-                                        <div class="btn-toolbar">
-                                            <h:commandButton styleClass="btn btn-success"
-                                                             value="Add New Asset" style="display: inline-block"
-                                                             action="#{assetTypeEditController.addNewAssetToSelectedType}">
-                                                <f:ajax render=":assetEditForm" onevent="loading"/>
-                                            </h:commandButton>
+                                                </b:column>
+                                            </div>
+                                            <!-- Save, Reset, Delete buttons -->
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <div class="btn-toolbar">
+                                                        <h:commandButton styleClass="btn btn-primary"
+                                                                         value="Save Changes"
+                                                                         style="display: inline-block"
+                                                                         action="#{assetEditController.updateSettings()}">
+                                                            <f:ajax execute="@form"
+                                                                    render=":assetSelectForm :assetEditForm"
+                                                                    onevent="loading"/>
+                                                        </h:commandButton>
+                                                        <h:commandButton styleClass="btn btn-default"
+                                                                         value="Reset Fields"
+                                                                         style="display: inline-block"
+                                                                         action="#{assetEditController.resetSettings()}">
+                                                            <f:ajax render=":assetEditForm"
+                                                                    onevent="loading"/>
+                                                        </h:commandButton>
+                                                        <b:button styleClass="btn btn-danger"
+                                                                  value="Delete Asset"
+                                                                  style="display: inline-block; float:right;"
+                                                                  p:data-toggle="modal"
+                                                                  p:data-target="#assetDeletionConfirmModal"/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </c:if>
                             </h:form>
                         </div>
                     </c:otherwise>
@@ -423,7 +442,7 @@
                 <h:commandButton styleClass="btn btn-danger"
                                  p:data-dismiss="modal" value="Delete"
                                  action="#{assetEditController.deleteSelectedAsset}">
-                    <f:ajax render=":assetsPage" onevent="loading"/>
+                    <f:ajax render=":assetSelectForm :assetEditForm" onevent="loading"/>
                 </h:commandButton>
             </f:facet>
         </b:modal>
