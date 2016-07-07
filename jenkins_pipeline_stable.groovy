@@ -3,7 +3,6 @@ node {
     def qaUrl = "https://" + qaGearName + "-aptitekk.rhcloud.com";
 
     def mvnHome = tool "Maven";
-    boolean aborted = false;
 
     try {
         stage "Checkout";
@@ -21,18 +20,14 @@ node {
 
         stage "QA Verification";
         if (!getQAInput(qaUrl)) {
-            aborted = true;
-            error "Aborted by User.";
+            onAbort();
+            return;
         }
     } catch (hudson.AbortException ignored) {
-        slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
+        onAbort();
     } catch (err) {
-        if (aborted) {
-            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
-        } else {
-            slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
-            error err.message;
-        }
+        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
+        error err.message;
     }
 }
 
@@ -94,4 +89,9 @@ def boolean getQAInput(qaUrl) {
     } catch (ignored) {
         return false;
     }
+}
+
+def onAbort() {
+    echo "Aborted by User.";
+    slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
 }
