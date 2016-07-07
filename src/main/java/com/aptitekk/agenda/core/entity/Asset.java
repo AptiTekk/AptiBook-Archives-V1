@@ -8,6 +8,7 @@ package com.aptitekk.agenda.core.entity;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,7 +29,7 @@ public class Asset implements Serializable {
     private int id;
 
     @Lob
-    @Column(length=100000)
+    @Basic(fetch = FetchType.LAZY)
     private byte[] photo;
 
     @Column(columnDefinition = "time")
@@ -53,8 +54,6 @@ public class Asset implements Serializable {
     @ManyToMany
     @OrderBy("name")
     private List<Tag> tags = new ArrayList<>();
-
-    private String imageFileName;
 
     public Asset() {
     }
@@ -141,14 +140,6 @@ public class Asset implements Serializable {
         this.owner = owner;
     }
 
-    public String getImageFileName() {
-        return imageFileName;
-    }
-
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
-    }
-
     public List<Tag> getTags() {
         return tags;
     }
@@ -177,13 +168,12 @@ public class Asset implements Serializable {
         return EqualsHelper.areEquals(getName(), other.getName())
                 && EqualsHelper.areEquals(getAvailabilityStart(), other.getAvailabilityStart())
                 && EqualsHelper.areEquals(getAvailabilityEnd(), other.getAvailabilityEnd())
-                && EqualsHelper.areEquals(getNeedsApproval(), other.getNeedsApproval())
-                && EqualsHelper.areEquals(getImageFileName(), other.getImageFileName());
+                && EqualsHelper.areEquals(getNeedsApproval(), other.getNeedsApproval());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName(), getAvailabilityStart(), getAvailabilityEnd(), getNeedsApproval(), getImageFileName());
+        return EqualsHelper.calculateHashCode(getName(), getAvailabilityStart(), getAvailabilityEnd(), getNeedsApproval());
     }
 
 }
