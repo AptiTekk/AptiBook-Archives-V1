@@ -27,6 +27,10 @@ public class Asset implements Serializable {
     @GeneratedValue
     private int id;
 
+    @Lob
+    @Column(length=100000)
+    private byte[] photo;
+
     @Column(columnDefinition = "time")
     private SegmentedTime availabilityEnd;
 
@@ -153,6 +157,13 @@ public class Asset implements Serializable {
         this.tags = tags;
     }
 
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

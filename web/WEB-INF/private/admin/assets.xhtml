@@ -114,7 +114,7 @@
 
                         <!-- Assets Accordion -->
                         <div class="form-horizontal">
-                            <h:form id="assetEditForm">
+                            <h:form id="assetEditForm" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <b:column colXs="9" offsetXs="3">
                                         <h4>Assets:</h4>
@@ -265,6 +265,33 @@
                                                             </b:column>
                                                         </div>
 
+                                                        <div class="form-group">
+                                                            <h:outputLabel value="Add a Photo:"
+                                                                           styleClass="col-xs-3 control-label"/>
+                                                            <b:column colXs="9" id="imageUpload">
+                                                                <div class="input-group">
+                                                                    <div class="input-group-btn">
+                                                                        <div class="btn btn-primary">
+                                                                            <span>Browse...</span>
+                                                                            <h:inputFile
+                                                                                    value="#{assetEditController.file}"
+                                                                                    class="_hiddenUplFile">
+                                                                                <f:ajax render="fileName"
+                                                                                        listener="#{assetEditController.onFileChosen}"/>
+                                                                            </h:inputFile>
+                                                                        </div>
+                                                                    </div>
+                                                                    <h:panelGroup id="fileName">
+                                                                        <span class="form-control">
+                                                                            <h:outputText
+                                                                                    value="#{assetEditController.fileName}"
+                                                                                    id="fileUploadNameField"/>
+                                                                         </span>
+                                                                    </h:panelGroup>
+                                                                </div>
+
+                                                            </b:column>
+                                                        </div>
                                                         <!-- Save, Reset, Delete buttons -->
                                                         <div class="form-group"
                                                              style="background-color: #dddddd; padding: 5px; margin-bottom: 0;">
@@ -337,7 +364,7 @@
                                          value="#{newAssetTypeController.name}"
                                          required="true"
                                          requiredMessage="This is required." maxlength="32">
-                                <f:validator binding="#{uniqueAssetTypeValidator}" />
+                                <f:validator binding="#{uniqueAssetTypeValidator}"/>
                             </h:inputText>
                         </b:column>
                     </div>

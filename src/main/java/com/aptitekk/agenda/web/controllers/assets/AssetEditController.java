@@ -9,8 +9,10 @@ package com.aptitekk.agenda.web.controllers.assets;
 import com.aptitekk.agenda.core.entity.Asset;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
+import org.apache.commons.io.IOUtils;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.model.TreeNode;
@@ -21,8 +23,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.InputStream;
 import java.io.Serializable;
 
 @Named
@@ -42,6 +46,8 @@ public class AssetEditController implements Serializable {
     private boolean editableAssetApproval;
     private TreeNode editableAssetOwnerGroup;
     private UserGroup currentAssetOwnerGroup;
+    private Part file;
+    private String fileName;
 
     @Inject
     private AssetTypeEditController assetTypeEditController;
@@ -51,6 +57,55 @@ public class AssetEditController implements Serializable {
 
     @Inject
     private TagController tagController;
+
+    /**
+     * Uploads the selected image file.
+     *
+     * @return True if upload was successful, false otherwise.
+     */
+    private boolean uploadPhoto() {
+        if (file != null && selectedAsset != null) {
+            if (validateFile()) {
+                try (InputStream inputStream = file.getInputStream()) {
+                    byte[] photoBytes = IOUtils.toByteArray(inputStream);
+                    selectedAsset.setPhoto(photoBytes);
+                    LogManager.logInfo("An image was added to the asset " + selectedAsset.getName());
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Validates the selected image file.
+     * @return True if valid, false otherwise.
+     */
+    private boolean validateFile() {
+        if (file.getSize() < 5000000) { //5MB
+            if (file.getContentType().equalsIgnoreCase("image/jpeg") || file.getContentType().equalsIgnoreCase("image/png")) {
+                return true;
+            } else {
+                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Only JPEG and PNG files are accepted."));
+                return false;
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This file is too large. Please select a file under 5MB in size."));
+            return false;
+        }
+    }
+
+    /**
+     * Called upon an image file being chosen by the user.
+     */
+    public void onFileChosen() {
+        if (file != null)
+            this.fileName = file.getSubmittedFileName();
+        else
+            LogManager.logError("The chosen image file for the asset being edited is null!");
+    }
 
     @PostConstruct
     public void init() {
@@ -72,6 +127,9 @@ public class AssetEditController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("assetEditForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This is required. Please select an owner group for this asset."));
                 update = false;
             }
+
+            if (!uploadPhoto())
+                update = false;
 
             if (update) {
                 selectedAsset.setName(editableAssetName);
@@ -106,7 +164,6 @@ public class AssetEditController implements Serializable {
             SegmentedTimeRange availabilityRange = new SegmentedTimeRange(null, selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
             timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
             timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
-
             this.currentAssetOwnerGroup = selectedAsset.getOwner();
         } else {
             setEditableAssetName("");
@@ -117,6 +174,7 @@ public class AssetEditController implements Serializable {
             timeSelectionController.setSelectedEndTime(null);
             this.currentAssetOwnerGroup = null;
         }
+        this.fileName = null;
     }
 
     public void onAssetTabChange(TabChangeEvent event) {
@@ -187,4 +245,21 @@ public class AssetEditController implements Serializable {
     public void setSelectedAssetIndex(int selectedAssetIndex) {
         this.selectedAssetIndex = selectedAssetIndex;
     }
+
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
 }
