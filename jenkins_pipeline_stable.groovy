@@ -1,41 +1,38 @@
 node {
+    def qaGearName = "agendaqa";
+    def qaUrl = "https://" + qaGearName + "-aptitekk.rhcloud.com";
+
+    def mvnHome = tool "Maven";
+    boolean aborted = false;
 
     try {
         stage "Checkout";
         checkoutFromGit();
 
         stage "Test";
-        runTests();
+        runTests(mvnHome);
         slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Deploying to QA...";
 
         stage "Build";
-        buildStableWAR();
+        buildStableWAR(mvnHome);
 
         stage "Deploy to QA";
-        deployToQA();
+        deployToQA(qaGearName, qaUrl);
 
         stage "QA Verification";
-        getQAInput();
-
-    } catch (hudson.AbortException ignored) {
-        if (!Global.abortHandled) {
-            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
+        if (!getQAInput(qaUrl)) {
+            aborted = true;
             error "Aborted by User.";
         }
+
     } catch (err) {
-        if (!Global.abortHandled) {
+        if (aborted) {
+            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
+        } else {
             slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
-            error err.message;
         }
+        error err.message;
     }
-}
-
-class Global {
-    public static String qaGearName = "agendaqa";
-    public static GString qaUrl = "https://${qaGearName}-aptitekk.rhcloud.com";
-
-    public static def mvnHome = tool "Maven";
-    public static boolean abortHandled = false;
 }
 
 def checkoutFromGit() {
@@ -56,21 +53,21 @@ def checkoutFromGit() {
     ]);
 }
 
-def runTests() {
-    sh "${Global.mvnHome}/bin/mvn clean install -P wildfly-managed -U";
+def runTests(mvnHome) {
+    sh "${mvnHome}/bin/mvn clean install -P wildfly-managed -U";
 }
 
-def buildStableWAR() {
-    sh "${Global.mvnHome}/bin/mvn clean install -P openshift -U";
+def buildStableWAR(mvnHome) {
+    sh "${mvnHome}/bin/mvn clean install -P openshift -U";
 }
 
-def deployToQA() {
-    sh "rhc scp ${Global.qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/";
+def deployToQA(qaGearName, qaUrl) {
+    sh "rhc scp ${qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/";
 
     def i = 0;
 
     while (i < 10) {
-        sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${Global.qaUrl} > .${env.JOB_NAME}${env.BUILD_NUMBER}qa-status";
+        sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${qaUrl} > .${env.JOB_NAME}${env.BUILD_NUMBER}qa-status";
         def status = readFile ".${env.JOB_NAME}${env.BUILD_NUMBER}qa-status";
 
         if (status == "200") {
@@ -86,13 +83,12 @@ def deployToQA() {
     }
 }
 
-def getQAInput() {
+def boolean getQAInput(qaUrl) {
     try {
-        slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${Global.qaUrl}";
-        input message: "Please test ${Global.qaUrl} and proceed when ready.", ok: "Proceed";
-    } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException ignored) {
-        slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
-        Global.abortHandled = true;
-        error "Aborted by User.";
+        slackSend color: "good", message: "A new QA build is ready for testing! Access it here: ${qaUrl}";
+        input message: "Please test ${qaUrl} and proceed when ready.", ok: "Proceed";
+        return true;
+    } catch (ignored) {
+        return false;
     }
 }
