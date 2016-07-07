@@ -24,14 +24,15 @@ node {
             aborted = true;
             error "Aborted by User.";
         }
-
+    } catch (hudson.AbortException ignored) {
+        slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
     } catch (err) {
         if (aborted) {
             slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
         } else {
             slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
+            error err.message;
         }
-        error err.message;
     }
 }
 
@@ -62,7 +63,9 @@ def buildStableWAR(mvnHome) {
 }
 
 def deployToQA(qaGearName, qaUrl) {
+    sh "rhc app stop ${qaGearName}";
     sh "rhc scp ${qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/";
+    sh "rhc app start ${qaGearName}";
 
     def i = 0;
 
