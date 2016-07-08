@@ -305,15 +305,17 @@
                                             <div class="form-group">
                                                 <h:outputLabel value="Add a Photo:"
                                                                styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9" id="imageUpload">
+                                                <b:column colXs="9">
+                                                    <b:message for="assetEditForm:imageUpload" id="imageUploadMessage"
+                                                               showSummary="false" showDetail="true"/>
                                                     <div class="input-group">
                                                         <div class="input-group-btn">
                                                             <div class="btn btn-primary">
                                                                 <span>Browse...</span>
-                                                                <h:inputFile
+                                                                <h:inputFile id="imageUpload"
                                                                         value="#{assetEditController.file}"
-                                                                        class="_hiddenUplFile">
-                                                                    <f:ajax render="fileName"
+                                                                        class="_hiddenUplFile" validator="#{imageUploadValidator.validate}">
+                                                                    <f:ajax render="imageUploadMessage fileUploadNameField"
                                                                             listener="#{assetEditController.onFileChosen}"/>
                                                                 </h:inputFile>
                                                             </div>

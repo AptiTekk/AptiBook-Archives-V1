@@ -7,10 +7,23 @@
 package com.aptitekk.agenda.core.entity;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
-import org.hibernate.annotations.Fetch;
+import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
+import javax.imageio.ImageIO;
 import javax.persistence.*;
+import javax.servlet.http.Part;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +44,9 @@ public class Asset implements Serializable {
     @Lob
     @Basic(fetch = FetchType.LAZY)
     private byte[] photo;
+
+    @Transient
+    private static final int MAX_PHOTO_SIZE_PX = 1000;
 
     @Column(columnDefinition = "time")
     private SegmentedTime availabilityEnd;
@@ -155,6 +171,57 @@ public class Asset implements Serializable {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+
+    /**
+     * Uploads the image, scales it, and crops it.
+     *
+     * @param part The image part file.
+     * @throws IOException If the image is not a true image, or otherwise cannot be parsed.
+     */
+    public void uploadPhoto(Part part) throws IOException {
+        if (part == null) {
+            LogManager.logError("Attempt to upload image for " + name + " failed due to a null Part");
+            return;
+        }
+
+        BufferedImage bufferedImage = ImageIO.read(part.getInputStream());
+
+        // Convert the image to remove the Alpha channel if it exists.
+        BufferedImage tempRgbImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = tempRgbImage.createGraphics();
+        g2d.setColor(Color.WHITE); // Or what ever fill color you want...
+        g2d.fillRect(0, 0, tempRgbImage.getWidth(), tempRgbImage.getHeight());
+        g2d.drawImage(bufferedImage, 0, 0, null);
+        g2d.dispose();
+        bufferedImage = tempRgbImage;
+
+        // Scale the image up or down first
+        int requiredWidthHeight;
+
+        if (bufferedImage.getWidth() > MAX_PHOTO_SIZE_PX || bufferedImage.getHeight() > MAX_PHOTO_SIZE_PX)
+            requiredWidthHeight = MAX_PHOTO_SIZE_PX;
+        else if (bufferedImage.getWidth() > bufferedImage.getHeight())
+            requiredWidthHeight = bufferedImage.getWidth();
+        else
+            requiredWidthHeight = bufferedImage.getHeight();
+
+        bufferedImage = Thumbnails.of(bufferedImage)
+                .size(requiredWidthHeight, requiredWidthHeight)
+                .crop(Positions.CENTER)
+                .outputQuality(1.0)
+                .asBufferedImage();
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(bufferedImage, "JPG", outputStream);
+        byte[] output = outputStream.toByteArray();
+        if (output != null) {
+            LogManager.logInfo("Image uploaded to " + name + " successfully.");
+            this.setPhoto(output);
+        } else {
+            LogManager.logError("Attempt to upload image for " + name + " failed due to a null byte array output.");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

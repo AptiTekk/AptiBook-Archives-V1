@@ -12,7 +12,6 @@ import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
-import org.apache.commons.io.IOUtils;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
@@ -25,7 +24,7 @@ import javax.inject.Named;
 import javax.servlet.http.Part;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 @Named
@@ -56,56 +55,6 @@ public class AssetEditController implements Serializable {
     @Inject
     private TagController tagController;
 
-    /**
-     * Uploads the selected image file.
-     *
-     * @return True if upload was successful, false otherwise.
-     */
-    private boolean uploadPhoto() {
-        if (file != null && selectedAsset != null) {
-            if (validateFile()) {
-                try (InputStream inputStream = file.getInputStream()) {
-                    byte[] photoBytes = IOUtils.toByteArray(inputStream);
-                    selectedAsset.setPhoto(photoBytes);
-                    LogManager.logInfo("An image was added to the asset " + selectedAsset.getName());
-                    return true;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Validates the selected image file.
-     *
-     * @return True if valid, false otherwise.
-     */
-    private boolean validateFile() {
-        if (file.getSize() < 5000000) { //5MB
-            if (file.getContentType().equalsIgnoreCase("image/jpeg") || file.getContentType().equalsIgnoreCase("image/png")) {
-                return true;
-            } else {
-                FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Only JPEG and PNG files are accepted."));
-                return false;
-            }
-        } else {
-            FacesContext.getCurrentInstance().addMessage("assetEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This file is too large. Please select a file under 5MB in size."));
-            return false;
-        }
-    }
-
-    /**
-     * Called upon an image file being chosen by the user.
-     */
-    public void onFileChosen() {
-        if (file != null)
-            this.fileName = file.getSubmittedFileName();
-        else
-            LogManager.logError("The chosen image file for the asset being edited is null!");
-    }
-
     @PostConstruct
     public void init() {
         if (assetTypeEditController != null)
@@ -127,9 +76,16 @@ public class AssetEditController implements Serializable {
                 update = false;
             }
 
-            //Upload file if it exists.
-            if (file != null && !uploadPhoto())
-                update = false;
+            if (file != null) {
+                try {
+                    selectedAsset.uploadPhoto(file);
+                } catch (IOException e) {
+                    LogManager.logError("Attempt to upload image for " + selectedAsset.getName() + " failed due to IOException.");
+                    FacesContext.getCurrentInstance().addMessage("assetEditForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
+                    update = false;
+                    e.printStackTrace();
+                }
+            }
 
             if (update) {
                 selectedAsset.setName(editableAssetName);
@@ -225,7 +181,17 @@ public class AssetEditController implements Serializable {
     }
 
     public void setFile(Part file) {
+        if (file == null)
+            return;
         this.file = file;
+    }
+
+    /**
+     * Called upon an image file being chosen by the user.
+     */
+    public void onFileChosen() {
+        if (file != null)
+            this.fileName = file.getSubmittedFileName();
     }
 
     public String getFileName() {
