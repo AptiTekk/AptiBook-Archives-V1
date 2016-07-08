@@ -60,6 +60,7 @@ def buildStableWAR(mvnHome) {
 def deployToQA(qaGearName, qaUrl) {
     sh "rhc app stop ${qaGearName}";
     sh "rhc scp ${qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/";
+    sh "rhc ssh ${qaGearName} \"rm -irf wildfly/welcome-content\"";
     sh "rhc app start ${qaGearName}";
 
     def i = 0;
