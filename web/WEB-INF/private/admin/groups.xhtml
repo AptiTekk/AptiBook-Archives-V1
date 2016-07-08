@@ -22,7 +22,7 @@
 
     <h:panelGroup layout="block" id="groupsPage">
         <b:row id="groupsPageContent">
-            <b:column colSm="4">
+            <b:column colXs="12" colLg="4">
                 <h:form id="userGroupSelection">
                     <div class="form-group">
                         <b:panel title="Select a User Group" collapsible="false">
@@ -57,7 +57,7 @@
                     </div>
                 </h:form>
             </b:column>
-            <b:column colSm="8">
+            <b:column colXs="12" colLg="8">
                 <h:form styleClass="form-horizontal" id="groupEditForm">
                     <c:choose>
                         <c:when test="#{groupEditController.selectedUserGroup == null}">

@@ -20,7 +20,7 @@
     <h:panelGroup layout="block" id="assetsPage">
         <b:row id="assetsPageContent">
             <!-- Asset Type Selection List -->
-            <b:column colXs="12" colSm="5">
+            <b:column colXs="12" colLg="5">
                 <h:form>
                     <div class="form-group">
                         <b:dataTable value="#{assetTypeEditController.assetTypes}" var="assetType"
@@ -48,7 +48,7 @@
             </b:column>
 
             <!-- Asset Type Edit Fields -->
-            <b:column colXs="12" colSm="7">
+            <b:column colXs="12" colLg="7">
                 <c:choose>
                     <c:when test="#{assetTypeEditController.selectedAssetType == null}">
                         <b:column colXs="9" offsetXs="3">

@@ -24,21 +24,13 @@
                     </b:column>
                 </b:row>
                 <c:forEach items="#{permissionDetails.permissions}" var="permission">
-                    <b:row style="padding-bottom:20px;">
-                        <b:column colXs="8">
+                    <b:row>
+                        <b:column colXs="12" colLg="8">
                             <h:outputText value="#{permission.descriptor.friendlyName}" style="font-weight: bold"/>
                             <br/>
                             <h:outputText value="#{permission.descriptor.description}" escape="false"/>
-                            <div class="form-group">
-                                <b:commandButton look="default"
-                                                 value="Change Assignments"
-                                                 action="#{permissionsController.setAssignmentPermission(permission)}"
-                                                 ajax="true"
-                                                 oncomplete="$('.assignModal').modal();"
-                                                 update=":assignModalForm"/>
-                            </div>
                         </b:column>
-                        <b:column colXs="2">
+                        <b:column colXs="6" colLg="2">
                             <h:outputText value="Assigned Users" style="font-weight: bold"/>
                             <br/>
                             <c:choose>
@@ -55,7 +47,7 @@
                                 </c:otherwise>
                             </c:choose>
                         </b:column>
-                        <b:column colXs="2">
+                        <b:column colXs="6" colLg="2">
                             <h:outputText value="Assigned User Groups" style="font-weight: bold"/>
                             <br/>
                             <c:choose>
@@ -71,6 +63,18 @@
                                     </ul>
                                 </c:otherwise>
                             </c:choose>
+                        </b:column>
+                    </b:row>
+                    <b:row style="padding-bottom:20px;">
+                        <b:column colXs="12">
+                            <div class="form-group">
+                                <b:commandButton look="default"
+                                                 value="Change Assignments"
+                                                 action="#{permissionsController.setAssignmentPermission(permission)}"
+                                                 ajax="true"
+                                                 oncomplete="$('.assignModal').modal();"
+                                                 update=":assignModalForm"/>
+                            </div>
                         </b:column>
                     </b:row>
                 </c:forEach>
@@ -96,10 +100,10 @@
                                                 Username
                                             </f:facet>
                                             <b:navCommandLink iconAwesome="plus-circle" iconAlign="left"
-                                                             value="#{user.username}"
-                                                             ajax="true"
-                                                             action="#{permissionsController.assignUser(user)}"
-                                                             update="@parent:@parent:@parent:@parent:@parent"/>
+                                                              value="#{user.username}"
+                                                              ajax="true"
+                                                              action="#{permissionsController.assignUser(user)}"
+                                                              update="@parent:@parent:@parent:@parent:@parent"/>
                                         </h:column>
                                     </b:dataTable>
                                 </div>

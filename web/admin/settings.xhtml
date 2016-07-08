@@ -25,7 +25,7 @@
             <b:container fluid="true">
                 <b:row>
                     <!-- Sidebar -->
-                    <b:column colXs="12" colMd="2">
+                    <b:column colXs="0" colSm="0" colMd="3" colLg="2">
                         <b:listLinks style="margin-top:20px">
                             <c:forEach items="#{settingsController.pages}" var="page">
                                 <b:navLink active="#{settingsController.currentPage == page}" value="#{page.name}"
@@ -35,7 +35,7 @@
                             </c:forEach>
                         </b:listLinks>
                     </b:column>
-                    <b:column colXs="12" colMd="9">
+                    <b:column colXs="12" colMd="8" colLg="9">
                         <ol class="breadcrumb" style="margin-top: 20px">
                             <li><h:link outcome="index" value="Home"/></li>
                             <li class="active">Agenda Settings</li>
