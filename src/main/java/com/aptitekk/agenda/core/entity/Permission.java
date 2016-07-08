@@ -20,6 +20,7 @@ public class Permission {
      */
     public enum Group {
 
+        GENERAL("General"),
         ASSETS("Assets"),
         USERS("Users"),
         GROUPS("Groups"),
@@ -46,6 +47,13 @@ public class Permission {
      * NOTE: Any modifications to the NAME of the descriptor (not friendlyName) will clear its existence from the database!
      */
     public enum Descriptor {
+
+        GENERAL_FULL_PERMISSIONS(Group.GENERAL, "Full Permissions",
+                "Users and User Groups with this permission are granted all permissions. They have un-restricted access to Agenda." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User is granted all permissions.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group are granted all permissions.</li>" +
+                        "</ul>"),
 
         ASSETS_MODIFY_OWN(Group.ASSETS, "May Modify Own Group's Assets",
                 "Users and User Groups with this permission may create, edit, and delete Assets for their User Group." +
@@ -89,10 +97,10 @@ public class Permission {
 
         PROPERTIES_MODIFY_ALL(Group.PROPERTIES, "May Modify Any Properties",
                 "Users and User Groups with this permission may edit any Properties." +
-                "<ul>" +
-                "<li>If a User is given this permission, the User may edit any Properties.</li>" +
-                "<li>If a User Group is given this permission, any Users within the User Group may edit any Properties.</li>" +
-                "</ul>");
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may edit any Properties.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may edit any Properties.</li>" +
+                        "</ul>");
 
         private final Group group;
         private final String friendlyName;
