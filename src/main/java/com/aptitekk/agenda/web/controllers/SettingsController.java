@@ -21,8 +21,8 @@ public class SettingsController implements Serializable {
     public enum SettingsPage {
         ASSETS("Assets", "assets.xhtml", "tags"),
         RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o"),
-        GROUPS("User Groups", "groups.xhtml", "sitemap"),
         USERS("Users", "users.xhtml", "user"),
+        GROUPS("User Groups", "groups.xhtml", "sitemap"),
         PERMISSIONS("Permissions", "permissions.xhtml", "unlock"),
         PROPERTIES("Properties", "properties.xhtml", "cog"),
         SERVICES("Services", "services.xhtml", "server");

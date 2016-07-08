@@ -23,6 +23,7 @@ public class Permission {
         ASSETS("Assets"),
         USERS("Users"),
         GROUPS("Groups"),
+        PERMISSIONS("Permissions"),
         PROPERTIES("Properties");
 
         private String friendlyName;
@@ -77,6 +78,13 @@ public class Permission {
                         "<ul>" +
                         "<li>If a User is given this permission, the User may create, edit, and delete any User Groups.</li>" +
                         "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any User Groups.</li>" +
+                        "</ul>"),
+
+        PERMISSIONS_MODIFY_ALL(Group.PERMISSIONS, "May Assign Any Permissions",
+                "Users and User Groups with this permission may assign any Permissions." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may assign any Permissions.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may assign any Permissions.</li>" +
                         "</ul>"),
 
         PROPERTIES_MODIFY_ALL(Group.PROPERTIES, "May Modify Any Properties",
