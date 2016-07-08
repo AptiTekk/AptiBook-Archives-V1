@@ -103,6 +103,7 @@
                                                               value="#{user.username}"
                                                               ajax="true"
                                                               action="#{permissionsController.assignUser(user)}"
+                                                              style="cursor: pointer;"
                                                               update="@parent:@parent:@parent:@parent:@parent"/>
                                         </h:column>
                                     </b:dataTable>
@@ -126,6 +127,7 @@
                                                               value="#{user.username}"
                                                               ajax="true"
                                                               action="#{permissionsController.unAssignUser(user)}"
+                                                              style="cursor: pointer;"
                                                               update="@parent:@parent:@parent:@parent:@parent"/>
                                         </h:column>
                                     </b:dataTable>

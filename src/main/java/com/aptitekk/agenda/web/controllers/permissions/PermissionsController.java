@@ -69,17 +69,24 @@ public class PermissionsController implements Serializable {
     public void setAssignmentPermission(Permission assignmentPermission) {
         this.assignmentPermission = assignmentPermission;
         if (assignmentPermission != null) {
-            assignedUsers = assignmentPermission.getUsers();
+            if (assignmentPermission.getUsers() == null || assignmentPermission.getUsers().isEmpty())
+                assignedUsers = null;
+            else
+                assignedUsers = new ArrayList<>(assignmentPermission.getUsers());
 
-            availableUsers = allUsers.subList(0, allUsers.size() - 1);
-            //Remove any users from the availableUsers list that are already assigned.
-            assignedUsers.stream().filter(user -> availableUsers.contains(user)).forEach(user -> availableUsers.remove(user));
+            availableUsers = new ArrayList<>(allUsers);
+            if (assignedUsers != null) {
+                //Remove any users from the availableUsers list that are already assigned.
+                assignedUsers.stream().filter(user -> availableUsers.contains(user)).forEach(user -> availableUsers.remove(user));
+            }
         }
     }
 
     public void assignUser(User user) {
-        if (assignedUsers != null && availableUsers != null) {
-            if (availableUsers.contains(user) && !assignedUsers.contains(user)) {
+        if (availableUsers != null) {
+            if (availableUsers.contains(user) && (assignedUsers == null || !assignedUsers.contains(user))) {
+                if (assignedUsers == null)
+                    assignedUsers = new ArrayList<>();
                 assignedUsers.add(user);
                 availableUsers.remove(user);
             }
@@ -87,9 +94,11 @@ public class PermissionsController implements Serializable {
     }
 
     public void unAssignUser(User user) {
-        if (assignedUsers != null && availableUsers != null) {
+        if (availableUsers != null && assignedUsers != null) {
             if (!availableUsers.contains(user) && assignedUsers.contains(user)) {
                 assignedUsers.remove(user);
+                if (assignedUsers.isEmpty())
+                    assignedUsers = null;
                 availableUsers.add(user);
             }
         }
@@ -118,13 +127,7 @@ public class PermissionsController implements Serializable {
     }
 
     public List<User> getAssignedUsers() {
-        if (assignmentPermission == null)
-            return null;
-
-        if (assignmentPermission.getUsers() == null || assignmentPermission.getUsers().isEmpty())
-            return null;
-        else
-            return assignmentPermission.getUsers();
+        return assignedUsers;
     }
 
     public void setAssignedUsers(List<User> users) {
