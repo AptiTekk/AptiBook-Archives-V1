@@ -350,6 +350,27 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 
 /* ---------------------------------- END DRAG DROP ---------------------------------- */
 
+/* ---------------------------------- BEGIN LIGHTBOX ---------------------------------- */
+
+.ui-widget-overlay {
+    background: rgba(255, 255, 255, 0.6);
+    opacity: 1;
+}
+
+.ui-lightbox-nav-right, .ui-lightbox-nav-left {
+    display: none !important;
+}
+
+.ui-lightbox-caption {
+    height: 24px;
+}
+
+.ui-lightbox-close {
+    padding: 0 !important;
+}
+
+/* ---------------------------------- END LIGHTBOX ---------------------------------- */
+
 select.big-select {
     display: block;
     font-size: 20px;
