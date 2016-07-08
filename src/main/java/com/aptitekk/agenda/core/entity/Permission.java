@@ -15,6 +15,8 @@ public class Permission {
     /**
      * Defines the groups of permissions.
      * The order in this enum determines the order shown to the user on the Permissions page.
+     * <p>
+     * NOTE: Any modifications to the NAME of the group (not friendlyName) will clear its existence from the database!
      */
     public enum Group {
 
@@ -39,27 +41,50 @@ public class Permission {
     /**
      * Defines the details about the permissions, including their descriptions.
      * The order in this enum determines the order shown to the user within each Group on the Permissions page.
+     * <p>
+     * NOTE: Any modifications to the NAME of the descriptor (not friendlyName) will clear its existence from the database!
      */
     public enum Descriptor {
 
-        ASSETS_EDIT_OWN(Group.ASSETS, "May Edit Own Group's Assets",
-                "Users and User Groups with this permission may edit the Assets that are assigned to their User Group." +
+        ASSETS_MODIFY_OWN(Group.ASSETS, "May Modify Own Group's Assets",
+                "Users and User Groups with this permission may create, edit, and delete Assets for their User Group." +
                         "<ul>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may edit the Assets which belong to the User Group.</li>" +
-                        "<li>If a User is given this permission, the User may edit the Assets which belong to the User Groups to which the User is assigned.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete Assets for the User Groups that the User is assigned to.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Assets for their User Group.</li>" +
                         "</ul>"),
-        ASSETS_EDIT_HIERARCHY(Group.ASSETS, "May Edit Hierarchy's Assets",
-                "Users and User Groups with this permission may edit the Assets that are assigned to their User Group and any User Groups beneath them." +
+        ASSETS_MODIFY_HIERARCHY(Group.ASSETS, "May Modify Hierarchy's Assets",
+                "Users and User Groups with this permission may create, edit, and delete Assets for their User Group and that User Group's children." +
                         "<ul>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may edit the Assets which belong to the User Group and those beneath it.</li>" +
-                        "<li>If a User is given this permission, the User may edit the Assets which belong to the User Groups to which the User is assigned, and all groups beneath them.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete Assets for the User Groups that the User is assigned to, and those User Groups' children.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Assets for their User Group and that User Group's children.</li>" +
                         "</ul>"),
-        ASSETS_EDIT_ALL(Group.ASSETS, "May Edit All Assets",
-                "Users and Groups with this permission may edit all Assets regardless of assignment." +
+        ASSETS_MODIFY_ALL(Group.ASSETS, "May Modify Any Assets",
+                "Users and User Groups with this permission may create, edit, and delete any Assets for any User Group." +
                         "<ul>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may edit any Assets.</li>" +
-                        "<li>If a User is given this permission, the User may edit any Assets.</li>" +
-                        "</ul>");
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Assets.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Assets.</li>" +
+                        "</ul>"),
+
+        USERS_MODIFY_ALL(Group.USERS, "May Modify Any Users",
+                "Users and User Groups with this permission may create, edit, and delete any Users." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Users.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Users.</li>" +
+                        "</ul>"),
+
+        GROUPS_MODIFY_ALL(Group.GROUPS, "May Modify Any User Groups",
+                "Users and User Groups with this permission may create, edit, and delete any User Groups." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any User Groups.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any User Groups.</li>" +
+                        "</ul>"),
+
+        PROPERTIES_MODIFY_ALL(Group.PROPERTIES, "May Modify Any Properties",
+                "Users and User Groups with this permission may edit any Properties." +
+                "<ul>" +
+                "<li>If a User is given this permission, the User may edit any Properties.</li>" +
+                "<li>If a User Group is given this permission, any Users within the User Group may edit any Properties.</li>" +
+                "</ul>");
 
         private final Group group;
         private final String friendlyName;
@@ -89,6 +114,7 @@ public class Permission {
     @GeneratedValue
     private int id;
 
+    @Enumerated(value = EnumType.STRING)
     private Descriptor descriptor;
 
     @ManyToMany(fetch = FetchType.EAGER)
