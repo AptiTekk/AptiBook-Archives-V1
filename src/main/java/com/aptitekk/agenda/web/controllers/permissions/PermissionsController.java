@@ -45,6 +45,12 @@ public class PermissionsController implements Serializable {
     @PostConstruct
     public void init() {
         allUsers = userService.getAll();
+
+        //Admin has all permissions by default. Remove it from the list.
+        User admin = userService.findByName(UserService.ADMIN_USERNAME);
+        if (admin != null && allUsers.contains(admin))
+            allUsers.remove(admin);
+
         buildPermissionDetailsList();
     }
 
