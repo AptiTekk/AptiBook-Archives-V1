@@ -107,6 +107,10 @@ public class SettingsController implements Serializable {
 
     public String redirectIfPageIsNull() {
         if (getCurrentPage() == null) {
+            if(pages == null || pages.isEmpty())
+            {
+                return "index";
+            }
             return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&tab=" + pages.get(0).getName().replaceAll(" ", "+");
         }
         return null;
