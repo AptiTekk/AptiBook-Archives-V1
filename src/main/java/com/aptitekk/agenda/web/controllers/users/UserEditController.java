@@ -20,8 +20,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +27,7 @@ import java.util.List;
 
 @Named
 @ViewScoped
-public class UserEditController implements Serializable {
+public class UserEditController extends UserFieldSupplier implements Serializable {
 
     @Inject
     private UserService userService;
@@ -40,38 +38,6 @@ public class UserEditController implements Serializable {
     private User selectedUser;
     private List<User> users;
 
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")
-    private String editableUsername;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String editableFirstName;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String editableLastName;
-
-    @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String editableEmail;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String editablePhoneNumber;
-
-    @Size(max = 256, message = "This may only be 256 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String editableLocation;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    private String newPassword;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    private String confirmPassword;
-
-    private TreeNode[] editableUserGroupNodes;
-
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
@@ -80,7 +46,7 @@ public class UserEditController implements Serializable {
         }
 
         refreshUserList();
-        resetSettings();
+        resetFields();
     }
 
     private boolean hasPagePermission() {
@@ -91,57 +57,47 @@ public class UserEditController implements Serializable {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
     }
 
-    public void refreshUserList() {
+    void refreshUserList() {
         users = userService.getAll();
     }
 
-    public void resetSettings() {
-        if (this.selectedUser != null) {
-            setEditableUsername(selectedUser.getUsername());
-            setEditableFirstName(selectedUser.getFirstName());
-            setEditableLastName(selectedUser.getLastName());
-            setEditableEmail(selectedUser.getEmail());
-            setEditablePhoneNumber(selectedUser.getPhoneNumber());
-            setEditableLocation(selectedUser.getLocation());
-
-            setNewPassword(null);
-            setConfirmPassword(null);
-        }
+    public void resetFields() {
+        resetFields(selectedUser);
     }
 
     public void updateSettings() {
         if (!hasModifyPermission())
             return;
 
-        if ((getNewPassword() == null && getConfirmPassword() != null) || (getNewPassword() != null && !getNewPassword().equals(getConfirmPassword()))) {
+        if ((password == null && confirmPassword != null) || (password != null && !password.equals(confirmPassword))) {
             FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Passwords do not match."));
-            setNewPassword(null);
+            password = null;
             setConfirmPassword(null);
         }
 
         if (FacesContext.getCurrentInstance().getMessageList("userEditForm").isEmpty()) {
-            selectedUser.setUsername(editableUsername);
-            selectedUser.setFirstName(editableFirstName);
-            selectedUser.setLastName(editableLastName);
-            selectedUser.setEmail(editableEmail);
-            selectedUser.setPhoneNumber(getEditablePhoneNumber());
-            selectedUser.setLocation(editableLocation);
+            selectedUser.setUsername(username);
+            selectedUser.setFirstName(firstName);
+            selectedUser.setLastName(lastName);
+            selectedUser.setEmail(email);
+            selectedUser.setPhoneNumber(phoneNumber);
+            selectedUser.setLocation(location);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
 
-            if (getNewPassword() != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
-                selectedUser.setPassword(Sha256Helper.rawToSha(getNewPassword()));
+            if (password != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
+                selectedUser.setPassword(Sha256Helper.rawToSha(password));
                 FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
             }
 
-            if (editableUserGroupNodes != null) {
+            if (userGroupNodes != null) {
                 boolean changesDiscovered = false;
 
                 List<UserGroup> selectedUserGroups = new ArrayList<>();
-                List<TreeNode> editableUserGroupNodesList = Arrays.asList(editableUserGroupNodes);
+                List<TreeNode> editableUserGroupNodesList = Arrays.asList(userGroupNodes);
                 for (TreeNode node : editableUserGroupNodesList) {
 
                     //Check to see if any parents are selected, and skip if they are.
@@ -218,82 +174,10 @@ public class UserEditController implements Serializable {
             return;
 
         this.selectedUser = selectedUser;
-        resetSettings();
+        resetFields();
     }
 
     public List<User> getUsers() {
         return users;
-    }
-
-    public String getEditableUsername() {
-        return editableUsername;
-    }
-
-    public void setEditableUsername(String editableUsername) {
-        this.editableUsername = editableUsername;
-    }
-
-    public String getEditableFirstName() {
-        return editableFirstName;
-    }
-
-    public void setEditableFirstName(String editableFirstName) {
-        this.editableFirstName = editableFirstName;
-    }
-
-    public String getEditableLastName() {
-        return editableLastName;
-    }
-
-    public void setEditableLastName(String editableLastName) {
-        this.editableLastName = editableLastName;
-    }
-
-    public String getEditableEmail() {
-        return editableEmail;
-    }
-
-    public void setEditableEmail(String editableEmail) {
-        this.editableEmail = editableEmail;
-    }
-
-    public String getEditablePhoneNumber() {
-        return editablePhoneNumber;
-    }
-
-    public void setEditablePhoneNumber(String editablePhoneNumber) {
-        this.editablePhoneNumber = editablePhoneNumber;
-    }
-
-    public String getEditableLocation() {
-        return editableLocation;
-    }
-
-    public void setEditableLocation(String editableLocation) {
-        this.editableLocation = editableLocation;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
-    public void setEditableUserGroupNodes(TreeNode[] editableUserGroupNodes) {
-        this.editableUserGroupNodes = editableUserGroupNodes;
-    }
-
-    public TreeNode[] getEditableUserGroupNodes() {
-        return editableUserGroupNodes;
     }
 }

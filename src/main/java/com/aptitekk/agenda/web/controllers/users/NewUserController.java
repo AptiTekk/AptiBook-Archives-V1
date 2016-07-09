@@ -28,7 +28,7 @@ import java.util.List;
 
 @Named
 @RequestScoped
-public class NewUserController implements Serializable {
+public class NewUserController extends UserFieldSupplier implements Serializable {
 
     @Inject
     private UserService userService;
@@ -38,38 +38,6 @@ public class NewUserController implements Serializable {
 
     @Inject
     private UserEditController userEditController;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")
-    private String username;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String firstName;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String lastName;
-
-    @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String email;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String phoneNumber;
-
-    @Size(max = 256, message = "This may only be 256 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String location;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    private String password;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    private String confirmPassword;
-
-    private TreeNode[] userGroupNodes;
 
     private boolean hasModifyPermission() {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
@@ -137,15 +105,7 @@ public class NewUserController implements Serializable {
         if (!hasModifyPermission())
             return;
 
-        username = null;
-        firstName = null;
-        lastName = null;
-        email = null;
-        phoneNumber = null;
-        location = null;
-        password = null;
-        confirmPassword = null;
-        userGroupNodes = null;
+        resetFields(null);
     }
 
     public String getUsername() {
