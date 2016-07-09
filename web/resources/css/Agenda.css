@@ -182,6 +182,25 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 
 /* ---------------------------------- BEGIN DATATABLE ---------------------------------- */
 
+/* Styles a panel like a BootsFaces data table */
+.dataTablePanel.panel {
+    border-radius: 0;
+}
+
+.dataTablePanel > .panel-heading {
+    background-color: #fff !important;
+    border-bottom-width: 2px;
+}
+
+.dataTablePanel > .panel-heading > .panel-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dataTablePanel .panel-body {
+    background-color: #f9f9f9;
+}
+
 .ui-datatable .ui-datatable-tablewrapper {
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -308,7 +327,7 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 }
 
 .ui-tree .ui-treenode {
-    border-left: 1px dashed #ddd;
+    border-left: 1px dashed #aaa;
 }
 
 .ui-draggable-dragging {

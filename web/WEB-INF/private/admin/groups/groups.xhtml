@@ -22,10 +22,10 @@
 
     <h:panelGroup layout="block" id="groupsPage">
         <b:row id="groupsPageContent">
-            <b:column colXs="12" colLg="4">
+            <b:column colXs="12" colLg="5">
                 <h:form id="userGroupSelection">
                     <div class="form-group">
-                        <b:panel title="Select a User Group" collapsible="false">
+                        <b:panel title="Select a User Group" collapsible="false" styleClass="dataTablePanel">
                             <c:choose>
                                 <c:when test="#{empty groupTreeController.getTree(groupEditController.selectedUserGroup, null, false, false).children}">
                                     There are no User Groups. Click the button below to add one.
@@ -47,17 +47,17 @@
                                     </pf:tree>
                                 </c:otherwise>
                             </c:choose>
-                            <div class="form-group" style="padding-top:20px">
-                                <b:button look="primary"
-                                          value="Add New User Group"
-                                          p:data-toggle="modal"
-                                          p:data-target=".newUserGroupModal"/>
-                            </div>
                         </b:panel>
+                        <div class="form-group" style="padding-top:20px">
+                            <b:button look="primary"
+                                      value="Add New User Group"
+                                      p:data-toggle="modal"
+                                      p:data-target=".newUserGroupModal"/>
+                        </div>
                     </div>
                 </h:form>
             </b:column>
-            <b:column colXs="12" colLg="8">
+            <b:column colXs="12" colLg="7">
                 <h:form styleClass="form-horizontal" id="groupEditForm">
                     <c:choose>
                         <c:when test="#{groupEditController.selectedUserGroup == null}">
@@ -115,23 +115,23 @@
                                 <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <b:message for="usersTable" showSummary="false" showDetail="true"/>
-                                    <b:dataTable searching="false" paginated="false"
+                                    <b:dataTable searching="true" paginated="true"
                                                  value="#{groupEditController.selectedUserGroup.users}" var="user"
                                                  id="usersTable">
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="Actions"/>
+                                                <h:outputText value="Username"/>
                                             </f:facet>
-                                            <h:commandLink value="Remove"
-                                                           action="#{groupEditController.removeUserFromSelectedGroup(user)}">
-                                                <f:ajax execute="@this" render="@form"/>
-                                            </h:commandLink>
+                                            <b:navCommandLink
+                                                    action="#{groupEditController.removeUserFromSelectedGroup(user)}"
+                                                    ajax="true" update="@parent:@parent:@parent:@parent" iconAwesome="minus-circle"
+                                                    value="#{user.username}" style="cursor: pointer;"/>
                                         </h:column>
                                         <h:column>
                                             <f:facet name="header">
-                                                <h:outputText value="Username"/>
+                                                <h:outputText value="Full Name"/>
                                             </f:facet>
-                                            #{user.username}
+                                            <h:outputText value="#{user.fullname}"/>
                                         </h:column>
                                     </b:dataTable>
                                 </b:column>
