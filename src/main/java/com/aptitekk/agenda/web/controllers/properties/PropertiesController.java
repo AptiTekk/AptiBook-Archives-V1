@@ -6,10 +6,12 @@
 
 package com.aptitekk.agenda.web.controllers.properties;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.Property;
 import com.aptitekk.agenda.core.properties.PropertyGroup;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.PropertiesService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -30,11 +32,26 @@ public class PropertiesController implements Serializable {
     @Inject
     private PropertiesService propertiesService;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     private List<PropertyInputGroup> propertyInputGroups;
 
     @PostConstruct
     private void init() {
+        if (!hasPagePermission()) {
+            authenticationController.forceUserRedirect();
+            return;
+        }
         buildPropertyInputGroups();
+    }
+
+    private boolean hasPagePermission() {
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.PROPERTIES);
+    }
+
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.PROPERTIES_MODIFY_ALL);
     }
 
     private void buildPropertyInputGroups() {
@@ -54,6 +71,9 @@ public class PropertiesController implements Serializable {
     }
 
     public void saveProperties() {
+        if (!hasModifyPermission())
+            return;
+
         //Iterate over the different property input groups (Sections)
         for (PropertyInputGroup propertyInputGroup : propertyInputGroups) {
             String groupClientId = "propertiesEditForm:propertyGroup" + propertyInputGroup.getPropertyGroup().ordinal();
@@ -110,6 +130,9 @@ public class PropertiesController implements Serializable {
     }
 
     public void resetFields() {
+        if (!hasModifyPermission())
+            return;
+
         for (PropertyInputGroup propertyInputGroup : propertyInputGroups) {
             propertyInputGroup.resetInputMap();
         }

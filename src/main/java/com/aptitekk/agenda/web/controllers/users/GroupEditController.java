@@ -11,10 +11,12 @@
  */
 package com.aptitekk.agenda.web.controllers.users;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -37,6 +39,9 @@ public class GroupEditController implements Serializable {
     @Inject
     private UserService userService;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     private UserGroup selectedUserGroup;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -46,12 +51,27 @@ public class GroupEditController implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!hasPagePermission()) {
+            authenticationController.forceUserRedirect();
+            return;
+        }
+
         resetSettings();
     }
 
-    public void updateSettings() {
-        if (editableGroupName != null) {
+    private boolean hasPagePermission() {
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.GROUPS);
+    }
 
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.GROUPS_MODIFY_ALL);
+    }
+
+    public void updateSettings() {
+        if (!hasModifyPermission())
+            return;
+
+        if (editableGroupName != null) {
             //Check if another Asset Type has the same name.
             UserGroup userGroup = userGroupService.findByName(editableGroupName);
             if (userGroup != null && !userGroup.equals(selectedUserGroup))
@@ -74,6 +94,9 @@ public class GroupEditController implements Serializable {
     }
 
     public void resetSettings() {
+        if (!hasModifyPermission())
+            return;
+
         if (selectedUserGroup != null) {
             editableGroupName = selectedUserGroup.getName();
         } else {
@@ -82,6 +105,9 @@ public class GroupEditController implements Serializable {
     }
 
     public void deleteSelectedGroup() {
+        if (!hasModifyPermission())
+            return;
+
         if (this.selectedUserGroup != null) {
             UserGroup parentGroup = selectedUserGroup.getParent();
 
@@ -107,6 +133,9 @@ public class GroupEditController implements Serializable {
     }
 
     public void removeUserFromSelectedGroup(User user) throws Exception {
+        if (!hasModifyPermission())
+            return;
+
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
             userService.merge(user);
@@ -118,6 +147,9 @@ public class GroupEditController implements Serializable {
     }
 
     public void onNodeSelect(NodeSelectEvent event) {
+        if (!hasModifyPermission())
+            return;
+
         if (event.getTreeNode().getData() instanceof UserGroup)
             setSelectedUserGroup((UserGroup) event.getTreeNode().getData());
         else
@@ -129,8 +161,11 @@ public class GroupEditController implements Serializable {
     }
 
     public void setSelectedUserGroup(UserGroup selectedUserGroup) {
+        if (!hasModifyPermission())
+            return;
+
         this.selectedUserGroup = selectedUserGroup;
-        if(newGroupController != null)
+        if (newGroupController != null)
             newGroupController.setParentGroup(selectedUserGroup);
 
         resetSettings();
@@ -144,7 +179,7 @@ public class GroupEditController implements Serializable {
         this.editableGroupName = editableGroupName;
     }
 
-    public void setNewGroupController(NewGroupController newGroupController) {
+    void setNewGroupController(NewGroupController newGroupController) {
         this.newGroupController = newGroupController;
     }
 }

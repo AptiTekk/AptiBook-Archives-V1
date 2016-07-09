@@ -83,7 +83,7 @@ public class SettingsController implements Serializable {
                     Permission.Group permissionGroup = next.getPermissionGroup();
                     if (permissionGroup == null)
                         iterator.remove();
-                    else if (!authenticationController.userHasPermissionOfGroup(permissionGroup) && !authenticationController.userHasPermission(Permission.Descriptor.GENERAL_FULL_PERMISSIONS))
+                    else if (!authenticationController.userHasPermissionOfGroup(permissionGroup))
                         iterator.remove();
                 }
             }

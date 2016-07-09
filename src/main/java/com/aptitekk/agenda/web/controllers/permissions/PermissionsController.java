@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +31,9 @@ public class PermissionsController implements Serializable {
     @Inject
     private UserService userService;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     private List<PermissionDetails> permissionDetailsList;
 
     private Permission assignmentPermission;
@@ -41,6 +45,11 @@ public class PermissionsController implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!hasPagePermission()) {
+            authenticationController.forceUserRedirect();
+            return;
+        }
+
         allUsers = userService.getAll();
 
         //Admin has all permissions by default. Remove it from the list.
@@ -51,6 +60,14 @@ public class PermissionsController implements Serializable {
         }
 
         buildPermissionDetailsList();
+    }
+
+    private boolean hasPagePermission() {
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.PERMISSIONS);
+    }
+
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.PERMISSIONS_MODIFY_ALL);
     }
 
     private void buildPermissionDetailsList() {
@@ -72,6 +89,9 @@ public class PermissionsController implements Serializable {
     }
 
     public void setAssignmentPermission(Permission assignmentPermission) {
+        if (!hasModifyPermission())
+            return;
+
         this.assignmentPermission = assignmentPermission;
         if (assignmentPermission != null) {
             if (assignmentPermission.getUsers() == null || assignmentPermission.getUsers().isEmpty())
@@ -88,6 +108,9 @@ public class PermissionsController implements Serializable {
     }
 
     public void assignUser(User user) {
+        if (!hasModifyPermission())
+            return;
+
         if (availableUsers != null) {
             if (availableUsers.contains(user) && (assignedUsers == null || !assignedUsers.contains(user))) {
                 if (assignedUsers == null)
@@ -99,6 +122,9 @@ public class PermissionsController implements Serializable {
     }
 
     public void unAssignUser(User user) {
+        if (!hasModifyPermission())
+            return;
+
         if (availableUsers != null && assignedUsers != null) {
             if (!availableUsers.contains(user) && assignedUsers.contains(user)) {
                 assignedUsers.remove(user);
@@ -110,6 +136,9 @@ public class PermissionsController implements Serializable {
     }
 
     public void saveChanges() {
+        if (!hasModifyPermission())
+            return;
+
         if (assignmentPermission != null) {
             assignmentPermission.setUsers(assignedUsers);
             List<UserGroup> userGroups = new ArrayList<>();

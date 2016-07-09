@@ -102,11 +102,11 @@ public class AuthenticationController implements Serializable {
     }
 
     public boolean userHasPermission(Permission.Descriptor descriptor) {
-        return authenticatedUser != null && permissionService.userHasPermission(authenticatedUser, descriptor);
+        return authenticatedUser != null && (authenticatedUser.isAdmin() || permissionService.userHasPermission(authenticatedUser, descriptor) || permissionService.userHasPermission(authenticatedUser, Permission.Descriptor.GENERAL_FULL_PERMISSIONS));
     }
 
     public boolean userHasPermissionOfGroup(Permission.Group group) {
-        return authenticatedUser != null && permissionService.userHasPermissionOfGroup(authenticatedUser, group);
+        return authenticatedUser != null && (authenticatedUser.isAdmin() || permissionService.userHasPermissionOfGroup(authenticatedUser, group) || permissionService.userHasPermission(authenticatedUser, Permission.Descriptor.GENERAL_FULL_PERMISSIONS));
     }
 
     public void forceUserRedirect() {

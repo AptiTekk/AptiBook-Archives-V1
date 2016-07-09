@@ -91,7 +91,7 @@ public class UserEditController implements Serializable {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
     }
 
-    void refreshUserList() {
+    public void refreshUserList() {
         users = userService.getAll();
     }
 

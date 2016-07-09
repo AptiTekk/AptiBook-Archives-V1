@@ -6,8 +6,10 @@
 
 package com.aptitekk.agenda.web.controllers.users;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -30,6 +32,13 @@ public class NewGroupController implements Serializable {
     @Inject
     private GroupEditController groupEditController;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.GROUPS_MODIFY_ALL);
+    }
+
     @PostConstruct
     public void init() {
         if (groupEditController != null)
@@ -42,6 +51,9 @@ public class NewGroupController implements Serializable {
     private UserGroup parentGroup;
 
     public void addGroup() {
+        if (!hasModifyPermission())
+            return;
+
         try {
             UserGroup newGroup = new UserGroup();
             newGroup.setName(name);
@@ -66,6 +78,9 @@ public class NewGroupController implements Serializable {
     }
 
     public void onParentGroupSelected(NodeSelectEvent event) {
+        if (!hasModifyPermission())
+            return;
+
         if (event.getTreeNode() != null && event.getTreeNode().getData() instanceof UserGroup)
             this.parentGroup = (UserGroup) event.getTreeNode().getData();
         else
