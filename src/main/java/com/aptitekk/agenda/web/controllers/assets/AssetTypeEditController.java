@@ -6,11 +6,10 @@
 
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.entity.Asset;
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.Tag;
+import com.aptitekk.agenda.core.entity.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -21,8 +20,7 @@ import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Named
 @ViewScoped
@@ -35,6 +33,7 @@ public class AssetTypeEditController implements Serializable {
     private AssetService assetService;
 
     private List<AssetType> assetTypes;
+    private HashMap<AssetType, List<Asset>> editableAssetMap;
     private AssetType selectedAssetType;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -44,6 +43,9 @@ public class AssetTypeEditController implements Serializable {
     @Inject
     private TagController tagController;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     private AssetEditController assetEditController;
 
     void setAssetEditController(AssetEditController assetEditController) {
@@ -52,12 +54,69 @@ public class AssetTypeEditController implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!hasPagePermission()) {
+            authenticationController.forceUserRedirect();
+            return;
+        }
+
         refreshAssetTypes();
         resetSettings();
     }
 
+    private boolean hasPagePermission() {
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.ASSETS);
+    }
+
+    public boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.ASSET_TYPES_MODIFY_ALL);
+    }
+
     void refreshAssetTypes() {
-        assetTypes = assetTypeService.getAll();
+        assetTypes = new ArrayList<>();
+        editableAssetMap = new HashMap<>();
+
+        if (authenticationController.userHasPermission(Permission.Descriptor.ASSET_TYPES_MODIFY_ALL) || authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
+            assetTypes = assetTypeService.getAll();
+        }
+
+        if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
+            for (AssetType assetType : assetTypes) {
+                editableAssetMap.putIfAbsent(assetType, new ArrayList<>(assetType.getAssets()));
+            }
+        } else {
+            if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_HIERARCHY)) {
+                for (UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
+                    Queue<UserGroup> queue = new LinkedList<>();
+                    queue.add(userGroup);
+
+                    //Traverse the tree downward using a queue.
+                    UserGroup queueGroup;
+                    while ((queueGroup = queue.poll()) != null) {
+                        queue.addAll(queueGroup.getChildren());
+
+                        //Add all Asset Types for the Assets that the User is allowed to edit.
+                        //noinspection Duplicates
+                        for (Asset asset : queueGroup.getAssets()) {
+                            if (!assetTypes.contains(asset.getAssetType()))
+                                assetTypes.add(asset.getAssetType());
+                            editableAssetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
+                            editableAssetMap.get(asset.getAssetType()).add(asset);
+                        }
+                    }
+                }
+            } else if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_OWN)) {
+                for (UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
+                    //Add all Asset Types for the Assets that the User is allowed to edit.
+                    //noinspection Duplicates
+                    for (Asset asset : userGroup.getAssets()) {
+                        if (!assetTypes.contains(asset.getAssetType()))
+                            assetTypes.add(asset.getAssetType());
+                        editableAssetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
+                        editableAssetMap.get(asset.getAssetType()).add(asset);
+                    }
+                }
+            }
+        }
 
         //Refresh selected AssetType
         if (selectedAssetType != null)
@@ -65,6 +124,9 @@ public class AssetTypeEditController implements Serializable {
     }
 
     public void updateSettings() {
+        if (!hasModifyPermission())
+            return;
+
         if (selectedAssetType != null && editableAssetTypeName != null) {
 
             //Check if another Asset Type has the same name.
@@ -110,6 +172,9 @@ public class AssetTypeEditController implements Serializable {
     }
 
     public void deleteSelectedAssetType() {
+        if (!hasModifyPermission())
+            return;
+
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetTypeService.get(getSelectedAssetType().getId()) != null) {
@@ -177,4 +242,7 @@ public class AssetTypeEditController implements Serializable {
         this.editableAssetTypeName = editableAssetTypeName;
     }
 
+    public HashMap<AssetType, List<Asset>> getEditableAssetMap() {
+        return editableAssetMap;
+    }
 }

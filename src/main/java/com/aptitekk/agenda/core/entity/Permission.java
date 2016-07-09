@@ -68,10 +68,16 @@ public class Permission {
                         "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Assets for their User Group and that User Group's children.</li>" +
                         "</ul>"),
         ASSETS_MODIFY_ALL(Group.ASSETS, "May Modify Any Assets",
-                "Users and User Groups with this permission may create, edit, and delete any Assets for any User Group." +
+                "Users and User Groups with this permission may create, edit, and delete any Assets." +
                         "<ul>" +
                         "<li>If a User is given this permission, the User may create, edit, and delete any Assets.</li>" +
                         "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Assets.</li>" +
+                        "</ul>"),
+        ASSET_TYPES_MODIFY_ALL(Group.ASSETS, "May Modify Any Asset Types",
+                "Users and User Groups with this permission may create, edit, and delete any Asset Types." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Types.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Types.</li>" +
                         "</ul>"),
 
         USERS_MODIFY_ALL(Group.USERS, "May Modify Any Users",
