@@ -6,7 +6,9 @@
 
 package com.aptitekk.agenda.web.controllers;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
@@ -28,6 +30,9 @@ public class AuthenticationController implements Serializable {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private PermissionService permissionService;
 
     private String username;
     private String password;
@@ -90,10 +95,24 @@ public class AuthenticationController implements Serializable {
         return "index";
     }
 
-    public void redirectIfLoggedIn() throws IOException {
-        if (authenticatedUser != null) {
-            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-            externalContext.redirect(externalContext.getRequestContextPath() + "/secure/index.xhtml");
+    public String redirectIfLoggedIn() throws IOException {
+        if (authenticatedUser != null)
+            return "index";
+        return null;
+    }
+
+    public boolean userHasPermission(Permission.Descriptor descriptor) {
+        return authenticatedUser != null && permissionService.userHasPermission(authenticatedUser, descriptor);
+    }
+
+    public boolean userHasPermissionOfGroup(Permission.Group group) {
+        return authenticatedUser != null && permissionService.userHasPermissionOfGroup(authenticatedUser, group);
+    }
+
+    public void forceUserRedirect() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            context.getApplication().getNavigationHandler().handleNavigation(context, null, "index");
         }
     }
 

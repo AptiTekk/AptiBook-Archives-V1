@@ -8,7 +8,6 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.services.PermissionService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -25,6 +24,7 @@ import java.util.List;
 @ViewScoped
 public class SettingsController implements Serializable {
 
+    @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
         ASSETS("Assets", "assets.xhtml", "tags", Permission.Group.ASSETS),
         RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o", Permission.Group.ASSETS),
@@ -66,9 +66,6 @@ public class SettingsController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    @Inject
-    private PermissionService permissionService;
-
     private List<SettingsPage> pages;
     private SettingsPage currentPage = null;
 
@@ -86,7 +83,7 @@ public class SettingsController implements Serializable {
                     Permission.Group permissionGroup = next.getPermissionGroup();
                     if (permissionGroup == null)
                         iterator.remove();
-                    else if (!permissionService.userHasPermissionOfGroup(user, permissionGroup) && !permissionService.userHasPermission(user, Permission.Descriptor.GENERAL_FULL_PERMISSIONS))
+                    else if (!authenticationController.userHasPermissionOfGroup(permissionGroup) && !authenticationController.userHasPermission(Permission.Descriptor.GENERAL_FULL_PERMISSIONS))
                         iterator.remove();
                 }
             }
@@ -107,8 +104,7 @@ public class SettingsController implements Serializable {
 
     public String redirectIfPageIsNull() {
         if (getCurrentPage() == null) {
-            if(pages == null || pages.isEmpty())
-            {
+            if (pages == null || pages.isEmpty()) {
                 return "index";
             }
             return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&tab=" + pages.get(0).getName().replaceAll(" ", "+");

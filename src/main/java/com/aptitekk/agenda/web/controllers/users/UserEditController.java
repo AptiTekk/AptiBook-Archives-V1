@@ -6,10 +6,12 @@
 
 package com.aptitekk.agenda.web.controllers.users;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -31,6 +33,9 @@ public class UserEditController implements Serializable {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private AuthenticationController authenticationController;
 
     private User selectedUser;
     private List<User> users;
@@ -69,12 +74,24 @@ public class UserEditController implements Serializable {
 
     @PostConstruct
     public void init() {
+        if (!hasPagePermission()) {
+            authenticationController.forceUserRedirect();
+            return;
+        }
 
         refreshUserList();
         resetSettings();
     }
 
-    public void refreshUserList() {
+    private boolean hasPagePermission() {
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.USERS);
+    }
+
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
+    }
+
+    void refreshUserList() {
         users = userService.getAll();
     }
 
@@ -93,6 +110,9 @@ public class UserEditController implements Serializable {
     }
 
     public void updateSettings() {
+        if (!hasModifyPermission())
+            return;
+
         if ((getNewPassword() == null && getConfirmPassword() != null) || (getNewPassword() != null && !getNewPassword().equals(getConfirmPassword()))) {
             FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Passwords do not match."));
@@ -169,6 +189,9 @@ public class UserEditController implements Serializable {
     }
 
     public void deleteSelectedUser() {
+        if (!hasModifyPermission())
+            return;
+
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (userService.get(getSelectedUser().getId()) != null) {
@@ -191,6 +214,9 @@ public class UserEditController implements Serializable {
     }
 
     public void setSelectedUser(User selectedUser) {
+        if (!hasModifyPermission())
+            return;
+
         this.selectedUser = selectedUser;
         resetSettings();
     }

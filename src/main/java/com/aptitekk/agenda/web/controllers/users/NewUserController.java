@@ -6,10 +6,12 @@
 
 package com.aptitekk.agenda.web.controllers.users;
 
+import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
 import com.aptitekk.agenda.core.entity.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
@@ -29,7 +31,10 @@ import java.util.List;
 public class NewUserController implements Serializable {
 
     @Inject
-    UserService userService;
+    private UserService userService;
+
+    @Inject
+    private AuthenticationController authenticationController;
 
     @Inject
     private UserEditController userEditController;
@@ -66,7 +71,14 @@ public class NewUserController implements Serializable {
 
     private TreeNode[] userGroupNodes;
 
+    private boolean hasModifyPermission() {
+        return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
+    }
+
     public void addUser() {
+        if (!hasModifyPermission())
+            return;
+
         try {
             User newUser = new User();
             newUser.setUsername(username);
@@ -122,6 +134,9 @@ public class NewUserController implements Serializable {
     }
 
     private void resetFields() {
+        if (!hasModifyPermission())
+            return;
+
         username = null;
         firstName = null;
         lastName = null;
