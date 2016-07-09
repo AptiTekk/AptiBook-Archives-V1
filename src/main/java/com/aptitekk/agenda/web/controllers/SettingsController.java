@@ -26,13 +26,13 @@ public class SettingsController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
-        ASSETS("Assets", "assets.xhtml", "tags", Permission.Group.ASSETS),
-        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o", Permission.Group.ASSETS),
-        USERS("Users", "users.xhtml", "user", Permission.Group.USERS),
-        GROUPS("User Groups", "groups.xhtml", "sitemap", Permission.Group.GROUPS),
-        PERMISSIONS("Permissions", "permissions.xhtml", "unlock", Permission.Group.PERMISSIONS),
-        PROPERTIES("Properties", "properties.xhtml", "cog", Permission.Group.PROPERTIES),
-        SERVICES("Services", "services.xhtml", "server", null);
+        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS),
+        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor", "comments-o", Permission.Group.ASSETS),
+        USERS("Users", "users", "user", Permission.Group.USERS),
+        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS),
+        PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS),
+        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES),
+        SERVICES("Services", "services", "server", null);
 
         private String name;
         private String fileName;

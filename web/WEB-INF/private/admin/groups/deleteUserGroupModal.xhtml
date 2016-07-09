@@ -1,0 +1,35 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition>
+    <b:modal id="deletionConfirmModal" title="User Group Deletion Confirmation">
+        Are you sure you want to delete the User Group '#{groupEditController.selectedUserGroup.name}'?
+        (No users will be deleted.)
+        <f:facet name="footer">
+
+            <b:button styleClass="btn btn-default"
+                      p:data-dismiss="modal" value="Cancel"/>
+            <h:commandButton styleClass="btn btn-danger"
+                             p:data-dismiss="modal" value="Delete"
+                             action="#{groupEditController.deleteSelectedGroup}">
+                <f:ajax render=":groupsPage" onevent="loading"/>
+            </h:commandButton>
+
+        </f:facet>
+    </b:modal>
+</ui:composition>
+
+</html>

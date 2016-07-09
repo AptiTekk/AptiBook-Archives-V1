@@ -142,78 +142,8 @@
             </b:column>
         </b:row>
 
-        <!-- New User Group Modal -->
-        <h:form styleClass="form-horizontal">
-            <b:modal styleClass="newUserGroupModal" title="New User Group">
-                <h:panelGroup id="newUserGroupFields">
-                    <div class="form-group">
-                        <b:column colXs="9" offsetXs="3">
-                            * = Required. Name must be unique.
-                        </b:column>
-                    </div>
-                    <div class="form-group">
-                        <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
-                        <b:column colXs="9">
-                            <b:message for="newGroupName" showSummary="false" showDetail="true"/>
-                            <h:inputText id="newGroupName" styleClass="form-control"
-                                         value="#{newGroupController.name}"
-                                         required="true"
-                                         requiredMessage="This is required." maxlength="32">
-                                <f:validator binding="#{uniqueUserGroupValidator}" />
-                            </h:inputText>
-                        </b:column>
-                    </div>
-                    <c:if test="#{not empty groupTreeController.getTree(groupEditController.selectedUserGroup, null, false, false).children}">
-                        <div class="form-group">
-                            <h:outputLabel value="Parent: *"
-                                           styleClass="col-xs-3 control-label"/>
-                            <b:column colXs="9">
-                                <b:message for="newGroupParent"
-                                           showSummary="false" showDetail="true"/>
-                                <pf:tree id="newGroupParent"
-                                         value="#{groupTreeController.getTree(newGroupController.parentGroup, null, true, false)}"
-                                         var="node" selectionMode="single">
-                                    <pf:ajax event="select" onstart="loading_start()"
-                                             oncomplete="loading_complete()"
-                                             listener="#{newGroupController.onParentGroupSelected}"/>
-                                    <pf:treeNode>
-                                        <h:outputText value="#{node.name}"/>
-                                    </pf:treeNode>
-                                </pf:tree>
-                            </b:column>
-                        </div>
-                    </c:if>
-                    <b:fetchBeanInfos/>
-                </h:panelGroup>
-                <f:facet name="footer">
-
-                    <b:button styleClass="btn btn-default"
-                              p:data-dismiss="modal" value="Cancel"/>
-                    <b:commandButton value="Add" look="primary" ajax="true"
-                                     update="newUserGroupFields :groupsPageContent :deletionConfirmModal"
-                                     oncomplete="if(!validationFailed) $('.newUserGroupModal').modal('hide')"
-                                     action="#{newGroupController.addGroup}"
-                                     actionListener="#{groupTreeController.invalidateTrees()}"/>
-                </f:facet>
-            </b:modal>
-        </h:form>
-
-        <!-- Deletion Confirmation Modal -->
-        <b:modal id="deletionConfirmModal" title="User Group Deletion Confirmation">
-            Are you sure you want to delete the User Group '#{groupEditController.selectedUserGroup.name}'?
-            (No users will be deleted.)
-            <f:facet name="footer">
-
-                <b:button styleClass="btn btn-default"
-                          p:data-dismiss="modal" value="Cancel"/>
-                <h:commandButton styleClass="btn btn-danger"
-                                 p:data-dismiss="modal" value="Delete"
-                                 action="#{groupEditController.deleteSelectedGroup}">
-                    <f:ajax render=":groupsPage" onevent="loading"/>
-                </h:commandButton>
-
-            </f:facet>
-        </b:modal>
+        <ui:include src="newUserGroupModal.xhtml"/>
+        <ui:include src="deleteUserGroupModal.xhtml"/>
 
     </h:panelGroup>
 </ui:composition>

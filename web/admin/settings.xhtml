@@ -49,8 +49,9 @@
                         <b:modal/>
 
                         <c:if test="#{settingsController.currentPage != null}">
+                            <!--suppress HtmlUnknownTarget -->
                             <ui:include
-                                    src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}"/>
+                                    src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}/#{settingsController.currentPage.fileName}.xhtml"/>
                         </c:if>
                     </b:column>
                 </b:row>
