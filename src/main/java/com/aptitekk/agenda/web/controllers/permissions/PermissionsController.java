@@ -18,10 +18,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Named
 @ViewScoped
@@ -47,9 +44,11 @@ public class PermissionsController implements Serializable {
         allUsers = userService.getAll();
 
         //Admin has all permissions by default. Remove it from the list.
-        User admin = userService.findByName(UserService.ADMIN_USERNAME);
-        if (admin != null && allUsers.contains(admin))
-            allUsers.remove(admin);
+        Iterator<User> iterator = allUsers.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().isAdmin())
+                iterator.remove();
+        }
 
         buildPermissionDetailsList();
     }

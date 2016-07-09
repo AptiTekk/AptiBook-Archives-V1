@@ -55,11 +55,6 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
-        } else if (uri.contains("/admin")) {
-            if (user != null && user.isAdmin()) {
-                chain.doFilter(request, response);
-                return;
-            }
         } else if (uri.contains(context.getContextPath() + "/index.xhtml") && user != null) {
             currentRes.sendRedirect(context.getContextPath() + "/secure/index.xhtml");
             return;

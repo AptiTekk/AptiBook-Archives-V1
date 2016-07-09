@@ -6,12 +6,19 @@
 
 package com.aptitekk.agenda.web.controllers;
 
+import com.aptitekk.agenda.core.entity.Permission;
+import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.services.PermissionService;
+
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @Named
@@ -19,22 +26,24 @@ import java.util.List;
 public class SettingsController implements Serializable {
 
     public enum SettingsPage {
-        ASSETS("Assets", "assets.xhtml", "tags"),
-        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o"),
-        USERS("Users", "users.xhtml", "user"),
-        GROUPS("User Groups", "groups.xhtml", "sitemap"),
-        PERMISSIONS("Permissions", "permissions.xhtml", "unlock"),
-        PROPERTIES("Properties", "properties.xhtml", "cog"),
-        SERVICES("Services", "services.xhtml", "server");
+        ASSETS("Assets", "assets.xhtml", "tags", Permission.Group.ASSETS),
+        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor.xhtml", "comments-o", Permission.Group.ASSETS),
+        USERS("Users", "users.xhtml", "user", Permission.Group.USERS),
+        GROUPS("User Groups", "groups.xhtml", "sitemap", Permission.Group.GROUPS),
+        PERMISSIONS("Permissions", "permissions.xhtml", "unlock", Permission.Group.PERMISSIONS),
+        PROPERTIES("Properties", "properties.xhtml", "cog", Permission.Group.PROPERTIES),
+        SERVICES("Services", "services.xhtml", "server", null);
 
         private String name;
         private String fileName;
         private String iconAwesomeName;
+        private Permission.Group permissionGroup;
 
-        SettingsPage(String name, String fileName, String iconAwesomeName) {
+        SettingsPage(String name, String fileName, String iconAwesomeName, Permission.Group permissionGroup) {
             this.name = name;
             this.fileName = fileName;
             this.iconAwesomeName = iconAwesomeName;
+            this.permissionGroup = permissionGroup;
         }
 
         public String getName() {
@@ -48,18 +57,52 @@ public class SettingsController implements Serializable {
         public String getIconAwesomeName() {
             return iconAwesomeName;
         }
+
+        public Permission.Group getPermissionGroup() {
+            return permissionGroup;
+        }
     }
 
-    private List<SettingsPage> pages = Arrays.asList(SettingsPage.values());
+    @Inject
+    private AuthenticationController authenticationController;
+
+    @Inject
+    private PermissionService permissionService;
+
+    private List<SettingsPage> pages;
     private SettingsPage currentPage = null;
 
     @PostConstruct
     public void init() {
+        User user = authenticationController.getAuthenticatedUser();
+
+        //Prune pages based on the permissions granted to the user.
+        if (user != null) {
+            pages = new ArrayList<>(Arrays.asList(SettingsPage.values()));
+            if (!user.isAdmin()) {
+                Iterator<SettingsPage> iterator = pages.iterator();
+                while (iterator.hasNext()) {
+                    SettingsPage next = iterator.next();
+                    Permission.Group permissionGroup = next.getPermissionGroup();
+                    if (permissionGroup == null)
+                        iterator.remove();
+                    else if (!permissionService.userHasPermissionOfGroup(user, permissionGroup) && !permissionService.userHasPermission(user, Permission.Descriptor.GENERAL_FULL_PERMISSIONS))
+                        iterator.remove();
+                }
+            }
+        } else {
+            pages = new ArrayList<>();
+        }
+
         String tab = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-        if (tab != null && !tab.isEmpty())
-            for (SettingsPage page : SettingsPage.values())
-                if (page.name.equalsIgnoreCase(tab))
+        if (tab != null && !tab.isEmpty()) {
+            for (SettingsPage page : pages) {
+                if (page.name.equalsIgnoreCase(tab)) {
                     setCurrentPage(page);
+                    break;
+                }
+            }
+        }
     }
 
     public String redirectIfPageIsNull() {

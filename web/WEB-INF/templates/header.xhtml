@@ -45,7 +45,7 @@
                                    onclick="loading_start()"
                                    rendered="#{authenticationController.authenticatedUser.userGroups.size() > 0}"/>
                         <b:dropMenu value="Agenda Settings" icon="glyphicon-cog"
-                                    rendered="#{authenticationController.authenticatedUser.isAdmin()}">
+                                    rendered="#{not empty settingsController.pages}">
                             <ui:repeat value="#{settingsController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
                                            onclick="loading_start()" active="#{settingsController.currentPage == page}">

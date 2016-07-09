@@ -64,7 +64,7 @@ public class AuthenticationController implements Serializable {
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
             return null;
         } else {
-            LogManager.logInfo("'" + username + "' has logged in.");
+            LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesSessionHelper.setSessionVariable(UserService.SESSION_VAR_USERNAME,
                     authenticatedUser.getUsername());
