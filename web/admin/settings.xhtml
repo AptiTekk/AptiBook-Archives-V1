@@ -29,7 +29,8 @@
                         <b:listLinks style="margin-top:20px">
                             <c:forEach items="#{settingsController.pages}" var="page">
                                 <b:navLink active="#{settingsController.currentPage == page}" value="#{page.name}"
-                                           onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}">
+                                           onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}"
+                                           style="#{page.subLevel ? 'margin-left: 10px;' : ''}">
                                     <f:param name="tab" value="#{page.name}"/>
                                 </b:navLink>
                             </c:forEach>

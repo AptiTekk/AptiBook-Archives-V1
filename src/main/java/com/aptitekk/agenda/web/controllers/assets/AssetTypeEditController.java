@@ -33,7 +33,6 @@ public class AssetTypeEditController implements Serializable {
     private AssetService assetService;
 
     private List<AssetType> assetTypes;
-    private HashMap<AssetType, List<Asset>> editableAssetMap;
     private AssetType selectedAssetType;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -45,12 +44,6 @@ public class AssetTypeEditController implements Serializable {
 
     @Inject
     private AuthenticationController authenticationController;
-
-    private AssetEditController assetEditController;
-
-    void setAssetEditController(AssetEditController assetEditController) {
-        this.assetEditController = assetEditController;
-    }
 
     @PostConstruct
     public void init() {
@@ -73,17 +66,12 @@ public class AssetTypeEditController implements Serializable {
 
     void refreshAssetTypes() {
         assetTypes = new ArrayList<>();
-        editableAssetMap = new HashMap<>();
 
         if (authenticationController.userHasPermission(Permission.Descriptor.ASSET_TYPES_MODIFY_ALL) || authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
             assetTypes = assetTypeService.getAll();
         }
 
-        if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
-            for (AssetType assetType : assetTypes) {
-                editableAssetMap.putIfAbsent(assetType, new ArrayList<>(assetType.getAssets()));
-            }
-        } else {
+        if (!authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
             if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_HIERARCHY)) {
                 for (UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
                     Queue<UserGroup> queue = new LinkedList<>();
@@ -99,8 +87,6 @@ public class AssetTypeEditController implements Serializable {
                         for (Asset asset : queueGroup.getAssets()) {
                             if (!assetTypes.contains(asset.getAssetType()))
                                 assetTypes.add(asset.getAssetType());
-                            editableAssetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
-                            editableAssetMap.get(asset.getAssetType()).add(asset);
                         }
                     }
                 }
@@ -111,8 +97,6 @@ public class AssetTypeEditController implements Serializable {
                     for (Asset asset : userGroup.getAssets()) {
                         if (!assetTypes.contains(asset.getAssetType()))
                             assetTypes.add(asset.getAssetType());
-                        editableAssetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
-                        editableAssetMap.get(asset.getAssetType()).add(asset);
                     }
                 }
             }
@@ -201,9 +185,6 @@ public class AssetTypeEditController implements Serializable {
 
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
 
-                if (assetEditController != null)
-                    assetEditController.setSelectedAsset(asset);
-
                 FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -228,9 +209,6 @@ public class AssetTypeEditController implements Serializable {
 
     public void setSelectedAssetType(AssetType selectedAssetType) {
         this.selectedAssetType = selectedAssetType;
-        if (assetEditController != null)
-            assetEditController.setSelectedAsset(null);
-
         resetSettings();
     }
 
@@ -240,9 +218,5 @@ public class AssetTypeEditController implements Serializable {
 
     public void setEditableAssetTypeName(String editableAssetTypeName) {
         this.editableAssetTypeName = editableAssetTypeName;
-    }
-
-    public HashMap<AssetType, List<Asset>> getEditableAssetMap() {
-        return editableAssetMap;
     }
 }

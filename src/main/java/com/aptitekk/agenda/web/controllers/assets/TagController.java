@@ -108,7 +108,7 @@ public class TagController implements Serializable {
      *
      * @param asset The Asset to update.
      */
-    void updateAssetTags(Asset asset) {
+    public void updateAssetTags(Asset asset) {
         List<Tag> currentTags = asset.getTags();
         if (currentTags == null)
             currentTags = new ArrayList<>();
@@ -210,7 +210,7 @@ public class TagController implements Serializable {
         return selectedAsset;
     }
 
-    void setSelectedAsset(Asset selectedAsset) {
+    public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
         this.availableTags = selectedAsset != null ? selectedAsset.getAssetType().getTags() : null;
     }

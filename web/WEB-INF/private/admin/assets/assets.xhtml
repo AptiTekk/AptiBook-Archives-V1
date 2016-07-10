@@ -12,372 +12,78 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:pf="http://primefaces.org/ui"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition>
     <h:panelGroup layout="block" id="assetsPage">
-        <b:row id="assetsPageContent">
-            <!-- Asset Type Selection List -->
-            <b:column colXs="12" colLg="5">
-                <h:form>
-                    <div class="form-group">
-                        <b:dataTable value="#{assetTypeEditController.assetTypes}" var="assetType"
-                                     styleClass="table table-striped table-bordered" style="width:100%;"
-                                     responsive="true">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Asset Type"/>
-                                </f:facet>
-                                <h:commandLink value="#{assetType.name}"
-                                               action="#{assetTypeEditController.setSelectedAssetType(assetType)}"
-                                               style="font-weight: #{assetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
-                                    <f:ajax render=":assetsPage"/>
-                                </h:commandLink>
-                            </h:column>
-                        </b:dataTable>
-                    </div>
-                    <h:panelGroup layout="block" styleClass="form-group"
-                                  rendered="#{assetTypeEditController.hasModifyPermission()}">
-                        <b:button look="primary"
-                                  value="Add New Asset Type"
-                                  p:data-toggle="modal"
-                                  p:data-target=".newAssetTypeModal"/>
-                    </h:panelGroup>
-                </h:form>
-            </b:column>
+        <h:panelGroup layout="block" id="assetsPageContent">
+            <c:forEach items="#{assetSettingsController.assetTypeList}" var="assetType">
+                <b:row>
+                    <b:column colXs="12">
+                        <h3>#{assetType.name}</h3>
+                        <hr/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colXs="12">
+                        <h:form id="assetsForm_#{assetType.id}">
+                            <div class="form-group">
+                                <b:message for="assetsForm_#{assetType.id}" showSummary="false"
+                                           showDetail="true"/>
+                            </div>
+                            <div class="form-group">
+                                <b:dataTable
+                                        value="#{assetSettingsController.assetMap.get(assetType)}"
+                                        var="asset">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Asset Name
+                                        </f:facet>
+                                        <b:navCommandLink value="#{asset.name}"
+                                                          iconAwesome="pencil-square-o"
+                                                          action="#{assetSettingsController.setSelectedAsset(asset)}"
+                                                          ajax="true"
+                                                          update=":editAssetModalForm"
+                                                          oncomplete="$('.editAssetModal').modal();"
+                                                          style="cursor:pointer;"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Approval Required
+                                        </f:facet>
+                                        #{asset.needsApproval ? 'Yes' : 'No'}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Availability
+                                        </f:facet>
+                                        #{asset.availabilityStart.timeString} - #{asset.availabilityEnd.timeString}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Owner Group
+                                        </f:facet>
+                                        #{asset.owner.name}
+                                    </h:column>
+                                </b:dataTable>
+                            </div>
 
-            <!-- Asset Type Edit Fields -->
-            <b:column colXs="12" colLg="7">
-                <c:choose>
-                    <c:when test="#{assetTypeEditController.selectedAssetType == null}">
-                        <b:column colXs="9" offsetXs="3">
-                            <h4>Please select an Asset Type.</h4>
-                            <b:messages showSummary="false" showDetail="true"/>
-                        </b:column>
-                    </c:when>
-                    <c:otherwise>
-                        <h:form styleClass="form-horizontal" id="assetTypeEditForm">
-
                             <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>Asset Type Settings:</h4>
-                                    * = Required. Name must be unique.
-                                    <b:message for="assetTypeEditForm" showSummary="false"
-                                               showDetail="true"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="assetTypeNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="assetTypeNameEdit" styleClass="form-control"
-                                                 value="#{assetTypeEditController.editableAssetTypeName}"
-                                                 required="true"
-                                                 disabled="#{!assetTypeEditController.hasModifyPermission()}"
-                                                 requiredMessage="This is required." maxlength="32"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <!--@elvariable id="tag" type="java.lang.String"-->
-                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetTypeTagNames}"
-                                                     completeMethod="#{tagController.getAssetTypeTagSuggestions}"
-                                                     var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                                     disabled="#{!assetTypeEditController.hasModifyPermission()}"
-                                                     onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
-                                        <pf:ajax event="keyup" process="@this" update="@this"/>
-                                    </pf:autoComplete>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-offset-3 col-xs-9">
-                                    <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{assetTypeEditController.updateSettings()}"
-                                                         disabled="#{!assetTypeEditController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
-                                                         action="#{assetTypeEditController.resetSettings()}"
-                                                         disabled="#{!assetTypeEditController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete Asset Type"
-                                                  style="display: inline-block; float:right;"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#assetTypeDeletionConfirmModal"
-                                                  disabled="#{!assetTypeEditController.hasModifyPermission()}"/>
-                                    </div>
-                                </div>
+                                <!-- Add new Asset Button -->
+                                <h:commandButton styleClass="btn btn-primary"
+                                                 value="Add New Asset" style="display: inline-block"
+                                                 action="#{assetSettingsController.addNewAsset(assetType)}">
+                                    <f:ajax render="@form"
+                                            onevent="loading"/>
+                                </h:commandButton>
                             </div>
                         </h:form>
+                    </b:column>
+                </b:row>
+            </c:forEach>
+        </h:panelGroup>
 
-                        <!-- Assets Accordion -->
-                        <div class="form-horizontal">
-                            <h:form id="assetSelectForm">
-                                <div class="form-group">
-                                    <b:column colXs="9" offsetXs="3">
-                                        <h4>Assets:</h4>
-                                        <b:message for="assetSelectForm" showSummary="false"
-                                                   showDetail="true"/>
-                                    </b:column>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-xs-offset-3 col-xs-9">
-                                        <b:dataTable
-                                                value="#{assetTypeEditController.editableAssetMap.get(assetTypeEditController.selectedAssetType)}"
-                                                var="asset">
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    Asset Name
-                                                </f:facet>
-                                                <b:navCommandLink value="#{asset.name}" iconAlign="left"
-                                                                  iconAwesome="pencil-square-o"
-                                                                  action="#{assetEditController.setSelectedAsset(asset)}"
-                                                                  ajax="true"
-                                                                  update=":assetSelectForm :assetEditForm :assetDeletionConfirmModal"
-                                                                  style="cursor:pointer; font-weight: #{assetEditController.selectedAsset == asset ? 'bold' : 'normal'}"/>
-                                            </h:column>
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    Approval Required
-                                                </f:facet>
-                                                #{asset.needsApproval ? 'Yes' : 'No'}
-                                            </h:column>
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    Availability
-                                                </f:facet>
-                                                #{asset.availabilityStart.timeString} - #{asset.availabilityEnd.timeString}
-                                            </h:column>
-                                            <h:column>
-                                                <f:facet name="header">
-                                                    Owner Group
-                                                </f:facet>
-                                                #{asset.owner.name}
-                                            </h:column>
-                                        </b:dataTable>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <div class="col-xs-offset-3 col-xs-9">
-                                        <!-- Add new Asset Button -->
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Add New Asset" style="display: inline-block"
-                                                         action="#{assetTypeEditController.addNewAssetToSelectedType}">
-                                            <f:ajax render=":assetSelectForm :assetEditForm :assetDeletionConfirmModal"
-                                                    onevent="loading"/>
-                                        </h:commandButton>
-                                    </div>
-                                </div>
-                            </h:form>
-
-                            <h:form id="assetEditForm" enctype="multipart/form-data">
-                                <c:if test="#{assetEditController.selectedAsset != null}">
-                                    <div class="form-group">
-                                        <b:column colXs="9" offsetXs="3">
-                                            <h4>Editing '#{assetEditController.selectedAsset.name}'</h4>
-                                            * = Required. Name must be unique.
-                                            <b:message for="assetEditForm" showSummary="false"
-                                                       showDetail="true"/>
-                                            <hr/>
-                                        </b:column>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-xs-offset-3 col-xs-9">
-                                            <!-- Edit Fields -->
-                                            <div class="form-group">
-                                                <h:outputLabel value="Name: *"
-                                                               styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9">
-                                                    <b:message for="assetEditForm:name" showSummary="false"
-                                                               showDetail="true"/>
-                                                    <h:inputText id="name" styleClass="form-control"
-                                                                 value="#{assetEditController.editableAssetName}"
-                                                                 required="true"
-                                                                 requiredMessage="This is required."
-                                                                 maxlength="32"/>
-                                                    <pf:tooltip for="name" position="left"
-                                                                value="The name as will be shown to users making reservations. E.g.: 'Library'"/>
-                                                </b:column>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <h:outputLabel value="Tags:"
-                                                               styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9">
-                                                    <!--@elvariable id="tag" type="com.aptitekk.agenda.core.entity.Tag"-->
-                                                    <pf:autoComplete multiple="true" dropdown="true"
-                                                                     value="#{tagController.selectedAssetTags}"
-                                                                     completeMethod="#{tagController.getAssetTagSuggestions}"
-                                                                     var="tag" itemLabel="#{tag.name}"
-                                                                     itemValue="#{tag}"
-                                                                     converter="#{TagConverter}"
-                                                                     queryDelay="100" styleClass="dropdown">
-                                                        <pf:ajax event="itemSelect" process="@this"/>
-                                                        <pf:ajax event="itemUnselect" process="@this"/>
-                                                        #{tag.name}
-                                                    </pf:autoComplete>
-                                                </b:column>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <h:outputLabel value="Requires Approval:"
-                                                               styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9">
-                                                    <h:selectBooleanCheckbox id="approvalCheck"
-                                                                             value="#{assetEditController.editableAssetApproval}"/>
-                                                    <pf:tooltip for="approvalCheck"
-                                                                value="If checked, any requested reservations for this Asset must be approved by the groups which own it."/>
-                                                </b:column>
-                                            </div>
-
-                                            <h:panelGroup id="assetAvailability" layout="block">
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Availability Time Start:"
-                                                                   styleClass="col-xs-3 control-label"/>
-                                                    <b:column colXs="9">
-                                                        <h:selectOneMenu id="startTime"
-                                                                         value="#{timeSelectionController.selectedStartTime}"
-                                                                         styleClass="big-select"
-                                                                         converter="#{SegmentedTimeConverter}">
-                                                            <f:selectItem itemValue="#{null}"
-                                                                          itemLabel="--- Select a Time ---"
-                                                                          noSelectionOption="true"/>
-                                                            <f:selectItems
-                                                                    value="#{timeSelectionController.getStartTimes(false)}"
-                                                                    var="time" itemValue="#{time}"
-                                                                    itemLabel="#{time.timeString}"/>
-                                                            <f:ajax render="assetAvailability"
-                                                                    onevent="loading"/>
-                                                        </h:selectOneMenu>
-                                                        <pf:tooltip for="startTime" position="left"
-                                                                    value="No reservations may be made before this time."/>
-                                                    </b:column>
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <h:outputLabel value="Availability Time End:"
-                                                                   styleClass="col-xs-3 control-label"/>
-                                                    <b:column colXs="9">
-                                                        <h:selectOneMenu id="endTime"
-                                                                         value="#{timeSelectionController.selectedEndTime}"
-                                                                         styleClass="big-select"
-                                                                         converter="#{SegmentedTimeConverter}"
-                                                                         disabled="#{timeSelectionController.selectedStartTime == null}">
-                                                            <f:selectItems
-                                                                    value="#{timeSelectionController.endTimes}"
-                                                                    var="time" itemValue="#{time}"
-                                                                    itemLabel="#{time.timeString}"/>
-                                                            <f:ajax render="assetAvailability"
-                                                                    onevent="loading"/>
-                                                        </h:selectOneMenu>
-                                                        <pf:tooltip for="endTime" position="left"
-                                                                    value="No reservations may be made after this time."/>
-                                                    </b:column>
-                                                </div>
-                                            </h:panelGroup>
-
-                                            <div class="form-group">
-                                                <h:outputLabel value="Owner Group: *"
-                                                               styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9">
-                                                    <b:message for="assetEditForm:ownerGroup"
-                                                               showSummary="false" showDetail="true"/>
-                                                    <pf:tree id="ownerGroup" required="true"
-                                                             requiredMessage="This is required."
-                                                             value="#{groupTreeController.getTree(assetEditController.currentAssetOwnerGroup, null, false, false)}"
-                                                             var="node" dynamic="true"
-                                                             selectionMode="single">
-                                                        <pf:ajax event="select" onstart="loading_start()"
-                                                                 oncomplete="loading_complete()"
-                                                                 listener="#{assetEditController.onOwnerSelected}"/>
-                                                        <pf:treeNode>
-                                                            <h:outputText value="#{node.name}"/>
-                                                        </pf:treeNode>
-                                                    </pf:tree>
-                                                    <pf:tooltip for="ownerGroup"
-                                                                value="The selected group and its parents will be notified of reservation requests for this Asset."
-                                                                showDelay="1000"/>
-                                                </b:column>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <h:outputLabel value="Add a Photo:"
-                                                               styleClass="col-xs-3 control-label"/>
-                                                <b:column colXs="9">
-                                                    <b:message for="assetEditForm:imageUpload" id="imageUploadMessage"
-                                                               showSummary="false" showDetail="true"/>
-                                                    <div class="input-group">
-                                                        <div class="input-group-btn">
-                                                            <div class="btn btn-primary">
-                                                                <span>Browse...</span>
-                                                                <h:inputFile id="imageUpload"
-                                                                             value="#{assetEditController.file}"
-                                                                             class="_hiddenUplFile"
-                                                                             validator="#{imageUploadValidator.validate}">
-                                                                    <f:ajax render="imageUploadMessage fileUploadNameField"
-                                                                            listener="#{assetEditController.onFileChosen}"/>
-                                                                </h:inputFile>
-                                                            </div>
-                                                        </div>
-                                                        <h:panelGroup id="fileName">
-                                                                        <span class="form-control">
-                                                                            <h:outputText
-                                                                                    value="#{assetEditController.fileName}"
-                                                                                    id="fileUploadNameField"/>
-                                                                         </span>
-                                                        </h:panelGroup>
-                                                    </div>
-
-                                                </b:column>
-                                            </div>
-                                            <!-- Save, Reset, Delete buttons -->
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <div class="btn-toolbar">
-                                                        <h:commandButton styleClass="btn btn-primary"
-                                                                         value="Save Changes"
-                                                                         style="display: inline-block"
-                                                                         action="#{assetEditController.updateSettings()}">
-                                                            <f:ajax execute="@form"
-                                                                    render=":assetSelectForm :assetEditForm"
-                                                                    onevent="loading"/>
-                                                        </h:commandButton>
-                                                        <h:commandButton styleClass="btn btn-default"
-                                                                         value="Reset Fields"
-                                                                         style="display: inline-block"
-                                                                         action="#{assetEditController.resetSettings()}">
-                                                            <f:ajax render=":assetEditForm"
-                                                                    onevent="loading"/>
-                                                        </h:commandButton>
-                                                        <b:button styleClass="btn btn-danger"
-                                                                  value="Delete Asset"
-                                                                  style="display: inline-block; float:right;"
-                                                                  p:data-toggle="modal"
-                                                                  p:data-target="#assetDeletionConfirmModal"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </c:if>
-                            </h:form>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </b:column>
-        </b:row>
-
-        <ui:include src="newAssetTypeModal.xhtml"/>
-        <ui:include src="deleteAssetTypeModal.xhtml"/>
+        <ui:include src="editAssetModal.xhtml"/>
         <ui:include src="deleteAssetModal.xhtml"/>
 
     </h:panelGroup>

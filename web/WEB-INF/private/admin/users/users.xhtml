@@ -33,11 +33,12 @@
                                 <f:facet name="header">
                                     <h:outputText value="Username"/>
                                 </f:facet>
-                                <h:commandLink value="#{authenticatedUser.username}"
-                                               action="#{userEditController.setSelectedUser(authenticatedUser)}"
-                                               style="font-weight: #{userEditController.selectedUser == authenticatedUser ? 'bold' : 'normal'}">
-                                    <f:ajax render=":usersPage"/>
-                                </h:commandLink>
+                                <b:navCommandLink value="#{authenticatedUser.username}"
+                                                  action="#{userEditController.setSelectedUser(authenticatedUser)}"
+                                                  iconAwesome="pencil-square-o"
+                                                  ajax="true"
+                                                  update=":usersPage"
+                                                  style="cursor: pointer; font-weight: #{userEditController.selectedUser == authenticatedUser ? 'bold' : 'normal'}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">

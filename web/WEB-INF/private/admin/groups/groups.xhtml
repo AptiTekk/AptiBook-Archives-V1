@@ -31,7 +31,8 @@
                                     There are no User Groups. Click the button below to add one.
                                 </c:when>
                                 <c:otherwise>
-                                    Drag and drop User Groups to re-arrange the hierarchy.
+                                    <p>Drag and drop User Groups to re-arrange the hierarchy.<br/>
+                                        Click on a User Group to select it for editing.</p>
                                     <pf:tree id="tree"
                                              value="#{groupTreeController.getTree(groupEditController.selectedUserGroup, null, false, false)}"
                                              var="node" draggable="true" droppable="true" selectionMode="single"
@@ -49,10 +50,11 @@
                             </c:choose>
                         </b:panel>
                         <div class="form-group" style="padding-top:20px">
-                            <b:button look="primary"
-                                      value="Add New User Group"
-                                      p:data-toggle="modal"
-                                      p:data-target=".newUserGroupModal"/>
+                            <b:commandButton look="primary"
+                                             value="Add New User Group"
+                                             ajax="true"
+                                             update=":newUserGroupModalForm"
+                                             oncomplete="$('.newUserGroupModal').modal()"/>
                         </div>
                     </div>
                 </h:form>
@@ -124,7 +126,8 @@
                                             </f:facet>
                                             <b:navCommandLink
                                                     action="#{groupEditController.removeUserFromSelectedGroup(user)}"
-                                                    ajax="true" update="@parent:@parent:@parent:@parent" iconAwesome="minus-circle"
+                                                    ajax="true" update="@parent:@parent:@parent:@parent"
+                                                    iconAwesome="minus-circle"
                                                     value="#{user.username}" style="cursor: pointer;"/>
                                         </h:column>
                                         <h:column>

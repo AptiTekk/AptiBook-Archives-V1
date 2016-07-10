@@ -28,12 +28,12 @@ public class UniqueAssetValidator implements Validator, Serializable {
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
-        Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
+        Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
         if (inputText != null && inputText instanceof String && assetService != null) {
             Asset otherAsset = assetService.findByName((String) inputText);
             if (otherAsset != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof Asset && otherAsset.equals(exemptionAttribute))
+                if (exceptionAttribute != null && exceptionAttribute instanceof Asset && otherAsset.equals(exceptionAttribute))
                     return;
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset with this name already exists."));
             }

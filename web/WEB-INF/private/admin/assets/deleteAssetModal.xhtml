@@ -12,24 +12,27 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+>
 
 <ui:composition>
-    <b:modal id="assetDeletionConfirmModal" title="Asset
+    <h:form id="deleteAssetModalForm">
+        <b:modal styleClass="deleteAssetModal" title="Asset
                          Deletion Confirmation">
-        Are you sure you want to delete the Asset '#{assetEditController.selectedAsset.name}'?
-        <br/>
-        <p style="text-decoration: underline">All associated Reservations will be deleted as well!</p>
-        <f:facet name="footer">
-            <b:button styleClass="btn btn-default"
-                      p:data-dismiss="modal" value="Cancel"/>
-            <h:commandButton styleClass="btn btn-danger"
-                             p:data-dismiss="modal" value="Delete"
-                             action="#{assetEditController.deleteSelectedAsset}">
-                <f:ajax render=":assetSelectForm :assetEditForm" onevent="loading"/>
-            </h:commandButton>
-        </f:facet>
-    </b:modal>
+            Are you sure you want to delete the Asset '#{assetSettingsController.selectedAsset.name}'?
+            <br/>
+            <p style="text-decoration: underline">All associated Reservations will be deleted as well!</p>
+            <f:facet name="footer">
+                <b:button look="default" value="Cancel"
+                          onclick="$('.deleteAssetModal').modal('hide');$('.editAssetModal').modal();"/>
+                <h:commandButton styleClass="btn btn-danger"
+                                 value="Delete"
+                                 action="#{assetSettingsController.deleteSelectedAsset}">
+                    <f:ajax render=":assetsPageContent"
+                            onevent="function closeModal(data) {if(data.status === 'success'){if(!validationFailed){$('.deleteAssetModal').modal('hide')}}}"/>
+                </h:commandButton>
+            </f:facet>
+        </b:modal>
+    </h:form>
 </ui:composition>
 
 </html>

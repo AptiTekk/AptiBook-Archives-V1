@@ -48,7 +48,8 @@
                                     rendered="#{not empty settingsController.pages}">
                             <ui:repeat value="#{settingsController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
-                                           onclick="loading_start()" active="#{settingsController.currentPage == page}">
+                                           onclick="loading_start()" active="#{settingsController.currentPage == page}"
+                                           style="#{page.subLevel ? 'margin-left: 10px;' : ''}">
                                     <f:param name="tab" value="#{page.name}"/>
                                 </b:navLink>
                             </ui:repeat>

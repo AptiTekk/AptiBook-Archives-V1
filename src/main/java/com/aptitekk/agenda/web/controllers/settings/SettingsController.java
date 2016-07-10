@@ -4,10 +4,11 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers;
+package com.aptitekk.agenda.web.controllers.settings;
 
 import com.aptitekk.agenda.core.entity.Permission;
 import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -26,24 +27,26 @@ public class SettingsController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
-        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS),
-        RESERVATION_FIELD_EDITOR("Fields Editor", "reservation_field_editor", "comments-o", Permission.Group.ASSETS),
-        USERS("Users", "users", "user", Permission.Group.USERS),
-        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS),
-        PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS),
-        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES),
-        SERVICES("Services", "services", "server", null);
+        ASSET_TYPES("Asset Types", "assetTypes", "folder-open", Permission.Group.ASSET_TYPES, false),
+        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, true),
+        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, false),
+        USERS("Users", "users", "user", Permission.Group.USERS, true),
+        PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, false),
+        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, false),
+        SERVICES("Services", "services", "server", null, false);
 
         private String name;
         private String fileName;
         private String iconAwesomeName;
         private Permission.Group permissionGroup;
+        private boolean subLevel;
 
-        SettingsPage(String name, String fileName, String iconAwesomeName, Permission.Group permissionGroup) {
+        SettingsPage(String name, String fileName, String iconAwesomeName, Permission.Group permissionGroup, boolean subLevel) {
             this.name = name;
             this.fileName = fileName;
             this.iconAwesomeName = iconAwesomeName;
             this.permissionGroup = permissionGroup;
+            this.subLevel = subLevel;
         }
 
         public String getName() {
@@ -60,6 +63,10 @@ public class SettingsController implements Serializable {
 
         public Permission.Group getPermissionGroup() {
             return permissionGroup;
+        }
+
+        public boolean isSubLevel() {
+            return subLevel;
         }
     }
 

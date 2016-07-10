@@ -338,6 +338,7 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 .ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable .ui-treenode-icon,
 .ui-tree .ui-treenode-label.ui-state-hover, .ui-tree .ui-treenode-label.ui-state-highlight {
     border: 1px solid #ccc !important;
+    border-radius: 0 !important;
 }
 
 .ui-tree-droppoint {

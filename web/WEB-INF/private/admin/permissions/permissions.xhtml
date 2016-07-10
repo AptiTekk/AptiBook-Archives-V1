@@ -71,9 +71,8 @@
                                 <b:commandButton look="default"
                                                  value="Change Assignments"
                                                  action="#{permissionsController.setAssignmentPermission(permission)}"
-                                                 ajax="true"
-                                                 oncomplete="$('.assignModal').modal();"
-                                                 update=":assignModalForm"/>
+                                                 ajax="true" update=":assignModalForm"
+                                                 oncomplete="$('.assignModal').modal();"/>
                             </div>
                         </b:column>
                     </b:row>
