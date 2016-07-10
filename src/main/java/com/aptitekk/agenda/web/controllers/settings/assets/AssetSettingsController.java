@@ -17,7 +17,9 @@ import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
 import com.aptitekk.agenda.web.controllers.assets.TagController;
+import com.aptitekk.agenda.web.controllers.groups.GroupTreeController;
 import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -26,7 +28,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.Part;
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.IOException;
@@ -46,6 +47,9 @@ public class AssetSettingsController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
+    @Inject
+    private GroupTreeController groupTreeController;
+
     private List<AssetType> assetTypeList;
     private HashMap<AssetType, List<Asset>> assetMap;
     private Asset selectedAsset;
@@ -57,6 +61,7 @@ public class AssetSettingsController implements Serializable {
     private boolean assetApprovalRequired;
 
     private UserGroup assetOwnerGroup;
+    private TreeNode tree;
 
     private Part file;
     private String fileName;
@@ -184,6 +189,16 @@ public class AssetSettingsController implements Serializable {
             timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
             timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
             this.assetOwnerGroup = selectedAsset.getOwner();
+
+            groupTreeController.invalidateTrees();
+            if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
+                tree = groupTreeController.getTree(selectedAsset.getOwner(), null, false, false);
+            } else if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_HIERARCHY)) {
+                tree = groupTreeController.getFilteredTree(selectedAsset.getOwner(), authenticationController.getAuthenticatedUser().getUserGroups(), true);
+            } else if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_OWN)) {
+                tree = groupTreeController.getFilteredTree(selectedAsset.getOwner(), authenticationController.getAuthenticatedUser().getUserGroups(), false);
+            } else
+                tree = null;
         }
         this.fileName = null;
     }
@@ -264,6 +279,10 @@ public class AssetSettingsController implements Serializable {
 
     public UserGroup getAssetOwnerGroup() {
         return assetOwnerGroup;
+    }
+
+    public TreeNode getTree() {
+        return tree;
     }
 
     public Part getFile() {

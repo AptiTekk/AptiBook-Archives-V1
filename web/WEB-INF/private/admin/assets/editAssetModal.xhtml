@@ -20,8 +20,6 @@
             <h:panelGroup id="editAssetModalContent">
                 <div class="form-group">
                     * = Required. Name must be unique.
-                    <h:link value="test" outcome="index"/>
-                    <b:navLink value="test2" outcome="index"/>
                     <b:message for="editAssetModalForm" showSummary="false"
                                showDetail="true"/>
                     <hr/>
@@ -106,7 +104,7 @@
                     <b:message for="ownerGroup"
                                showSummary="false" showDetail="true"/>
                     <pf:tree id="ownerGroup"
-                             value="#{groupTreeController.getTree(assetSettingsController.assetOwnerGroup, null, false, false)}"
+                             value="#{assetSettingsController.tree}"
                              var="node" dynamic="true"
                              selectionMode="single">
                         <pf:ajax event="select" listener="#{assetSettingsController.onOwnerSelected}"/>

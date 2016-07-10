@@ -61,13 +61,75 @@ public class GroupTreeController implements Serializable {
                     if (currentlySelectedGroups != null && currentlySelectedGroups.contains(child)) {
                         node.setSelected(true);
                     }
-                    if(readOnly)
+                    if (readOnly)
                         node.setSelectable(false);
 
                     queue.add(node);
                 }
             }
         }
+        return rootNode;
+    }
+
+    private TreeNode buildFilteredTree(UserGroup currentlySelectedGroup, List<UserGroup> allowedGroups, boolean includeChildren) {
+        UserGroup rootGroup = groupService.getRootGroup();
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        TreeNode rootNode = new DefaultTreeNode(rootGroup);
+        rootNode.setExpanded(true);
+        rootNode.setSelectable(false);
+        queue.add(rootNode);
+
+        TreeNode currEntry;
+
+        while ((currEntry = queue.poll()) != null) {
+            UserGroup group = currEntry.getData() == null ? null : (UserGroup) currEntry.getData();
+
+            if (group != null) {
+                for (UserGroup child : group.getChildren()) {
+                    TreeNode node = new DefaultTreeNode(child, currEntry);
+                    node.setExpanded(true);
+                    node.setSelectable(false);
+                    if (currentlySelectedGroup != null && currentlySelectedGroup.equals(child))
+                        node.setSelected(true);
+
+                    queue.add(node);
+                }
+            }
+        }
+
+        queue = new LinkedList<>();
+        queue.add(rootNode);
+
+        while ((currEntry = queue.poll()) != null) {
+            if (!currEntry.equals(rootNode)) {
+                //noinspection SuspiciousMethodCalls
+                if (!allowedGroups.contains(currEntry.getData()) && !currEntry.isSelectable()) {
+                    for (TreeNode child : currEntry.getChildren()) {
+                        child.setParent(currEntry.getParent());
+                        currEntry.getParent().getChildren().add(child);
+                        queue.add(child);
+                    }
+                    currEntry.getParent().getChildren().remove(currEntry);
+                    currEntry.clearParent();
+                } else {
+                    currEntry.setSelectable(true);
+                    if (includeChildren) {
+                        for (TreeNode child : currEntry.getChildren()) {
+                            child.setSelectable(true);
+                            queue.add(child);
+                        }
+                    } else {
+                        currEntry.getChildren().clear();
+                    }
+                }
+            } else {
+                for (TreeNode child : currEntry.getChildren()) {
+                    queue.add(child);
+                }
+            }
+        }
+
         return rootNode;
     }
 
@@ -80,6 +142,23 @@ public class GroupTreeController implements Serializable {
         }
 
         return getMultipleSelectedTree(userGroups, userGroupToExclude, allowRootSelection, readOnly);
+    }
+
+    public TreeNode getFilteredTree(UserGroup currentlySelectedGroup, List<UserGroup> allowedGroups, boolean includeChildren) {
+        int hashCode = 0;
+
+        hashCode += currentlySelectedGroup == null ? 0 : currentlySelectedGroup.hashCode();
+        hashCode += allowedGroups == null ? 0 : allowedGroups.hashCode();
+        hashCode += includeChildren ? 1 : 0;
+
+        if (cache.containsKey(hashCode)) {
+            return cache.get(hashCode);
+        } else {
+            TreeNode newTree = buildFilteredTree(currentlySelectedGroup, allowedGroups, includeChildren);
+            cache.put(hashCode, newTree);
+
+            return newTree;
+        }
     }
 
     public TreeNode getMultipleSelectedTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection, Boolean readOnly) {
