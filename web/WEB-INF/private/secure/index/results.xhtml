@@ -70,7 +70,7 @@
             </b:column>
         </b:row>
         <b:row style="margin-top:10px">
-            <b:column colXs="4">
+            <b:column colXs="12" colMd="4">
                 <h:form>
                     <b:panel look="default" title="Filters">
                         <h:selectManyCheckbox value="#{availableAssetsController.selectedFilterTags}"
@@ -82,7 +82,7 @@
                     </b:panel>
                 </h:form>
             </b:column>
-            <b:column colXs="8">
+            <b:column colXs="12" colMd="8">
                 <h:form id="availableAssetsList">
                     <c:choose>
                         <c:when test="#{empty availableAssetsController.filteredAssets}">
