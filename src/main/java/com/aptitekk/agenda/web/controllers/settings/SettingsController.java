@@ -27,26 +27,26 @@ public class SettingsController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
-        ASSET_TYPES("Asset Types", "assetTypes", "folder-open", Permission.Group.ASSET_TYPES, false),
-        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, true),
-        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, false),
-        USERS("Users", "users", "user", Permission.Group.USERS, true),
-        PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, false),
-        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, false),
-        SERVICES("Services", "services", "server", null, false);
+        ASSET_TYPES("Asset Types", "assetTypes", "folder-open", Permission.Group.ASSET_TYPES, null),
+        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, ASSET_TYPES),
+        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
+        USERS("Users", "users", "user", Permission.Group.USERS, GROUPS),
+        PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, null),
+        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, null),
+        SERVICES("Services", "services", "server", null, null);
 
         private String name;
         private String fileName;
         private String iconAwesomeName;
         private Permission.Group permissionGroup;
-        private boolean subLevel;
+        private SettingsPage parent;
 
-        SettingsPage(String name, String fileName, String iconAwesomeName, Permission.Group permissionGroup, boolean subLevel) {
+        SettingsPage(String name, String fileName, String iconAwesomeName, Permission.Group permissionGroup, SettingsPage parent) {
             this.name = name;
             this.fileName = fileName;
             this.iconAwesomeName = iconAwesomeName;
             this.permissionGroup = permissionGroup;
-            this.subLevel = subLevel;
+            this.parent = parent;
         }
 
         public String getName() {
@@ -65,8 +65,8 @@ public class SettingsController implements Serializable {
             return permissionGroup;
         }
 
-        public boolean isSubLevel() {
-            return subLevel;
+        public SettingsPage getParent() {
+            return parent;
         }
     }
 
