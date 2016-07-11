@@ -48,26 +48,30 @@
                                                     look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
                                                     title="#{reservationDetails.reservation.asset.name}"
                                                     collapsible="false">
-                                                <div class="form-group">
-                                                    <p:lightBox>
-                                                        <h:outputLink
-                                                                value="#{request.contextPath}/images/assets/#{reservationDetails.reservation.asset.id}">
-                                                            <h:graphicImage
-                                                                    url="/images/assets/#{reservationDetails.reservation.asset.id}"
-                                                                    style="height: 100px; border-radius: 5px"/>
-                                                        </h:outputLink>
-                                                    </p:lightBox>
-                                                </div>
-                                                <div class="form-group">
-                                                    Reserved By: #{reservationDetails.reservation.user.fullname}
-                                                </div>
-                                                <div class="form-group">
-                                                    From: #{reservationDetails.reservation.timeStart.timeString} To: #{reservationDetails.reservation.timeEnd.timeString}
-                                                </div>
-                                                <ul>
-                                                    <c:forEach items="#{reservationDetails.hierarchyDecisions}"
-                                                               var="hierarchyDecision">
-                                                        <li>
+                                                <b:row>
+                                                    <b:column colXs="12" colSm="2" style="width: 115px;">
+                                                        <div class="form-group">
+                                                            <p:lightBox>
+                                                                <h:outputLink
+                                                                        value="#{request.contextPath}/images/assets/#{reservationDetails.reservation.asset.id}">
+                                                                    <h:graphicImage
+                                                                            url="/images/assets/#{reservationDetails.reservation.asset.id}"
+                                                                            style="height: 100px; border-radius: 5px"/>
+                                                                </h:outputLink>
+                                                            </p:lightBox>
+                                                        </div>
+                                                    </b:column>
+                                                    <b:column colXs="12" colSm="10">
+                                                        <div class="form-group">
+                                                            Reserved By: #{reservationDetails.reservation.user.fullname}
+                                                        </div>
+                                                        <div class="form-group">
+                                                            From: #{reservationDetails.reservation.timeStart.timeString} To: #{reservationDetails.reservation.timeEnd.timeString}
+                                                        </div>
+                                                    </b:column>
+                                                    <b:column colXs="12" style="padding-top: 5px; border-top: 1px dashed #ddd">
+                                                        <c:forEach items="#{reservationDetails.hierarchyDecisions}"
+                                                                   var="hierarchyDecision">
                                                             <h:outputText value="#{hierarchyDecision.key.name} "
                                                                           style="font-weight: bold;"/>
                                                             has
@@ -75,9 +79,10 @@
                                                                     text="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'approved' : 'rejected') : 'not yet decided upon'}"
                                                                     severity="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'success' : 'danger') : 'default'}"/>
                                                             this Reservation.
-                                                        </li>
-                                                    </c:forEach>
-                                                </ul>
+                                                            <br/>
+                                                        </c:forEach>
+                                                    </b:column>
+                                                </b:row>
                                                 <f:facet name="footer">
                                                     <h:panelGroup layout="block" styleClass="form-group"
                                                                   rendered="#{reservationDetails.currentDecision != null}">
