@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
@@ -105,6 +106,10 @@ public class Reservation implements Serializable {
 
     public Calendar getDate() {
         return date;
+    }
+
+    public String getFormattedDate() {
+        return new SimpleDateFormat("EEEE, dd MMMM, yyyy").format(date.getTime());
     }
 
     public void setDate(Calendar date) {

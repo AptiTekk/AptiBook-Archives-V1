@@ -15,6 +15,14 @@
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="css">
+        <!--suppress CssUnusedSymbol -->
+        <style type="text/css">
+            .pendingReservationPanel .form-control[readonly] {
+                background-color: #fff;
+            }
+        </style>
+    </ui:define>
     <ui:define name="content">
         <h:panelGroup id="page">
             <b:container>
@@ -44,10 +52,10 @@
                                 <c:forEach items="#{entry.value}" var="reservationDetails">
                                     <b:row>
                                         <b:column colXs="12">
-                                            <b:panel
-                                                    look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
-                                                    title="#{reservationDetails.reservation.asset.name}"
-                                                    collapsible="false">
+                                            <b:panel styleClass="pendingReservationPanel"
+                                                     look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
+                                                     title="#{reservationDetails.reservation.asset.name}"
+                                                     collapsible="false">
                                                 <b:row>
                                                     <b:column colXs="12" colSm="2" style="width: 115px;">
                                                         <div class="form-group">
@@ -62,25 +70,78 @@
                                                         </div>
                                                     </b:column>
                                                     <b:column colXs="12" colSm="10">
-                                                        <div class="form-group">
-                                                            Reserved By: #{reservationDetails.reservation.user.fullname}
-                                                        </div>
-                                                        <div class="form-group">
-                                                            From: #{reservationDetails.reservation.timeStart.timeString} To: #{reservationDetails.reservation.timeEnd.timeString}
-                                                        </div>
+                                                        <b:row>
+                                                            <b:column colXs="12" colSm="9">
+                                                                <div class="form-group">
+                                                                    <h:outputLabel value="Reservation Title:"
+                                                                                   style="margin-right: 10px;"/>
+                                                                    <b:inputText
+                                                                            value="#{reservationDetails.reservation.title}"
+                                                                            readonly="true"/>
+                                                                </div>
+                                                            </b:column>
+                                                            <b:column colXs="12" colSm="3">
+                                                                <div class="form-group">
+                                                                    <h:outputLabel value="Requested By:"
+                                                                                   style="margin-right: 10px;"/>
+                                                                    <b:inputText
+                                                                            value="#{reservationDetails.reservation.user.fullname}"
+                                                                            readonly="true"/>
+                                                                </div>
+                                                            </b:column>
+                                                        </b:row>
+                                                        <b:row>
+                                                            <b:column colXs="12" colSm="4">
+                                                                <div class="form-group">
+                                                                    <h:outputLabel value="On:"
+                                                                                   style="margin-right: 10px;"/>
+                                                                    <b:inputText
+                                                                            value="#{reservationDetails.reservation.formattedDate}"
+                                                                            readonly="true"/>
+                                                                </div>
+                                                            </b:column>
+                                                            <b:column colXs="12" colSm="4">
+                                                                <div class="form-group">
+                                                                    <h:outputLabel value="From:"
+                                                                                   style="margin-right: 10px;"/>
+                                                                    <b:inputText
+                                                                            value="#{reservationDetails.reservation.timeStart.timeString}"
+                                                                            readonly="true"/>
+                                                                </div>
+                                                            </b:column>
+                                                            <b:column colXs="12" colSm="4">
+                                                                <div class="form-group">
+                                                                    <h:outputLabel value="To:"
+                                                                                   style="margin-right: 10px;"/>
+                                                                    <b:inputText
+                                                                            value="#{reservationDetails.reservation.timeEnd.timeString}"
+                                                                            readonly="true"/>
+                                                                </div>
+                                                            </b:column>
+                                                        </b:row>
                                                     </b:column>
-                                                    <b:column colXs="12" style="padding-top: 5px; border-top: 1px dashed #ddd">
-                                                        <c:forEach items="#{reservationDetails.hierarchyDecisions}"
-                                                                   var="hierarchyDecision">
-                                                            <h:outputText value="#{hierarchyDecision.key.name} "
-                                                                          style="font-weight: bold;"/>
-                                                            has
-                                                            <b:label
-                                                                    text="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'approved' : 'rejected') : 'not yet decided upon'}"
-                                                                    severity="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'success' : 'danger') : 'default'}"/>
-                                                            this Reservation.
-                                                            <br/>
-                                                        </c:forEach>
+                                                    <b:column colXs="12"
+                                                              style="padding-top: 5px; border-top: 1px dashed #ddd">
+                                                        <div class="form-group">
+                                                            <c:forEach items="#{reservationDetails.hierarchyDecisions}"
+                                                                       var="hierarchyDecision">
+                                                                <h:outputText value="#{hierarchyDecision.key.name} "
+                                                                              style="font-weight: bold;"/>
+                                                                <h:outputText
+                                                                        rendered="#{hierarchyDecision.value != null}"
+                                                                        value="User "/>
+                                                                <h:outputText
+                                                                        rendered="#{hierarchyDecision.value != null}"
+                                                                        value="#{hierarchyDecision.value.user.fullname} "
+                                                                        style="font-weight: bold;"/>
+                                                                has
+                                                                <b:label
+                                                                        text="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'approved' : 'rejected') : 'not yet decided upon'}"
+                                                                        severity="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'success' : 'danger') : 'default'}"/>
+                                                                this Reservation.
+                                                                <br/>
+                                                            </c:forEach>
+                                                        </div>
                                                     </b:column>
                                                 </b:row>
                                                 <f:facet name="footer">

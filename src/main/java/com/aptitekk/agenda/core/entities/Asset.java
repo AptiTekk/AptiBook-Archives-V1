@@ -54,6 +54,7 @@ public class Asset implements Serializable {
     private Boolean needsApproval = false;
 
     @OneToMany(mappedBy = "asset", cascade = CascadeType.REMOVE)
+    @OrderBy("dateCreated")
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne

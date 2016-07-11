@@ -46,6 +46,7 @@ public class User implements Serializable {
     private List<UserGroup> userGroups = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @OrderBy("dateCreated")
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
