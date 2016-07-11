@@ -13,6 +13,7 @@ package com.aptitekk.agenda.core.services;
 
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 
 import javax.ejb.Local;
@@ -24,6 +25,8 @@ import java.util.List;
 public interface NotificationService extends EntityService<Notification> {
 
     String NOTIFICATION_DATEFORMAT = "MM-dd-yyyy hh:mm a";
+
+    void buildNotification(String Subject, String Body, List<UserGroup> userGroup);
 
     void sendEmailNotification(Notification n)
             throws MessagingException, NoSuchMethodException, SecurityException,

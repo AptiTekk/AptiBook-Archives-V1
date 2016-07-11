@@ -14,6 +14,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.QNotification;
 import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.MailingService;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.utilities.NotificationFactory;
@@ -64,6 +65,21 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
         n.setRead(Boolean.TRUE);
         merge(n);
     }
+    @Override
+    public void buildNotification(String Subject, String Body, List<UserGroup> userGroupList){
+        for(UserGroup userGroup: userGroupList){
+            for(User user: userGroup.getUsers()){
+                Notification notification = new Notification(user, Subject, Body);
+                try {
+                    insert(notification);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public List<Notification> getUnread(User user) {
