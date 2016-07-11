@@ -89,14 +89,8 @@ public class ReservationIntegrationTest {
         System.out.println(reservationService.getClass().getName());
         reservationService.insert(reservation);
         
-        assertEquals("Notifications count should be 1", 1, notificationService.getAll().size());
-        
         assertNotNull("testOwner is null", testOwner);
-        assertNotNull("Notifications list null", testOwner.getNotifications());
-        
         assertNotNull("Reservation doesn't exist", reservationService.get(reservation.getId()));
-        assertEquals("Notification didn't appear", 1, notificationService.getUnread(testOwner).size());
-
     }
 
 }
