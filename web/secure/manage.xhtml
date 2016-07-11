@@ -139,6 +139,24 @@
                                                                         text="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'approved' : 'rejected') : 'not yet decided upon'}"
                                                                         severity="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'success' : 'danger') : 'default'}"/>
                                                                 this Reservation.
+                                                                <c:if test="#{reservationDetails.getOverridingDecisionForGroup(hierarchyDecision.key) != null}">
+                                                                    (
+                                                                    <b:label text="Overridden"
+                                                                             severity="info"/>
+                                                                    by the decision of
+                                                                    <h:outputText
+                                                                            value="#{reservationDetails.getOverridingDecisionForGroup(hierarchyDecision.key).user.fullname} "
+                                                                            style="font-weight: bold;"/>
+                                                                    to
+                                                                    <b:label
+                                                                            text="#{reservationDetails.getOverridingDecisionForGroup(hierarchyDecision.key).approved ? 'approve' : 'reject'}"
+                                                                            severity="#{reservationDetails.getOverridingDecisionForGroup(hierarchyDecision.key).approved ? 'success' : 'danger'}"/>
+                                                                    on behalf of the
+                                                                    <h:outputText
+                                                                            value="#{reservationDetails.getOverridingDecisionForGroup(hierarchyDecision.key).userGroup.name} "
+                                                                            style="font-weight: bold;"/>
+                                                                    User Group.)
+                                                                </c:if>
                                                                 <br/>
                                                             </c:forEach>
                                                         </div>

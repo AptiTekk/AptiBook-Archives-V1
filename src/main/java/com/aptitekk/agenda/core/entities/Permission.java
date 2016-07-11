@@ -6,6 +6,8 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.utilities.EqualsHelper;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -177,5 +179,23 @@ public class Permission {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof Permission)) return false;
+
+        Permission other = (Permission) o;
+
+        return EqualsHelper.areEquals(getDescriptor(), other.getDescriptor());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getDescriptor());
     }
 }

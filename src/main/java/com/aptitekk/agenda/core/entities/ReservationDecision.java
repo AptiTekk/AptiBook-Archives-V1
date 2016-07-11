@@ -6,6 +6,8 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.utilities.EqualsHelper;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -73,5 +75,27 @@ public class ReservationDecision implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null) return false;
+
+        if (!(o instanceof ReservationDecision)) return false;
+
+        ReservationDecision other = (ReservationDecision) o;
+
+        return EqualsHelper.areEquals(getUser(), other.getUser())
+                && EqualsHelper.areEquals(getUserGroup(), other.getUserGroup())
+                && EqualsHelper.areEquals(getReservation(), other.getReservation())
+                && EqualsHelper.areEquals(isApproved(), other.isApproved())
+                && EqualsHelper.areEquals(getComment(), other.getComment());
+    }
+
+    @Override
+    public int hashCode() {
+        return EqualsHelper.calculateHashCode(getUser(), getUserGroup(), getReservation(), isApproved(), getComment());
     }
 }

@@ -66,7 +66,7 @@ public class ReservationManagementController implements Serializable {
                         reservationDetailsMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
 
                         //Traverse up the hierarchy and determine the decisions that have already been made.
-                        Map<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
+                        LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
                         List<UserGroup> hierarchyUp = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
                         UserGroup behalfUserGroup = null;
                         //This for loop descends to properly order the groups for display on the page.
@@ -75,9 +75,6 @@ public class ReservationManagementController implements Serializable {
                             //This group is the group that the authenticated user is acting on behalf of when making a decision.
                             if (authenticationController.getAuthenticatedUser().getUserGroups().contains(userGroup))
                                 behalfUserGroup = userGroup;
-                            //We don't want to display the root group decision on the page.
-                            if (userGroup.isRoot())
-                                continue;
                             for (ReservationDecision decision : reservation.getDecisions()) {
                                 if (decision.getUserGroup().equals(userGroup)) {
                                     hierarchyDecisions.put(userGroup, decision);
