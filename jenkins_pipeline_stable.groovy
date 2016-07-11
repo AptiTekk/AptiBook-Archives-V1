@@ -20,14 +20,13 @@ node {
 
         stage "QA Verification";
         if (!getQAInput(qaUrl)) {
-            onAbort();
+            echo "Aborted by User.";
+            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
             return;
         }
-    } catch (hudson.AbortException ignored) {
-        onAbort();
     } catch (err) {
         slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}";
-        error err.message;
+        error err;
     }
 }
 
@@ -90,9 +89,4 @@ def boolean getQAInput(qaUrl) {
     } catch (ignored) {
         return false;
     }
-}
-
-def onAbort() {
-    echo "Aborted by User.";
-    slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})";
 }
