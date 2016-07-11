@@ -10,7 +10,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
@@ -48,9 +48,22 @@
                             <c:forEach items="#{entry.value}" var="reservation">
                                 <b:row>
                                     <b:column colXs="12">
-                                        <b:panel look="default" title="#{reservation.asset.name}">
-                                            Reserved By: #{reservation.user.fullname} <br/>
-                                            From: #{reservation.timeStart.timeString} To: #{reservation.timeEnd.timeString}
+                                        <b:panel look="default" title="#{reservation.asset.name}" collapsible="false">
+                                            <div class="form-group">
+                                                <p:lightBox>
+                                                    <h:outputLink
+                                                            value="#{request.contextPath}/images/assets/#{reservation.asset.id}">
+                                                        <h:graphicImage url="/images/assets/#{reservation.asset.id}"
+                                                                        style="height: 100px; border-radius: 5px"/>
+                                                    </h:outputLink>
+                                                </p:lightBox>
+                                            </div>
+                                            <div class="form-group">
+                                                Reserved By: #{reservation.user.fullname}
+                                            </div>
+                                            <div class="form-group">
+                                                From: #{reservation.timeStart.timeString} To: #{reservation.timeEnd.timeString}
+                                            </div>
                                             <br/>
                                         </b:panel>
                                     </b:column>
