@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.services;
 
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.User;
 
 import javax.ejb.Local;
 
@@ -15,10 +15,10 @@ import javax.ejb.Local;
 public interface PermissionService extends EntityService<Permission> {
 
     /**
-     * Gets the Permission entity object that matches the Permission Descriptor.
+     * Gets the Permission entities object that matches the Permission Descriptor.
      *
      * @param descriptor The Permission Descriptor.
-     * @return the Permission entity if found, null otherwise.
+     * @return the Permission entities if found, null otherwise.
      */
     Permission getPermissionByDescriptor(Permission.Descriptor descriptor);
 

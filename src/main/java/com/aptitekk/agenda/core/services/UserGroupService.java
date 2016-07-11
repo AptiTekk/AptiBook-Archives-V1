@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.services;
 
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.UserGroup;
 
 import javax.ejb.Local;
 import java.util.List;

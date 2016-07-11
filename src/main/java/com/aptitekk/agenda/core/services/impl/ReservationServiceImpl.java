@@ -6,31 +6,26 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.*;
-import com.aptitekk.agenda.core.entity.enums.ReservationStatus;
+import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.QReservation;
+import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.NotificationFactory;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.mail.MessagingException;
-import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 @Stateless
 public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> implements ReservationService, Serializable {
 
-    QReservation reservationTable = QReservation.reservation;
-
     @Inject
     AssetService assetService;
-
-    @Inject
-    GoogleCalendarService googleCalendarService;
 
     @Inject
     NotificationService notificationService;
@@ -43,165 +38,6 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     public ReservationServiceImpl() {
         super(Reservation.class);
-    }
-
-    @Override
-    public void insert(Reservation reservation) throws Exception {
-        try {
-            if (!GoogleService.ACCESS_TOKEN_PROPERTY.isEmpty()) {
-                googleCalendarService.insert(googleCalendarService.getCalendarService(), reservation);
-            }
-
-            String notif_subject = "Subject";
-            String notif_body = "Body";
-
-            List<UserGroup> userGroups = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
-
-            for (UserGroup group : userGroups) {
-                for (User user : group.getUsers()) {
-                    try {
-                        Notification n = (Notification) NotificationFactory.createDefaultNotificationBuilder()
-                                .setTo(user)
-                                .setSubject(notif_subject)
-                                .setBody(notif_body)
-                                .build(reservation, user);
-                        notificationService.insert(n);
-                    } catch (MessagingException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            super.insert(reservation);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void update(Reservation reservation, int id) throws Exception {
-        try {
-            if (!GoogleService.ACCESS_TOKEN_PROPERTY.isEmpty()) {
-                googleCalendarService.update(googleCalendarService.getCalendarService(), reservation);
-            }
-
-            //String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
-            //String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
-            //TODO: Traverse Reservable Owner to find all Owners
-            /*for (UserGroup group : reservation.getReservable().getOwners()) {
-                for (User user : group.getUsers()) {
-                    try {
-                        Notification n = (Notification) createDefaultNotificationBuilder()
-                                .setTo(user)
-                                .setSubject(notif_subject)
-                                .setBody(notif_body)
-                                .build(reservation, user);
-                        notificationService.insert(n);
-                    } catch (MessagingException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }*/
-
-            super.update(reservation, id);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int id) throws Exception {
-        Reservation reservation = get(id);
-        try {
-            /*if (!properties.get(GoogleService.ACCESS_TOKEN_PROPERTY.getKey()).isEmpty()) {
-                googleCalendarService.delete(googleCalendarService.getCalendarService(), reservation);
-            }
-
-            String notif_subject = properties.get(NEW_RESERVATION_NOTIFICATION_SUBJECT.getKey());
-            String notif_body = properties.get(NEW_RESERVATION_NOTIFICATION_BODY.getKey());
-            //TODO: Traverse Reservable Owner to find all Owners*/
-
-            super.delete(id);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setStatus(Reservation reservation, ReservationStatus reservationStatus) throws Exception {
-        reservation.setStatus(reservationStatus);
-        update(reservation, reservation.getId());
-    }
-
-    @Override
-    public void approveReservation(Reservation reservation, User owner, boolean approved) throws Exception {
-        ReservationApproval approval = new ReservationApproval();
-        approval.setReservation(reservation);
-        approval.setUser(owner);
-        approval.setApproved((approved) ? ReservationStatus.APPROVED : ReservationStatus.REJECTED);
-
-        entityManager.persist(approval);
-
-        resolveStatus(reservation);
-    }
-
-    @Override
-    public void resolveStatus(Reservation reservation) throws Exception {
-        reservation = entityManager.merge(reservation);
-        List<ReservationApproval> approvals = reservation.getApprovals();
-
-        UserGroup highestGroup = getHighestApproval(approvals);
-
-        Boolean answer = getGroupAnswer(highestGroup, approvals, highestGroup.getUsers().size());
-        if (answer == null) {
-            reservation.setStatus(ReservationStatus.PENDING);
-        } else if (answer) {
-            reservation.setStatus(ReservationStatus.APPROVED);
-        } else {
-            reservation.setStatus(ReservationStatus.REJECTED);
-        }
-    }
-
-    private UserGroup getHighestApproval(List<ReservationApproval> approvals) {
-        User user;
-        UserGroup result = null;
-
-        int level = 0;
-        for (ReservationApproval approval : approvals) {
-            user = approval.getUser();
-            UserGroup[] highest = userGroupService.getSenior(user.getUserGroups());
-
-            for (UserGroup group : highest) {
-                List<UserGroup> hierarchy = userGroupService.getHierarchyUp(group);
-
-                if (level < hierarchy.size()) {
-                    level = hierarchy.size();
-                    result = group;
-                }
-            }
-        }
-        return result;
-    }
-
-    private Boolean getGroupAnswer(UserGroup group, List<ReservationApproval> approvals, int minimumForApproval) {
-        List<ReservationApproval> groupOnlyApprovals = filterByGroup(group, approvals);
-        int accepted = 0;
-        for (ReservationApproval approval : groupOnlyApprovals) {
-            if (approval.getApproved().equals(ReservationStatus.APPROVED)) {
-                accepted++;
-            }
-        }
-
-        return accepted >= minimumForApproval;
-    }
-
-    private List<ReservationApproval> filterByGroup(UserGroup group, List<ReservationApproval> approvals) {
-        List<ReservationApproval> groupOnlyApprovals = new ArrayList<>();
-        approvals.forEach(approval -> {
-            if (approval.getUser().getUserGroups().contains(group)) {
-                groupOnlyApprovals.add(approval);
-            }
-        });
-        return groupOnlyApprovals;
     }
 
     /**
@@ -265,27 +101,6 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
                 return false;
         }
         return true;
-    }
-
-    @Override
-    public Set<Reservation> getAllUnderUser(User user) {
-        final Set<Reservation> result = new HashSet<>();
-        UserGroup[] seniors = userGroupService.getSenior(user.getUserGroups());
-        for (UserGroup group : seniors) {
-            group.getAssets().forEach(asset -> result.addAll(asset.getReservations()));
-            result.addAll(getDecendantsReservation(result, group));
-        }
-        return result;
-    }
-
-    private Set<Reservation> getDecendantsReservation(Set<Reservation> set, UserGroup group) {
-        group.getChildren().forEach(userGroup -> {
-                    userGroup.getAssets().forEach(asset
-                            -> asset.getReservations().forEach(set::add));
-                    getDecendantsReservation(set, userGroup);
-                }
-        );
-        return set;
     }
 
 }

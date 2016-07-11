@@ -6,9 +6,9 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.QReservationField;
-import com.aptitekk.agenda.core.entity.ReservationField;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.QReservationField;
+import com.aptitekk.agenda.core.entities.ReservationField;
 import com.aptitekk.agenda.core.services.ReservationFieldService;
 import com.querydsl.jpa.impl.JPAQuery;
 

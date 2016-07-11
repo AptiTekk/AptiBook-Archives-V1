@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web.converters;
 
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.Tag;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.Tag;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.services.TagService;
 

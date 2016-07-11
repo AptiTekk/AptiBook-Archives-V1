@@ -9,33 +9,16 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:b="http://bootsfaces.net/ui">
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
         <b:container>
-            <h2 style="margin-top:50px">My Reservations</h2>
-
-            <b:column colMd="9" colXs="12">
-                <p:schedule value="#{reservationViewController.lazyEventModel}"/>
-            </b:column>
-            <b:column colMd="3">
-                <ui:fragment rendered="#{not empty reservationViewController.cardModels}">
-                    <ui:repeat value="#{reservationViewController.cardModels}" var="reservation">
-                        <b:panel title="#{reservation.title} - #{reservation.asset.name}" look="info">
-                            <h4>#{reservation.title}</h4>
-                            <h6>#{reservation.description}</h6>
-                            <p>#{reservation.date}</p>
-                            <p>#{reservation.timeStart.timeString}</p>
-                            <p>#{reservation.timeEnd.timeString}</p>
-                        </b:panel>
-                    </ui:repeat>
-                </ui:fragment>
-                <ui:fragment rendered="#{empty reservationViewController.cardModels}">
-                    <i>No Reservations</i>
-                </ui:fragment>
-            </b:column>
+            <b:row>
+                <b:column colXs="12">
+                    <h2>WIP</h2>
+                </b:column>
+            </b:row>
         </b:container>
     </ui:define>
 </ui:composition>

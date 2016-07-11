@@ -11,8 +11,8 @@
  */
 package com.aptitekk.agenda.core.services;
 
-import com.aptitekk.agenda.core.entity.Notification;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Notification;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 
 import javax.ejb.Local;

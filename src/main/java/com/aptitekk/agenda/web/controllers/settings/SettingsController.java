@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web.controllers.settings;
 
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;

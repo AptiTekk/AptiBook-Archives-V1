@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
@@ -63,19 +63,17 @@ public class ReservationServiceTest {
         testOwner.setFirstName("Test");
         testOwner.setLastName("Owner");
         testOwner.setUsername("testOwner");
-        testOwner.setEnabled(true);
         userService.insert(testOwner);
 
         UserGroup testOwnerGroup = new UserGroup();
         testOwnerGroup.setName("Test Owner Group");
-        testOwnerGroup.addUser(testOwner);
+        testOwnerGroup.getUsers().add(testOwner);
         userGroupService.insert(testOwnerGroup);
 
         User testRenter = new User();
         testRenter.setFirstName("Test");
         testRenter.setLastName("Renter");
         testRenter.setUsername("testRenter");
-        testRenter.setEnabled(true);
         userService.insert(testRenter);
 
         AssetType assetType = new AssetType();

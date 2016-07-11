@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.QAssetType;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.QAssetType;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.querydsl.jpa.impl.JPAQuery;
 

@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
@@ -50,17 +50,15 @@ public class ReservationIntegrationTest {
         testOwner.setFirstName("Test");
         testOwner.setLastName("Owner");
         testOwner.setUsername("testOwner");
-        testOwner.setEnabled(true);
 
         UserGroup testOwnerGroup = new UserGroup();
         testOwnerGroup.setName("Test Owner Group");
-        testOwnerGroup.addUser(testOwner);
+        testOwnerGroup.getUsers().add(testOwner);
 
-        User testRenter = new User();
-        testRenter.setFirstName("Test");
-        testRenter.setLastName("Renter");
-        testRenter.setUsername("testRenter");
-        testRenter.setEnabled(true);
+        User testUser = new User();
+        testUser.setFirstName("Test");
+        testUser.setLastName("Renter");
+        testUser.setUsername("testUser");
 
         AssetType testAssetType = new AssetType();
         testAssetType.setName("TestType");
@@ -71,7 +69,7 @@ public class ReservationIntegrationTest {
         testAsset.setOwner(testOwnerGroup);
 
         userService.insert(testOwner);
-        userService.insert(testRenter);
+        userService.insert(testUser);
 
         userGroupService.insert(testOwnerGroup);
 
@@ -80,15 +78,13 @@ public class ReservationIntegrationTest {
 
         Reservation reservation = new Reservation();
         reservation.setTitle("Test Reservation");
-        reservation.setDescription("Test Reservation Description");
-        reservation.setDateCreated(Calendar.getInstance());
         reservation.setTimeStart(new SegmentedTime(6, false));
 
         Calendar endTime = Calendar.getInstance();
         endTime.add(Calendar.HOUR, 1);
         reservation.setTimeEnd(new SegmentedTime(15, false));
         reservation.setAsset(testAsset);
-        reservation.setUser(testRenter);
+        reservation.setUser(testUser);
 
         System.out.println(reservationService.getClass().getName());
         reservationService.insert(reservation);

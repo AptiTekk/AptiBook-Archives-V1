@@ -11,9 +11,9 @@
  */
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.Notification;
-import com.aptitekk.agenda.core.entity.QNotification;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Notification;
+import com.aptitekk.agenda.core.entities.QNotification;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.MailingService;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.utilities.NotificationFactory;
