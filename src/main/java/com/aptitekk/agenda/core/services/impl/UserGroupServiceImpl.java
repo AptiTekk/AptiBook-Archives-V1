@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.QUserGroup;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.QUserGroup;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import com.querydsl.jpa.impl.JPAQuery;
 

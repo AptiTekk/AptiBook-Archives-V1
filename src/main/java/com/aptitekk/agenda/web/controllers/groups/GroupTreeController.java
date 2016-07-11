@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.groups;
 
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;

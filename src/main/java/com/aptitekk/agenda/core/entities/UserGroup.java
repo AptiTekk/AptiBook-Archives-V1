@@ -4,14 +4,13 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 

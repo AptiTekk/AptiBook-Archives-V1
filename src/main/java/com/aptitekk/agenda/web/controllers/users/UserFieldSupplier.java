@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.User;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;

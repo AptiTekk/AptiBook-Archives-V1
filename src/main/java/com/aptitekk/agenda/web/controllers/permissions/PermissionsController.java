@@ -6,9 +6,9 @@
 
 package com.aptitekk.agenda.web.controllers.permissions;
 
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;

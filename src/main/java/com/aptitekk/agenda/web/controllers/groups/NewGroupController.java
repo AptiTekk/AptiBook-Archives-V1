@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web.controllers.groups;
 
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;

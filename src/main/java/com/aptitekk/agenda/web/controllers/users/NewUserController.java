@@ -6,9 +6,9 @@
 
 package com.aptitekk.agenda.web.controllers.users;
 
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.User;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
@@ -19,8 +19,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,7 +54,6 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             newUser.setPhoneNumber(phoneNumber);
             newUser.setLocation(location);
             newUser.setPassword(Sha256Helper.rawToSha(password));
-            newUser.setEnabled(true);
 
             if (userGroupNodes != null) {
                 List<UserGroup> selectedUserGroups = new ArrayList<>();

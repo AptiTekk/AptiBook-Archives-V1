@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.properties;
 
-import com.aptitekk.agenda.core.entity.Property;
+import com.aptitekk.agenda.core.entities.Property;
 import com.aptitekk.agenda.core.properties.PropertyGroup;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 

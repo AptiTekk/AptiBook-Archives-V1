@@ -19,55 +19,8 @@
     <ui:define name="content">
         <h:panelGroup id="page">
             <b:container>
-                <h2 style="margin-top:50px">Manage Reservations</h2>
+                <h2 style="margin-top:50px">WIP</h2>
 
-                <ui:fragment rendered="#{not empty reservationManagementController.reservations}">
-                    <b:column colMd="6" offsetMd="2">
-
-                        <pf:accordionPanel dynamic="true" cache="true" activeIndex="-1"
-                                           value="#{reservationManagementController.reservations}"
-                                           var="reservation">
-                            <pf:ajax event="tabChange"
-                                     onstart="loading_start()"
-                                     oncomplete="loading_complete()"/>
-
-                            <pf:tab title="#{reservation.title} - #{reservation.asset.name}">
-                                <h4>#{reservation.title}</h4>
-                                <h6>#{reservation.description}</h6>
-                                <p>#{reservation.timeStart.timeString}</p>
-                                <p>#{reservation.timeEnd.timeString}</p>
-                                <br/>
-                                <i>#{reservationManagementController.formatApprovedBy(reservation)}</i>
-                                <f:facet name="footer">
-                                    <div class="btn-toolbar pull-right">
-                                        <h:commandButton styleClass="btn btn-success"
-                                                         value="Approve" style="display: inline-block">
-                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
-                                        </h:commandButton>
-
-                                        <h:commandButton styleClass="btn btn-warning"
-                                                         value="Counterpropose" style="display: inline-block">
-                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
-                                        </h:commandButton>
-
-                                        <h:commandButton styleClass="btn btn-danger"
-                                                         value="Reject" style="display: inline-block">
-                                            <f:ajax execute="@form" render=":page" onevent="loading"/>
-                                        </h:commandButton>
-                                    </div>
-                                </f:facet>
-                            </pf:tab>
-                        </pf:accordionPanel>
-
-                    </b:column>
-                </ui:fragment>
-
-
-                <b:column colSm="8" offsetSm="1">
-                    <ui:fragment rendered="#{empty reservationManagementController.reservations}">
-                        <i>No Reservations</i>
-                    </ui:fragment>
-                </b:column>
             </b:container>
         </h:panelGroup>
     </ui:define>

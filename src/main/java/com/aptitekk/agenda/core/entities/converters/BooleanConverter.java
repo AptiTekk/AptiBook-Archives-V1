@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity.converter;
+package com.aptitekk.agenda.core.entities.converters;
 
 import javax.persistence.AttributeConverter;
 

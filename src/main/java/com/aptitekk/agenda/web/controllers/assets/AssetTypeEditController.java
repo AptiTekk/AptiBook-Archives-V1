@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.assets;
 
-import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;

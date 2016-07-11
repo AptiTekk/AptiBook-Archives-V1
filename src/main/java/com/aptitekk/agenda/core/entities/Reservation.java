@@ -4,9 +4,8 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.entity.enums.ReservationStatus;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 
@@ -22,23 +21,82 @@ import java.util.List;
 @Entity
 @NamedQuery(name = "Reservation.findAll", query = "SELECT r FROM Reservation r")
 public class Reservation implements Serializable {
+    public enum Status {
+        PENDING,
+        APPROVED,
+        REJECTED
+    }
+
+    @Entity(name = "ReservationDecision")
+    @NamedQuery(name = "Decision.findAll", query = "SELECT r FROM ReservationDecision r")
+    public class Decision implements Serializable {
+
+        @Id
+        @GeneratedValue
+        private int id;
+
+        @ManyToOne
+        private User user;
+
+        @ManyToOne
+        private Reservation reservation;
+
+        private boolean approved;
+
+        @Column(length = 512)
+        private String comment;
+
+        public int getId() {
+            return id;
+        }
+
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
+        public Reservation getReservation() {
+            return reservation;
+        }
+
+        public void setReservation(Reservation reservation) {
+            this.reservation = reservation;
+        }
+
+        public boolean isApproved() {
+            return approved;
+        }
+
+        public void setApproved(boolean approved) {
+            this.approved = approved;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
+        }
+    }
+
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private int id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar dateCreated;
+    private Calendar dateCreated = Calendar.getInstance();
 
     @Column(length = 32)
     private String title;
 
-    @Lob
-    private String description;
-
-    @Column(nullable = false)
-    private ReservationStatus status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @Column(columnDefinition = "time")
     private SegmentedTime timeStart;
@@ -49,41 +107,24 @@ public class Reservation implements Serializable {
     @Temporal(TemporalType.DATE)
     private Calendar date;
 
-    // bi-directional many-to-one association to Room
     @ManyToOne
     private Asset asset;
 
-    // bi-directional many-to-one association to User
     @ManyToOne
     private User user;
 
     @OneToMany(mappedBy = "reservation")
-    private List<ReservationFieldEntry> fieldEntries;
+    private List<Decision> decisions;
 
     @OneToMany(mappedBy = "reservation")
-    private List<ReservationApproval> approvals;
-
-    @Column(length = 128)
-    private String googleEventId;
-
-    public Reservation() {
-        this.setDateCreated(Calendar.getInstance());
-    }
+    private List<ReservationFieldEntry> fieldEntries;
 
     public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return id;
     }
 
     public Calendar getDateCreated() {
-        return this.dateCreated;
-    }
-
-    public void setDateCreated(Calendar dateCreated) {
-        this.dateCreated = dateCreated;
+        return dateCreated;
     }
 
     public String getTitle() {
@@ -94,24 +135,16 @@ public class Reservation implements Serializable {
         this.title = title;
     }
 
-    public String getDescription() {
-        return this.description;
+    public Status getStatus() {
+        return status;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public ReservationStatus getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(ReservationStatus pendingApproval) {
-        this.status = pendingApproval;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public SegmentedTime getTimeStart() {
-        return this.timeStart;
+        return timeStart;
     }
 
     public void setTimeStart(SegmentedTime timeStart) {
@@ -119,7 +152,7 @@ public class Reservation implements Serializable {
     }
 
     public SegmentedTime getTimeEnd() {
-        return this.timeEnd;
+        return timeEnd;
     }
 
     public void setTimeEnd(SegmentedTime timeEnd) {
@@ -135,10 +168,7 @@ public class Reservation implements Serializable {
     }
 
     public Asset getAsset() {
-        if (this.asset == null) {
-            System.out.println("asset is null");
-        }
-        return this.asset;
+        return asset;
     }
 
     public void setAsset(Asset asset) {
@@ -146,11 +176,19 @@ public class Reservation implements Serializable {
     }
 
     public User getUser() {
-        return this.user;
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Decision> getDecisions() {
+        return decisions;
+    }
+
+    public void setDecisions(List<Decision> decisions) {
+        this.decisions = decisions;
     }
 
     public List<ReservationFieldEntry> getFieldEntries() {
@@ -159,27 +197,6 @@ public class Reservation implements Serializable {
 
     public void setFieldEntries(List<ReservationFieldEntry> fieldEntries) {
         this.fieldEntries = fieldEntries;
-    }
-
-    public List<ReservationApproval> getApprovals() {
-        return approvals;
-    }
-
-    public void setApprovals(List<ReservationApproval> approvals) {
-        this.approvals = approvals;
-    }
-
-    public String getGoogleEventId() {
-        return googleEventId;
-    }
-
-    public void setGoogleEventId(String googleEventId) {
-        this.googleEventId = googleEventId;
-    }
-
-    @PrePersist
-    public void onCreate() {
-        status = ReservationStatus.PENDING;
     }
 
     @Override
@@ -193,9 +210,7 @@ public class Reservation implements Serializable {
         Reservation other = (Reservation) o;
 
         return EqualsHelper.areEquals(getTitle(), other.getTitle())
-                && EqualsHelper.areEquals(getDescription(), other.getDescription())
                 && EqualsHelper.areEquals(getDateCreated(), other.getDateCreated())
-                && EqualsHelper.areEquals(getGoogleEventId(), other.getGoogleEventId())
                 && EqualsHelper.areEquals(getStatus(), other.getStatus())
                 && EqualsHelper.areEquals(getTimeStart(), other.getTimeStart())
                 && EqualsHelper.areEquals(getTimeEnd(), other.getTimeEnd());
@@ -203,6 +218,6 @@ public class Reservation implements Serializable {
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), getDateCreated(), getGoogleEventId(), getStatus(), getTimeStart(), getTimeEnd());
+        return EqualsHelper.calculateHashCode(getTitle(), getDateCreated(), getStatus(), getTimeStart(), getTimeEnd());
     }
 }

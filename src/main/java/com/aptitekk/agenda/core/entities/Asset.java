@@ -4,24 +4,19 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.imageio.ImageIO;
 import javax.persistence.*;
 import javax.servlet.http.Part;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;

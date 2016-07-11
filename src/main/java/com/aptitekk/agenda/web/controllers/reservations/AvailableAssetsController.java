@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.reservations;
 
-import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;

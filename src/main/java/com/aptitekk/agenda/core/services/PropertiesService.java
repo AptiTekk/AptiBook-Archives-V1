@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.services;
 
-import com.aptitekk.agenda.core.entity.Property;
+import com.aptitekk.agenda.core.entities.Property;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 
 import javax.ejb.Local;

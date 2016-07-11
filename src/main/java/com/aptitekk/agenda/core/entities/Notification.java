@@ -9,7 +9,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
@@ -123,7 +123,7 @@ public class Notification implements Serializable {
 
     @Override
     public String toString() {
-        return "com.AptiTekk.Agenda.core.entity.Notifications[ id=" + id + " ]";
+        return "com.AptiTekk.Agenda.core.entities.Notifications[ id=" + id + " ]";
     }
 
 }

@@ -4,18 +4,14 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Entity implementation class for Entity: ReservationField
- */
 @Entity
-
 public class ReservationField implements Serializable {
 
     @Id

@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.entity.Notification;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Notification;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;

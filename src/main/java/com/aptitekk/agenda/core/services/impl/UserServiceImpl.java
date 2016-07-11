@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.QUser;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.QUser;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.querydsl.jpa.impl.JPAQuery;

@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web;
 
-import com.aptitekk.agenda.core.entity.Asset;
+import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 

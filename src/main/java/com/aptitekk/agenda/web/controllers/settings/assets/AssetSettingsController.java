@@ -6,10 +6,10 @@
 
 package com.aptitekk.agenda.web.controllers.settings.assets;
 
-import com.aptitekk.agenda.core.entity.Asset;
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.Permission;
-import com.aptitekk.agenda.core.entity.UserGroup;
+import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
 import com.aptitekk.agenda.core.utilities.LogManager;

@@ -78,7 +78,7 @@
                                 <h:outputLabel value="Username: *" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <c:choose>
-                                        <c:when test="#{userEditController.selectedUser.immutableUsername}">
+                                        <c:when test="#{userEditController.selectedUser.admin}">
                                             <h:outputText styleClass="form-control"
                                                           value="#{userEditController.username}"
                                                           p:disabled="true"/>
@@ -185,7 +185,7 @@
                             </div>
 
                             <c:choose>
-                                <c:when test="#{userEditController.selectedUser.immutableUsername}">
+                                <c:when test="#{userEditController.selectedUser.admin}">
                                     <div class="form-group">
                                         <b:column colXs="9" offsetXs="3">
                                             Administrators are automatically granted full permissions. No User Groups need be assigned.
@@ -245,7 +245,7 @@
                                                   style="display: inline-block"
                                                   p:data-toggle="modal"
                                                   p:data-target="#deletionConfirmModal"
-                                                  disabled="#{userEditController.selectedUser.immutableUsername}"/>
+                                                  disabled="#{userEditController.selectedUser.admin}"/>
                                     </div>
                                 </div>
                             </div>

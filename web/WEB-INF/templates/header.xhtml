@@ -41,10 +41,10 @@
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
-                        <b:navLink outcome="manage" value="Manage Reservations" icon="glyphicon-edit"
+                        <b:navLink outcome="manage" value="Manage Reservations" iconAwesome="calendar-check-o"
                                    onclick="loading_start()"
                                    rendered="#{authenticationController.authenticatedUser.userGroups.size() > 0}"/>
-                        <b:dropMenu value="Agenda Settings" icon="glyphicon-cog"
+                        <b:dropMenu value="Agenda Settings" iconAwesome="cogs"
                                     rendered="#{not empty settingsController.pages}">
                             <ui:repeat value="#{settingsController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
@@ -55,16 +55,16 @@
                             </ui:repeat>
                         </b:dropMenu>
                         <b:dropMenu value="#{authenticationController.authenticatedUser.fullname}"
-                                    icon="glyphicon-user">
-                            <b:navLink outcome="my" value="My Reservations" icon="glyphicon-calendar"
+                                    iconAwesome="user">
+                            <b:navLink outcome="my" value="My Reservations" iconAwesome="calendar"
                                        onclick="loading_start()"/>
-                            <b:navLink outcome="userSettings" value="User Settings" icon="glyphicon-cog"
+                            <b:navLink outcome="userSettings" value="User Settings" iconAwesome="pencil"
                                        onclick="loading_start()"/>
                             <b:navLink/>
                             <b:navCommandLink action="#{authenticationController.logout}" value="Sign Out"
-                                              icon="glyphicon-log-out"/>
+                                              iconAwesome="sign-out" style="cursor:pointer;"/>
                         </b:dropMenu>
-                        <b:navLink outcome="notifications" icon="glyphicon-bell"
+                        <b:navLink outcome="notifications" iconAwesome="bell"
                                    onclick="loading_start()">
                             <ui:fragment
                                     rendered="#{notificationController.notifications != null}">

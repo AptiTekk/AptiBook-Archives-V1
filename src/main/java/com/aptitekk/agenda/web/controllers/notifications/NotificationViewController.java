@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.notifications;
 
-import com.aptitekk.agenda.core.entity.Notification;
+import com.aptitekk.agenda.core.entities.Notification;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entity.*;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
@@ -67,7 +67,6 @@ public class StartupServiceImpl implements StartupService, Serializable {
             adminUser = new User();
             adminUser.setUsername(UserService.ADMIN_USERNAME);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
-            adminUser.setEnabled(true);
             try {
                 userService.insert(adminUser);
             } catch (Exception e) {
@@ -84,7 +83,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
             if (rootGroup != null) {
                 if (!adminUser.getUserGroups().contains(rootGroup)) {
                     try {
-                        adminUser.addGroup(rootGroup);
+                        adminUser.getUserGroups().add(rootGroup);
                         userService.merge(adminUser);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -96,6 +95,8 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void checkForAssetTypes() {
+
+        //TODO: Do this once ever, not on every startup.
         if (assetTypeService.getAll().isEmpty()) {
             try {
                 AssetType assetType = new AssetType("Rooms");
@@ -108,10 +109,8 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void writeDefaultProperties() {
-        for(PropertyKey key : PropertyKey.values())
-        {
-            if(propertiesService.getPropertyByKey(key) == null)
-            {
+        for (PropertyKey key : PropertyKey.values()) {
+            if (propertiesService.getPropertyByKey(key) == null) {
                 Property property = new Property(key, key.getDefaultValue());
                 try {
                     propertiesService.insert(property);
@@ -124,10 +123,8 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void writeDefaultPermissions() {
-        for(Permission.Descriptor descriptor : Permission.Descriptor.values())
-        {
-            if(permissionService.getPermissionByDescriptor(descriptor) == null)
-            {
+        for (Permission.Descriptor descriptor : Permission.Descriptor.values()) {
+            if (permissionService.getPermissionByDescriptor(descriptor) == null) {
                 Permission permission = new Permission();
                 permission.setDescriptor(descriptor);
                 try {

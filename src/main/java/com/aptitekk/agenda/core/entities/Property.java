@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entity;
+package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;

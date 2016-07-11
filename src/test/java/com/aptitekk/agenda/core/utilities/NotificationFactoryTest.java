@@ -6,10 +6,10 @@
 
 package com.aptitekk.agenda.core.utilities;
 
-import com.aptitekk.agenda.core.entity.Asset;
-import com.aptitekk.agenda.core.entity.AssetType;
-import com.aptitekk.agenda.core.entity.Reservation;
-import com.aptitekk.agenda.core.entity.User;
+import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.Reservation;
+import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.utilities.notification.EmailNotification;
 import com.aptitekk.agenda.core.utilities.notification.VariableInjection;
@@ -50,7 +50,6 @@ public class NotificationFactoryTest {
         item.setAssetType(type);
 
         Reservation res = new Reservation();
-        res.setDateCreated(Calendar.getInstance());
         res.setAsset(item);
 
         String body =

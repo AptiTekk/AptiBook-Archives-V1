@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.permissions;
 
-import com.aptitekk.agenda.core.entity.Permission;
+import com.aptitekk.agenda.core.entities.Permission;
 
 import java.util.List;
 
