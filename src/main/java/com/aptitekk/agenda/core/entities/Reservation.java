@@ -72,6 +72,10 @@ public class Reservation implements Serializable {
         return dateCreated;
     }
 
+    public String getFormattedDateCreated() {
+        return new SimpleDateFormat("EEEE, dd MMMM, yyyy").format(dateCreated.getTime());
+    }
+
     public String getTitle() {
         return title;
     }

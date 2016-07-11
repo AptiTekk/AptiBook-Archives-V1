@@ -46,7 +46,7 @@ public class User implements Serializable {
     private List<UserGroup> userGroups = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    @OrderBy("dateCreated")
+    @OrderBy("dateCreated desc")
     private List<Reservation> reservations = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -132,6 +132,10 @@ public class User implements Serializable {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<ReservationDecision> getReservationDecisions() {
+        return reservationDecisions;
     }
 
     public List<Notification> getNotifications() {

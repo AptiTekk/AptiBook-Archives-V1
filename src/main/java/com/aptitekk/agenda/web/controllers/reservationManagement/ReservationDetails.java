@@ -18,6 +18,7 @@ public class ReservationDetails {
     private UserGroup behalfUserGroup;
     private ReservationDecision currentDecision;
     private LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions;
+    private List<UserGroup> hierarchyGroups;
     private Map<UserGroup, ReservationDecision> overridingDecisions;
 
     public ReservationDetails(Reservation reservation, UserGroup behalfUserGroup, ReservationDecision currentDecision, LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions) {
@@ -25,6 +26,7 @@ public class ReservationDetails {
         this.behalfUserGroup = behalfUserGroup;
         this.currentDecision = currentDecision;
         this.hierarchyDecisions = hierarchyDecisions;
+        this.hierarchyGroups = new ArrayList<>(hierarchyDecisions.keySet());
 
         findOverridingDecisions();
     }
@@ -72,8 +74,12 @@ public class ReservationDetails {
         return currentDecision;
     }
 
-    public LinkedHashMap<UserGroup, ReservationDecision> getHierarchyDecisions() {
-        return hierarchyDecisions;
+    public List<UserGroup> getUserGroups() {
+        return hierarchyGroups;
+    }
+
+    public ReservationDecision getReservationDecisionFromUserGroup(UserGroup userGroup) {
+        return hierarchyDecisions.get(userGroup);
     }
 
     public ReservationDecision getOverridingDecisionForGroup(UserGroup userGroup) {

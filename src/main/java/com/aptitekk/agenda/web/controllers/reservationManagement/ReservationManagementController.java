@@ -113,6 +113,8 @@ public class ReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                    reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();
@@ -138,6 +140,8 @@ public class ReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                    reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();
@@ -149,7 +153,11 @@ public class ReservationManagementController implements Serializable {
         }
     }
 
-    public HashMap<AssetType, List<ReservationDetails>> getReservationDetailsMap() {
-        return reservationDetailsMap;
+    public List<AssetType> getAssetTypes() {
+        return new ArrayList<>(reservationDetailsMap.keySet());
+    }
+
+    public List<ReservationDetails> getReservationDetailsForAssetType(AssetType assetType) {
+        return reservationDetailsMap.get(assetType);
     }
 }
