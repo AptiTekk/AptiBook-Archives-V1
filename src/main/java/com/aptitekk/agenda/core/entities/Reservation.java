@@ -96,7 +96,7 @@ public class Reservation implements Serializable {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private Status status = Status.PENDING;
 
     @Column(columnDefinition = "time")
     private SegmentedTime timeStart;

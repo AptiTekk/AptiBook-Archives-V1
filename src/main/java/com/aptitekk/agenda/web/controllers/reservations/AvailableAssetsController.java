@@ -78,12 +78,13 @@ public class AvailableAssetsController implements Serializable {
                 reservation.setDate(segmentedTimeRange.getDate());
                 reservation.setTimeStart(segmentedTimeRange.getStartTime());
                 reservation.setTimeEnd(segmentedTimeRange.getEndTime());
+                if (!asset.getNeedsApproval())
+                    reservation.setStatus(Reservation.Status.APPROVED);
 
                 try {
                     reservationService.insert(reservation);
                 } catch (Exception e) {
                     e.printStackTrace();
-                    //TODO: Tell user
                 }
             }
         }

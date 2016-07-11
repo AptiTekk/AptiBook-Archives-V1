@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers.assets;
+package com.aptitekk.agenda.web.controllers.settings.assetTypes;
 
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;

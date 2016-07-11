@@ -8,7 +8,6 @@ package com.aptitekk.agenda.web;
 
 import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -43,14 +42,12 @@ public class AssetImageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String assetIdString = request.getPathInfo().substring(1);
-        LogManager.logInfo("Finding image for asset ID " + assetIdString);
 
         try {
             int assetId = Integer.parseInt(assetIdString);
             Asset asset = assetService.get(assetId);
             respondWithAssetImage(response, asset);
         } catch (NumberFormatException e) {
-            LogManager.logInfo("Format exception for " + assetIdString);
             e.printStackTrace();
             respondWithAssetImage(response, null);
         }

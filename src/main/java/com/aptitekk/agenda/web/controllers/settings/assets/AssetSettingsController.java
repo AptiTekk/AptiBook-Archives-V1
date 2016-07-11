@@ -16,8 +16,8 @@ import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
-import com.aptitekk.agenda.web.controllers.assets.TagController;
-import com.aptitekk.agenda.web.controllers.groups.GroupTreeController;
+import com.aptitekk.agenda.web.controllers.settings.assetTypes.TagController;
+import com.aptitekk.agenda.web.controllers.settings.groups.GroupTreeController;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 
@@ -135,8 +135,6 @@ public class AssetSettingsController implements Serializable {
     }
 
     public void updateSettings() {
-        LogManager.logInfo("test");
-
         if (selectedAsset != null) {
             boolean update = true;
 

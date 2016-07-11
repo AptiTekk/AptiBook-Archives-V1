@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers.permissions;
+package com.aptitekk.agenda.web.controllers.settings.permissions;
 
 import com.aptitekk.agenda.core.entities.Permission;
 

@@ -41,7 +41,7 @@
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
-                        <b:navLink outcome="manage" value="Manage Reservations" iconAwesome="calendar-check-o"
+                        <b:navLink outcome="manage" value="Reservation Management" iconAwesome="calendar-check-o"
                                    onclick="loading_start()"
                                    rendered="#{authenticationController.authenticatedUser.userGroups.size() > 0}"/>
                         <b:dropMenu value="Agenda Settings" iconAwesome="cogs"

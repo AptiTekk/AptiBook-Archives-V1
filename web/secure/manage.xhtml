@@ -10,17 +10,55 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:b="http://bootsfaces.net/ui"
-      xmlns:pf="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
         <h:panelGroup id="page">
             <b:container>
-                <h2 style="margin-top:50px">WIP</h2>
+                <ol class="breadcrumb" style="margin-top: 20px">
+                    <li><h:link outcome="index" value="Home"/></li>
+                    <li class="active">Reservation Management</li>
+                </ol>
 
+                <b:row>
+                    <b:column colXs="12">
+                        <h2>Reservations Pending Approval:</h2>
+                        <hr/>
+                    </b:column>
+                </b:row>
+
+                <c:choose>
+                    <c:when test="#{empty reservationManagementController.reservationMap}">
+                        <b:row>
+                            <b:column colXs="12">
+                                <h4>There are currently no Reservations pending approval.</h4>
+                            </b:column>
+                        </b:row>
+                    </c:when>
+                    <c:otherwise>
+                        <c:forEach items="#{reservationManagementController.reservationMap}" var="entry">
+                            <b:row>
+                                <b:column colXs="12">
+                                    <h4>#{entry.key.name}</h4>
+                                    <hr/>
+                                </b:column>
+                            </b:row>
+                            <c:forEach items="#{entry.value}" var="reservation">
+                                <b:row>
+                                    <b:column colXs="12">
+                                        <b:panel look="default" title="#{reservation.asset.name}">
+                                            Reserved By: #{reservation.user.fullname} <br/>
+                                            From: #{reservation.timeStart.timeString} To: #{reservation.timeEnd.timeString}
+                                            <br/>
+                                        </b:panel>
+                                    </b:column>
+                                </b:row>
+                            </c:forEach>
+                        </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </b:container>
         </h:panelGroup>
     </ui:define>
