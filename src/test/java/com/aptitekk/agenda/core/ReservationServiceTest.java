@@ -67,7 +67,7 @@ public class ReservationServiceTest {
 
         UserGroup testOwnerGroup = new UserGroup();
         testOwnerGroup.setName("Test Owner Group");
-        testOwnerGroup.addUser(testOwner);
+        testOwnerGroup.getUsers().add(testOwner);
         userGroupService.insert(testOwnerGroup);
 
         User testRenter = new User();

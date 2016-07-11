@@ -6,7 +6,6 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
@@ -48,6 +47,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ReservationDecision> reservationDecisions = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications = new ArrayList<>();
@@ -161,6 +163,7 @@ public class User implements Serializable {
 
     /**
      * Determines if the user is the admin.
+     *
      * @return True if the user is the admin, false otherwise.
      */
     public boolean isAdmin() {

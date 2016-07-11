@@ -11,6 +11,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
@@ -22,56 +23,104 @@
                     <li class="active">Reservation Management</li>
                 </ol>
 
-                <b:row>
-                    <b:column colXs="12">
-                        <h2>Reservations Pending Approval:</h2>
-                        <hr/>
-                    </b:column>
-                </b:row>
-
-                <c:choose>
-                    <c:when test="#{empty reservationManagementController.reservationMap}">
-                        <b:row>
-                            <b:column colXs="12">
-                                <h4>There are currently no Reservations pending approval.</h4>
-                            </b:column>
-                        </b:row>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach items="#{reservationManagementController.reservationMap}" var="entry">
+                <h:panelGroup id="pendingReservations">
+                    <b:message for="pendingReservations" showSummary="false" showDetail="true"/>
+                    <c:choose>
+                        <c:when test="#{empty reservationManagementController.reservationDetailsMap}">
                             <b:row>
                                 <b:column colXs="12">
-                                    <h4>#{entry.key.name}</h4>
-                                    <hr/>
+                                    <h4>There are currently no Reservations pending approval.</h4>
                                 </b:column>
                             </b:row>
-                            <c:forEach items="#{entry.value}" var="reservation">
+                        </c:when>
+                        <c:otherwise>
+                            <c:forEach items="#{reservationManagementController.reservationDetailsMap}" var="entry">
                                 <b:row>
                                     <b:column colXs="12">
-                                        <b:panel look="default" title="#{reservation.asset.name}" collapsible="false">
-                                            <div class="form-group">
-                                                <p:lightBox>
-                                                    <h:outputLink
-                                                            value="#{request.contextPath}/images/assets/#{reservation.asset.id}">
-                                                        <h:graphicImage url="/images/assets/#{reservation.asset.id}"
-                                                                        style="height: 100px; border-radius: 5px"/>
-                                                    </h:outputLink>
-                                                </p:lightBox>
-                                            </div>
-                                            <div class="form-group">
-                                                Reserved By: #{reservation.user.fullname}
-                                            </div>
-                                            <div class="form-group">
-                                                From: #{reservation.timeStart.timeString} To: #{reservation.timeEnd.timeString}
-                                            </div>
-                                            <br/>
-                                        </b:panel>
+                                        <h4>#{entry.key.name}</h4>
+                                        <hr/>
                                     </b:column>
                                 </b:row>
+                                <c:forEach items="#{entry.value}" var="reservationDetails">
+                                    <b:row>
+                                        <b:column colXs="12">
+                                            <b:panel
+                                                    look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
+                                                    title="#{reservationDetails.reservation.asset.name}"
+                                                    collapsible="false">
+                                                <div class="form-group">
+                                                    <p:lightBox>
+                                                        <h:outputLink
+                                                                value="#{request.contextPath}/images/assets/#{reservationDetails.reservation.asset.id}">
+                                                            <h:graphicImage
+                                                                    url="/images/assets/#{reservationDetails.reservation.asset.id}"
+                                                                    style="height: 100px; border-radius: 5px"/>
+                                                        </h:outputLink>
+                                                    </p:lightBox>
+                                                </div>
+                                                <div class="form-group">
+                                                    Reserved By: #{reservationDetails.reservation.user.fullname}
+                                                </div>
+                                                <div class="form-group">
+                                                    From: #{reservationDetails.reservation.timeStart.timeString} To: #{reservationDetails.reservation.timeEnd.timeString}
+                                                </div>
+                                                <ul>
+                                                    <c:forEach items="#{reservationDetails.hierarchyDecisions}"
+                                                               var="hierarchyDecision">
+                                                        <li>
+                                                            <h:outputText value="#{hierarchyDecision.key.name} "
+                                                                          style="font-weight: bold;"/>
+                                                            has
+                                                            <b:label
+                                                                    text="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'approved' : 'rejected') : 'not yet decided upon'}"
+                                                                    severity="#{hierarchyDecision.value != null ? (hierarchyDecision.value.approved ? 'success' : 'danger') : 'default'}"/>
+                                                            this Reservation.
+                                                        </li>
+                                                    </c:forEach>
+                                                </ul>
+                                                <f:facet name="footer">
+                                                    <h:panelGroup layout="block" styleClass="form-group"
+                                                                  rendered="#{reservationDetails.currentDecision != null}">
+                                                        <h:outputText
+                                                                value="#{reservationDetails.currentDecision.user.equals(authenticationController.authenticatedUser)
+                                                                ? 'You'
+                                                                : reservationDetails.currentDecision.user.fullname}"
+                                                                style="font-weight: bold;"/>
+                                                        <h:outputText
+                                                                value="#{reservationDetails.currentDecision.user.equals(authenticationController.authenticatedUser)
+                                                                ? ' have '
+                                                                : ' has '}"/>
+                                                        already decided to
+                                                        <b:label
+                                                                text="#{reservationDetails.currentDecision.approved ? 'approve' : 'reject'}"
+                                                                severity="#{reservationDetails.currentDecision.approved ? 'success' : 'danger'}"/>
+                                                        this Reservation on behalf of the
+                                                        <h:outputText
+                                                                style="font-weight: bold;"
+                                                                value="#{reservationDetails.currentDecision.userGroup.name}"/>
+                                                        User Group.
+                                                    </h:panelGroup>
+                                                    <h:form rendered="#{reservationDetails.currentDecision == null}">
+                                                        <div class="btn-toolbar">
+                                                            <b:commandButton value="Approve Reservation" look="success"
+                                                                             action="#{reservationManagementController.approveReservation(reservationDetails)}"
+                                                                             ajax="true" update=":pendingReservations"
+                                                                             disabled="#{reservationDetails.currentDecision != null}"/>
+                                                            <b:commandButton value="Reject Reservation" look="default"
+                                                                             action="#{reservationManagementController.rejectReservation(reservationDetails)}"
+                                                                             ajax="true" update=":pendingReservations"
+                                                                             disabled="#{reservationDetails.currentDecision != null}"/>
+                                                        </div>
+                                                    </h:form>
+                                                </f:facet>
+                                            </b:panel>
+                                        </b:column>
+                                    </b:row>
+                                </c:forEach>
                             </c:forEach>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+                </h:panelGroup>
             </b:container>
         </h:panelGroup>
     </ui:define>

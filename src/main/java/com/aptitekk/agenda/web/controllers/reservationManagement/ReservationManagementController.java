@@ -6,13 +6,15 @@
 
 package com.aptitekk.agenda.web.controllers.reservationManagement;
 
-import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.entities.Reservation;
-import com.aptitekk.agenda.core.entities.UserGroup;
+import com.aptitekk.agenda.core.entities.*;
+import com.aptitekk.agenda.core.services.ReservationDecisionService;
+import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,7 +28,16 @@ public class ReservationManagementController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    private HashMap<AssetType, List<Reservation>> reservationMap;
+    @Inject
+    private ReservationService reservationService;
+
+    @Inject
+    private ReservationDecisionService reservationDecisionService;
+
+    @Inject
+    private UserGroupService userGroupService;
+
+    private HashMap<AssetType, List<ReservationDetails>> reservationDetailsMap;
 
     @PostConstruct
     public void init() {
@@ -34,27 +45,114 @@ public class ReservationManagementController implements Serializable {
     }
 
     private void buildReservationList() {
-        reservationMap = new LinkedHashMap<>();
+        reservationDetailsMap = new LinkedHashMap<>();
 
         Queue<UserGroup> queue = new LinkedList<>();
         queue.addAll(authenticationController.getAuthenticatedUser().getUserGroups());
 
+        //Traverse down the hierarchy and determine which reservations are pending approval.
+        //Then, build details about each reservation and store it in the reservationDetailsMap.
         UserGroup currentGroup;
         while ((currentGroup = queue.poll()) != null) {
             queue.addAll(currentGroup.getChildren());
 
             for (Asset asset : currentGroup.getAssets()) {
                 for (Reservation reservation : asset.getReservations()) {
+
+                    //Found a reservation with a pending status.
                     if (reservation.getStatus() == Reservation.Status.PENDING) {
-                        reservationMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
-                        reservationMap.get(asset.getAssetType()).add(reservation);
+
+                        //If there is not an AssetType already in the map, add one with an empty list.
+                        reservationDetailsMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
+
+                        //Traverse up the hierarchy and determine the decisions that have already been made.
+                        Map<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
+                        List<UserGroup> hierarchyUp = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
+                        UserGroup behalfUserGroup = null;
+                        //This for loop descends to properly order the groups for display on the page.
+                        for (int i = hierarchyUp.size() - 1; i >= 0; i--) {
+                            UserGroup userGroup = hierarchyUp.get(i);
+                            //This group is the group that the authenticated user is acting on behalf of when making a decision.
+                            if (authenticationController.getAuthenticatedUser().getUserGroups().contains(userGroup))
+                                behalfUserGroup = userGroup;
+                            //We don't want to display the root group decision on the page.
+                            if (userGroup.isRoot())
+                                continue;
+                            for (ReservationDecision decision : reservation.getDecisions()) {
+                                if (decision.getUserGroup().equals(userGroup)) {
+                                    hierarchyDecisions.put(userGroup, decision);
+                                    break;
+                                }
+                            }
+                            hierarchyDecisions.putIfAbsent(userGroup, null);
+                        }
+
+                        ReservationDecision currentDecision = null;
+                        for (ReservationDecision decision : reservation.getDecisions()) {
+                            if (decision.getUserGroup().equals(behalfUserGroup)) {
+                                currentDecision = decision;
+                                break;
+                            }
+                        }
+
+                        reservationDetailsMap.get(asset.getAssetType()).add(new ReservationDetails(reservation, behalfUserGroup, currentDecision, hierarchyDecisions));
                     }
                 }
             }
         }
     }
 
-    public HashMap<AssetType, List<Reservation>> getReservationMap() {
-        return reservationMap;
+    public void approveReservation(ReservationDetails reservationDetails) {
+        if (reservationDetails != null) {
+            if (reservationDetails.getCurrentDecision() != null)
+                return;
+
+            try {
+                ReservationDecision decision = new ReservationDecision();
+                decision.setApproved(true);
+                decision.setReservation(reservationDetails.getReservation());
+                decision.setUser(authenticationController.getAuthenticatedUser());
+                decision.setUserGroup(reservationDetails.getBehalfUserGroup());
+                reservationDecisionService.insert(decision);
+
+                reservationDetails.getReservation().getDecisions().add(decision);
+                reservationService.merge(reservationDetails.getReservation());
+
+                buildReservationList();
+
+                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void rejectReservation(ReservationDetails reservationDetails) {
+        if (reservationDetails != null) {
+            if (reservationDetails.getCurrentDecision() != null)
+                return;
+
+            try {
+                ReservationDecision decision = new ReservationDecision();
+                decision.setApproved(false);
+                decision.setReservation(reservationDetails.getReservation());
+                decision.setUser(authenticationController.getAuthenticatedUser());
+                decision.setUserGroup(reservationDetails.getBehalfUserGroup());
+                reservationDecisionService.insert(decision);
+
+                reservationDetails.getReservation().getDecisions().add(decision);
+                reservationService.merge(reservationDetails.getReservation());
+
+                buildReservationList();
+
+                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public HashMap<AssetType, List<ReservationDetails>> getReservationDetailsMap() {
+        return reservationDetailsMap;
     }
 }

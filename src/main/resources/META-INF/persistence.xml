@@ -14,6 +14,7 @@
         <class>com.aptitekk.agenda.core.entities.Asset</class>
         <class>com.aptitekk.agenda.core.entities.AssetType</class>
         <class>com.aptitekk.agenda.core.entities.Reservation</class>
+        <class>com.aptitekk.agenda.core.entities.ReservationDecision</class>
         <class>com.aptitekk.agenda.core.entities.ReservationField</class>
         <class>com.aptitekk.agenda.core.entities.ReservationFieldEntry</class>
         <class>com.aptitekk.agenda.core.entities.User</class>

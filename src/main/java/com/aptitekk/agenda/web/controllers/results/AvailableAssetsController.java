@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers.reservations;
+package com.aptitekk.agenda.web.controllers.results;
 
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;

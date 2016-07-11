@@ -27,62 +27,6 @@ public class Reservation implements Serializable {
         REJECTED
     }
 
-    @Entity(name = "ReservationDecision")
-    @NamedQuery(name = "Decision.findAll", query = "SELECT r FROM ReservationDecision r")
-    public class Decision implements Serializable {
-
-        @Id
-        @GeneratedValue
-        private int id;
-
-        @ManyToOne
-        private User user;
-
-        @ManyToOne
-        private Reservation reservation;
-
-        private boolean approved;
-
-        @Column(length = 512)
-        private String comment;
-
-        public int getId() {
-            return id;
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public void setUser(User user) {
-            this.user = user;
-        }
-
-        public Reservation getReservation() {
-            return reservation;
-        }
-
-        public void setReservation(Reservation reservation) {
-            this.reservation = reservation;
-        }
-
-        public boolean isApproved() {
-            return approved;
-        }
-
-        public void setApproved(boolean approved) {
-            this.approved = approved;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
-    }
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -114,7 +58,7 @@ public class Reservation implements Serializable {
     private User user;
 
     @OneToMany(mappedBy = "reservation")
-    private List<Decision> decisions;
+    private List<ReservationDecision> decisions;
 
     @OneToMany(mappedBy = "reservation")
     private List<ReservationFieldEntry> fieldEntries;
@@ -183,11 +127,11 @@ public class Reservation implements Serializable {
         this.user = user;
     }
 
-    public List<Decision> getDecisions() {
+    public List<ReservationDecision> getDecisions() {
         return decisions;
     }
 
-    public void setDecisions(List<Decision> decisions) {
+    public void setDecisions(List<ReservationDecision> decisions) {
         this.decisions = decisions;
     }
 

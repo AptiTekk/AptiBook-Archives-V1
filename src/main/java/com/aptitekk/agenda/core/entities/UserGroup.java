@@ -42,6 +42,9 @@ public class UserGroup implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userGroups")
     private List<Permission> permissions;
 
+    @OneToMany(mappedBy = "userGroup")
+    private List<ReservationDecision> reservationDecisions = new ArrayList<>();
+
     public UserGroup() {
     }
 
@@ -81,16 +84,6 @@ public class UserGroup implements Serializable {
         this.users = users;
     }
 
-    public User addUser(User user) {
-        getUsers().add(user);
-        return user;
-    }
-
-    public User removeUser(User user) {
-        getUsers().remove(user);
-        return user;
-    }
-
     public UserGroup getParent() {
         return parent;
     }
@@ -107,12 +100,28 @@ public class UserGroup implements Serializable {
         this.children = children;
     }
 
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public List<ReservationDecision> getReservationDecisions() {
+        return reservationDecisions;
+    }
+
+    public void setReservationDecisions(List<ReservationDecision> reservationDecisions) {
+        this.reservationDecisions = reservationDecisions;
+    }
+
     public String toString() {
         return this.getName();
     }
 
-    public boolean isImmutable() {
-        return this.getParent() == null;
+    public boolean isRoot() {
+        return this.parent == null;
     }
 
     @Override
@@ -133,11 +142,4 @@ public class UserGroup implements Serializable {
         return EqualsHelper.calculateHashCode(getName());
     }
 
-    public List<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Permission> permissions) {
-        this.permissions = permissions;
-    }
 }
