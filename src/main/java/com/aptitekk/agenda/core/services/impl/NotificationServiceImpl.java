@@ -79,6 +79,8 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
         }
     }
 
+
+
     @Override
     public List<Notification> getUnread(User user) {
         List<Notification> result = new JPAQuery<Notification>(entityManager).from(table)
