@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
-@WebFilter("/AuthenticationFilter")
+@WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
     public static final String SESSION_ORIGINAL_URL = "Original-Url";
@@ -56,10 +56,6 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
                 return;
             }
-        } else if (uri.contains(context.getContextPath() + "/index.xhtml") && user != null) {
-            LogManager.logInfo("Redirecting to secure section of Agenda.");
-            currentRes.sendRedirect(context.getContextPath() + "/secure/index.xhtml");
-            return;
         } else {
             chain.doFilter(request, response);
             return;
@@ -79,7 +75,7 @@ public class AuthenticationFilter implements Filter {
 
         LogManager.logInfo("Unauthorized access request to " + uri + parameters);
         currentSession.setAttribute(SESSION_ORIGINAL_URL, uri + parameters);
-        currentRes.sendRedirect(context.getContextPath() + "/index.xhtml");
+        currentRes.sendRedirect(context.getContextPath() + "/" + (request.getParameter("tenant") != null ? request.getParameter("tenant") != null : ""));
     }
 
     @Override

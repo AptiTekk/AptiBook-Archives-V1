@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter("/*")
+@WebFilter(filterName = "TenantFilter")
 public class TenantFilter implements Filter {
 
     @Override
@@ -34,7 +34,7 @@ public class TenantFilter implements Filter {
             if (url.contains(";"))
                 url = url.substring(0, url.indexOf(";"));
             request.getRequestDispatcher(url).forward(req, res);
-        } else if (pathSplit.length < 2) {
+        } else if (pathSplit.length < 2 || pathSplit[1].endsWith(".xhtml")) {
             ((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
         } else {
             chain.doFilter(req, res);

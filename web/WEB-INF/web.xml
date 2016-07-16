@@ -24,10 +24,10 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    <filter>
-        <filter-name>AuthenticationFilter</filter-name>
-        <filter-class>com.aptitekk.agenda.web.filters.AuthenticationFilter</filter-class>
-    </filter>
+    <filter-mapping>
+        <filter-name>TenantFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
