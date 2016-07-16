@@ -195,18 +195,24 @@
                                                             value="#{reservationDetails.currentDecision.userGroup.name}"/>
                                                     User Group.
                                                 </h:panelGroup>
-                                                <h:form rendered="#{reservationDetails.currentDecision == null}">
-                                                    <div class="btn-toolbar">
-                                                        <b:commandButton value="Approve Reservation" look="success"
-                                                                         action="#{reservationManagementController.approveReservation(reservationDetails)}"
-                                                                         ajax="true" update=":pendingReservations"
-                                                                         disabled="#{reservationDetails.currentDecision != null}"/>
-                                                        <b:commandButton value="Reject Reservation" look="default"
-                                                                         action="#{reservationManagementController.rejectReservation(reservationDetails)}"
-                                                                         ajax="true" update=":pendingReservations"
-                                                                         disabled="#{reservationDetails.currentDecision != null}"/>
-                                                    </div>
+
+                                                <h:form>
+                                                    <h:panelGroup>
+                                                    <b:commandButton value="Approve reservation"
+                                                                     action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
+                                                                     look="success"
+                                                                     ajax="true"
+                                                                     update=":manageModalForm"
+                                                                     oncomplete="$('.manageModal').modal();"/>
+                                                        <b:commandButton value="Reject reservation"
+                                                                         action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
+                                                                         look="default"
+                                                                         ajax="true"
+                                                                         update=":manageModalForm"
+                                                                         oncomplete="$('.manageModal').modal();"/>
+                                                    </h:panelGroup>
                                                 </h:form>
+
                                             </f:facet>
                                         </b:panel>
                                     </b:column>
@@ -217,7 +223,8 @@
                 </h:panelGroup>
             </b:container>
         </h:panelGroup>
+        <ui:include src="manageModal.xhtml"/>
     </ui:define>
 </ui:composition>
 
-</html>
+        </html>
