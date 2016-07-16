@@ -4,10 +4,11 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web;
+package com.aptitekk.agenda.web.filters;
 
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -56,6 +57,7 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         } else if (uri.contains(context.getContextPath() + "/index.xhtml") && user != null) {
+            LogManager.logInfo("Redirecting to secure section of Agenda.");
             currentRes.sendRedirect(context.getContextPath() + "/secure/index.xhtml");
             return;
         } else {
@@ -75,15 +77,13 @@ public class AuthenticationFilter implements Filter {
 
         parameters = parameters.substring(0, parameters.length() - 1);
 
-        this.context.log("Unauthorized access request to " + uri + parameters);
+        LogManager.logInfo("Unauthorized access request to " + uri + parameters);
         currentSession.setAttribute(SESSION_ORIGINAL_URL, uri + parameters);
         currentRes.sendRedirect(context.getContextPath() + "/index.xhtml");
     }
 
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
-
     }
 
 

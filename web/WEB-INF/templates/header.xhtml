@@ -15,29 +15,12 @@
 >
 
 <ui:composition>
-    <b:navBar brandImg="#{resource['images:Logo.svg']}" brandHref="#{request.contextPath}/secure/" fixed="top"
+    <b:navBar brandImg="#{resource['images:Logo.svg']}"
+              brandHref="#{facesNavigationController.getUrlFromNavigationCase('secure')}"
+              fixed="top"
               onclick="loading_start()">
         <h:panelGroup
                 layout="block" id="header">
-            <ui:fragment rendered="#{authenticationController.authenticatedUser == null}">
-                <h:form id="loginForm" styleClass="navbar-form navbar-right"
-                        p:aria-expanded="false" style="height: 1px;">
-                    <h:message for="loginForm" style="color:red;"/>
-                    <div class="form-group">
-                        <h:inputText p:placeholder="Username" styleClass="form-control"
-                                     autocomplete="off" value="#{authenticationController.username}"/>
-                    </div>
-                    <div class="form-group">
-                        <h:inputSecret p:placeholder="Password" styleClass="form-control"
-                                       autocomplete="off" value="#{authenticationController.password}"/>
-                    </div>
-                    <h:commandButton styleClass="btn btn-success" value="Sign In"
-                                     action="#{authenticationController.login}" style="margin-left: 5px;">
-                        <f:ajax execute="@form" onevent="loading()"/>
-                    </h:commandButton>
-                </h:form>
-            </ui:fragment>
-
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">

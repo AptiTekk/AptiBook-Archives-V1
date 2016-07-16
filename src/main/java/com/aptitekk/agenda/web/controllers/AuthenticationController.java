@@ -12,7 +12,7 @@ import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.web.AuthenticationFilter;
+import com.aptitekk.agenda.web.filters.AuthenticationFilter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -85,7 +85,7 @@ public class AuthenticationController implements Serializable {
                 }
             }
         }
-        return "index";
+        return "secure";
     }
 
     public String logout() {
@@ -97,7 +97,7 @@ public class AuthenticationController implements Serializable {
 
     public String redirectIfLoggedIn() throws IOException {
         if (authenticatedUser != null)
-            return "index";
+            return "secure";
         return null;
     }
 
