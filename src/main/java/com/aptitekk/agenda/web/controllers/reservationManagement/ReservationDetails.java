@@ -23,14 +23,14 @@ public class ReservationDetails {
     private Map<UserGroup, ReservationDecision> overridingDecisions;
 
     /**
-     * This list contains the decisions that will be overridden if the behalfUserGroup chooses to approve.
+     * This list contains the User Groups with decisions that will be overridden if the behalfUserGroup chooses to approve.
      */
-    private List<ReservationDecision> lowerApprovalOverrides;
+    private List<UserGroup> lowerApprovalOverrides;
 
     /**
-     * This list contains the decisions that will be overridden if the behalfUserGroup chooses to reject.
+     * This list contains the User Groups with decisions that will be overridden if the behalfUserGroup chooses to reject.
      */
-    private List<ReservationDecision> lowerRejectionOverrides;
+    private List<UserGroup> lowerRejectionOverrides;
 
 
     public ReservationDetails(Reservation reservation, UserGroup behalfUserGroup, ReservationDecision currentDecision, LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions) {
@@ -93,12 +93,12 @@ public class ReservationDetails {
             if (reachedUserGroup) {
                 //If this Group has not decided yet, then add it to both override lists.
                 if (entry.getValue() == null) {
-                    lowerApprovalOverrides.add(entry.getValue());
-                    lowerRejectionOverrides.add(entry.getValue());
+                    lowerApprovalOverrides.add(entry.getKey());
+                    lowerRejectionOverrides.add(entry.getKey());
                 } else if (entry.getValue().isApproved()) { //If the Group approved, add it to the rejection override list.
-                    lowerRejectionOverrides.add(entry.getValue());
+                    lowerRejectionOverrides.add(entry.getKey());
                 } else { //Otherwise (they rejected), add it to the approval override list.
-                    lowerApprovalOverrides.add(entry.getValue());
+                    lowerApprovalOverrides.add(entry.getKey());
                 }
             }
         }
@@ -134,11 +134,11 @@ public class ReservationDetails {
         return overridingDecisions.get(userGroup);
     }
 
-    public List<ReservationDecision> getLowerApprovalOverrides() {
+    public List<UserGroup> getLowerApprovalOverrides() {
         return lowerApprovalOverrides;
     }
 
-    public List<ReservationDecision> getLowerRejectionOverrides() {
+    public List<UserGroup> getLowerRejectionOverrides() {
         return lowerRejectionOverrides;
     }
 }
