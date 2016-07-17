@@ -6,9 +6,13 @@
 
 package com.aptitekk.agenda.web.controllers;
 
+import com.aptitekk.agenda.core.entities.Tenant;
+import com.aptitekk.agenda.core.tenants.TenantSessionService;
+
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -17,7 +21,12 @@ import java.net.MalformedURLException;
 @RequestScoped
 public class FacesNavigationController implements Serializable {
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     public String getUrlFromNavigationCase(String outcome) {
+        Tenant currentTenant = tenantSessionService.getCurrentTenant();
+
         if (outcome == null)
             return "#";
 

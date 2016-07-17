@@ -12,28 +12,21 @@ import com.aptitekk.agenda.core.tenants.TenantSessionService;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
 @Stateful
 public class TenantSessionServiceImpl implements TenantSessionService {
 
     @Inject
-    private TenantService tenantService;
-
-    private Tenant currentTenant;
+    private HttpServletRequest servletRequest;
 
     @Override
     public Tenant getCurrentTenant() {
-        return currentTenant;
-    }
-
-    @Override
-    public void setCurrentTenant(String tenant) {
-        try {
-            int subscriptionId = Integer.parseInt(tenant);
-            if (currentTenant == null || currentTenant.getSubscriptionId() != subscriptionId)
-                currentTenant = tenantService.getTenantBySubscriptionId(subscriptionId);
-
-        } catch (NumberFormatException ignored) {
+        if (servletRequest != null) {
+            Object attribute = servletRequest.getAttribute("tenant");
+            if (attribute != null && attribute instanceof Tenant)
+                return (Tenant) attribute;
         }
+        return null;
     }
 }

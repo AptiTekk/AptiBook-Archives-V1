@@ -15,6 +15,4 @@ public interface TenantSessionService {
 
     Tenant getCurrentTenant();
 
-    void setCurrentTenant(String tenant);
-
 }

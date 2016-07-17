@@ -6,10 +6,11 @@
 
 package com.aptitekk.agenda.web.filters;
 
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.services.TenantService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.tenants.TenantManagementService;
-import com.aptitekk.agenda.core.tenants.TenantSessionService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class TenantFilter implements Filter {
     private TenantManagementService tenantManagementService;
 
     @Inject
-    private TenantSessionService tenantSessionService;
+    private TenantService tenantService;
 
     @Inject
     private UserService userService;
@@ -51,23 +52,28 @@ public class TenantFilter implements Filter {
 
             //Tenants
             if (pathSplit[1].matches(tenantManagementService.getAllowedTenantUrlPattern())) { //Valid Tenant ID
-                tenantSessionService.setCurrentTenant(pathSplit[1]);
-                request.setAttribute("tenant", tenantSessionService.getCurrentTenant());
+                try {
+                    int tenantSubscriptionId = Integer.parseInt(pathSplit[1]);
+                    request.setAttribute("tenant", tenantService.getTenantBySubscriptionId(tenantSubscriptionId));
 
-                String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
-                if (url.contains(";"))
-                    url = url.substring(0, url.indexOf(";"));
+                    String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
+                    if (url.contains(";"))
+                        url = url.substring(0, url.indexOf(";"));
 
-                if (url.contains("/secure")) {
-                    User user = userService.findByName((String) ((HttpServletRequest) req).getSession(true).getAttribute(UserService.SESSION_VAR_USERNAME));
-                    if (user != null) {
+                    if (url.contains("/secure")) {
+                        User user = userService.findByName((String) ((HttpServletRequest) req).getSession(true).getAttribute(UserService.SESSION_VAR_USERNAME));
+                        if (user != null) {
+                            request.getRequestDispatcher(url).forward(req, res);
+                            return;
+                        }
+                        redirectUnauthorized(req, res);
+                        return;
+                    } else {
                         request.getRequestDispatcher(url).forward(req, res);
                         return;
                     }
-                    redirectUnauthorized(req, res);
-                    return;
-                } else {
-                    request.getRequestDispatcher(url).forward(req, res);
+                } catch (NumberFormatException e) {
+                    ((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
             } else if (pathSplit[1].matches("[0-9]{1,9}")) { //Invalid Tenant ID
@@ -106,7 +112,7 @@ public class TenantFilter implements Filter {
 
         LogManager.logInfo("Unauthorized access request to " + attemptedAccessPath + parameters);
         ((HttpServletRequest) request).getSession(true).setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
-        ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (tenantSessionService.getCurrentTenant() != null ? tenantSessionService.getCurrentTenant().getSubscriptionId() : ""));
+        ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSubscriptionId() : ""));
     }
 
     @Override
