@@ -191,11 +191,11 @@ public class ReservationManagementController implements Serializable {
                     } else {
                         approvedBy = reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString();
                     }
-
-                    overwriteApprove = true;
-
-
                 }
+            } //get latest decision
+            if(this.reservationDetails.getReservation().getDecisions().get(this.reservationDetails.getReservation().getDecisions().size()).isApproved()){
+                //if latest decision is approved, set to true
+                overwriteApprove = true;
             }
         }else{
             System.out.println("res details are null");
@@ -216,16 +216,14 @@ public class ReservationManagementController implements Serializable {
                     } else {
                         rejectedBy = reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString();
                     }
-                    overwriteReject = true;
-                    rejectMessage = "If you approve this reservation, you will override a rejection.";
-                    // System.out.println("Getting to above faces message");
-
-                    //FacesContext.getCurrentInstance().addMessage("confirmationModal:amodal", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "If you approve this reservation, you will override a rejection."));
-
-
-                }
             }
-        }else{
+        }    //get latest decision
+            if(this.reservationDetails.getReservation().getDecisions().get(this.reservationDetails.getReservation().getDecisions().size()).isApproved()){
+                //if latest decision is approved, set to true
+                overwriteReject = true;
+            }
+        }
+        else{
             System.out.println("res details are null in reject");
         }
         return overwriteReject;
