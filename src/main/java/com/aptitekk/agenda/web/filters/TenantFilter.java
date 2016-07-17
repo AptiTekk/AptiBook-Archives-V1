@@ -67,7 +67,7 @@ public class TenantFilter implements Filter {
             }
 
             //Resources
-            if (pathSplit[1].matches("javax\\.faces\\.resource|resources")) {
+            if (pathSplit[1].matches("javax\\.faces\\.resource|resources|fonts")) {
                 chain.doFilter(req, res);
             }
 

@@ -20,4 +20,9 @@ public interface StartupService {
     void writeDefaultProperties();
 
     void writeDefaultPermissions();
+
+    /**
+     * Temporary method to demonstrate the capability of tenants
+     */
+    void loadDefaultTenants();
 }

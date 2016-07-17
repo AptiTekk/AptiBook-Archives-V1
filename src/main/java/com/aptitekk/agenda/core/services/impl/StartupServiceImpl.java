@@ -9,6 +9,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +39,9 @@ public class StartupServiceImpl implements StartupService, Serializable {
     @Inject
     private PermissionService permissionService;
 
+    @Inject
+    private TenantService tenantService;
+
     @PostConstruct
     public void init() {
         checkForRootGroup();
@@ -45,6 +49,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
         checkForAssetTypes();
         writeDefaultProperties();
         writeDefaultPermissions();
+        loadDefaultTenants();
     }
 
     @Override
@@ -130,6 +135,22 @@ public class StartupServiceImpl implements StartupService, Serializable {
                 try {
                     permissionService.insert(permission);
                 } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void loadDefaultTenants() {
+        for (int i = 0; i < 3; i++) {
+            if (tenantService.getTenantBySubscriptionId(i) == null) {
+                Tenant tenant = new Tenant();
+                tenant.setSubscriptionId(i);
+                try {
+                    tenantService.insert(tenant);
+                } catch (Exception e) {
+                    LogManager.logError("Couldn't persist Tenant with subscription id " + i);
                     e.printStackTrace();
                 }
             }
