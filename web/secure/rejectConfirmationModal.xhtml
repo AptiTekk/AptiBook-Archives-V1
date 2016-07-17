@@ -40,11 +40,10 @@
                 <f:facet name="footer">
                     <b:button value="Cancel" dismiss="modal" onclick="return false;"/>
 
-                    <b:commandButton value="Reject Reservation" look="success"
+                    <b:commandButton value="Reject Reservation" look="danger"
                                      action="#{reservationManagementController.rejectReservation(reservationManagementController.reservationDetails)}"
                                      ajax="true" update=":pendingReservations"
-                                     oncomplete="$('.rejectConfirmationModal').modal('hide')"
-                                     disabled="#{reservationManagementController.reservationDetails.currentDecision != null}"/>
+                                     oncomplete="$('.rejectConfirmationModal').modal('hide')"/>
 
                 </f:facet>
         </b:modal>

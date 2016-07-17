@@ -198,20 +198,20 @@
                                                 </h:panelGroup>
 
                                                 <h:form>
-                                                    <h:panelGroup>
-                                                    <b:commandButton value="Approve reservation"
-                                                                     action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
-                                                                     look="success"
-                                                                     ajax="true"
-                                                                     update=":approveModalForm"
-                                                                     oncomplete="$('.approvalConfirmationModal').modal();"/>
-                                                        <b:commandButton value="Reject reservation"
+                                                    <div class="btn-toolbar">
+                                                        <b:commandButton value="Approve Reservation"
+                                                                         action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
+                                                                         look="success"
+                                                                         ajax="true"
+                                                                         update=":approveModalForm"
+                                                                         oncomplete="$('.approvalConfirmationModal').modal();"/>
+                                                        <b:commandButton value="Reject Reservation"
                                                                          action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
                                                                          look="default"
                                                                          ajax="true"
                                                                          update=":rejectModalForm"
                                                                          oncomplete="$('.rejectConfirmationModal').modal();"/>
-                                                    </h:panelGroup>
+                                                    </div>
                                                 </h:form>
 
                                             </f:facet>
@@ -229,4 +229,4 @@
     </ui:define>
 </ui:composition>
 
-        </html>
+</html>

@@ -46,8 +46,7 @@
                 <b:commandButton value="Approve Reservation" look="success"
                                  action="#{reservationManagementController.approveReservation(reservationManagementController.reservationDetails)}"
                                  ajax="true" update=":pendingReservations"
-                                 oncomplete="$('.approvalConfirmationModal').modal('hide')"
-                                 disabled="#{reservationManagementController.reservationDetails.currentDecision != null}"/>
+                                 oncomplete="$('.approvalConfirmationModal').modal('hide')"/>
 
             </f:facet>
 

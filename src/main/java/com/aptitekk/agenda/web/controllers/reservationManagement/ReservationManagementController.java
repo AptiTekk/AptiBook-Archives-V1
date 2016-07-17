@@ -104,9 +104,6 @@ public class ReservationManagementController implements Serializable {
 
     public void approveReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
-            if (reservationDetails.getCurrentDecision() != null)
-                return;
-
             try {
                 ReservationDecision decision = new ReservationDecision();
                 decision.setApproved(true);
@@ -131,9 +128,6 @@ public class ReservationManagementController implements Serializable {
 
     public void rejectReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
-            if (reservationDetails.getCurrentDecision() != null)
-                return;
-
             try {
                 ReservationDecision decision = new ReservationDecision();
                 decision.setApproved(false);
