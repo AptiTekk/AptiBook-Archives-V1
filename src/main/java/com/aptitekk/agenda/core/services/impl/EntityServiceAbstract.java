@@ -25,9 +25,6 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T>, Seri
         this.entityType = entityType;
     }
 
-    protected EntityServiceAbstract() {
-    }
-
     @Override
     public void insert(T o) throws Exception {
         this.entityManager.persist(o);

@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.viewHandlers;
 
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.entities.Tenant;
 
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ViewHandlerWrapper;
@@ -26,10 +26,11 @@ public class TenantViewHandler extends ViewHandlerWrapper {
         String contextPath = context.getExternalContext().getApplicationContextPath();
         String url = actionUrl.substring(context.getExternalContext().getApplicationContextPath().length() + 1);
 
-        Integer tenant = (Integer) context.getExternalContext().getRequestMap().get("tenant");
+        Object attribute = context.getExternalContext().getRequestMap().get("tenant");
+        Tenant tenant = attribute != null && attribute instanceof Tenant ? (Tenant) attribute : null;
 
         if (tenant != null) {
-            actionUrl = contextPath + "/" + tenant + "/" + url;
+            actionUrl = contextPath + "/" + tenant.getSubscriptionId() + "/" + url;
         }
 
         return actionUrl;

@@ -18,6 +18,10 @@ import java.io.Serializable;
 @Stateless
 public class TenantServiceImpl extends EntityServiceAbstract<Tenant> implements TenantService, Serializable {
 
+    TenantServiceImpl() {
+        super(Tenant.class);
+    }
+
     @Override
     public Tenant getTenantBySubscriptionId(int subscriptionId) {
         try {

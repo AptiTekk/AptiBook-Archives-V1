@@ -15,4 +15,9 @@ import java.io.Serializable;
 
 @Stateless
 public class ReservationDecisionServiceImpl extends EntityServiceAbstract<ReservationDecision> implements ReservationDecisionService, Serializable {
+
+    ReservationDecisionServiceImpl() {
+        super(ReservationDecision.class);
+    }
+
 }

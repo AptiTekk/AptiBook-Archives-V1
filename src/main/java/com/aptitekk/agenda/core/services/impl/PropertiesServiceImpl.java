@@ -20,6 +20,10 @@ public class PropertiesServiceImpl extends EntityServiceAbstract<Property> imple
 
     private QProperty table = QProperty.property;
 
+    PropertiesServiceImpl() {
+        super(Property.class);
+    }
+
     @Override
     public Property getPropertyByKey(PropertyKey key) {
         return new JPAQuery<Property>(entityManager).from(table).where(table.propertyKey.eq(key))

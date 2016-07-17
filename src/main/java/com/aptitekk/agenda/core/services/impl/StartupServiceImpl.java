@@ -9,6 +9,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
+import com.aptitekk.agenda.core.tenants.TenantManagementService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 
@@ -41,6 +42,9 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Inject
     private TenantService tenantService;
+
+    @Inject
+    private TenantManagementService tenantManagementService;
 
     @PostConstruct
     public void init() {
@@ -155,5 +159,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
                 }
             }
         }
+
+        tenantManagementService.refreshTenants();
     }
 }

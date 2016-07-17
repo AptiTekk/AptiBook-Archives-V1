@@ -21,6 +21,10 @@ public class PermissionServiceImpl extends EntityServiceAbstract<Permission> imp
 
     private QPermission table = QPermission.permission;
 
+    PermissionServiceImpl() {
+        super(Permission.class);
+    }
+
     @Override
     public Permission getPermissionByDescriptor(Permission.Descriptor descriptor) {
         if (descriptor == null)
