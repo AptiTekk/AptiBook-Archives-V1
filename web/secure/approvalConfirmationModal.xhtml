@@ -47,7 +47,7 @@
                                  action="#{reservationManagementController.approveReservation(reservationManagementController.reservationDetails)}"
                                  ajax="true" update=":pendingReservations"
                                  oncomplete="$('.approvalConfirmationModal').modal('hide')"
-                                 disabled="#{reservationDetails.currentDecision != null}"/>
+                                 disabled="#{reservationManagementController.reservationDetails.currentDecision != null}"/>
 
             </f:facet>
 
