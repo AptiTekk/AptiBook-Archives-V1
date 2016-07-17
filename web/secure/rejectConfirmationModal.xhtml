@@ -15,24 +15,38 @@
 <ui:composition>
     <h:form id="rejectModalForm">
         <b:modal  title="Confirm Action" styleClass="rejectConfirmationModal"
-                  closable="false" close-on-escape="false" backdrop="false">
-            <h4><label>Are you sure?</label></h4>
-            <ui:fragment rendered="#{reservationManagementController.rejectCheck()}">
-                <h4><label>If you approve this reservation, you will be overriding a previous rejection</label></h4>
-                <h:outputText value="Was rejected by: #{reservationManagementController.rejectedBy}" rendered="#{reservationManagementController.rejectedBy != null}"/>
-                <h:outputText value="Was approved by: #{reservationManagementController.approvedBy}" rendered="#{reservationManagementController.approvedBy != null}"/>
+                  close-on-escape="false" backdrop="false">
+            <h2><label>Are you sure?</label></h2>
+            <ui:fragment rendered="#{not empty reservationManagementController.reservationDetails.lowerRejectionOverrides}">
+                <h4>
+                    <label>
+                        <h:outputText value="If you reject this reservation, you will be overriding a previous decision"/>
+                    </label>
+                </h4>
+                <label>
+                    Overriding:
+                </label>
+                <br/>
+                <ui:repeat value="#{reservationManagementController.reservationDetails.lowerRejectionOverrides}" var="userGroup">
+                    <h:outputText value=" #{userGroup.name}: "/>
+                    <b:label
+                            text="#{reservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                          ? (reservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'approved' : 'rejected') :'not yet decided'}"
+                            severity="#{reservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                          ? (reservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'success' : 'danger') : 'default'}"/>
+                    <br/>
+                </ui:repeat>
             </ui:fragment>
+                <f:facet name="footer">
+                    <b:button value="Cancel" dismiss="modal" onclick="return false;"/>
 
-            <f:facet name="footer">
-                <b:button value="close" dismiss="modal" onclick="return false;"/>
+                    <b:commandButton value="Reject Reservation" look="success"
+                                     action="#{reservationManagementController.rejectReservation(reservationManagementController.reservationDetails)}"
+                                     ajax="true" update=":pendingReservations"
+                                     oncomplete="$('.rejectConfirmationModal').modal('hide')"
+                                     disabled="#{reservationDetails.currentDecision != null}"/>
 
-                <b:commandButton value="Reject Reservation" look="default"
-                                 action="#{reservationManagementController.rejectReservation(reservationManagementController.reservationDetails)}"
-                                 ajax="true" update=":pendingReservations"
-                                 oncomplete="$('.rejectConfirmationModal').modal('hide')"
-                                 disabled="#{reservationDetails.currentDecision != null}"/>
-
-            </f:facet>
+                </f:facet>
         </b:modal>
     </h:form>
 </ui:composition>

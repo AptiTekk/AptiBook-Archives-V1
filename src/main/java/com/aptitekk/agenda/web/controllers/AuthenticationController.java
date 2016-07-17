@@ -12,7 +12,7 @@ import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.web.filters.AuthenticationFilter;
+import com.aptitekk.agenda.web.filters.TenantFilter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -74,9 +74,9 @@ public class AuthenticationController implements Serializable {
             FacesSessionHelper.setSessionVariable(UserService.SESSION_VAR_USERNAME,
                     authenticatedUser.getUsername());
             String originalUrl
-                    = FacesSessionHelper.getSessionVariableAsString(AuthenticationFilter.SESSION_ORIGINAL_URL);
+                    = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
             if (originalUrl != null) {
-                FacesSessionHelper.removeSessionVariable(AuthenticationFilter.SESSION_ORIGINAL_URL);
+                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
                     return null;

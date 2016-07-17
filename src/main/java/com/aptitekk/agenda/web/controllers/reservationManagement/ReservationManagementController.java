@@ -45,22 +45,8 @@ public class ReservationManagementController implements Serializable {
         buildReservationList();
     }
 
-
-    public boolean isOverwriteApprove() {
-        return overwriteApprove;
-    }
-
-    private boolean overwriteApprove = false;
-
-    public boolean isOverwriteReject() {
-        return overwriteReject;
-    }
-
-    private boolean overwriteReject = false;
-    private String rejectedBy = null;
-    private String approvedBy = null;
-    private String rejectMessage = null;
     private ReservationDetails reservationDetails;
+
     private void buildReservationList() {
         reservationDetailsMap = new LinkedHashMap<>();
 
@@ -176,94 +162,6 @@ public class ReservationManagementController implements Serializable {
 
     public List<ReservationDetails> getReservationDetailsForAssetType(AssetType assetType) {
         return reservationDetailsMap.get(assetType);
-    }
-
-    public boolean approvedCheck() {
-        if(this.reservationDetails != null) {
-            for (int i = 0; i < this.reservationDetails.getReservation().getDecisions().size(); i++) {
-                if (this.reservationDetails.getReservation().getDecisions().get(i).isApproved()) {
-                   // System.out.println("Reservation is Approved");
-                    //reservation is approved by someone
-                    if (approvedBy != null) {
-                        if (!approvedBy.contains(reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString())) {
-                            approvedBy += reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString() + ",";
-                        }
-                    } else {
-                        approvedBy = reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString();
-                    }
-                }
-            } //get latest decision
-            if(this.reservationDetails.getReservation().getDecisions().get(this.reservationDetails.getReservation().getDecisions().size()).isApproved()){
-                //if latest decision is approved, set to true
-                overwriteApprove = true;
-            }
-        }else{
-            System.out.println("res details are null");
-        }
-        return overwriteApprove;
-    }
-
-    public boolean rejectCheck() {
-       /* if(this.reservationDetails != null) {
-            for (int i = 0; i < this.reservationDetails.getReservation().getDecisions().size(); i++) {
-                if (!this.reservationDetails.getReservation().getDecisions().get(i).isApproved()) {
-                   // System.out.println("Reservation is Rejected");
-                    //reservation is rejected by someone
-                    if (rejectedBy != null) {
-                        if (!rejectedBy.contains(reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString())) {
-                            rejectedBy += reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString() + ",";
-                        }
-                    } else {
-                        rejectedBy = reservationDetails.getReservation().getDecisions().get(i).getUserGroup().toString();
-                    }
-            }
-        }    //get latest decision
-            if(this.reservationDetails.getReservation().getDecisions().get(this.reservationDetails.getReservation().getDecisions().size()).isApproved()){
-                //if latest decision is approved, set to true
-                overwriteReject = true;
-            }
-        }
-        else{
-            System.out.println("res details are null in reject");
-        }*/
-
-
-
-
-        return overwriteReject;
-    }
-
-    public void setOverwriteReject(boolean overwriteReject) {
-        this.overwriteReject = overwriteReject;
-    }
-
-    public void setOverwriteApprove(boolean overwriteApprove) {
-        this.overwriteApprove = overwriteApprove;
-    }
-
-
-    public String getRejectedBy() {
-        return rejectedBy;
-    }
-
-    public void setRejectedBy(String rejectedBy) {
-        this.rejectedBy = rejectedBy;
-    }
-
-    public String getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(String approvedBy) {
-        this.approvedBy = approvedBy;
-    }
-
-    public String getRejectMessage() {
-        return rejectMessage;
-    }
-
-    public void setRejectMessage(String rejectMessage) {
-        this.rejectMessage = rejectMessage;
     }
 
     public ReservationDetails getReservationDetails() {

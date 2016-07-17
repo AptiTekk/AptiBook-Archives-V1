@@ -99,6 +99,4 @@ public class ReservationDecision implements Serializable {
         return EqualsHelper.calculateHashCode(getUser(), getUserGroup(), getReservation(), isApproved(), getComment());
     }
 
-
-
 }
