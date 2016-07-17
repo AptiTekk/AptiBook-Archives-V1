@@ -141,4 +141,8 @@ public class ReservationDetails {
     public List<ReservationDecision> getLowerRejectionOverrides() {
         return lowerRejectionOverrides;
     }
+
+     public String toStringApproval(){
+        return  lowerApprovalOverrides.toString();
+    }
 }

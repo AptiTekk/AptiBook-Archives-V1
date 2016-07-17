@@ -16,12 +16,19 @@
 <h:form id="approveModalForm">
 <b:modal  title="Confirm Action" styleClass="approvalConfirmationModal"
          closable="false" close-on-escape="false" backdrop="false">
-    <h4><label>Are you sure?</label></h4>
-    <ui:fragment rendered="#{reservationManagementController.approvedCheck()}">
-        <h4><label>If you reject this reservation, you will be overriding a previous approval</label></h4>
-        <h:outputText value="Was rejected by: #{reservationManagementController.rejectedBy}" rendered="#{reservationManagementController.rejectedBy != null}"/>
-        <h:outputText value="Was approved by: #{reservationManagementController.approvedBy}" rendered="#{reservationManagementController.approvedBy != null}"/>
-    </ui:fragment>
+    <h2><label>Are you sure?</label></h2>
+    <h4>
+        <label>
+            <h:outputText value="If you approve this reservation, you will be overriding a previous rejection" rendered="#{reservationManagementController.reservationDetails.lowerApprovalOverrides != null}"/>
+        </label>
+    </h4>
+    <label>
+        Was rejected by:
+    </label>
+    <ui:repeat value="#{reservationManagementController.reservationDetails.lowerApprovalOverrides.toStringApproval}" var="decision">
+         <h:outputText value="#{decision}"/>
+       </ui:repeat>
+
     <f:facet name="footer">
         <b:button value="close" dismiss="modal" onclick="return false;"/>
 

@@ -204,7 +204,7 @@ public class ReservationManagementController implements Serializable {
     }
 
     public boolean rejectCheck() {
-        if(this.reservationDetails != null) {
+       /* if(this.reservationDetails != null) {
             for (int i = 0; i < this.reservationDetails.getReservation().getDecisions().size(); i++) {
                 if (!this.reservationDetails.getReservation().getDecisions().get(i).isApproved()) {
                    // System.out.println("Reservation is Rejected");
@@ -225,7 +225,11 @@ public class ReservationManagementController implements Serializable {
         }
         else{
             System.out.println("res details are null in reject");
-        }
+        }*/
+
+
+
+
         return overwriteReject;
     }
 
