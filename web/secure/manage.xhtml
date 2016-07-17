@@ -203,14 +203,14 @@
                                                                      action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
                                                                      look="success"
                                                                      ajax="true"
-                                                                     update=":manageModalForm"
-                                                                     oncomplete="$('.manageModal').modal();"/>
+                                                                     update=":approveModalForm"
+                                                                     oncomplete="$('.approvalConfirmationModal').modal();"/>
                                                         <b:commandButton value="Reject reservation"
                                                                          action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
                                                                          look="default"
                                                                          ajax="true"
-                                                                         update=":manageModalForm"
-                                                                         oncomplete="$('.manageModal').modal();"/>
+                                                                         update=":rejectModalForm"
+                                                                         oncomplete="$('.rejectConfirmationModal').modal();"/>
                                                     </h:panelGroup>
                                                 </h:form>
 
@@ -224,7 +224,8 @@
                 </h:panelGroup>
             </b:container>
         </h:panelGroup>
-        <ui:include src="manageModal.xhtml"/>
+        <ui:include src="approvalConfirmationModal.xhtml"/>
+        <ui:include src="rejectConfirmationModal.xhtml"/>
     </ui:define>
 </ui:composition>
 

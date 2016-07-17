@@ -141,4 +141,5 @@ public class ReservationDetails {
     public List<UserGroup> getLowerRejectionOverrides() {
         return lowerRejectionOverrides;
     }
+
 }
