@@ -22,18 +22,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Local
-public interface NotificationService extends EntityService<Notification> {
+public interface NotificationService extends MultiTenantEntityService<Notification> {
 
     String NOTIFICATION_DATEFORMAT = "MM-dd-yyyy hh:mm a";
 
-    void buildNotification(String Subject, String Body, List<UserGroup> userGroup);
+    void buildNotification(String subject, String body, List<UserGroup> userGroupList);
 
-    void sendEmailNotification(Notification n)
+    void sendEmailNotification(Notification notification)
             throws MessagingException, NoSuchMethodException, SecurityException,
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException;
 
-    void markAsRead(Notification n) throws Exception;
+    void markAsRead(Notification notification) throws Exception;
 
     List<Notification> getUnread(User user);
 

@@ -6,13 +6,14 @@
 
 package com.aptitekk.agenda.core.services;
 
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.UserGroup;
 
 import javax.ejb.Local;
 import java.util.List;
 
 @Local
-public interface UserGroupService extends EntityService<UserGroup> {
+public interface UserGroupService extends MultiTenantEntityService<UserGroup> {
 
     String ROOT_GROUP_NAME = "root";
 
@@ -22,19 +23,31 @@ public interface UserGroupService extends EntityService<UserGroup> {
     void loadTree();
 
     /**
-     * Finds Group Entity by its name
+     * Finds Group Entity by its name, within the current Tenant.
      *
-     * @param groupName The name of the group to search for.
-     * @return Group where table.name = groupName
+     * @param userGroupName The name of the group to search for.
+     * @return A User Group with the specified name, or null if one does not exist.
      */
-    UserGroup findByName(String groupName);
+    UserGroup findByName(String userGroupName);
 
     /**
-     * @return The top level, AKA root group.
+     * Finds Group Entity by its name, within the specified Tenant.
+     *
+     * @param userGroupName The name of the group to search for.
+     * @param tenant    The Tenant of the User Group to search for.
+     * @return A User Group with the specified name, or null if one does not exist.
+     */
+    UserGroup findByName(String userGroupName, Tenant tenant);
+
+    /**
+     * @return The Root UserGroup of the current Tenant.
      */
     UserGroup getRootGroup();
 
-    UserGroup[] getSenior(List<UserGroup> groups);
+    /**
+     * @return The Root UserGroup of the specified Tenant.
+     */
+    UserGroup getRootGroup(Tenant tenant);
 
     List<UserGroup> getHierarchyUp(UserGroup origin);
 }

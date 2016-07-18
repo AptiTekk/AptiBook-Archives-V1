@@ -10,27 +10,22 @@ import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.TenantService;
 import com.aptitekk.agenda.core.tenants.TenantManagementService;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+@Startup
 @Singleton
 public class TenantManagementServiceImpl implements TenantManagementService {
-
-    private Map<Tenant, EntityManager> tenantEntityManagerMap = new HashMap<>();
-    private String allowedTenantUrlPattern;
 
     @Inject
     private TenantService tenantService;
 
+    private String allowedTenantUrlPattern;
+
     private void buildTenantUrlPattern() {
-        List<Tenant> tenants = tenantService.getAll();
         StringBuilder urlPatternBuilder = new StringBuilder();
-        for (Tenant tenant : tenants) {
+        for (Tenant tenant : tenantService.getAll()) {
             urlPatternBuilder.append(tenant.getSubscriptionId()).append("|");
         }
 

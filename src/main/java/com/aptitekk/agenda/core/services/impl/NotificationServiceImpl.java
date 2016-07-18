@@ -12,18 +12,17 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Notification;
-import com.aptitekk.agenda.core.entities.QNotification;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.MailingService;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.utilities.NotificationFactory;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.mail.MessagingException;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -32,19 +31,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Stateless
-public class NotificationServiceImpl extends EntityServiceAbstract<Notification> implements NotificationService, Serializable {
-
-    QNotification table = QNotification.notification;
+@Stateful
+public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<Notification> implements NotificationService, Serializable {
 
     @Inject
     MailingService mailingService;
 
     List<NotificationListener> notificationListeners = new ArrayList<>();
-
-    public NotificationServiceImpl() {
-        super(Notification.class);
-    }
 
     @Override
     public void insert(Notification n) throws Exception {
@@ -53,23 +46,33 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
     }
 
     @Override
-    public void sendEmailNotification(Notification n)
+    public void sendEmailNotification(Notification notification)
             throws MessagingException, NoSuchMethodException, SecurityException,
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException {
-        mailingService.send(NotificationFactory.convert(n));
+        if (notification == null)
+            return;
+
+        mailingService.send(NotificationFactory.convert(notification));
     }
 
     @Override
-    public void markAsRead(Notification n) throws Exception {
-        n.setRead(Boolean.TRUE);
-        merge(n);
+    public void markAsRead(Notification notification) throws Exception {
+        if (notification == null)
+            return;
+
+        notification.setRead(Boolean.TRUE);
+        merge(notification);
     }
+
     @Override
-    public void buildNotification(String Subject, String Body, List<UserGroup> userGroupList){
-        for(UserGroup userGroup: userGroupList){
-            for(User user: userGroup.getUsers()){
-                Notification notification = new Notification(user, Subject, Body);
+    public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
+        if (subject == null || body == null || userGroupList == null)
+            return;
+
+        for (UserGroup userGroup : userGroupList) {
+            for (User user : userGroup.getUsers()) {
+                Notification notification = new Notification(user, subject, body);
                 try {
                     insert(notification);
                 } catch (Exception e) {
@@ -79,39 +82,54 @@ public class NotificationServiceImpl extends EntityServiceAbstract<Notification>
         }
     }
 
-
-
     @Override
     public List<Notification> getUnread(User user) {
-        List<Notification> result = new JPAQuery<Notification>(entityManager).from(table)
-                .where(table.user.eq(user))
-                .where(table.notif_read.eq(false)).fetch();
+        if (user == null)
+            return null;
 
-        Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
-        comparator = comparator.reversed();
+        try {
+            List<Notification> result = entityManager
+                    .createQuery("SELECT n FROM Notification n WHERE n.user = :user AND n.notif_read = false", Notification.class)
+                    .setParameter("user", user)
+                    .getResultList();
 
-        // Sort the stream:
-        Stream<Notification> notificationStream = result.stream().sorted(comparator);
+            Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
+            comparator = comparator.reversed();
 
-        return notificationStream.collect(Collectors.toList());
+            // Sort the stream:
+            Stream<Notification> notificationStream = result.stream().sorted(comparator);
+
+            return notificationStream.collect(Collectors.toList());
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
 
     @Override
     public List<Notification> getAllByUser(User user) {
-        List<Notification> result = new JPAQuery<Notification>(entityManager).from(table).where(table.user.eq(user))
-                .fetch();
+        if (user == null)
+            return null;
 
-        result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
-            notification.setRead(false);
-        });
+        try {
+            List<Notification> result = entityManager
+                    .createQuery("SELECT n FROM Notification n WHERE n.user = :user", Notification.class)
+                    .setParameter("user", user)
+                    .getResultList();
 
-        Comparator<Notification> comparator = Comparator.comparing(Notification::getRead);
-        comparator = comparator.reversed();
-        comparator = comparator.thenComparing(Notification::getCreation);
-        comparator = comparator.reversed();
-        Stream<Notification> notificationStream = result.stream().sorted(comparator);
+            result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
+                notification.setRead(false);
+            });
 
-        return notificationStream.collect(Collectors.toList());
+            Comparator<Notification> comparator = Comparator.comparing(Notification::getRead);
+            comparator = comparator.reversed();
+            comparator = comparator.thenComparing(Notification::getCreation);
+            comparator = comparator.reversed();
+            Stream<Notification> notificationStream = result.stream().sorted(comparator);
+
+            return notificationStream.collect(Collectors.toList());
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
 
     @Override

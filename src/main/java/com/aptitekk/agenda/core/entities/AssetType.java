@@ -6,6 +6,7 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
@@ -13,14 +14,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Entity implementation class for Entity: AssetType
- */
 @Entity
-public class AssetType implements Serializable {
+public class AssetType extends MultiTenantEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private int id;
 
     private String name;

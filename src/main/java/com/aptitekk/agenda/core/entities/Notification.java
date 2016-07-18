@@ -11,19 +11,15 @@
  */
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author kevint
- */
 @Entity
-public class Notification implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Notification extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue

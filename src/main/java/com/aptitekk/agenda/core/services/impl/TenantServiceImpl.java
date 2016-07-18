@@ -8,24 +8,21 @@ package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.TenantService;
-import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
 @Stateless
 public class TenantServiceImpl extends EntityServiceAbstract<Tenant> implements TenantService, Serializable {
 
-    TenantServiceImpl() {
-        super(Tenant.class);
-    }
-
     @Override
     public Tenant getTenantBySubscriptionId(int subscriptionId) {
         try {
-            return entityManager.createNamedQuery("Tenant.getBySubscriptionId", entityType).setParameter("subscriptionId", subscriptionId).getSingleResult();
+            return entityManager
+                    .createQuery("SELECT t FROM Tenant t WHERE t.subscriptionId = :subscriptionId", Tenant.class)
+                    .setParameter("subscriptionId", subscriptionId)
+                    .getSingleResult();
         } catch (PersistenceException e) {
             return null;
         }

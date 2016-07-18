@@ -6,6 +6,7 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
@@ -14,15 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * The persistent class for the Group database table.
- */
 @Entity
-public class UserGroup implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class UserGroup extends MultiTenantEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private int id;
 
     private String name;

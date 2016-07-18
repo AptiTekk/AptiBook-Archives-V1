@@ -7,20 +7,30 @@
 package com.aptitekk.agenda.core.services;
 
 import com.aptitekk.agenda.core.entities.Permission;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 
 import javax.ejb.Local;
 
 @Local
-public interface PermissionService extends EntityService<Permission> {
+public interface PermissionService extends MultiTenantEntityService<Permission> {
 
     /**
-     * Gets the Permission entities object that matches the Permission Descriptor.
+     * Gets the Permission Entity that matches the Permission Descriptor, within the current Tenant.
      *
      * @param descriptor The Permission Descriptor.
-     * @return the Permission entities if found, null otherwise.
+     * @return the Permission Entity if found, null otherwise.
      */
     Permission getPermissionByDescriptor(Permission.Descriptor descriptor);
+
+    /**
+     * Gets the Permission Entity that matches the Permission Descriptor, within the specified Tenant.
+     *
+     * @param descriptor The Permission Descriptor.
+     * @param tenant The Tenant of the Permission being searched for.
+     * @return the Permission Entity if found, null otherwise.
+     */
+    Permission getPermissionByDescriptor(Permission.Descriptor descriptor, Tenant tenant);
 
     /**
      * Determines if the User has the permission supplied.

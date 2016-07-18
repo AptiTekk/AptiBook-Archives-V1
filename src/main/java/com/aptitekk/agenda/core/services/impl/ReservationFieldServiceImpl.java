@@ -6,28 +6,14 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.entities.QReservationField;
 import com.aptitekk.agenda.core.entities.ReservationField;
 import com.aptitekk.agenda.core.services.ReservationFieldService;
-import com.querydsl.jpa.impl.JPAQuery;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import java.io.Serializable;
-import java.util.List;
 
-@Stateless
-public class ReservationFieldServiceImpl extends EntityServiceAbstract<ReservationField> implements ReservationFieldService, Serializable {
+@Stateful
+public class ReservationFieldServiceImpl extends MultiTenantEntityServiceAbstract<ReservationField> implements ReservationFieldService, Serializable {
 
-    QReservationField table = QReservationField.reservationField;
-
-    public ReservationFieldServiceImpl() {
-        super(ReservationField.class);
-    }
-
-    @Override
-    public List<ReservationField> getByType(AssetType type) {
-        return new JPAQuery<ReservationField>(entityManager).from(table).where(((type == null) ? table.assetType.isNull() : table.assetType.eq(type)))
-                .fetch();
-    }
 }

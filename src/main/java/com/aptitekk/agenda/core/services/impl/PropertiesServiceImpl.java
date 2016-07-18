@@ -7,27 +7,35 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Property;
-import com.aptitekk.agenda.core.entities.QProperty;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.PropertiesService;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
-@Stateless
-public class PropertiesServiceImpl extends EntityServiceAbstract<Property> implements PropertiesService, Serializable {
+@Stateful
+public class PropertiesServiceImpl extends MultiTenantEntityServiceAbstract<Property> implements PropertiesService, Serializable {
 
-    private QProperty table = QProperty.property;
-
-    PropertiesServiceImpl() {
-        super(Property.class);
+    @Override
+    public Property getPropertyByKey(PropertyKey propertyKey) {
+        return getPropertyByKey(propertyKey, getTenant());
     }
 
     @Override
-    public Property getPropertyByKey(PropertyKey key) {
-        return new JPAQuery<Property>(entityManager).from(table).where(table.propertyKey.eq(key))
-                .fetchOne();
-    }
+    public Property getPropertyByKey(PropertyKey propertyKey, Tenant tenant) {
+        if (propertyKey == null || tenant == null)
+            return null;
 
+        try {
+            return entityManager
+                    .createQuery("SELECT p FROM Property p WHERE p.propertyKey = :propertyKey AND p.tenant = :tenant", Property.class)
+                    .setParameter("propertyKey", propertyKey)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
 }

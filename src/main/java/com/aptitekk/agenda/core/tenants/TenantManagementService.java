@@ -6,7 +6,12 @@
 
 package com.aptitekk.agenda.core.tenants;
 
+import com.aptitekk.agenda.core.entities.Tenant;
+
 import javax.ejb.Local;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @Local
 public interface TenantManagementService {

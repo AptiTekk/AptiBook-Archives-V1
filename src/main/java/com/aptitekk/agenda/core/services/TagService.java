@@ -12,7 +12,7 @@ import com.aptitekk.agenda.core.entities.Tag;
 import javax.ejb.Local;
 
 @Local
-public interface TagService extends EntityService<Tag> {
+public interface TagService extends MultiTenantEntityService<Tag> {
 
     Tag findByName(AssetType assetType, String tag);
 }

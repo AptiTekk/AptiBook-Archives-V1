@@ -6,9 +6,14 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.services.EntityService;
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
+import com.aptitekk.agenda.core.entities.Tenant;
+import com.aptitekk.agenda.core.services.MultiTenantEntityService;
+import com.aptitekk.agenda.core.tenants.TenantSessionService;
 
-import javax.ejb.Stateless;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -16,22 +21,44 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Stateless
-public abstract class EntityServiceAbstract<T> implements EntityService<T>, Serializable {
+public abstract class MultiTenantEntityServiceAbstract<T extends MultiTenantEntity> implements MultiTenantEntityService<T>, Serializable {
 
     @PersistenceContext
     EntityManager entityManager;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     private Class<T> entityType;
 
-    public EntityServiceAbstract() {
+    private Tenant tenant;
+
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    MultiTenantEntityServiceAbstract() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         //noinspection unchecked
         this.entityType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
 
+    @PostConstruct
+    private void init() {
+        tenant = tenantSessionService != null ? tenantSessionService.getCurrentTenant() : null;
+    }
+
     @Override
     public void insert(T o) throws Exception {
+        insert(o, tenant);
+    }
+
+    @Override
+    public void insert(T o, Tenant tenant) throws Exception {
+        if (o == null)
+            throw new Exception("Entity was null.");
+
+        o.setTenant(tenant);
         this.entityManager.persist(o);
     }
 
@@ -42,7 +69,12 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T>, Seri
 
     @Override
     public List<T> getAll() {
-        TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e", entityType);
+        return getAll(tenant);
+    }
+
+    @Override
+    public List<T> getAll(Tenant tenant) {
+        TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e WHERE e.tenant = :tenant", entityType).setParameter("tenant", tenant);
         return query.getResultList();
     }
 
@@ -52,7 +84,7 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T>, Seri
         if (entity != null) {
             entityManager.remove(entity);
         } else {
-            throw new Exception("Entity was not found");
+            throw new Exception("Entity was not found.");
         }
     }
 

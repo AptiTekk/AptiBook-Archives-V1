@@ -6,6 +6,7 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Tag implements Comparable<Tag> {
+public class Tag extends MultiTenantEntity implements Comparable<Tag> {
 
     @Id
     @GeneratedValue

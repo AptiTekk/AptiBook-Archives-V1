@@ -6,37 +6,43 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.QUser;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
-@Stateless
-public class UserServiceImpl extends EntityServiceAbstract<User> implements UserService, Serializable {
-
-    QUser userTable = QUser.user;
-
-    public UserServiceImpl() {
-        super(User.class);
-    }
+@Stateful
+public class UserServiceImpl extends MultiTenantEntityServiceAbstract<User> implements UserService, Serializable {
 
     @Override
     public User findByName(String username) {
-        if (username == null) {
-            return null;
-        }
-
-        return new JPAQuery<User>(entityManager).from(userTable).where(userTable.username.eq(username))
-                .fetchOne();
+        return findByName(username, getTenant());
     }
 
     @Override
-    public User correctCredentials(String username, String password) {
-        if (username == null || password == null) {
+    public User findByName(String username, Tenant tenant) {
+        if (username == null || tenant == null) {
+            return null;
+        }
+
+        try {
+            return entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
+                    .setParameter("username", username)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public User getUserWithCredentials(String username, String password) {
+        if (username == null || password == null || getTenant() == null) {
             return null;
         }
 
@@ -44,9 +50,16 @@ public class UserServiceImpl extends EntityServiceAbstract<User> implements User
         if (hashedPassword == null)
             return null;
 
-        return new JPAQuery<User>(entityManager).from(userTable)
-                .where(userTable.username.equalsIgnoreCase(username).and(userTable.password.eq(hashedPassword)))
-                .fetchOne();
+        try {
+            return entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.tenant = :tenant", User.class)
+                    .setParameter("username", username)
+                    .setParameter("password", hashedPassword)
+                    .setParameter("tenant", getTenant())
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
 
 }

@@ -9,6 +9,7 @@ package com.aptitekk.agenda.core.tenants;
 import com.aptitekk.agenda.core.entities.Tenant;
 
 import javax.ejb.Local;
+import javax.persistence.EntityManagerFactory;
 
 @Local
 public interface TenantSessionService {

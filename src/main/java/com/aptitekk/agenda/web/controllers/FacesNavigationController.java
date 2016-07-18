@@ -25,15 +25,13 @@ public class FacesNavigationController implements Serializable {
     private TenantSessionService tenantSessionService;
 
     public String getUrlFromNavigationCase(String outcome) {
-        Tenant currentTenant = tenantSessionService.getCurrentTenant();
-
         if (outcome == null)
             return "#";
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ConfigurableNavigationHandler navigationHandler = (ConfigurableNavigationHandler) facesContext.getApplication().getNavigationHandler();
         try {
-            return navigationHandler.getNavigationCase(facesContext, null, outcome).getActionURL(facesContext).toString();
+            return navigationHandler.getNavigationCase(facesContext, null, outcome).getActionURL(facesContext).getPath();
         } catch (MalformedURLException e) {
             return "#";
         }

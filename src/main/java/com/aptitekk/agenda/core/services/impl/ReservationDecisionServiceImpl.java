@@ -6,18 +6,13 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.entities.ReservationDecision;
 import com.aptitekk.agenda.core.services.ReservationDecisionService;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import java.io.Serializable;
 
-@Stateless
-public class ReservationDecisionServiceImpl extends EntityServiceAbstract<ReservationDecision> implements ReservationDecisionService, Serializable {
-
-    ReservationDecisionServiceImpl() {
-        super(ReservationDecision.class);
-    }
+@Stateful
+public class ReservationDecisionServiceImpl extends MultiTenantEntityServiceAbstract<ReservationDecision> implements ReservationDecisionService, Serializable {
 
 }

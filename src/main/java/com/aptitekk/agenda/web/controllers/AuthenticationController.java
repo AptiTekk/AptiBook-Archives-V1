@@ -60,7 +60,7 @@ public class AuthenticationController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         LogManager.logDebug("Logging In - User: " + username);
 
-        User authenticatedUser = userService.correctCredentials(username, password);
+        User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
 
         if (authenticatedUser == null) // Invalid Credentials

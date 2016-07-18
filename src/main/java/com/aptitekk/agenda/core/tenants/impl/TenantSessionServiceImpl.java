@@ -8,25 +8,43 @@ package com.aptitekk.agenda.core.tenants.impl;
 
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.TenantService;
+import com.aptitekk.agenda.core.tenants.TenantManagementService;
 import com.aptitekk.agenda.core.tenants.TenantSessionService;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.persistence.EntityManagerFactory;
 import javax.servlet.http.HttpServletRequest;
 
 @Stateful
 public class TenantSessionServiceImpl implements TenantSessionService {
 
     @Inject
-    private HttpServletRequest servletRequest;
+    private TenantManagementService tenantManagementService;
+
+    @Inject
+    private TenantService tenantService;
+
+    private HttpServletRequest httpRequest;
+
+    @Inject
+    public TenantSessionServiceImpl(HttpServletRequest httpRequest) {
+        try {
+            if (httpRequest != null)
+                httpRequest.getAttribute("tenant");
+            this.httpRequest = httpRequest;
+        } catch (Exception ignored) {
+        }
+    }
 
     @Override
     public Tenant getCurrentTenant() {
-        if (servletRequest != null) {
-            Object attribute = servletRequest.getAttribute("tenant");
+        if (httpRequest != null) {
+            Object attribute = httpRequest.getAttribute("tenant");
             if (attribute != null && attribute instanceof Tenant)
                 return (Tenant) attribute;
         }
+
         return null;
     }
 }

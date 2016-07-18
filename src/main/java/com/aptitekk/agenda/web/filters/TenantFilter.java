@@ -54,14 +54,15 @@ public class TenantFilter implements Filter {
             if (pathSplit[1].matches(tenantManagementService.getAllowedTenantUrlPattern())) { //Valid Tenant ID
                 try {
                     int tenantSubscriptionId = Integer.parseInt(pathSplit[1]);
-                    request.setAttribute("tenant", tenantService.getTenantBySubscriptionId(tenantSubscriptionId));
+                    Tenant tenant = tenantService.getTenantBySubscriptionId(tenantSubscriptionId);
+                    request.setAttribute("tenant", tenant);
 
                     String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
                     if (url.contains(";"))
                         url = url.substring(0, url.indexOf(";"));
 
                     if (url.contains("/secure")) {
-                        User user = userService.findByName((String) ((HttpServletRequest) req).getSession(true).getAttribute(UserService.SESSION_VAR_USERNAME));
+                        User user = userService.findByName((String) ((HttpServletRequest) req).getSession(true).getAttribute(UserService.SESSION_VAR_USERNAME), tenant);
                         if (user != null) {
                             request.getRequestDispatcher(url).forward(req, res);
                             return;
