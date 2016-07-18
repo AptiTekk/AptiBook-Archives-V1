@@ -62,8 +62,8 @@ public class TenantFilter implements Filter {
                         url = url.substring(0, url.indexOf(";"));
 
                     if (url.contains("/secure")) {
-                        User user = userService.findByName((String) ((HttpServletRequest) req).getSession(true).getAttribute(UserService.SESSION_VAR_USERNAME), tenant);
-                        if (user != null) {
+                        Object attribute = ((HttpServletRequest) req).getSession(true).getAttribute(tenant.getSubscriptionId() + "_authenticatedUser");
+                        if (attribute != null && attribute instanceof User) {
                             request.getRequestDispatcher(url).forward(req, res);
                             return;
                         }

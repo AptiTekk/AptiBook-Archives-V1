@@ -17,8 +17,6 @@ public interface UserService extends MultiTenantEntityService<User> {
     String ADMIN_USERNAME = "admin";
     String DEFAULT_ADMIN_PASSWORD = "admin";
 
-    String SESSION_VAR_USERNAME = "username";
-
     /**
      * Finds User Entity by its username, within the current Tenant.
      *
