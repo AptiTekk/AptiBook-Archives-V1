@@ -51,6 +51,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-entitymanager:5.0.7.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.18.1-GA" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-ehcache:5.0.7.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.ehcache:ehcache-core:2.4.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
