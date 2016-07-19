@@ -134,6 +134,7 @@ public class AssetTypeEditController implements Serializable {
                     refreshAssetTypes();
                     FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
                 } catch (Exception e) {
+                    LogManager.logError("Error updating Asset Type settings: " + e.getMessage());
                     e.printStackTrace();
                     FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating Asset Type: " + e.getMessage()));
                 }
@@ -168,10 +169,12 @@ public class AssetTypeEditController implements Serializable {
                 LogManager.logInfo("Asset Type name deleted, Asset Type Id and Name: " + selectedAssetType.getId() + "," + selectedAssetType.getName());
                 setSelectedAssetType(null);
             } else {
+                LogManager.logError("User not found");
                 throw new Exception("User not found!");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            LogManager.logError("Error deleting asset type: " + e.getMessage());
             context.addMessage("assetTypeEditForm", new FacesMessage("Failure", "Error While Deleting Asset Type!"));
         }
 
@@ -190,6 +193,7 @@ public class AssetTypeEditController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
             } catch (Exception e) {
                 e.printStackTrace();
+                LogManager.logError(e.getMessage());
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
 

@@ -95,6 +95,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             resetFields();
         } catch (Exception e) {
             e.printStackTrace();
+            LogManager.logError("Error While Adding User" + e.getMessage());
             FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
         }
     }

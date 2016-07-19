@@ -172,6 +172,7 @@ public class AssetSettingsController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
+                    LogManager.logError("Error updating asset settings " + e.getMessage());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
@@ -214,6 +215,7 @@ public class AssetSettingsController implements Serializable {
                 refreshAssets();
             } catch (Exception e) {
                 e.printStackTrace();
+                LogManager.logError("Error persisting asset " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
@@ -232,6 +234,7 @@ public class AssetSettingsController implements Serializable {
             }
         } catch (Exception e) {
             context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
+            LogManager.logError("Error while Deleting Asset " + e.getMessage());
             e.printStackTrace();
         }
 

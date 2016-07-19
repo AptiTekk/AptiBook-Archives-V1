@@ -10,6 +10,7 @@ import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.ReservationDecisionService;
 import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
@@ -121,6 +122,7 @@ public class ReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
+                LogManager.logError("Error approving reservation: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -145,6 +147,7 @@ public class ReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
+                LogManager.logError("Error rejecting reservation: " + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -74,6 +74,7 @@ public class NewGroupController implements Serializable {
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + newGroup.getName() + "' Added"));
         } catch (Exception e) {
             e.printStackTrace();
+            LogManager.logError(e.getMessage());
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
         }
     }
