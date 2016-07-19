@@ -122,7 +122,7 @@ public class ReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
-                LogManager.logError("Error approving reservation: " + e.getMessage());
+                LogManager.logError("Error approving reservation. Reservation title and id: " + reservationDetails.getReservation().getTitle() + reservationDetails.getReservation().getId()  +  "Reservation for: " +  "Exception message: " + e.getMessage());
                 e.printStackTrace();
             }
         }
