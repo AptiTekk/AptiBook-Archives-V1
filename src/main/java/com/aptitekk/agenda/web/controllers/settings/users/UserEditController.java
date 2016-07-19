@@ -135,11 +135,11 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
 
             try {
                 selectedUser = userService.merge(selectedUser);
-                LogManager.logInfo("User updated, user Id and Name: " +  selectedUser.getId() + ", " + selectedUser.getFullname());
+                LogManager.logInfo("User updated, user Id and Name: " + selectedUser.getId() + ", " + selectedUser.getFullname());
                 refreshUserList();
             } catch (Exception e) {
                 e.printStackTrace();
-                LogManager.logError("Error while updating User Settings: " + e.getMessage());
+                LogManager.logError("Error while updating User Settings for " + selectedUser.getUsername() + ": " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
             }
@@ -163,7 +163,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LogManager.logError("Error While Deleting User" + e.getMessage());
+            LogManager.logError("Error While Deleting User " + selectedUser.getUsername() + ": " + e.getMessage());
             context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
         }
 

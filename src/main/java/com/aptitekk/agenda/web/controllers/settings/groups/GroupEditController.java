@@ -18,7 +18,6 @@ import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
-import org.primefaces.component.log.Log;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -88,7 +87,7 @@ public class GroupEditController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    LogManager.logError("Error while updating User Group" + e.getMessage());
+                    LogManager.logError("Error while updating User Group" + selectedUserGroup.getName() + ": " + e.getMessage());
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
                 }
             }
@@ -130,7 +129,7 @@ public class GroupEditController implements Serializable {
                 selectedUserGroup = null;
             } catch (Exception e) {
                 e.printStackTrace();
-                LogManager.logError(e.getMessage());
+                LogManager.logError("Error while deleting User Group " + selectedUserGroup.getName() + ": " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }

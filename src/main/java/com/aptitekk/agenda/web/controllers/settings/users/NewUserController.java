@@ -10,9 +10,9 @@ import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
-import com.aptitekk.agenda.core.utilities.LogManager;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
@@ -95,7 +95,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             resetFields();
         } catch (Exception e) {
             e.printStackTrace();
-            LogManager.logError("Error While Adding User" + e.getMessage());
+            LogManager.logError("Error While Adding User: " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
         }
     }
