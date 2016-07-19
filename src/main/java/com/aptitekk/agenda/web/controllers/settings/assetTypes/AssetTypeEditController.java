@@ -125,7 +125,7 @@ public class AssetTypeEditController implements Serializable {
 
                     //Persist name change
                     assetTypeService.merge(selectedAssetType);
-                    LogManager.logInfo("Asset Type name updated, Asset Type Id and Name: " + selectedAssetType.getId() + "," + selectedAssetType.getName());
+                    LogManager.logInfo("Asset Type updated, Asset Type Id and Name: " + selectedAssetType.getId() + ", " + selectedAssetType.getName());
                     //Update tags
                     tagController.updateAssetTags(selectedAssetType);
 
@@ -166,7 +166,7 @@ public class AssetTypeEditController implements Serializable {
             if (assetTypeService.get(getSelectedAssetType().getId()) != null) {
                 context.addMessage("assetTypeEditForm", new FacesMessage("Successful", "Asset Type Deleted!"));
                 assetTypeService.delete(getSelectedAssetType().getId());
-                LogManager.logInfo("Asset Type name deleted, Asset Type Id and Name: " + selectedAssetType.getId() + "," + selectedAssetType.getName());
+                LogManager.logInfo("Asset Type deleted, Asset Type Id and Name: " + selectedAssetType.getId() + ", " + selectedAssetType.getName());
                 setSelectedAssetType(null);
             } else {
                 LogManager.logError("User not found");
@@ -187,7 +187,7 @@ public class AssetTypeEditController implements Serializable {
                 Asset asset = new Asset("New Asset");
                 asset.setAssetType(selectedAssetType);
                 assetService.insert(asset);
-                LogManager.logInfo("Asset for AssetType persisted, Asset Id and Name: " + asset.getId() + "," + asset.getName());
+                LogManager.logInfo("Asset for AssetType persisted, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
 
                 FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
