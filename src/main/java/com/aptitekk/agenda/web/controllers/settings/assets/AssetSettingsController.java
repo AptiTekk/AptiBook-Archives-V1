@@ -168,6 +168,7 @@ public class AssetSettingsController implements Serializable {
                         selectedAsset.setOwner(assetOwnerGroup);
 
                     setSelectedAsset(assetService.merge(selectedAsset));
+                    LogManager.logInfo("Asset updated, Asset Id and Name: " + selectedAsset.getId() + "," + selectedAsset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -207,7 +208,7 @@ public class AssetSettingsController implements Serializable {
                 Asset asset = new Asset("New Asset");
                 asset.setAssetType(assetType);
                 assetService.insert(asset);
-
+                LogManager.logInfo("Asset created, Asset Id and Name: " + selectedAsset.getId() + "," + selectedAsset.getName());
                 FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
 
                 refreshAssets();
@@ -224,7 +225,7 @@ public class AssetSettingsController implements Serializable {
             if (assetService.get(selectedAsset.getId()) != null) {
                 context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Successful", "Asset Deleted!"));
                 assetService.delete(selectedAsset.getId());
-
+                LogManager.logInfo("Asset deleted, Asset Id and Name: " + selectedAsset.getId() + "," + selectedAsset.getName());
                 refreshAssets();
             } else {
                 throw new Exception("Asset not found!");

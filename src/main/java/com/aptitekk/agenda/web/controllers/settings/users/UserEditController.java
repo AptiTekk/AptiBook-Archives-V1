@@ -10,6 +10,7 @@ import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
@@ -134,6 +135,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
 
             try {
                 selectedUser = userService.merge(selectedUser);
+                LogManager.logInfo("User updated, user Id and Name: " +  selectedUser.getId() + "," + selectedUser.getFullname());
                 refreshUserList();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -153,6 +155,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
             if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
+                LogManager.logInfo("User deleted, user Id and Name: " + getSelectedUser().getId() + "," + getSelectedUser().getFullname());
                 setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");

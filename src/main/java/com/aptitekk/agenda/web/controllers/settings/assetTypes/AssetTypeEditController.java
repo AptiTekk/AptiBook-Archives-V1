@@ -9,6 +9,7 @@ package com.aptitekk.agenda.web.controllers.settings.assetTypes;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
@@ -124,7 +125,7 @@ public class AssetTypeEditController implements Serializable {
 
                     //Persist name change
                     assetTypeService.merge(selectedAssetType);
-
+                    LogManager.logInfo("Asset Type name updated, Asset Type Id and Name: " + selectedAssetType.getId() + "," + selectedAssetType.getName());
                     //Update tags
                     tagController.updateAssetTags(selectedAssetType);
 
@@ -164,6 +165,7 @@ public class AssetTypeEditController implements Serializable {
             if (assetTypeService.get(getSelectedAssetType().getId()) != null) {
                 context.addMessage("assetTypeEditForm", new FacesMessage("Successful", "Asset Type Deleted!"));
                 assetTypeService.delete(getSelectedAssetType().getId());
+                LogManager.logInfo("Asset Type name deleted, Asset Type Id and Name: " + selectedAssetType.getId() + "," + selectedAssetType.getName());
                 setSelectedAssetType(null);
             } else {
                 throw new Exception("User not found!");
@@ -182,7 +184,7 @@ public class AssetTypeEditController implements Serializable {
                 Asset asset = new Asset("New Asset");
                 asset.setAssetType(selectedAssetType);
                 assetService.insert(asset);
-
+                LogManager.logInfo("Asset for AssetType persisted, Asset Id and Name: " + asset.getId() + "," + asset.getName());
                 setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
 
                 FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));

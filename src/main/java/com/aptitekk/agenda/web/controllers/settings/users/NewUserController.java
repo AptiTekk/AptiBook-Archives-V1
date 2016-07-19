@@ -12,6 +12,7 @@ import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
@@ -80,7 +81,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             }
 
             userService.insert(newUser);
-
+            LogManager.logInfo("New user persisted, user Id and Name: " + newUser.getId() + "," + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
                 if (userEditController != null) {

@@ -9,6 +9,7 @@ package com.aptitekk.agenda.web.controllers.settings.groups;
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 
@@ -64,7 +65,7 @@ public class NewGroupController implements Serializable {
                 newGroup.setParent(userGroupService.getRootGroup());
 
             userGroupService.insert(newGroup);
-
+            LogManager.logInfo("User Group added, User Group Id and Name: " + newGroup.getId() + "," + newGroup.getName());
             if (groupEditController != null)
                 groupEditController.setSelectedUserGroup(newGroup);
 
