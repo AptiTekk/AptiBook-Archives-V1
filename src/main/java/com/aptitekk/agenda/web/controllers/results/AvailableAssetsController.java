@@ -86,7 +86,7 @@ public class AvailableAssetsController implements Serializable {
                     reservationService.insert(reservation);
                     LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
                 } catch (Exception e) {
-                    LogManager.logError("Error in Making reservation" + e.getMessage());
+                    LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName()+ user.getFullname() + "Exception message: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
