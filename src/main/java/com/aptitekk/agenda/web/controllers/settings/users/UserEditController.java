@@ -135,7 +135,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
 
             try {
                 selectedUser = userService.merge(selectedUser);
-                LogManager.logInfo("User updated, user Id and Name: " +  selectedUser.getId() + "," + selectedUser.getFullname());
+                LogManager.logInfo("User updated, user Id and Name: " +  selectedUser.getId() + ", " + selectedUser.getFullname());
                 refreshUserList();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -155,7 +155,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
             if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
-                LogManager.logInfo("User deleted, user Id and Name: " + getSelectedUser().getId() + "," + getSelectedUser().getFullname());
+                LogManager.logInfo("User deleted, user Id and Name: " + getSelectedUser().getId() + ", " + getSelectedUser().getFullname());
                 setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");

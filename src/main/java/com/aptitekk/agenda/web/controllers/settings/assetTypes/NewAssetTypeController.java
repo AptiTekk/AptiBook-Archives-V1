@@ -40,7 +40,7 @@ public class NewAssetTypeController implements Serializable {
         AssetType assetType = new AssetType();
         assetType.setName(name);
         assetTypeService.insert(assetType);
-        LogManager.logInfo("New Asset Type persisted , Asset Type Id and Name: " + assetType.getId() + "," + assetType.getName());
+        LogManager.logInfo("New Asset Type persisted , Asset Type Id and Name: " + assetType.getId() + ", " + assetType.getName());
 
         if (tagController != null)
             tagController.updateAssetTags(assetType);

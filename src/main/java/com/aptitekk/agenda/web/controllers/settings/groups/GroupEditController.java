@@ -81,7 +81,7 @@ public class GroupEditController implements Serializable {
             if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
                 try {
                     selectedUserGroup.setName(editableGroupName);
-                    LogManager.logInfo("User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + "," + selectedUserGroup.getName());
+                    LogManager.logInfo("User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                     selectedUserGroup = userGroupService.merge(selectedUserGroup);
                     resetSettings();
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
@@ -122,7 +122,7 @@ public class GroupEditController implements Serializable {
             }
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-                LogManager.logInfo("User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + "," + selectedUserGroup.getName());
+                LogManager.logInfo("User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {

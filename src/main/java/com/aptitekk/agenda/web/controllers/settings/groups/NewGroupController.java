@@ -65,7 +65,7 @@ public class NewGroupController implements Serializable {
                 newGroup.setParent(userGroupService.getRootGroup());
 
             userGroupService.insert(newGroup);
-            LogManager.logInfo("User Group added, User Group Id and Name: " + newGroup.getId() + "," + newGroup.getName());
+            LogManager.logInfo("User Group added, User Group Id and Name: " + newGroup.getId() + ", " + newGroup.getName());
             if (groupEditController != null)
                 groupEditController.setSelectedUserGroup(newGroup);
 
