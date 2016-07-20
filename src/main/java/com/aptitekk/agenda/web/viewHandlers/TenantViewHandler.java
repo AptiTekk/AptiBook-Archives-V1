@@ -30,7 +30,7 @@ public class TenantViewHandler extends ViewHandlerWrapper {
         Tenant tenant = attribute != null && attribute instanceof Tenant ? (Tenant) attribute : null;
 
         if (tenant != null) {
-            actionUrl = contextPath + "/" + tenant.getSubscriptionId() + "/" + url;
+            actionUrl = contextPath + "/" + tenant.getSlug().toLowerCase() + "/" + url;
         }
 
         return actionUrl;
