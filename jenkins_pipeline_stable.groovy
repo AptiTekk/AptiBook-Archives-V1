@@ -1,7 +1,6 @@
 node {
     def qaGearName = "agendaqa"
     def qaUrl = "https://" + qaGearName + "-aptitekk.rhcloud.com"
-
     def mvnHome = tool "Maven"
 
     try {
