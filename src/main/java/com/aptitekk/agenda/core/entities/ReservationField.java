@@ -6,13 +6,14 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class ReservationField implements Serializable {
+public class ReservationField extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue

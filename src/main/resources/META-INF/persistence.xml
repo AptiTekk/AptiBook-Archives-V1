@@ -11,17 +11,6 @@
     <persistence-unit name="Agenda" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
 
-        <class>com.aptitekk.agenda.core.entities.Asset</class>
-        <class>com.aptitekk.agenda.core.entities.AssetType</class>
-        <class>com.aptitekk.agenda.core.entities.Reservation</class>
-        <class>com.aptitekk.agenda.core.entities.ReservationDecision</class>
-        <class>com.aptitekk.agenda.core.entities.ReservationField</class>
-        <class>com.aptitekk.agenda.core.entities.ReservationFieldEntry</class>
-        <class>com.aptitekk.agenda.core.entities.User</class>
-        <class>com.aptitekk.agenda.core.entities.UserGroup</class>
-        <class>com.aptitekk.agenda.core.entities.Tag</class>
-        <class>com.aptitekk.agenda.core.entities.Permission</class>
-
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>

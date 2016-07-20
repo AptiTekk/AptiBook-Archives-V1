@@ -6,6 +6,7 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
@@ -23,14 +24,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * The persistent class for the Room database table.
- */
 @Entity
-@NamedQuery(name = "Asset.findAll", query = "SELECT r FROM Asset r")
-public class Asset implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Asset extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue

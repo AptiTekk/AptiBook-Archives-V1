@@ -8,24 +8,26 @@ package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.services.EntityService;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+@Stateless
 public abstract class EntityServiceAbstract<T> implements EntityService<T>, Serializable {
 
-    @PersistenceContext(unitName = "Agenda")
+    @PersistenceContext
     EntityManager entityManager;
 
-    Class<T> entityType;
+    private Class<T> entityType;
 
-    EntityServiceAbstract(Class<T> entityType) {
-        this.entityType = entityType;
-    }
-
-    protected EntityServiceAbstract() {
+    public EntityServiceAbstract() {
+        ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
+        //noinspection unchecked
+        this.entityType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
     }
 
     @Override
@@ -40,17 +42,8 @@ public abstract class EntityServiceAbstract<T> implements EntityService<T>, Seri
 
     @Override
     public List<T> getAll() {
-        Query query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e");
+        TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e", entityType);
         return query.getResultList();
-    }
-
-    @Override
-    public void update(T newEntity, int id) throws Exception {
-        T old = entityManager.find(entityType, id);
-        if (old != null) {
-            old = newEntity;
-        }
-        merge(old);
     }
 
     @Override

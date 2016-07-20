@@ -10,11 +10,13 @@ import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.ReservationDecisionService;
 import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.SystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,6 +45,8 @@ public class ReservationManagementController implements Serializable {
     public void init() {
         buildReservationList();
     }
+
+    private ReservationDetails reservationDetails;
 
     private void buildReservationList() {
         reservationDetailsMap = new LinkedHashMap<>();
@@ -101,9 +105,6 @@ public class ReservationManagementController implements Serializable {
 
     public void approveReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
-            if (reservationDetails.getCurrentDecision() != null)
-                return;
-
             try {
                 ReservationDecision decision = new ReservationDecision();
                 decision.setApproved(true);
@@ -121,6 +122,7 @@ public class ReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
+                LogManager.logError("Error approving reservation. Reservation title and id: " + reservationDetails.getReservation().getTitle() + reservationDetails.getReservation().getId()  +  "Reservation for: " +  "Exception message: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -128,9 +130,6 @@ public class ReservationManagementController implements Serializable {
 
     public void rejectReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
-            if (reservationDetails.getCurrentDecision() != null)
-                return;
-
             try {
                 ReservationDecision decision = new ReservationDecision();
                 decision.setApproved(false);
@@ -148,6 +147,7 @@ public class ReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
+                LogManager.logError("Error rejecting reservation: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -159,5 +159,13 @@ public class ReservationManagementController implements Serializable {
 
     public List<ReservationDetails> getReservationDetailsForAssetType(AssetType assetType) {
         return reservationDetailsMap.get(assetType);
+    }
+
+    public ReservationDetails getReservationDetails() {
+        return reservationDetails;
+    }
+
+    public void setReservationDetails(ReservationDetails reservationDetails) {
+        this.reservationDetails = reservationDetails;
     }
 }

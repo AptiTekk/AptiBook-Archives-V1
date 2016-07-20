@@ -15,7 +15,7 @@ import javax.ejb.Local;
 import java.util.List;
 
 @Local
-public interface ReservationService extends EntityService<Reservation> {
+public interface ReservationService extends MultiTenantEntityService<Reservation> {
 
     List<Asset> findAvailableAssets(AssetType type, SegmentedTimeRange segmentedTimeRange, float cushionInHours);
 

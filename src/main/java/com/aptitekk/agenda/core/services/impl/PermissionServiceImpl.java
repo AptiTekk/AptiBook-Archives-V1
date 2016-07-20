@@ -7,31 +7,44 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Permission;
-import com.aptitekk.agenda.core.entities.QPermission;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
-@Stateless
-public class PermissionServiceImpl extends EntityServiceAbstract<Permission> implements PermissionService, Serializable {
-
-    private QPermission table = QPermission.permission;
+@Stateful
+public class PermissionServiceImpl extends MultiTenantEntityServiceAbstract<Permission> implements PermissionService, Serializable {
 
     @Override
     public Permission getPermissionByDescriptor(Permission.Descriptor descriptor) {
-        if (descriptor == null)
+        return getPermissionByDescriptor(descriptor, getTenant());
+    }
+
+    @Override
+    public Permission getPermissionByDescriptor(Permission.Descriptor descriptor, Tenant tenant) {
+        if (descriptor == null || tenant == null)
             return null;
 
-        return new JPAQuery<Permission>(entityManager).from(table).where(table.descriptor.eq(descriptor))
-                .fetchOne();
+        try {
+            return entityManager
+                    .createQuery("SELECT p FROM Permission p WHERE p.descriptor = :descriptor AND p.tenant = :tenant", Permission.class)
+                    .setParameter("descriptor", descriptor)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
 
     @Override
     public boolean userHasPermission(User user, Permission.Descriptor descriptor) {
+        if (user == null || descriptor == null)
+            return false;
+
         for (Permission permission : user.getPermissions()) {
             if (permission.getDescriptor() == descriptor)
                 return true;
@@ -49,6 +62,9 @@ public class PermissionServiceImpl extends EntityServiceAbstract<Permission> imp
 
     @Override
     public boolean userHasPermissionOfGroup(User user, Permission.Group group) {
+        if (user == null || group == null)
+            return false;
+
         for (Permission permission : user.getPermissions()) {
             if (permission.getDescriptor().getGroup() == group)
                 return true;

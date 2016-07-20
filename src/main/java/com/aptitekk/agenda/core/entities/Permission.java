@@ -6,13 +6,14 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Permission {
+public class Permission extends MultiTenantEntity {
 
     /**
      * Defines the groups of permissions.

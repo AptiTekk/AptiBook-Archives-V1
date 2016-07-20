@@ -7,27 +7,30 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.entities.QTag;
 import com.aptitekk.agenda.core.entities.Tag;
 import com.aptitekk.agenda.core.services.TagService;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
-@Stateless
-public class TagServiceImpl extends EntityServiceAbstract<Tag> implements TagService, Serializable {
-
-    private QTag tagTable = QTag.tag;
-
-    public TagServiceImpl() {
-        super(Tag.class);
-    }
+@Stateful
+public class TagServiceImpl extends MultiTenantEntityServiceAbstract<Tag> implements TagService, Serializable {
 
     @Override
     public Tag findByName(AssetType assetType, String name) {
-        return new JPAQuery<Tag>(entityManager).from(tagTable).where(tagTable.name.eq(name).and(tagTable.assetType.eq(assetType))).fetchOne();
-    }
+        if (assetType == null || name == null)
+            return null;
 
+        try {
+            return entityManager
+                    .createQuery("SELECT t FROM Tag t WHERE t.assetType = :assetType AND t.name = :name", Tag.class)
+                    .setParameter("assetType", assetType)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
 
 }

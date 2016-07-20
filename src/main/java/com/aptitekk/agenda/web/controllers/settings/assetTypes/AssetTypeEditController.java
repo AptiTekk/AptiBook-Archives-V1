@@ -9,6 +9,7 @@ package com.aptitekk.agenda.web.controllers.settings.assetTypes;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,10 @@ import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 @Named
 @ViewScoped
@@ -124,7 +128,7 @@ public class AssetTypeEditController implements Serializable {
 
                     //Persist name change
                     assetTypeService.merge(selectedAssetType);
-
+                    LogManager.logInfo("Asset Type updated, Asset Type Id and Name: " + selectedAssetType.getId() + ", " + selectedAssetType.getName());
                     //Update tags
                     tagController.updateAssetTags(selectedAssetType);
 
@@ -133,6 +137,7 @@ public class AssetTypeEditController implements Serializable {
                     refreshAssetTypes();
                     FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Updated"));
                 } catch (Exception e) {
+                    LogManager.logError("Error updating Asset Type settings for " + selectedAssetType.getName() + ": " + e.getMessage());
                     e.printStackTrace();
                     FacesContext.getCurrentInstance().addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating Asset Type: " + e.getMessage()));
                 }
@@ -162,37 +167,20 @@ public class AssetTypeEditController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetTypeService.get(getSelectedAssetType().getId()) != null) {
-                context.addMessage("assetTypeEditForm", new FacesMessage("Successful", "Asset Type Deleted!"));
+                context.addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Type Deleted!"));
                 assetTypeService.delete(getSelectedAssetType().getId());
+                LogManager.logInfo("Asset Type deleted, Asset Type Id and Name: " + selectedAssetType.getId() + ", " + selectedAssetType.getName());
                 setSelectedAssetType(null);
             } else {
-                throw new Exception("User not found!");
+                LogManager.logError("Error while deleting Asset Type " + selectedAssetType.getName() + ": Asset Type not found.");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            context.addMessage("assetTypeEditForm", new FacesMessage("Failure", "Error While Deleting Asset Type!"));
+            LogManager.logError("Error while deleting Asset Type " + selectedAssetType.getName() + ": " + e.getMessage());
+            context.addMessage("assetTypeEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting Asset Type!"));
         }
 
         refreshAssetTypes();
-    }
-
-    public void addNewAssetToSelectedType() {
-        if (selectedAssetType != null) {
-            try {
-                Asset asset = new Asset("New Asset");
-                asset.setAssetType(selectedAssetType);
-                assetService.insert(asset);
-
-                setSelectedAssetType(assetTypeService.get(getSelectedAssetType().getId()));
-
-                FacesContext.getCurrentInstance().addMessage("assetSelectForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
-            } catch (Exception e) {
-                e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
-            }
-
-            refreshAssetTypes();
-        }
     }
 
     public List<AssetType> getAssetTypes() {

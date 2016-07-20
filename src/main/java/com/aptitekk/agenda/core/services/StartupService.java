@@ -6,18 +6,25 @@
 
 package com.aptitekk.agenda.core.services;
 
+import com.aptitekk.agenda.core.entities.Tenant;
+
 import javax.ejb.Local;
 
 @Local
 public interface StartupService {
 
-    void checkForRootGroup();
+    void checkForRootGroup(Tenant tenant);
 
-    void checkForAdminUser();
+    void checkForAdminUser(Tenant tenant);
 
-    void checkForAssetTypes();
+    void checkForAssetTypes(Tenant tenant);
 
-    void writeDefaultProperties();
+    void writeDefaultProperties(Tenant tenant);
 
-    void writeDefaultPermissions();
+    void writeDefaultPermissions(Tenant tenant);
+
+    /**
+     * Temporary method to demonstrate the capability of tenants
+     */
+    void loadDefaultTenants();
 }

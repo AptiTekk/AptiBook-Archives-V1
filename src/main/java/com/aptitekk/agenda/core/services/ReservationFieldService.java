@@ -13,8 +13,6 @@ import javax.ejb.Local;
 import java.util.List;
 
 @Local
-public interface ReservationFieldService extends EntityService<ReservationField> {
-
-    List<ReservationField> getByType(AssetType type);
+public interface ReservationFieldService extends MultiTenantEntityService<ReservationField> {
 
 }

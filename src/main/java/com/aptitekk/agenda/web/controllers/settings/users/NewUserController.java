@@ -10,6 +10,7 @@ import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
@@ -80,7 +81,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             }
 
             userService.insert(newUser);
-
+            LogManager.logInfo("New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
                 if (userEditController != null) {
@@ -94,6 +95,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             resetFields();
         } catch (Exception e) {
             e.printStackTrace();
+            LogManager.logError("Error While Adding User: " + e.getMessage());
             FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
         }
     }

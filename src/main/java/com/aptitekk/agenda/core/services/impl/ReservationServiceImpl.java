@@ -8,12 +8,12 @@ package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.entities.QReservation;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-@Stateless
-public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> implements ReservationService, Serializable {
+@Stateful
+public class ReservationServiceImpl extends MultiTenantEntityServiceAbstract<Reservation> implements ReservationService, Serializable {
 
     @Inject
     AssetService assetService;
@@ -35,10 +35,6 @@ public class ReservationServiceImpl extends EntityServiceAbstract<Reservation> i
 
     @Inject
     UserService userService;
-
-    public ReservationServiceImpl() {
-        super(Reservation.class);
-    }
 
     /**
      * Finds and returns a list of assets that are available for reservation at the given times from the given asset type.

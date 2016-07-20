@@ -6,27 +6,24 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.NamedQuery;
 import java.io.Serializable;
 
-/**
- * Entity implementation class for Entity: Property
- */
 @Entity
-@NamedQuery(name = "AppProperty.findAll", query = "SELECT e FROM Property e")
-public class Property implements Serializable {
+public class Property extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue
     private int id;
 
     private PropertyKey propertyKey;
+
     private String propertyValue;
 
     private static final long serialVersionUID = 1L;

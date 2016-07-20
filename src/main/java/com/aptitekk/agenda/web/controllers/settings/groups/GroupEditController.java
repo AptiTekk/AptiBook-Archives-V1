@@ -16,6 +16,7 @@ import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 
@@ -80,13 +81,13 @@ public class GroupEditController implements Serializable {
             if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
                 try {
                     selectedUserGroup.setName(editableGroupName);
-
+                    LogManager.logInfo("User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                     selectedUserGroup = userGroupService.merge(selectedUserGroup);
                     resetSettings();
-
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
+                    LogManager.logError("Error while updating User Group" + selectedUserGroup.getName() + ": " + e.getMessage());
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
                 }
             }
@@ -117,16 +118,18 @@ public class GroupEditController implements Serializable {
                     userGroupService.merge(child);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    LogManager.logError(e.getMessage());
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-
+                LogManager.logInfo("User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
                 e.printStackTrace();
+                LogManager.logError("Error while deleting User Group " + selectedUserGroup.getName() + ": " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
@@ -139,6 +142,7 @@ public class GroupEditController implements Serializable {
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
             userService.merge(user);
+            LogManager.logInfo("Update user, removed from User group. User id and name: " + ", " + user.getId() + user.getFullname());
             selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
             resetSettings();
 

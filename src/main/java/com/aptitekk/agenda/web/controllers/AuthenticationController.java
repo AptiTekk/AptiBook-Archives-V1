@@ -10,13 +10,13 @@ import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.tenants.TenantSessionService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.web.AuthenticationFilter;
+import com.aptitekk.agenda.web.filters.TenantFilter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -34,6 +34,9 @@ public class AuthenticationController implements Serializable {
     @Inject
     private PermissionService permissionService;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     private String username;
     private String password;
 
@@ -41,13 +44,9 @@ public class AuthenticationController implements Serializable {
 
     @PostConstruct
     public void init() {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        this.username = externalContext.getRequestHeaderMap().get("REMOTE_USER");
-
-        String loggedInUser
-                = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
-        if (loggedInUser != null) {
-            this.setAuthenticatedUser(userService.findByName(loggedInUser));
+        Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
+        if (attribute != null && attribute instanceof User) {
+            this.authenticatedUser = (User) attribute;
         }
     }
 
@@ -60,7 +59,7 @@ public class AuthenticationController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         LogManager.logDebug("Logging In - User: " + username);
 
-        User authenticatedUser = userService.correctCredentials(username, password);
+        User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
 
         if (authenticatedUser == null) // Invalid Credentials
@@ -71,12 +70,11 @@ public class AuthenticationController implements Serializable {
         } else {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
-            FacesSessionHelper.setSessionVariable(UserService.SESSION_VAR_USERNAME,
-                    authenticatedUser.getUsername());
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser", authenticatedUser);
             String originalUrl
-                    = FacesSessionHelper.getSessionVariableAsString(AuthenticationFilter.SESSION_ORIGINAL_URL);
+                    = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
             if (originalUrl != null) {
-                FacesSessionHelper.removeSessionVariable(AuthenticationFilter.SESSION_ORIGINAL_URL);
+                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
                 try {
                     FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
                     return null;
@@ -85,19 +83,19 @@ public class AuthenticationController implements Serializable {
                 }
             }
         }
-        return "index";
+        return "secure";
     }
 
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
-        FacesSessionHelper.removeSessionVariable(UserService.SESSION_VAR_USERNAME);
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
         return "index";
     }
 
     public String redirectIfLoggedIn() throws IOException {
         if (authenticatedUser != null)
-            return "index";
+            return "secure";
         return null;
     }
 

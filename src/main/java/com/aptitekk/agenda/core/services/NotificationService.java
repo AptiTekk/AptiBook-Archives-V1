@@ -13,6 +13,7 @@ package com.aptitekk.agenda.core.services;
 
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 
 import javax.ejb.Local;
@@ -21,16 +22,18 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Local
-public interface NotificationService extends EntityService<Notification> {
+public interface NotificationService extends MultiTenantEntityService<Notification> {
 
     String NOTIFICATION_DATEFORMAT = "MM-dd-yyyy hh:mm a";
 
-    void sendEmailNotification(Notification n)
+    void buildNotification(String subject, String body, List<UserGroup> userGroupList);
+
+    void sendEmailNotification(Notification notification)
             throws MessagingException, NoSuchMethodException, SecurityException,
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException;
 
-    void markAsRead(Notification n) throws Exception;
+    void markAsRead(Notification notification) throws Exception;
 
     List<Notification> getUnread(User user);
 

@@ -7,28 +7,34 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.entities.QAssetType;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.AssetTypeService;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
-@Stateless
-public class AssetTypeServiceImpl extends EntityServiceAbstract<AssetType> implements AssetTypeService, Serializable {
+@Stateful
+public class AssetTypeServiceImpl extends MultiTenantEntityServiceAbstract<AssetType> implements AssetTypeService, Serializable {
 
-    QAssetType table = QAssetType.assetType;
-
-    public AssetTypeServiceImpl() {
-        super(AssetType.class);
+    @Override
+    public AssetType findByName(String assetTypeName) {
+        return findByName(assetTypeName, getTenant());
     }
 
     @Override
-    public AssetType findByName(String name) {
-        if (name == null)
+    public AssetType findByName(String assetTypeName, Tenant tenant) {
+        if (assetTypeName == null || tenant == null)
             return null;
 
-        return new JPAQuery<AssetType>(entityManager).from(table).where(table.name.equalsIgnoreCase(name)).fetchOne();
+        try {
+        return entityManager
+                .createQuery("SELECT a FROM AssetType a WHERE a.name = :assetTypeName AND a.tenant = :tenant", AssetType.class)
+                .setParameter("assetTypeName", assetTypeName)
+                .setParameter("tenant", tenant)
+                .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
-
 }

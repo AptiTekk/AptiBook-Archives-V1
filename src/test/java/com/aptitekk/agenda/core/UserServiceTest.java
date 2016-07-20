@@ -34,7 +34,7 @@ public class UserServiceTest {
 
     @Test
     public void correctCredentialsReturnsNullIfNullInput() throws Exception {
-        assertNull(userService.correctCredentials(null, null));
+        assertNull(userService.getUserWithCredentials(null, null));
     }
 
     @Test
@@ -49,10 +49,10 @@ public class UserServiceTest {
 
         userService.insert(user);
 
-        User check = userService.correctCredentials(username, rawPassword);
+        User check = userService.getUserWithCredentials(username, rawPassword);
 
-        assertNotNull("The credentials should have been correct, but correctCredentials returned null!", check);
+        assertNotNull("The credentials should have been correct, but getUserWithCredentials returned null!", check);
 
-        assertTrue("The user returned by correctCredentials does not match the original! Original: "+user.getId()+" - Returned: "+check.getId(), user.equals(check));
+        assertTrue("The user returned by getUserWithCredentials does not match the original! Original: "+user.getId()+" - Returned: "+check.getId(), user.equals(check));
     }
 }

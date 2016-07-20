@@ -9,6 +9,8 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
+import com.aptitekk.agenda.core.tenants.TenantManagementService;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.Sha256Helper;
 
 import javax.annotation.PostConstruct;
@@ -38,21 +40,31 @@ public class StartupServiceImpl implements StartupService, Serializable {
     @Inject
     private PermissionService permissionService;
 
+    @Inject
+    private TenantService tenantService;
+
+    @Inject
+    private TenantManagementService tenantManagementService;
+
     @PostConstruct
     public void init() {
-        checkForRootGroup();
-        checkForAdminUser();
-        checkForAssetTypes();
-        writeDefaultProperties();
-        writeDefaultPermissions();
+        loadDefaultTenants();
+
+        for(Tenant tenant : tenantService.getAll()) {
+            checkForRootGroup(tenant);
+            checkForAdminUser(tenant);
+            checkForAssetTypes(tenant);
+            writeDefaultProperties(tenant);
+            writeDefaultPermissions(tenant);
+        }
     }
 
     @Override
-    public void checkForRootGroup() {
-        if (userGroupService.findByName(UserGroupService.ROOT_GROUP_NAME) == null) {
+    public void checkForRootGroup(Tenant tenant) {
+        if (userGroupService.getRootGroup(tenant) == null) {
             UserGroup rootGroup = new UserGroup(UserGroupService.ROOT_GROUP_NAME);
             try {
-                userGroupService.insert(rootGroup);
+                userGroupService.insert(rootGroup, tenant);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -60,26 +72,26 @@ public class StartupServiceImpl implements StartupService, Serializable {
     }
 
     @Override
-    public void checkForAdminUser() {
-        User adminUser = userService.findByName(UserService.ADMIN_USERNAME);
+    public void checkForAdminUser(Tenant tenant) {
+        User adminUser = userService.findByName(UserService.ADMIN_USERNAME, tenant);
         if (adminUser == null) {
 
             adminUser = new User();
             adminUser.setUsername(UserService.ADMIN_USERNAME);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
             try {
-                userService.insert(adminUser);
+                userService.insert(adminUser, tenant);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        ensureAdminHasRootGroup();
+        ensureAdminHasRootGroup(tenant);
     }
 
-    private void ensureAdminHasRootGroup() {
-        User adminUser = userService.findByName(UserService.ADMIN_USERNAME);
+    private void ensureAdminHasRootGroup(Tenant tenant) {
+        User adminUser = userService.findByName(UserService.ADMIN_USERNAME, tenant);
         if (adminUser != null) {
-            UserGroup rootGroup = userGroupService.getRootGroup();
+            UserGroup rootGroup = userGroupService.getRootGroup(tenant);
             if (rootGroup != null) {
                 if (!adminUser.getUserGroups().contains(rootGroup)) {
                     try {
@@ -94,13 +106,13 @@ public class StartupServiceImpl implements StartupService, Serializable {
     }
 
     @Override
-    public void checkForAssetTypes() {
+    public void checkForAssetTypes(Tenant tenant) {
 
-        //TODO: Do this once ever, not on every startup.
-        if (assetTypeService.getAll().isEmpty()) {
+        //TODO: Do this when tenant is created; not on every startup.
+        if (assetTypeService.getAll(tenant).isEmpty()) {
             try {
                 AssetType assetType = new AssetType("Rooms");
-                assetTypeService.insert(assetType);
+                assetTypeService.insert(assetType, tenant);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -108,12 +120,12 @@ public class StartupServiceImpl implements StartupService, Serializable {
     }
 
     @Override
-    public void writeDefaultProperties() {
+    public void writeDefaultProperties(Tenant tenant) {
         for (PropertyKey key : PropertyKey.values()) {
-            if (propertiesService.getPropertyByKey(key) == null) {
+            if (propertiesService.getPropertyByKey(key, tenant) == null) {
                 Property property = new Property(key, key.getDefaultValue());
                 try {
-                    propertiesService.insert(property);
+                    propertiesService.insert(property, tenant);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -122,17 +134,35 @@ public class StartupServiceImpl implements StartupService, Serializable {
     }
 
     @Override
-    public void writeDefaultPermissions() {
+    public void writeDefaultPermissions(Tenant tenant) {
         for (Permission.Descriptor descriptor : Permission.Descriptor.values()) {
-            if (permissionService.getPermissionByDescriptor(descriptor) == null) {
+            if (permissionService.getPermissionByDescriptor(descriptor, tenant) == null) {
                 Permission permission = new Permission();
                 permission.setDescriptor(descriptor);
                 try {
-                    permissionService.insert(permission);
+                    permissionService.insert(permission, tenant);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    @Override
+    public void loadDefaultTenants() {
+        for (int i = 0; i < 3; i++) {
+            if (tenantService.getTenantBySubscriptionId(i) == null) {
+                Tenant tenant = new Tenant();
+                tenant.setSubscriptionId(i);
+                try {
+                    tenantService.insert(tenant);
+                } catch (Exception e) {
+                    LogManager.logError("Couldn't persist Tenant with subscription id " + i);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        tenantManagementService.refreshTenants();
     }
 }

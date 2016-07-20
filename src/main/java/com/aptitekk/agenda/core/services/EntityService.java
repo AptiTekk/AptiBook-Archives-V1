@@ -18,8 +18,6 @@ public interface EntityService<T> {
 
     void insert(T o) throws Exception;
 
-    void update(T newData, int id) throws Exception;
-
     void delete(int id) throws Exception;
 
     T merge(T entity) throws Exception;

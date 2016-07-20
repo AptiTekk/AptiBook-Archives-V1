@@ -16,6 +16,6 @@ import javax.ejb.Local;
 import java.util.List;
 
 @Local
-public interface ReservationDecisionService extends EntityService<ReservationDecision> {
+public interface ReservationDecisionService extends MultiTenantEntityService<ReservationDecision> {
 
 }

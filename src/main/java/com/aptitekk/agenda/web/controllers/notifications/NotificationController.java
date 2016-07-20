@@ -13,6 +13,7 @@ import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -37,6 +38,9 @@ public class NotificationController implements NotificationListener, Serializabl
     @Inject
     private NotificationService notificationService;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     private List<Notification> notifications;
 
     private List<Notification> unread;
@@ -45,10 +49,8 @@ public class NotificationController implements NotificationListener, Serializabl
 
     @PostConstruct
     public void init() {
-        String loggedInUser
-                = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
-        if (loggedInUser != null) {
-            this.setUser(userService.findByName(loggedInUser));
+        if (authenticationController != null && authenticationController.getAuthenticatedUser() != null) {
+            this.user = authenticationController.getAuthenticatedUser();
             pullNotifications();
             notificationService.registerListener(this);
         }

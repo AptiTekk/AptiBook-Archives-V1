@@ -148,6 +148,7 @@
                                                                         ? (reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'success' : 'danger')
                                                                         : 'default'}"/>
                                                                 this Reservation.
+
                                                                 <ui:fragment
                                                                         rendered="#{reservationDetails.getOverridingDecisionForGroup(userGroup) != null}">
                                                                     (
@@ -195,18 +196,24 @@
                                                             value="#{reservationDetails.currentDecision.userGroup.name}"/>
                                                     User Group.
                                                 </h:panelGroup>
-                                                <h:form rendered="#{reservationDetails.currentDecision == null}">
+
+                                                <h:form>
                                                     <div class="btn-toolbar">
-                                                        <b:commandButton value="Approve Reservation" look="success"
-                                                                         action="#{reservationManagementController.approveReservation(reservationDetails)}"
-                                                                         ajax="true" update=":pendingReservations"
-                                                                         disabled="#{reservationDetails.currentDecision != null}"/>
-                                                        <b:commandButton value="Reject Reservation" look="default"
-                                                                         action="#{reservationManagementController.rejectReservation(reservationDetails)}"
-                                                                         ajax="true" update=":pendingReservations"
-                                                                         disabled="#{reservationDetails.currentDecision != null}"/>
+                                                        <b:commandButton value="Approve Reservation"
+                                                                         action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
+                                                                         look="success"
+                                                                         ajax="true"
+                                                                         update=":approveModalForm"
+                                                                         oncomplete="$('.approvalConfirmationModal').modal();"/>
+                                                        <b:commandButton value="Reject Reservation"
+                                                                         action="#{reservationManagementController.setReservationDetails(reservationDetails)}"
+                                                                         look="default"
+                                                                         ajax="true"
+                                                                         update=":rejectModalForm"
+                                                                         oncomplete="$('.rejectConfirmationModal').modal();"/>
                                                     </div>
                                                 </h:form>
+
                                             </f:facet>
                                         </b:panel>
                                     </b:column>
@@ -217,6 +224,8 @@
                 </h:panelGroup>
             </b:container>
         </h:panelGroup>
+        <ui:include src="approvalConfirmationModal.xhtml"/>
+        <ui:include src="rejectConfirmationModal.xhtml"/>
     </ui:define>
 </ui:composition>
 

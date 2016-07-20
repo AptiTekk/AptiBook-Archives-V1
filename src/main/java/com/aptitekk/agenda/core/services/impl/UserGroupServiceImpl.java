@@ -6,68 +6,56 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.QUserGroup;
+import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
-import com.querydsl.jpa.impl.JPAQuery;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@Stateless
-public class UserGroupServiceImpl extends EntityServiceAbstract<UserGroup> implements UserGroupService, Serializable {
-
-    QUserGroup userGroupTable = QUserGroup.userGroup;
-
-    public UserGroupServiceImpl() {
-        super(UserGroup.class);
-    }
-
-    @PostConstruct
-    public void init() {
-        loadTree();
-    }
+@Stateful
+public class UserGroupServiceImpl extends MultiTenantEntityServiceAbstract<UserGroup> implements UserGroupService, Serializable {
 
     @Override
     public void loadTree() {
-        entityManager.createQuery("SELECT g from UserGroup g left join fetch g.children").getResultList();
+        try {
+            entityManager.createQuery("SELECT g from UserGroup g left join fetch g.children").getResultList();
+        } catch (PersistenceException ignored) {
+        }
     }
 
     @Override
     public UserGroup findByName(String userGroupName) {
-        if (userGroupName == null)
+        return findByName(userGroupName, getTenant());
+    }
+
+    @Override
+    public UserGroup findByName(String userGroupName, Tenant tenant) {
+        if (userGroupName == null || tenant == null)
             return null;
 
-        return new JPAQuery<UserGroup>(entityManager).from(userGroupTable)
-                .where(userGroupTable.name.equalsIgnoreCase(userGroupName)).fetchOne();
+        try {
+            return entityManager
+                    .createQuery("SELECT g FROM UserGroup g WHERE g.name = :name AND g.tenant = :tenant", UserGroup.class)
+                    .setParameter("name", userGroupName)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
     }
 
     @Override
     public UserGroup getRootGroup() {
-        Object result = entityManager.createQuery("SELECT g FROM UserGroup g WHERE g.name = ?1").setParameter(1, ROOT_GROUP_NAME).getSingleResult();
-        return result == null ? null : (UserGroup) result;
+        return getRootGroup(getTenant());
     }
 
     @Override
-    public UserGroup[] getSenior(List<UserGroup> groups) {
-        Map<UserGroup, Integer> steps = new HashMap<>();
-        groups.forEach(userGroup -> {
-            UserGroup currentParent = userGroup.getParent();
-            if (currentParent != null) {
-                steps.put(userGroup, 1);
-                while (currentParent.getId() != getRootGroup().getId()) {
-                    steps.put(userGroup, steps.get(userGroup) + 1);
-                    currentParent = currentParent.getParent();
-                }
-            }
-        });
-
-        Map<UserGroup, Integer> treeMap = new TreeMap<UserGroup, Integer>(
-                (o1, o2) -> steps.get(o2) - steps.get(o1));
-        treeMap.putAll(steps);
-        return treeMap.keySet().toArray(new UserGroup[treeMap.size()]);
+    public UserGroup getRootGroup(Tenant tenant) {
+        return findByName(ROOT_GROUP_NAME, tenant);
     }
 
     @Override
