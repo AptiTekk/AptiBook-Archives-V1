@@ -15,4 +15,6 @@ public interface TenantService extends EntityService<Tenant> {
 
     Tenant getTenantBySubscriptionId(int subscriptionId);
 
+    Tenant getTenantBySlug(String slug);
+
 }

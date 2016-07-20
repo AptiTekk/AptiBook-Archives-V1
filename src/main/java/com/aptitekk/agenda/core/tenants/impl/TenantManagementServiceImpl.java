@@ -13,6 +13,9 @@ import com.aptitekk.agenda.core.tenants.TenantManagementService;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Startup
 @Singleton
@@ -21,27 +24,21 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     @Inject
     private TenantService tenantService;
 
-    private String allowedTenantUrlPattern;
+    private Set<String> allowedTenantSlugs;
 
-    private void buildTenantUrlPattern() {
-        StringBuilder urlPatternBuilder = new StringBuilder();
-        for (Tenant tenant : tenantService.getAll()) {
-            urlPatternBuilder.append(tenant.getSubscriptionId()).append("|");
-        }
+    private void buildAllowedTenantSlugSet() {
+        allowedTenantSlugs = new HashSet<>();
 
-        if (urlPatternBuilder.length() > 0)
-            urlPatternBuilder.deleteCharAt(urlPatternBuilder.length() - 1);
-
-        allowedTenantUrlPattern = urlPatternBuilder.toString();
+        allowedTenantSlugs.addAll(tenantService.getAll().stream().map(Tenant::getSlug).collect(Collectors.toList()));
     }
 
     @Override
-    public String getAllowedTenantUrlPattern() {
-        return allowedTenantUrlPattern;
+    public Set<String> getAllowedTenantSlugs() {
+        return allowedTenantSlugs;
     }
 
     @Override
     public void refreshTenants() {
-        buildTenantUrlPattern();
+        buildAllowedTenantSlugSet();
     }
 }

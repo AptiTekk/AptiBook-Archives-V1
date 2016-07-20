@@ -22,6 +22,9 @@ public class Tenant {
     @Column(nullable = false, unique = true)
     private int subscriptionId;
 
+    @Column(nullable = false, unique = true, length = 32)
+    private String slug;
+
     @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
     private List<Asset> assets = new ArrayList<>();
 
@@ -70,6 +73,14 @@ public class Tenant {
         this.subscriptionId = subscriptionId;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug.toLowerCase();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -87,5 +98,4 @@ public class Tenant {
     public int hashCode() {
         return EqualsHelper.calculateHashCode(getSubscriptionId());
     }
-
 }

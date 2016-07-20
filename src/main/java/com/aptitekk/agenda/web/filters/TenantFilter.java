@@ -43,57 +43,60 @@ public class TenantFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest request = (HttpServletRequest) req;
-        String path = request.getRequestURI().substring(request.getContextPath().length());
-        String[] pathSplit = request.getRequestURI().substring(request.getContextPath().length()).split("/");
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String path = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
+        String[] pathSplit = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length()).split("/");
 
         if (pathSplit.length >= 2) {
 
             //Tenants
-            if (pathSplit[1].matches(tenantManagementService.getAllowedTenantUrlPattern())) { //Valid Tenant ID
+            if (tenantManagementService.getAllowedTenantSlugs().contains(pathSplit[1].toLowerCase())) { //Valid Tenant ID
                 try {
-                    int tenantSubscriptionId = Integer.parseInt(pathSplit[1]);
-                    Tenant tenant = tenantService.getTenantBySubscriptionId(tenantSubscriptionId);
-                    request.setAttribute("tenant", tenant);
+                    String tenantSlug = pathSplit[1].toLowerCase();
+                    Tenant tenant = tenantService.getTenantBySlug(tenantSlug);
+                    httpServletRequest.setAttribute("tenant", tenant);
 
                     String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
                     if (url.contains(";"))
                         url = url.substring(0, url.indexOf(";"));
 
                     if (url.contains("/secure")) {
-                        Object attribute = ((HttpServletRequest) req).getSession(true).getAttribute(tenant.getSubscriptionId() + "_authenticatedUser");
+                        Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSubscriptionId() + "_authenticatedUser");
                         if (attribute != null && attribute instanceof User) {
-                            request.getRequestDispatcher(url).forward(req, res);
+                            httpServletRequest.getRequestDispatcher(url).forward(request, response);
                             return;
                         }
-                        redirectUnauthorized(req, res);
+                        redirectUnauthorized(request, response);
                         return;
                     } else {
-                        request.getRequestDispatcher(url).forward(req, res);
+                        httpServletRequest.getRequestDispatcher(url).forward(request, response);
                         return;
                     }
                 } catch (NumberFormatException e) {
-                    ((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
                     return;
                 }
-            } else if (pathSplit[1].matches("[0-9]{1,9}")) { //Invalid Tenant ID
-                request.getRequestDispatcher("/WEB-INF/error/inactive_tenant.xhtml").forward(req, res);
             }
 
             //Resources
             if (pathSplit[1].matches("javax\\.faces\\.resource|resources|fonts")) {
-                chain.doFilter(req, res);
+                chain.doFilter(request, response);
+                return;
             }
 
             //Servlets
             if (pathSplit[1].matches("ping|images")) {
-                chain.doFilter(req, res);
+                chain.doFilter(request, response);
+                return;
             }
 
-        } else {
-            ((HttpServletResponse) res).setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+        redirectInactive(request, response);
+    }
+
+    private void redirectInactive(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/error/inactive_tenant.xhtml").forward(request, response);
     }
 
     private void redirectUnauthorized(ServletRequest request, ServletResponse response) throws IOException {

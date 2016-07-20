@@ -209,13 +209,13 @@ public class AssetSettingsController implements Serializable {
                 Asset asset = new Asset("New Asset");
                 asset.setAssetType(assetType);
                 assetService.insert(asset);
-                LogManager.logInfo("Asset created, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
+                LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                 FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
 
                 refreshAssets();
             } catch (Exception e) {
                 e.printStackTrace();
-                LogManager.logError("Error persisting asset " + e.getMessage());
+                LogManager.logError("Error persisting asset: " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
@@ -226,15 +226,15 @@ public class AssetSettingsController implements Serializable {
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
                 context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Successful", "Asset Deleted!"));
-                assetService.delete(selectedAsset.getId());
                 LogManager.logInfo("Asset deleted, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
+                assetService.delete(selectedAsset.getId());
                 refreshAssets();
             } else {
                 throw new Exception("Asset not found!");
             }
         } catch (Exception e) {
             context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
-            LogManager.logError("Error while Deleting Asset " + e.getMessage());
+            LogManager.logError("Error while Deleting Asset: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -277,10 +277,6 @@ public class AssetSettingsController implements Serializable {
     public void onOwnerSelected(NodeSelectEvent event) {
         if (event.getTreeNode() != null && event.getTreeNode().getData() != null && event.getTreeNode().getData() instanceof UserGroup)
             this.assetOwnerGroup = (UserGroup) event.getTreeNode().getData();
-    }
-
-    public UserGroup getAssetOwnerGroup() {
-        return assetOwnerGroup;
     }
 
     public TreeNode getTree() {

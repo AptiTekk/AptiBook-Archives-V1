@@ -20,8 +20,20 @@ public class TenantServiceImpl extends EntityServiceAbstract<Tenant> implements 
     public Tenant getTenantBySubscriptionId(int subscriptionId) {
         try {
             return entityManager
-                    .createQuery("SELECT t FROM Tenant t WHERE t.subscriptionId = :subscriptionId", Tenant.class)
-                    .setParameter("subscriptionId", subscriptionId)
+                    .createQuery("SELECT t FROM Tenant t WHERE t.subscriptionId = ?1", Tenant.class)
+                    .setParameter(1, subscriptionId)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Tenant getTenantBySlug(String slug) {
+        try {
+            return entityManager
+                    .createQuery("SELECT t FROM Tenant t WHERE t.slug = ?1", Tenant.class)
+                    .setParameter(1, slug)
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;

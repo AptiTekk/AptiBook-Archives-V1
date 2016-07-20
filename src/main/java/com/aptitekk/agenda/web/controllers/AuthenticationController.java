@@ -44,9 +44,11 @@ public class AuthenticationController implements Serializable {
 
     @PostConstruct
     public void init() {
-        Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
-        if (attribute != null && attribute instanceof User) {
-            this.authenticatedUser = (User) attribute;
+        if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
+            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
+            if (attribute != null && attribute instanceof User) {
+                this.authenticatedUser = (User) attribute;
+            }
         }
     }
 

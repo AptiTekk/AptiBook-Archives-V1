@@ -50,7 +50,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
     public void init() {
         loadDefaultTenants();
 
-        for(Tenant tenant : tenantService.getAll()) {
+        for (Tenant tenant : tenantService.getAll()) {
             checkForRootGroup(tenant);
             checkForAdminUser(tenant);
             checkForAssetTypes(tenant);
@@ -154,6 +154,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
             if (tenantService.getTenantBySubscriptionId(i) == null) {
                 Tenant tenant = new Tenant();
                 tenant.setSubscriptionId(i);
+                tenant.setSlug("tenant" + i);
                 try {
                     tenantService.insert(tenant);
                 } catch (Exception e) {
