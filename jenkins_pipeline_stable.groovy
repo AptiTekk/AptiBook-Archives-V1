@@ -32,7 +32,7 @@ node {
 
 def checkoutFromGit() {
     def branch = "stable"
-    def url = "ssh://git@core.aptitekk.com:28/AptiTekk/Agenda.git"
+    def url = "ssh://git@util.aptitekk.com:2005/ag/agenda-core.git"
     def credentialsId = "542239bb-3d63-40bc-9cfa-e5ed56a1fc5b"
 
     checkout([$class                           : "GitSCM",
