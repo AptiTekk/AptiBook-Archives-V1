@@ -144,10 +144,10 @@ public class Permission extends MultiTenantEntity {
     @Enumerated(value = EnumType.STRING)
     private Descriptor descriptor;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<UserGroup> userGroups;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     private List<User> users;
 
     public int getId() {

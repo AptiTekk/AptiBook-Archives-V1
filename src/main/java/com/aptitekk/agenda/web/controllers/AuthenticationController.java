@@ -45,7 +45,7 @@ public class AuthenticationController implements Serializable {
     @PostConstruct
     public void init() {
         if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
-            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
+            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
             if (attribute != null && attribute instanceof User) {
                 this.authenticatedUser = (User) attribute;
             }
@@ -72,7 +72,7 @@ public class AuthenticationController implements Serializable {
         } else {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser", authenticatedUser);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
             String originalUrl
                     = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
             if (originalUrl != null) {
@@ -91,7 +91,7 @@ public class AuthenticationController implements Serializable {
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSubscriptionId() + "_authenticatedUser");
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
         return "index";
     }
 

@@ -13,6 +13,9 @@
     <application>
         <view-handler>com.aptitekk.agenda.web.viewHandlers.TenantViewHandler</view-handler>
     </application>
+    <!--<lifecycle>
+        <phase-listener>com.aptitekk.agenda.web.AgendaPhaseListener</phase-listener>
+    </lifecycle>-->
     <navigation-rule>
         <display-name>*</display-name>
         <from-view-id>*</from-view-id>

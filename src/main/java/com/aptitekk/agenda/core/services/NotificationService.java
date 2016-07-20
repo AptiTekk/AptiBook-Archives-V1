@@ -24,8 +24,6 @@ import java.util.List;
 @Local
 public interface NotificationService extends MultiTenantEntityService<Notification> {
 
-    String NOTIFICATION_DATEFORMAT = "MM-dd-yyyy hh:mm a";
-
     void buildNotification(String subject, String body, List<UserGroup> userGroupList);
 
     void sendEmailNotification(Notification notification)
@@ -33,11 +31,9 @@ public interface NotificationService extends MultiTenantEntityService<Notificati
             IllegalAccessException, IllegalArgumentException,
             InvocationTargetException;
 
-    void markAsRead(Notification notification) throws Exception;
+    void markAllAsReadForUser(User user);
 
-    List<Notification> getUnread(User user);
-
-    List<Notification> getAllByUser(User user);
+    List<Notification> getAllForUser(User user);
 
     void registerListener(NotificationListener notificationListener);
 

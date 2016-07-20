@@ -62,7 +62,7 @@ public class TenantFilter implements Filter {
                         url = url.substring(0, url.indexOf(";"));
 
                     if (url.contains("/secure")) {
-                        Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSubscriptionId() + "_authenticatedUser");
+                        Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_authenticatedUser");
                         if (attribute != null && attribute instanceof User) {
                             httpServletRequest.getRequestDispatcher(url).forward(request, response);
                             return;
@@ -116,7 +116,7 @@ public class TenantFilter implements Filter {
 
         LogManager.logInfo("Unauthorized access request to " + attemptedAccessPath + parameters);
         ((HttpServletRequest) request).getSession(true).setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
-        ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSubscriptionId() : ""));
+        ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 
     @Override

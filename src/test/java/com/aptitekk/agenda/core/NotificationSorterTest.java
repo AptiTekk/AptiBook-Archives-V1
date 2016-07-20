@@ -75,7 +75,7 @@ public class NotificationSorterTest {
         notificationService.insert(readNotification2);
 
         //act
-        List<Notification> notifs = notificationService.getAllByUser(testUser);
+        List<Notification> notifs = notificationService.getAllForUser(testUser);
 
         //assert
         List<Notification> expected = new LinkedList<Notification>() {{

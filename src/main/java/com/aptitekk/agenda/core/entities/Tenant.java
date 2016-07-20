@@ -91,11 +91,12 @@ public class Tenant {
 
         Tenant other = (Tenant) o;
 
-        return EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId());
+        return EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
+                && EqualsHelper.areEquals(getSlug(), other.getSlug());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getSubscriptionId());
+        return EqualsHelper.calculateHashCode(getSubscriptionId(), getSlug());
     }
 }

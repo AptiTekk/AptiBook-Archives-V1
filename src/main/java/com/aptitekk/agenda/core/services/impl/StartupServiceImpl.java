@@ -19,6 +19,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.List;
 
 @Startup
 @Singleton
@@ -107,7 +108,6 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void checkForAssetTypes(Tenant tenant) {
-
         //TODO: Do this when tenant is created; not on every startup.
         if (assetTypeService.getAll(tenant).isEmpty()) {
             try {
@@ -121,8 +121,20 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void writeDefaultProperties(Tenant tenant) {
+        List<Property> currentProperties = propertiesService.getAll(tenant);
+
         for (PropertyKey key : PropertyKey.values()) {
-            if (propertiesService.getPropertyByKey(key, tenant) == null) {
+            boolean foundProperty = false;
+
+            for (Property property : currentProperties) {
+                if (property.getPropertyKey().equals(key)) {
+                    foundProperty = true;
+                    break;
+                }
+            }
+
+            if(!foundProperty)
+            {
                 Property property = new Property(key, key.getDefaultValue());
                 try {
                     propertiesService.insert(property, tenant);
@@ -135,8 +147,20 @@ public class StartupServiceImpl implements StartupService, Serializable {
 
     @Override
     public void writeDefaultPermissions(Tenant tenant) {
+        List<Permission> currentPermissions = permissionService.getAll(tenant);
+
         for (Permission.Descriptor descriptor : Permission.Descriptor.values()) {
-            if (permissionService.getPermissionByDescriptor(descriptor, tenant) == null) {
+            boolean foundPermission = false;
+
+            for (Permission permission : currentPermissions) {
+                if (permission.getDescriptor().equals(descriptor)) {
+                    foundPermission = true;
+                    break;
+                }
+            }
+
+            if(!foundPermission)
+            {
                 Permission permission = new Permission();
                 permission.setDescriptor(descriptor);
                 try {

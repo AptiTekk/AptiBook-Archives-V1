@@ -17,7 +17,7 @@
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="pre-body">
         <f:metadata>
-            <f:viewAction action="#{settingsController.redirectIfPageIsNull}"/>
+            <f:viewAction action="#{settingsViewController.redirectIfPageIsNull}"/>
         </f:metadata>
     </ui:define>
     <ui:define name="content">
@@ -27,10 +27,10 @@
                     <!-- Sidebar -->
                     <b:column colXs="0" colSm="0" colMd="3" colLg="2">
                         <b:listLinks style="margin-top:20px">
-                            <c:forEach items="#{settingsController.pages}" var="page">
-                                <b:navLink active="#{settingsController.currentPage == page}" value="#{page.name}"
+                            <c:forEach items="#{settingsViewController.pages}" var="page">
+                                <b:navLink active="#{settingsViewController.currentPage == page}" value="#{page.name}"
                                            onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}"
-                                           style="#{settingsController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
+                                           style="#{settingsViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
                                     <f:param name="tab" value="#{page.name}"/>
                                 </b:navLink>
                             </c:forEach>
@@ -40,7 +40,7 @@
                         <ol class="breadcrumb" style="margin-top: 20px">
                             <li><h:link outcome="index" value="Home"/></li>
                             <li class="active">Agenda Settings</li>
-                            <li class="active">#{settingsController.currentPage.name}</li>
+                            <li class="active">#{settingsViewController.currentPage.name}</li>
                         </ol>
 
                         <!-- Empty tags to initialize primefaces and bootsfaces components -->
@@ -49,10 +49,10 @@
                         <p:tree draggable="true" rendered="false"/>
                         <b:modal/>
 
-                        <c:if test="#{settingsController.currentPage != null}">
+                        <c:if test="#{settingsViewController.currentPage != null}">
                             <!--suppress HtmlUnknownTarget -->
                             <ui:include
-                                    src="/WEB-INF/private/admin/#{settingsController.currentPage.fileName}/#{settingsController.currentPage.fileName}.xhtml"/>
+                                    src="/WEB-INF/private/admin/#{settingsViewController.currentPage.fileName}/#{settingsViewController.currentPage.fileName}.xhtml"/>
                         </c:if>
                     </b:column>
                 </b:row>

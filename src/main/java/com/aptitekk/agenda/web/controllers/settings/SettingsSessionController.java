@@ -7,12 +7,11 @@
 package com.aptitekk.agenda.web.controllers.settings;
 
 import com.aptitekk.agenda.core.entities.Permission;
-import com.aptitekk.agenda.core.entities.User;
+import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
-import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -22,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 @Named
-@ViewScoped
-public class SettingsController implements Serializable {
+@SessionScoped
+public class SettingsSessionController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
@@ -76,14 +75,11 @@ public class SettingsController implements Serializable {
     private List<SettingsPage> pages;
     private SettingsPage currentPage = null;
 
-    @PostConstruct
-    public void init() {
-        User user = authenticationController.getAuthenticatedUser();
-
-        //Prune pages based on the permissions granted to the user.
-        if (user != null) {
+    void checkPagesValidity() {
+        if ((pages == null || pages.isEmpty()) && authenticationController.getAuthenticatedUser() != null) {
+            //Prune pages based on the permissions granted to the user.
             pages = new ArrayList<>(Arrays.asList(SettingsPage.values()));
-            if (!user.isAdmin()) {
+            if (!authenticationController.getAuthenticatedUser().isAdmin()) {
                 Iterator<SettingsPage> iterator = pages.iterator();
                 while (iterator.hasNext()) {
                     SettingsPage next = iterator.next();
@@ -94,22 +90,10 @@ public class SettingsController implements Serializable {
                         iterator.remove();
                 }
             }
-        } else {
-            pages = new ArrayList<>();
-        }
-
-        String tab = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-        if (tab != null && !tab.isEmpty()) {
-            for (SettingsPage page : pages) {
-                if (page.name.equalsIgnoreCase(tab)) {
-                    setCurrentPage(page);
-                    break;
-                }
-            }
         }
     }
 
-    public String redirectIfPageIsNull() {
+    String redirectIfPageIsNull() {
         if (getCurrentPage() == null) {
             if (pages == null || pages.isEmpty()) {
                 return "index";
@@ -119,16 +103,16 @@ public class SettingsController implements Serializable {
         return null;
     }
 
-    public List<SettingsPage> getPages() {
+    List<SettingsPage> getPages() {
         return pages;
     }
 
-    public SettingsPage getCurrentPage() {
+    SettingsPage getCurrentPage() {
         return currentPage;
     }
 
-    public void setCurrentPage(SettingsPage settingsPage) {
-        this.currentPage = settingsPage;
+    void setCurrentPage(SettingsPage page) {
+        this.currentPage = page;
     }
 
 }

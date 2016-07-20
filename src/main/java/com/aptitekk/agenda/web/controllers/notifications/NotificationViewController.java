@@ -8,7 +8,6 @@ package com.aptitekk.agenda.web.controllers.notifications;
 
 import com.aptitekk.agenda.core.entities.Notification;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -23,18 +22,13 @@ public class NotificationViewController implements Serializable {
     @Inject
     private NotificationController notificationController;
 
-    @PostConstruct
-    public void init() {
-        notificationController.pullNotifications();
-    }
-
     @PreDestroy
     public void markUnreadRead() {
-        notificationController.markUnreadRead();
+        notificationController.markAllAsRead();
     }
 
     public List<Notification> getUnread() {
-        return notificationController.getUnread();
+        return notificationController.getUnreadNotifications();
     }
 
     public List<Notification> getNotifications() {

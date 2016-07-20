@@ -57,12 +57,14 @@ public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<No
     }
 
     @Override
-    public void markAsRead(Notification notification) throws Exception {
-        if (notification == null)
-            return;
-
-        notification.setRead(Boolean.TRUE);
-        merge(notification);
+    public void markAllAsReadForUser(User user) {
+        try {
+            entityManager
+                    .createQuery("UPDATE Notification n SET n.notif_read = true WHERE n.user = ?1")
+                    .setParameter(1, user)
+                    .executeUpdate();
+        } catch (PersistenceException ignored) {
+        }
     }
 
     @Override
@@ -83,30 +85,7 @@ public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<No
     }
 
     @Override
-    public List<Notification> getUnread(User user) {
-        if (user == null)
-            return null;
-
-        try {
-            List<Notification> result = entityManager
-                    .createQuery("SELECT n FROM Notification n WHERE n.user = :user AND n.notif_read = false", Notification.class)
-                    .setParameter("user", user)
-                    .getResultList();
-
-            Comparator<Notification> comparator = Comparator.comparing(notif -> notif.getCreation());
-            comparator = comparator.reversed();
-
-            // Sort the stream:
-            Stream<Notification> notificationStream = result.stream().sorted(comparator);
-
-            return notificationStream.collect(Collectors.toList());
-        } catch (PersistenceException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Notification> getAllByUser(User user) {
+    public List<Notification> getAllForUser(User user) {
         if (user == null)
             return null;
 
@@ -115,10 +94,6 @@ public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<No
                     .createQuery("SELECT n FROM Notification n WHERE n.user = :user", Notification.class)
                     .setParameter("user", user)
                     .getResultList();
-
-            result.stream().filter(notification -> notification.getRead() == null).forEach(notification -> {
-                notification.setRead(false);
-            });
 
             Comparator<Notification> comparator = Comparator.comparing(Notification::getRead);
             comparator = comparator.reversed();
