@@ -85,6 +85,9 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-ehcache:5.0.7.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sf.ehcache:ehcache-core:2.4.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.6.1" level="project" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-cdi:3.5.1" level="project" />
     <orderEntry type="library" name="Maven: javax.mail:javax.mail-api:1.5.5" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: net.bootsfaces:bootsfaces:0.9.0" level="project" />

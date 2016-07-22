@@ -7,6 +7,9 @@
           <element id="module-output" name="Agenda" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.liquibase:liquibase-core:3.5.1" />
+          <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.13" />
+          <element id="library" level="project" name="Maven: org.liquibase:liquibase-cdi:3.5.1" />
           <element id="library" level="project" name="Maven: javax.mail:javax.mail-api:1.5.5" />
           <element id="library" level="project" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" />
           <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.9.0" />
