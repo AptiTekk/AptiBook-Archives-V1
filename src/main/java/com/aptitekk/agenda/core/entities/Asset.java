@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
@@ -115,20 +115,6 @@ public class Asset extends MultiTenantEntity implements Serializable {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
-    }
-
-    public Reservation addReservation(Reservation reservation) {
-        getReservations().add(reservation);
-        reservation.setAsset(this);
-
-        return reservation;
-    }
-
-    public Reservation removeReservation(Reservation reservation) {
-        getReservations().remove(reservation);
-        reservation.setAsset(null);
-
-        return reservation;
     }
 
     public AssetType getAssetType() {

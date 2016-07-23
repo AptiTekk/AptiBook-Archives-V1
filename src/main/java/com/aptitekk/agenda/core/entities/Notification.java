@@ -11,7 +11,7 @@
  */
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.utilities.EqualsHelper;
 
 import javax.persistence.*;

@@ -25,42 +25,6 @@ public class Tenant {
     @Column(nullable = false, unique = true, length = 32)
     private String slug;
 
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Asset> assets = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<AssetType> assetTypes = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Notification> notifications = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Permission> permissions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Property> properties = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Reservation> reservations = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<ReservationDecision> reservationDecisions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<ReservationField> reservationFields = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<ReservationFieldEntry> reservationFieldEntries = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<Tag> tags = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<User> users = new ArrayList<>();
-
-    @OneToMany(mappedBy = "tenant", cascade = CascadeType.REMOVE)
-    private List<UserGroup> userGroups = new ArrayList<>();
-
     public int getId() {
         return id;
     }

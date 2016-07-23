@@ -4,13 +4,11 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.entities.superClasses;
+package com.aptitekk.agenda.core.entities.util;
 
 import com.aptitekk.agenda.core.entities.Tenant;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
 @MappedSuperclass
 public abstract class MultiTenantEntity {

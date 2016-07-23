@@ -13,9 +13,11 @@ import liquibase.resource.ResourceAccessor;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+@Named
 public class LiquibaseProducer {
 
     @Resource(lookup = "java:jboss/datasources/MySQLDS")

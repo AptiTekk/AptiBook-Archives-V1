@@ -11,11 +11,7 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
     <changeSet id="1__Initial_Schema" author="MitchTalmadge">
-        <createTable tableName="liquibase">
-            <column name="id" type="int" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-        </createTable>
+        <sqlFile path="liquibase/1__Initial_Schema.sql"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -13,7 +13,8 @@
 
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
         <properties>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.implicit_naming_strategy"
+                      value="com.aptitekk.agenda.core.entities.util.CustomNamingStrategy"/>
             <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
             <property name="hibernate.cache.use_second_level_cache"
                       value="true"/>

@@ -22,7 +22,7 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="EclipseLink" />
         <datasource-mapping>
-          <factory-entry name="Agenda" value="1950c36b-7e7b-4cce-8913-b3cc86f2ace5" />
+          <factory-entry name="Agenda" value="a3d9ed9c-aca5-441b-9580-fffaf50d7a81" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
@@ -51,6 +51,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.5.1" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
+    <orderEntry type="library" name="Maven: org.liquibase:liquibase-cdi:3.5.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />

@@ -6,13 +6,12 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.superClasses.MultiTenantEntity;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.MultiTenantEntityService;
 import com.aptitekk.agenda.core.tenants.TenantSessionService;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
