@@ -83,7 +83,7 @@ public class PendingReservationManagementController implements Serializable {
                                     +" to "
                                     +reservationDetails.getReservation().getTimeEnd().getTimeString()
                                     +" has been Approved!",
-                            authenticationController.getAuthenticatedUser());
+                            reservationDetails.getReservation().getUser());
                 }
                 reservationService.merge(reservationDetails.getReservation());
 
@@ -120,7 +120,7 @@ public class PendingReservationManagementController implements Serializable {
                                     +" to "
                                     +reservationDetails.getReservation().getTimeEnd().getTimeString()
                                     +" has been Rejected.",
-                            authenticationController.getAuthenticatedUser());
+                            reservationDetails.getReservation().getUser());
                 }
                 reservationService.merge(reservationDetails.getReservation());
 
