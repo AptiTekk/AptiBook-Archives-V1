@@ -8,7 +8,9 @@ package com.aptitekk.agenda.web.controllers.results;
 
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
@@ -25,6 +27,12 @@ public class AvailableAssetsController implements Serializable {
 
     @Inject
     private ReservationService reservationService;
+
+    @Inject
+    private NotificationService notificationService;
+
+    @Inject
+    private UserGroupService userGroupService;
 
     @Inject
     private AssetService assetService;
@@ -85,8 +93,13 @@ public class AvailableAssetsController implements Serializable {
                 try {
                     reservationService.insert(reservation);
                     LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
+
+                    if (asset.getNeedsApproval())
+                        notificationService.buildNotification("New Reservation Request", "A new Reservation for " + asset.getName() + " has been requested by " + user.getFullname() + ".", userGroupService.getHierarchyUp(asset.getOwner()));
+                    else
+                        notificationService.buildNotification("New Reservation Added", "A new Reservation for " + asset.getName() + " has been added by " + user.getFullname() + ".", userGroupService.getHierarchyUp(asset.getOwner()));
                 } catch (Exception e) {
-                    LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName()+ user.getFullname() + "Exception message: " + e.getMessage());
+                    LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + user.getFullname() + "Exception message: " + e.getMessage());
                     e.printStackTrace();
                 }
             }

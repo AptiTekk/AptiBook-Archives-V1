@@ -33,10 +33,10 @@ public class Asset extends MultiTenantEntity implements Serializable {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    private byte[] photo;
+    private byte[] image;
 
     @Transient
-    private static final int MAX_PHOTO_SIZE_PX = 1000;
+    private static final int MAX_IMAGE_SIZE_PX = 1000;
 
     @Column(columnDefinition = "time")
     private SegmentedTime availabilityEnd;
@@ -141,12 +141,12 @@ public class Asset extends MultiTenantEntity implements Serializable {
         this.tags = tags;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     /**
@@ -155,7 +155,7 @@ public class Asset extends MultiTenantEntity implements Serializable {
      * @param part The image part file.
      * @throws IOException If the image is not a true image, or otherwise cannot be parsed.
      */
-    public void uploadPhoto(Part part) throws IOException {
+    public void uploadImage(Part part) throws IOException {
         if (part == null) {
             LogManager.logError("Attempt to upload image for " + name + " failed due to a null Part");
             return;
@@ -175,8 +175,8 @@ public class Asset extends MultiTenantEntity implements Serializable {
         // Scale the image up or down first
         int requiredWidthHeight;
 
-        if (bufferedImage.getWidth() > MAX_PHOTO_SIZE_PX || bufferedImage.getHeight() > MAX_PHOTO_SIZE_PX)
-            requiredWidthHeight = MAX_PHOTO_SIZE_PX;
+        if (bufferedImage.getWidth() > MAX_IMAGE_SIZE_PX || bufferedImage.getHeight() > MAX_IMAGE_SIZE_PX)
+            requiredWidthHeight = MAX_IMAGE_SIZE_PX;
         else if (bufferedImage.getWidth() > bufferedImage.getHeight())
             requiredWidthHeight = bufferedImage.getWidth();
         else
@@ -193,7 +193,7 @@ public class Asset extends MultiTenantEntity implements Serializable {
         byte[] output = outputStream.toByteArray();
         if (output != null) {
             LogManager.logInfo("Image uploaded to " + name + " successfully.");
-            this.setPhoto(output);
+            this.setImage(output);
         } else {
             LogManager.logError("Attempt to upload image for " + name + " failed due to a null byte array output.");
         }

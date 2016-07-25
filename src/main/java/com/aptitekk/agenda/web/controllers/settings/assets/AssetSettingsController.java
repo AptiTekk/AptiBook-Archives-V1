@@ -145,7 +145,7 @@ public class AssetSettingsController implements Serializable {
 
             if (file != null) {
                 try {
-                    selectedAsset.uploadPhoto(file);
+                    selectedAsset.uploadImage(file);
                 } catch (IOException e) {
                     LogManager.logError("Attempt to upload image for " + selectedAsset.getName() + " failed due to IOException.");
                     FacesContext.getCurrentInstance().addMessage("editAssetModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
