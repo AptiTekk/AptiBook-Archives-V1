@@ -28,6 +28,28 @@ import java.util.stream.Stream;
 public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<Notification> implements NotificationService, Serializable {
 
     @Override
+    public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
+        if (subject == null || body == null || userGroupList == null)
+            return;
+
+        for (UserGroup userGroup : userGroupList) {
+            for (User user : userGroup.getUsers()) {
+                buildNotification(subject, body, user);
+            }
+        }
+    }
+
+    @Override
+    public void buildNotification(String subject, String body, User user) {
+        Notification notification = new Notification(user, subject, body);
+        try {
+            insert(notification);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void markAllAsReadForUser(User user) {
         try {
             entityManager
@@ -35,23 +57,6 @@ public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<No
                     .setParameter(1, user)
                     .executeUpdate();
         } catch (PersistenceException ignored) {
-        }
-    }
-
-    @Override
-    public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
-        if (subject == null || body == null || userGroupList == null)
-            return;
-
-        for (UserGroup userGroup : userGroupList) {
-            for (User user : userGroup.getUsers()) {
-                Notification notification = new Notification(user, subject, body);
-                try {
-                    insert(notification);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

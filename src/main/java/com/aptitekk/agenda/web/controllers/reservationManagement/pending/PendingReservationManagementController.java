@@ -7,6 +7,7 @@
 package com.aptitekk.agenda.web.controllers.reservationManagement.pending;
 
 import com.aptitekk.agenda.core.entities.*;
+import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.ReservationDecisionService;
 import com.aptitekk.agenda.core.services.ReservationService;
 import com.aptitekk.agenda.core.services.UserGroupService;
@@ -43,6 +44,9 @@ public class PendingReservationManagementController implements Serializable {
     @Inject
     private UserGroupService userGroupService;
 
+    @Inject
+    private NotificationService notificationService;
+
     private Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap;
 
     private ReservationDetails reservationDetails;
@@ -67,8 +71,20 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
+                    notificationService.buildNotification(
+                            "Reservation Approved",
+                            "Your Reservation for "+reservationDetails.getReservation().getAsset().getName()
+                                    +" on "
+                                    +reservationDetails.getReservation().getFormattedDate()
+                                    +" from "
+                                    +reservationDetails.getReservation().getTimeStart().getTimeString()
+                                    +" to "
+                                    +reservationDetails.getReservation().getTimeEnd().getTimeString()
+                                    +" has been Approved!",
+                            authenticationController.getAuthenticatedUser());
+                }
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();
@@ -92,8 +108,20 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
+                    notificationService.buildNotification(
+                            "Reservation Rejected",
+                            "Your Reservation for "+reservationDetails.getReservation().getAsset().getName()
+                                    +" on "
+                                    +reservationDetails.getReservation().getFormattedDate()
+                                    +" from "
+                                    +reservationDetails.getReservation().getTimeStart().getTimeString()
+                                    +" to "
+                                    +reservationDetails.getReservation().getTimeEnd().getTimeString()
+                                    +" has been Rejected.",
+                            authenticationController.getAuthenticatedUser());
+                }
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();

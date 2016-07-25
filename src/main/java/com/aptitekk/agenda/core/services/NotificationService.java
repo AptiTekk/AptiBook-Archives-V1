@@ -23,6 +23,8 @@ public interface NotificationService extends MultiTenantEntityService<Notificati
 
     void buildNotification(String subject, String body, List<UserGroup> userGroupList);
 
+    void buildNotification(String subject, String body, User user);
+
     void markAllAsReadForUser(User user);
 
     List<Notification> getAllForUser(User user);
