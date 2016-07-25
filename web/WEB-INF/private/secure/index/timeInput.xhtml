@@ -57,7 +57,7 @@
                                         <tr>
                                             <td>
                                                 <h:commandLink value="#{assetCategory.name}"
-                                                               action="#{timeSelectionController.selectedAssetCategory(assetCategory)}"
+                                                               action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
                                                                style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
                                                     <f:ajax render=":timeForm"/>
                                                 </h:commandLink>
