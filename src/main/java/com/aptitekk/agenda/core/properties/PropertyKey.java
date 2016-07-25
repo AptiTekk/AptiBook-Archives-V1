@@ -8,12 +8,9 @@ package com.aptitekk.agenda.core.properties;
 
 public enum PropertyKey {
 
-    TEST_KEY_1("Test Key 1", "default", PropertyGroup.TEST_GROUP_1, 1, false, 64, null, null),
-    TEST_KEY_2("Test Key 2", "default", PropertyGroup.TEST_GROUP_1, 1, false, 64, null, null),
-    TEST_KEY_3("Test Key 3", "default", PropertyGroup.TEST_GROUP_1, 1, false, 64, null, null),
-    TEST_KEY_4("Test Key 4", "default", PropertyGroup.TEST_GROUP_2, 1, false, 64, null, null),
-    TEST_KEY_5("Test Key 5", "default", PropertyGroup.TEST_GROUP_2, 1, false, 64, null, null),
-    TEST_KEY_6("Test Key 6", "default", PropertyGroup.TEST_GROUP_2, 1, false, 64, null, null);
+    POLICY_BOX("Policy Box Content",
+            "Here lies a disclaimer. It will be ignored, just like all disclaimers usually are. If you are not ignoring it, you will not follow it. That is the way of life; and that is how we as a society innovate. For innovation shall not be hindered by policies.",
+            PropertyGroup.FRONT_PAGE, 3, false, 256, null, null);
 
     private final String friendlyName;
     private final String defaultValue;
@@ -24,7 +21,7 @@ public enum PropertyKey {
     private final String regex;
     private final String regexMessage;
 
-    PropertyKey(String defaultValue, String friendlyName, PropertyGroup group, int rows, boolean secret, int maxLength, String regex, String regexMessage) {
+    PropertyKey(String friendlyName, String defaultValue, PropertyGroup group, int rows, boolean secret, int maxLength, String regex, String regexMessage) {
         this.friendlyName = friendlyName;
         this.defaultValue = defaultValue;
         this.group = group;

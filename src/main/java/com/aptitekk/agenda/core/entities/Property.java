@@ -10,9 +10,7 @@ import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.util.EqualsHelper;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -22,6 +20,7 @@ public class Property extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
+    @Enumerated(EnumType.STRING)
     private PropertyKey propertyKey;
 
     private String propertyValue;

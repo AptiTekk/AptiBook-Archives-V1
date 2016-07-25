@@ -17,8 +17,7 @@ import java.util.Set;
 
 public enum PropertyGroup {
 
-    TEST_GROUP_1("Test Group 1", null),
-    TEST_GROUP_2("Test Group 2", null);
+    FRONT_PAGE("Front Page", null);
 
     private String friendlyName;
     private Class<? extends PropertyGroupChangeListener> propertyGroupChangeListenerClass;
