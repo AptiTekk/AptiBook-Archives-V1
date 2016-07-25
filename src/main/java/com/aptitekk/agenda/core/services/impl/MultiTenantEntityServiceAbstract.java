@@ -9,7 +9,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.MultiTenantEntityService;
-import com.aptitekk.agenda.core.tenants.TenantSessionService;
+import com.aptitekk.agenda.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;

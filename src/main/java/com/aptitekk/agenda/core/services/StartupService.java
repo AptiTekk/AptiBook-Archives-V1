@@ -24,7 +24,7 @@ public interface StartupService {
     void writeDefaultPermissions(Tenant tenant);
 
     /**
-     * Temporary method to demonstrate the capability of tenants
+     * Temporary method to demonstrate the capability of tenant
      */
     void loadDefaultTenants();
 }

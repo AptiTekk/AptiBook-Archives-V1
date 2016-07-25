@@ -6,8 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.entities.Tenant;
-import com.aptitekk.agenda.core.tenants.TenantSessionService;
+import com.aptitekk.agenda.core.tenant.TenantSessionService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.ConfigurableNavigationHandler;

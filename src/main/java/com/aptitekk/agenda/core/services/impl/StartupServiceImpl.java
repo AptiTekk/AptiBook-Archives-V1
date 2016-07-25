@@ -9,9 +9,9 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.services.*;
-import com.aptitekk.agenda.core.tenants.TenantManagementService;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import com.aptitekk.agenda.core.tenant.TenantManagementService;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.Sha256Helper;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

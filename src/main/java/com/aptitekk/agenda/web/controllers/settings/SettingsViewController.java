@@ -26,10 +26,10 @@ public class SettingsViewController implements Serializable {
         settingsSessionController.checkPagesValidity();
 
         if (settingsSessionController.getPages() != null) {
-            String tab = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("tab");
-            if (tab != null && !tab.isEmpty()) {
+            String settingsPage = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("settingsPage");
+            if (settingsPage != null && !settingsPage.isEmpty()) {
                 for (SettingsSessionController.SettingsPage page : settingsSessionController.getPages()) {
-                    if (page.getName().equalsIgnoreCase(tab)) {
+                    if (page.getName().equalsIgnoreCase(settingsPage)) {
                         settingsSessionController.setCurrentPage(page);
                         break;
                     }

@@ -9,7 +9,7 @@ package com.aptitekk.agenda.web.controllers.settings.assetCategories;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;

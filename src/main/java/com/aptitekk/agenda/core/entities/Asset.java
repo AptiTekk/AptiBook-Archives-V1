@@ -7,9 +7,9 @@
 package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import com.aptitekk.agenda.core.util.EqualsHelper;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 

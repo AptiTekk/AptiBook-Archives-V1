@@ -6,8 +6,6 @@
 
 package com.aptitekk.agenda.web;
 
-import com.aptitekk.agenda.core.utilities.LogManager;
-
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;

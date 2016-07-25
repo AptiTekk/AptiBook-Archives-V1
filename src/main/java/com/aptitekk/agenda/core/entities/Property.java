@@ -8,7 +8,7 @@ package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.properties.PropertyKey;
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

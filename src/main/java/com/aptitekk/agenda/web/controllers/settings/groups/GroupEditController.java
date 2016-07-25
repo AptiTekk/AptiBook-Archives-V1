@@ -16,7 +16,7 @@ import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.UserGroupService;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 

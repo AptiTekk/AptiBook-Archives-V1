@@ -8,7 +8,7 @@ package com.aptitekk.agenda.web.controllers.settings.assetCategories;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;

@@ -23,16 +23,23 @@
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
-                        <b:navLink outcome="manage" value="Reservation Management" iconAwesome="calendar-check-o"
-                                   onclick="loading_start()"
-                                   rendered="#{authenticationController.authenticatedUser.userGroups.size() > 0}"/>
+                        <b:dropMenu value="Reservation Management" iconAwesome="calendar-check-o"
+                                    rendered="#{not empty reservationManagementViewController.pages}">
+                            <ui:repeat value="#{reservationManagementViewController.pages}" var="page">
+                                <b:navLink outcome="manage" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
+                                           onclick="loading_start()" active="#{reservationManagementViewController.currentPage == page}"
+                                           style="#{reservationManagementViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
+                                    <f:param name="managementPage" value="#{page.name}"/>
+                                </b:navLink>
+                            </ui:repeat>
+                        </b:dropMenu>
                         <b:dropMenu value="Agenda Settings" iconAwesome="cogs"
                                     rendered="#{not empty settingsViewController.pages}">
                             <ui:repeat value="#{settingsViewController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
                                            onclick="loading_start()" active="#{settingsViewController.currentPage == page}"
                                            style="#{settingsViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
-                                    <f:param name="tab" value="#{page.name}"/>
+                                    <f:param name="settingsPage" value="#{page.name}"/>
                                 </b:navLink>
                             </ui:repeat>
                         </b:dropMenu>

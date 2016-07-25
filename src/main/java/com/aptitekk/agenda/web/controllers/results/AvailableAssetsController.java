@@ -9,8 +9,8 @@ package com.aptitekk.agenda.web.controllers.results;
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.services.AssetService;
 import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

@@ -6,11 +6,9 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Tenant {

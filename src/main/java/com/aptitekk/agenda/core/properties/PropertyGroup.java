@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.properties;
 
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.util.LogManager;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.UnsatisfiedResolutionException;

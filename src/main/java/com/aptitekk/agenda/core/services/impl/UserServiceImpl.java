@@ -9,7 +9,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import com.aptitekk.agenda.core.util.Sha256Helper;
 
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;

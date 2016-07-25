@@ -25,13 +25,13 @@
             <b:container fluid="true">
                 <b:row>
                     <!-- Sidebar -->
-                    <b:column colXs="0" colSm="0" colMd="3" colLg="2">
+                    <b:column colXs="0" colSm="0" colMd="3" colLg="2" id="sidebar">
                         <b:listLinks style="margin-top:20px">
                             <c:forEach items="#{settingsViewController.pages}" var="page">
                                 <b:navLink active="#{settingsViewController.currentPage == page}" value="#{page.name}"
                                            onclick="loading_start()" iconAwesome="#{page.iconAwesomeName}"
                                            style="#{settingsViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
-                                    <f:param name="tab" value="#{page.name}"/>
+                                    <f:param name="settingsPage" value="#{page.name}"/>
                                 </b:navLink>
                             </c:forEach>
                         </b:listLinks>

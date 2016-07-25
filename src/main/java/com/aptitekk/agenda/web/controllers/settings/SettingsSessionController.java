@@ -7,7 +7,6 @@
 package com.aptitekk.agenda.web.controllers.settings;
 
 import com.aptitekk.agenda.core.entities.Permission;
-import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.enterprise.context.SessionScoped;
@@ -98,7 +97,7 @@ public class SettingsSessionController implements Serializable {
             if (pages == null || pages.isEmpty()) {
                 return "index";
             }
-            return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&tab=" + pages.get(0).getName().replaceAll(" ", "+");
+            return FacesContext.getCurrentInstance().getViewRoot().getViewId() + "?faces-redirect=true&settingsPage=" + pages.get(0).getName().replaceAll(" ", "+");
         }
         return null;
     }

@@ -10,8 +10,8 @@ import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.services.*;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;

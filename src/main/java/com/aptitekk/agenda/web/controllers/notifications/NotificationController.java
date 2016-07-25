@@ -10,16 +10,10 @@ import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -29,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Named
 @RequestScoped
-public class NotificationController implements NotificationListener, Serializable {
+public class NotificationController implements Serializable {
 
     @Inject
     private UserService userService;
@@ -50,13 +44,7 @@ public class NotificationController implements NotificationListener, Serializabl
         if (authenticationController != null && authenticationController.getAuthenticatedUser() != null) {
             this.user = authenticationController.getAuthenticatedUser();
             loadNotifications();
-            notificationService.registerListener(this);
         }
-    }
-
-    @PreDestroy
-    private void destroy() {
-        notificationService.unregisterListener(this);
     }
 
     private void loadNotifications() {
@@ -83,13 +71,5 @@ public class NotificationController implements NotificationListener, Serializabl
 
     public List<Notification> getUnreadNotifications() {
         return unreadNotifications;
-    }
-
-    @Override
-    public void pushNotification(Notification n) {
-        LogManager.logInfo("Notification pushed to frontend.");
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, n.getSubject(), (n.getBody().length() > 30 ? n.getBody().substring(0, 30) + "..." : n.getBody()));
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, message);
     }
 }

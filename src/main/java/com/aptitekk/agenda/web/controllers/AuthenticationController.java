@@ -10,9 +10,9 @@ import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.tenants.TenantSessionService;
-import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.tenant.TenantSessionService;
+import com.aptitekk.agenda.core.util.FacesSessionHelper;
+import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.filters.TenantFilter;
 
 import javax.annotation.PostConstruct;
@@ -73,8 +73,7 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            String originalUrl
-                    = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+            String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
             if (originalUrl != null) {
                 FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
                 try {
@@ -140,4 +139,9 @@ public class AuthenticationController implements Serializable {
         this.password = password;
     }
 
+    public void refreshUser() {
+        if (authenticatedUser != null) {
+            authenticatedUser = userService.get(authenticatedUser.getId());
+        }
+    }
 }

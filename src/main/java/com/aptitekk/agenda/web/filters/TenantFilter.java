@@ -10,8 +10,8 @@ import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.TenantService;
 import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.tenants.TenantManagementService;
-import com.aptitekk.agenda.core.utilities.LogManager;
+import com.aptitekk.agenda.core.tenant.TenantManagementService;
+import com.aptitekk.agenda.core.util.LogManager;
 
 import javax.inject.Inject;
 import javax.servlet.*;
