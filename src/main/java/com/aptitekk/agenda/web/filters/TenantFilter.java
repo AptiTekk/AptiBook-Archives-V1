@@ -54,7 +54,7 @@ public class TenantFilter implements Filter {
             if (tenantManagementService.getAllowedTenantSlugs().contains(pathSplit[1].toLowerCase())) { //Valid Tenant ID
                 try {
                     String tenantSlug = pathSplit[1].toLowerCase();
-                    Tenant tenant = tenantService.getTenantBySlug(tenantSlug);
+                    Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
                     httpServletRequest.setAttribute("tenant", tenant);
 
                     String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";

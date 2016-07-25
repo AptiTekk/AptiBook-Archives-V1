@@ -13,9 +13,9 @@ import com.aptitekk.agenda.core.tenant.TenantManagementService;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Startup
 @Singleton
@@ -24,21 +24,28 @@ public class TenantManagementServiceImpl implements TenantManagementService {
     @Inject
     private TenantService tenantService;
 
-    private Set<String> allowedTenantSlugs;
+    private Map<String, Tenant> allowedTenants;
 
-    private void buildAllowedTenantSlugSet() {
-        allowedTenantSlugs = new HashSet<>();
+    private void buildAllowedTenants() {
+        allowedTenants = new HashMap<>();
 
-        allowedTenantSlugs.addAll(tenantService.getAll().stream().map(Tenant::getSlug).collect(Collectors.toList()));
+        for (Tenant tenant : tenantService.getAll()) {
+            allowedTenants.put(tenant.getSlug(), tenant);
+        }
     }
 
     @Override
     public Set<String> getAllowedTenantSlugs() {
-        return allowedTenantSlugs;
+        return allowedTenants.keySet();
     }
 
     @Override
     public void refreshTenants() {
-        buildAllowedTenantSlugSet();
+        buildAllowedTenants();
+    }
+
+    @Override
+    public Tenant getTenantBySlug(String tenantSlug) {
+        return allowedTenants.get(tenantSlug);
     }
 }

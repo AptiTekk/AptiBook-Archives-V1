@@ -6,6 +6,8 @@
 
 package com.aptitekk.agenda.core.tenant;
 
+import com.aptitekk.agenda.core.entities.Tenant;
+
 import javax.ejb.Local;
 import java.util.Set;
 
@@ -22,4 +24,11 @@ public interface TenantManagementService {
      */
     void refreshTenants();
 
+    /**
+     * Returns a Tenant based on the slug provided.
+     *
+     * @param tenantSlug The slug of the Tenant.
+     * @return The Tenant with the corresponding slug, or null.
+     */
+    Tenant getTenantBySlug(String tenantSlug);
 }
