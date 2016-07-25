@@ -6,35 +6,36 @@
 
 package com.aptitekk.agenda.web.converters;
 
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.services.AssetCategoryService;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "AssetTypeConverter")
+@Named
 @RequestScoped
-public class AssetTypeConverter implements Converter {
+public class AssetCategoryConverter implements Converter, Serializable {
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
-        if (string == null || string.isEmpty() || assetTypeService == null)
+        if (string == null || string.isEmpty() || assetCategoryService == null)
             return null;
 
-        return assetTypeService.findByName(string);
+        return assetCategoryService.findByName(string);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
-        if (o instanceof AssetType) {
-            return ((AssetType) o).getName();
+        if (o instanceof AssetCategory) {
+            return ((AssetCategory) o).getName();
         }
         return "";
     }

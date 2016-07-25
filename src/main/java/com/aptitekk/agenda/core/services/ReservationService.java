@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.core.services;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Local
 public interface ReservationService extends MultiTenantEntityService<Reservation> {
 
-    List<Asset> findAvailableAssets(AssetType type, SegmentedTimeRange segmentedTimeRange, float cushionInHours);
+    List<Asset> findAvailableAssets(AssetCategory type, SegmentedTimeRange segmentedTimeRange, float cushionInHours);
 
     boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange);
 

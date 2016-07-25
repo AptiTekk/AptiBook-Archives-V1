@@ -26,8 +26,8 @@ public class SettingsSessionController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {
-        ASSET_TYPES("Asset Types", "assetTypes", "folder-open", Permission.Group.ASSET_TYPES, null),
-        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, ASSET_TYPES),
+        ASSET_CATEGORIES("Asset Categories", "assetCategories", "folder-open", Permission.Group.ASSET_CATEGORIES, null),
+        ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, ASSET_CATEGORIES),
         GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
         USERS("Users", "users", "user", Permission.Group.USERS, GROUPS),
         PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, null),

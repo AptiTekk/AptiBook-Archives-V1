@@ -17,8 +17,8 @@
 
 <ui:composition>
     <h:form styleClass="form-horizontal">
-        <b:modal styleClass="newAssetTypeModal" title="New Asset Type">
-            <h:panelGroup id="newAssetTypeFields">
+        <b:modal styleClass="newAssetCategoryModal" title="New Asset Category">
+            <h:panelGroup id="newAssetCategoryFields">
                 <div class="form-group">
                     <b:column colXs="9" offsetXs="3">
                         * = Required. Name must be unique.
@@ -27,12 +27,12 @@
                 <div class="form-group">
                     <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
                     <b:column colXs="9">
-                        <b:message for="newAssetTypeName" showSummary="false" showDetail="true"/>
-                        <h:inputText id="newAssetTypeName" styleClass="form-control"
-                                     value="#{newAssetTypeController.name}"
+                        <b:message for="newAssetCategoryName" showSummary="false" showDetail="true"/>
+                        <h:inputText id="newAssetCategoryName" styleClass="form-control"
+                                     value="#{newAssetCategoryController.name}"
                                      required="true"
                                      requiredMessage="This is required." maxlength="32">
-                            <f:validator binding="#{uniqueAssetTypeValidator}"/>
+                            <f:validator binding="#{uniqueAssetCategoryValidator}"/>
                         </h:inputText>
                     </b:column>
                 </div>
@@ -40,8 +40,8 @@
                     <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
                     <b:column colXs="9">
                         <!--@elvariable id="tag" type="java.lang.String"-->
-                        <pf:autoComplete multiple="true" value="#{tagController.selectedAssetTypeTagNames}"
-                                         completeMethod="#{tagController.getAssetTypeTagSuggestions}"
+                        <pf:autoComplete multiple="true" value="#{tagController.selectedAssetCategoryTagNames}"
+                                         completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
                                          var="tag" itemLabel="#{tag}" itemValue="#{tag}"
                                          onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                             <pf:ajax event="keyup" process="@this" update="@this"/>
@@ -55,9 +55,9 @@
                 <b:button styleClass="btn btn-default"
                           p:data-dismiss="modal" value="Cancel"/>
                 <b:commandButton value="Add" look="primary" ajax="true"
-                                 update="newAssetTypeFields :assetsPageContent :assetTypeDeletionConfirmModal"
-                                 oncomplete="if(!validationFailed) $('.newAssetTypeModal').modal('hide')"
-                                 action="#{newAssetTypeController.addAssetType}"/>
+                                 update="newAssetCategoryFields :assetCategoriesPageContent :assetCategoryDeletionConfirmModal"
+                                 oncomplete="if(!validationFailed) $('.newAssetCategoryModal').modal('hide')"
+                                 action="#{newAssetCategoryController.addAssetCategory}"/>
             </f:facet>
         </b:modal>
     </h:form>

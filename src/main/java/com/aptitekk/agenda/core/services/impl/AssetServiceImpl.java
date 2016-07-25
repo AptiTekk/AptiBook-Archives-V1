@@ -9,7 +9,7 @@ package com.aptitekk.agenda.core.services.impl;
 import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.AssetCategoryService;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class AssetServiceImpl extends MultiTenantEntityServiceAbstract<Asset> implements AssetService, Serializable {
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Override
     public Asset findByName(String assetName) {

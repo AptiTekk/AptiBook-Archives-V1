@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.web.validators;
 
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.services.AssetCategoryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -21,21 +21,21 @@ import java.io.Serializable;
 
 @Named
 @RequestScoped
-public class UniqueAssetTypeValidator implements Validator, Serializable {
+public class UniqueAssetCategoryValidator implements Validator, Serializable {
 
     @Inject
-    AssetTypeService assetTypeService;
+    AssetCategoryService assetCategoryService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
         Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
 
-        if (inputText != null && inputText instanceof String && assetTypeService != null) {
-            AssetType otherAssetType = assetTypeService.findByName((String) inputText);
-            if (otherAssetType != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof AssetType && otherAssetType.equals(exemptionAttribute))
+        if (inputText != null && inputText instanceof String && assetCategoryService != null) {
+            AssetCategory otherAssetCategory = assetCategoryService.findByName((String) inputText);
+            if (otherAssetCategory != null) {
+                if (exemptionAttribute != null && exemptionAttribute instanceof AssetCategory && otherAssetCategory.equals(exemptionAttribute))
                     return;
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset Type with this name already exists."));
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset Category with this name already exists."));
             }
         }
     }

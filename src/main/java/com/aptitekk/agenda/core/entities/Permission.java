@@ -24,7 +24,7 @@ public class Permission extends MultiTenantEntity {
     public enum Group {
 
         GENERAL("General"),
-        ASSET_TYPES("Asset Types"),
+        ASSET_CATEGORIES("Asset Categories"),
         ASSETS("Assets"),
         USERS("Users"),
         GROUPS("Groups"),
@@ -59,11 +59,11 @@ public class Permission extends MultiTenantEntity {
                         "<li>If a User Group is given this permission, any Users within the User Group are granted all permissions.</li>" +
                         "</ul>"),
 
-        ASSET_TYPES_MODIFY_ALL(Group.ASSET_TYPES, "May Modify Any Asset Types",
-                "Users and User Groups with this permission may create, edit, and delete any Asset Types." +
+        ASSET_CATEGORIES_MODIFY_ALL(Group.ASSET_CATEGORIES, "May Modify Any Asset Categories",
+                "Users and User Groups with this permission may create, edit, and delete any Asset Categories." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Types.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Types.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Categories.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Categories.</li>" +
                         "</ul>"),
 
         ASSETS_MODIFY_OWN(Group.ASSETS, "May Modify Own Group's Assets",

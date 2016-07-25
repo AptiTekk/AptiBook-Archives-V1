@@ -7,14 +7,13 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.services.*;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 
 import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,17 +36,17 @@ public class ReservationServiceImpl extends MultiTenantEntityServiceAbstract<Res
     UserService userService;
 
     /**
-     * Finds and returns a list of assets that are available for reservation at the given times from the given asset type.
+     * Finds and returns a list of assets that are available for reservation at the given times from the given AssetCategory.
      *
-     * @param assetType            The asset type that a reservation is desired to be made from
+     * @param assetCategory        The AssetCategory that a reservation is desired to be made from
      * @param segmentedTimeRange   The time range of the reservation
      * @param hoursOffsetAllowance An amount of time in hours that the start and end times may be offset in case of not finding any available assets.
      * @return A list of available assets during the selected times.
      */
     @Override
-    public List<Asset> findAvailableAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange, float hoursOffsetAllowance) {
-        //This list contains all the assets for the given asset type.
-        List<Asset> assetsOfType = assetType.getAssets();
+    public List<Asset> findAvailableAssets(AssetCategory assetCategory, SegmentedTimeRange segmentedTimeRange, float hoursOffsetAllowance) {
+        //This list contains all the assets for the given AssetCategory.
+        List<Asset> assetsOfType = assetCategory.getAssets();
         //This list is what will be returned, it will contain all of the assets that are available for reservation.
         List<Asset> availableAssets = new ArrayList<>();
 
@@ -55,10 +54,6 @@ public class ReservationServiceImpl extends MultiTenantEntityServiceAbstract<Res
             //Check for intersections of previous reservations.
             if (isAssetAvailableForReservation(asset, segmentedTimeRange)) {
                 availableAssets.add(asset);
-                LogManager.logDebug("Available.");
-            } else {
-                LogManager.logDebug("Unavailable.");
-                //TODO: Offset time in 30 min intervals
             }
         }
         return availableAssets;

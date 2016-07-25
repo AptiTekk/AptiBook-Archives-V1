@@ -53,7 +53,7 @@ public class Asset extends MultiTenantEntity implements Serializable {
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne
-    private AssetType assetType;
+    private AssetCategory assetCategory;
 
     @ManyToOne
     private UserGroup owner;
@@ -117,12 +117,12 @@ public class Asset extends MultiTenantEntity implements Serializable {
         this.reservations = reservations;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public void setAssetType(AssetType type) {
-        this.assetType = type;
+    public void setAssetCategory(AssetCategory type) {
+        this.assetCategory = type;
     }
 
     public UserGroup getOwner() {

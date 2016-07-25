@@ -16,7 +16,6 @@ import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.SystemEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,7 +38,7 @@ public class ReservationManagementController implements Serializable {
     @Inject
     private UserGroupService userGroupService;
 
-    private HashMap<AssetType, List<ReservationDetails>> reservationDetailsMap;
+    private HashMap<AssetCategory, List<ReservationDetails>> reservationDetailsMap;
 
     @PostConstruct
     public void init() {
@@ -66,8 +65,8 @@ public class ReservationManagementController implements Serializable {
                     //Found a reservation with a pending status.
                     if (reservation.getStatus() == Reservation.Status.PENDING) {
 
-                        //If there is not an AssetType already in the map, add one with an empty list.
-                        reservationDetailsMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
+                        //If there is not an AssetCategory already in the map, add one with an empty list.
+                        reservationDetailsMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
 
                         //Traverse up the hierarchy and determine the decisions that have already been made.
                         LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
@@ -96,7 +95,7 @@ public class ReservationManagementController implements Serializable {
                             }
                         }
 
-                        reservationDetailsMap.get(asset.getAssetType()).add(new ReservationDetails(reservation, behalfUserGroup, currentDecision, hierarchyDecisions));
+                        reservationDetailsMap.get(asset.getAssetCategory()).add(new ReservationDetails(reservation, behalfUserGroup, currentDecision, hierarchyDecisions));
                     }
                 }
             }
@@ -153,12 +152,12 @@ public class ReservationManagementController implements Serializable {
         }
     }
 
-    public List<AssetType> getAssetTypes() {
+    public List<AssetCategory> getAssetCategories() {
         return new ArrayList<>(reservationDetailsMap.keySet());
     }
 
-    public List<ReservationDetails> getReservationDetailsForAssetType(AssetType assetType) {
-        return reservationDetailsMap.get(assetType);
+    public List<ReservationDetails> getReservationDetailsForAssetCategory(AssetCategory assetCategory) {
+        return reservationDetailsMap.get(assetCategory);
     }
 
     public ReservationDetails getReservationDetails() {

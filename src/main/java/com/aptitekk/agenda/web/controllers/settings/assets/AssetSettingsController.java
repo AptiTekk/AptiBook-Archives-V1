@@ -7,16 +7,16 @@
 package com.aptitekk.agenda.web.controllers.settings.assets;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.AssetCategoryService;
 import com.aptitekk.agenda.core.utilities.LogManager;
 import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import com.aptitekk.agenda.web.controllers.TimeSelectionController;
-import com.aptitekk.agenda.web.controllers.settings.assetTypes.TagController;
+import com.aptitekk.agenda.web.controllers.settings.assetCategories.TagController;
 import com.aptitekk.agenda.web.controllers.settings.groups.GroupTreeController;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
@@ -42,7 +42,7 @@ public class AssetSettingsController implements Serializable {
     private AssetService assetService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Inject
     private AuthenticationController authenticationController;
@@ -50,8 +50,8 @@ public class AssetSettingsController implements Serializable {
     @Inject
     private GroupTreeController groupTreeController;
 
-    private List<AssetType> assetTypeList;
-    private HashMap<AssetType, List<Asset>> assetMap;
+    private List<AssetCategory> assetCategoryList;
+    private HashMap<AssetCategory, List<Asset>> assetMap;
     private Asset selectedAsset;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -87,16 +87,16 @@ public class AssetSettingsController implements Serializable {
     }
 
     private void refreshAssets() {
-        assetTypeList = new ArrayList<>();
+        assetCategoryList = new ArrayList<>();
         assetMap = new HashMap<>();
 
-        if (authenticationController.userHasPermission(Permission.Descriptor.ASSET_TYPES_MODIFY_ALL) || authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
-            assetTypeList = assetTypeService.getAll();
+        if (authenticationController.userHasPermission(Permission.Descriptor.ASSET_CATEGORIES_MODIFY_ALL) || authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
+            assetCategoryList = assetCategoryService.getAll();
         }
 
         if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_ALL)) {
-            for (AssetType assetType : assetTypeList) {
-                assetMap.putIfAbsent(assetType, new ArrayList<>(assetType.getAssets()));
+            for (AssetCategory assetCategory : assetCategoryList) {
+                assetMap.putIfAbsent(assetCategory, new ArrayList<>(assetCategory.getAssets()));
             }
         } else {
             if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_HIERARCHY)) {
@@ -109,25 +109,25 @@ public class AssetSettingsController implements Serializable {
                     while ((queueGroup = queue.poll()) != null) {
                         queue.addAll(queueGroup.getChildren());
 
-                        //Add all Asset Types for the Assets that the User is allowed to edit.
+                        //Add all AssetCategories for the Assets that the User is allowed to edit.
                         //noinspection Duplicates
                         for (Asset asset : queueGroup.getAssets()) {
-                            if (!assetTypeList.contains(asset.getAssetType()))
-                                assetTypeList.add(asset.getAssetType());
-                            assetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
-                            assetMap.get(asset.getAssetType()).add(asset);
+                            if (!assetCategoryList.contains(asset.getAssetCategory()))
+                                assetCategoryList.add(asset.getAssetCategory());
+                            assetMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
+                            assetMap.get(asset.getAssetCategory()).add(asset);
                         }
                     }
                 }
             } else if (authenticationController.userHasPermission(Permission.Descriptor.ASSETS_MODIFY_OWN)) {
                 for (UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
-                    //Add all Asset Types for the Assets that the User is allowed to edit.
+                    //Add all AssetCategories for the Assets that the User is allowed to edit.
                     //noinspection Duplicates
                     for (Asset asset : userGroup.getAssets()) {
-                        if (!assetTypeList.contains(asset.getAssetType()))
-                            assetTypeList.add(asset.getAssetType());
-                        assetMap.putIfAbsent(asset.getAssetType(), new ArrayList<>());
-                        assetMap.get(asset.getAssetType()).add(asset);
+                        if (!assetCategoryList.contains(asset.getAssetCategory()))
+                            assetCategoryList.add(asset.getAssetCategory());
+                        assetMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
+                        assetMap.get(asset.getAssetCategory()).add(asset);
                     }
                 }
             }
@@ -169,11 +169,11 @@ public class AssetSettingsController implements Serializable {
 
                     setSelectedAsset(assetService.merge(selectedAsset));
                     LogManager.logInfo("Asset updated, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
-                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
+                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
                     LogManager.logError("Error updating asset settings " + e.getMessage());
-                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
         }
@@ -203,20 +203,20 @@ public class AssetSettingsController implements Serializable {
         this.fileName = null;
     }
 
-    public void addNewAsset(AssetType assetType) {
-        if (assetType != null) {
+    public void addNewAsset(AssetCategory assetCategory) {
+        if (assetCategory != null) {
             try {
                 Asset asset = new Asset("New Asset");
-                asset.setAssetType(assetType);
+                asset.setAssetCategory(assetCategory);
                 assetService.insert(asset);
                 LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
-                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
+                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
 
                 refreshAssets();
             } catch (Exception e) {
                 e.printStackTrace();
                 LogManager.logError("Error persisting asset: " + e.getMessage());
-                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetType.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
     }
@@ -225,7 +225,7 @@ public class AssetSettingsController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
-                context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Successful", "Asset Deleted!"));
+                context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Successful", "Asset Deleted!"));
                 LogManager.logInfo("Asset deleted, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
                 assetService.delete(selectedAsset.getId());
                 refreshAssets();
@@ -233,7 +233,7 @@ public class AssetSettingsController implements Serializable {
                 throw new Exception("Asset not found!");
             }
         } catch (Exception e) {
-            context.addMessage("assetsForm_" + selectedAsset.getAssetType().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
+            context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
             LogManager.logError("Error while Deleting Asset: " + e.getMessage());
             e.printStackTrace();
         }
@@ -241,11 +241,11 @@ public class AssetSettingsController implements Serializable {
         selectedAsset = null;
     }
 
-    public List<AssetType> getAssetTypeList() {
-        return assetTypeList;
+    public List<AssetCategory> getAssetCategoryList() {
+        return assetCategoryList;
     }
 
-    public HashMap<AssetType, List<Asset>> getAssetMap() {
+    public HashMap<AssetCategory, List<Asset>> getAssetMap() {
         return assetMap;
     }
 

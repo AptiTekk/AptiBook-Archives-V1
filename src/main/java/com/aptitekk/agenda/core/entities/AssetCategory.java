@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class AssetType extends MultiTenantEntity implements Serializable {
+public class AssetCategory extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue
@@ -23,24 +23,24 @@ public class AssetType extends MultiTenantEntity implements Serializable {
 
     private String name;
 
-    @OneToMany(mappedBy = "assetType", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)
     private List<Asset> assets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "assetType", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)
     @OrderColumn(name = "`Order`")
     private List<ReservationField> reservationFields = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetType")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetCategory")
     @OrderBy(value = "name")
     private List<Tag> tags = new ArrayList<>();
 
     private static final long serialVersionUID = 1L;
 
-    public AssetType() {
+    public AssetCategory() {
         super();
     }
 
-    public AssetType(String name) {
+    public AssetCategory(String name) {
         super();
         this.name = name;
     }
@@ -91,9 +91,9 @@ public class AssetType extends MultiTenantEntity implements Serializable {
 
         if (o == null) return false;
 
-        if (!(o instanceof AssetType)) return false;
+        if (!(o instanceof AssetCategory)) return false;
 
-        AssetType other = (AssetType) o;
+        AssetCategory other = (AssetCategory) o;
 
         return EqualsHelper.areEquals(getName(), other.getName());
     }

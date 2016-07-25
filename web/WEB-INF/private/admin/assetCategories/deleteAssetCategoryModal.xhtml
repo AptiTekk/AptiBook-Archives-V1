@@ -15,9 +15,9 @@
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition>
-    <b:modal id="assetTypeDeletionConfirmModal" title="Asset Type
+    <b:modal id="assetCategoryDeletionConfirmModal" title="Asset Type
                          Deletion Confirmation">
-        Are you sure you want to delete the Asset Type '#{assetTypeEditController.selectedAssetType.name}'?
+        Are you sure you want to delete the Asset Category '#{assetCategoryEditController.selectedAssetCategory.name}'?
         <br/>
         <p style="text-decoration: underline">All associated Assets and Reservations will be deleted as well!</p>
         <f:facet name="footer">
@@ -25,8 +25,8 @@
                       p:data-dismiss="modal" value="Cancel"/>
             <h:commandButton styleClass="btn btn-danger"
                              p:data-dismiss="modal" value="Delete"
-                             action="#{assetTypeEditController.deleteSelectedAssetType}">
-                <f:ajax render=":assetsPage" onevent="loading"/>
+                             action="#{assetCategoryEditController.deleteSelectedAssetCategory}">
+                <f:ajax render=":assetCategoriesPage" onevent="loading"/>
             </h:commandButton>
         </f:facet>
     </b:modal>

@@ -17,7 +17,7 @@ public interface StartupService {
 
     void checkForAdminUser(Tenant tenant);
 
-    void checkForAssetTypes(Tenant tenant);
+    void checkForAssetCategories(Tenant tenant);
 
     void writeDefaultProperties(Tenant tenant);
 

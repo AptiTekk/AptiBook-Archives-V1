@@ -43,7 +43,7 @@ public class ReservationServiceTest {
     private AssetService assetService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     private Random random;
 
@@ -76,16 +76,16 @@ public class ReservationServiceTest {
         testRenter.setUsername("testRenter");
         userService.insert(testRenter);
 
-        AssetType assetType = new AssetType();
-        assetType.setName("Test Asset Type");
+        AssetCategory assetCategory = new AssetCategory();
+        assetCategory.setName("Test AssetCategory");
 
-        assetTypeService.insert(assetType);
+        assetCategoryService.insert(assetCategory);
 
         SegmentedTimeRange searchTimeRange = new SegmentedTimeRange(Calendar.getInstance(), new SegmentedTime(12, false), new SegmentedTime(15, false)); //Search from 12 to 3 on today's date.
         List<Asset> expectedAvailableAssets = new ArrayList<>();
 
         Asset expectedAsset1 = new Asset("expectedAsset1");
-        expectedAsset1.setAssetType(assetType);
+        expectedAsset1.setAssetCategory(assetCategory);
         expectedAsset1.setAvailabilityStart(new SegmentedTime(12, false));
         expectedAsset1.setAvailabilityEnd(new SegmentedTime(15, false));
         expectedAsset1.setOwner(testOwnerGroup);
@@ -93,7 +93,7 @@ public class ReservationServiceTest {
         expectedAvailableAssets.add(expectedAsset1);
 
         Asset expectedAsset2 = new Asset("expectedAsset2");
-        expectedAsset2.setAssetType(assetType);
+        expectedAsset2.setAssetCategory(assetCategory);
         expectedAsset2.setAvailabilityStart(new SegmentedTime(11, true));
         expectedAsset2.setAvailabilityEnd(new SegmentedTime(15, true));
         expectedAsset2.setOwner(testOwnerGroup);
@@ -101,7 +101,7 @@ public class ReservationServiceTest {
         expectedAvailableAssets.add(expectedAsset2);
 
         Asset expectedAsset3 = new Asset("expectedAsset3");
-        expectedAsset3.setAssetType(assetType);
+        expectedAsset3.setAssetCategory(assetCategory);
         expectedAsset3.setAvailabilityStart(new SegmentedTime(8, false));
         expectedAsset3.setAvailabilityEnd(new SegmentedTime(15, false));
         expectedAsset3.setOwner(testOwnerGroup);
@@ -117,7 +117,7 @@ public class ReservationServiceTest {
         reservationService.insert(reservation);
 
         Asset expectedAsset4 = new Asset("expectedAsset4");
-        expectedAsset4.setAssetType(assetType);
+        expectedAsset4.setAssetCategory(assetCategory);
         expectedAsset4.setAvailabilityStart(new SegmentedTime(8, false));
         expectedAsset4.setAvailabilityEnd(new SegmentedTime(15, false));
         expectedAsset4.setOwner(testOwnerGroup);
@@ -134,21 +134,21 @@ public class ReservationServiceTest {
         reservationService.insert(reservation);
 
         Asset unexpectedAsset1 = new Asset("unexpectedAsset1");
-        unexpectedAsset1.setAssetType(assetType);
+        unexpectedAsset1.setAssetCategory(assetCategory);
         unexpectedAsset1.setAvailabilityStart(new SegmentedTime(12, true));
         unexpectedAsset1.setAvailabilityEnd(new SegmentedTime(15, false));
         unexpectedAsset1.setOwner(testOwnerGroup);
         assetService.insert(unexpectedAsset1);
 
         Asset unexpectedAsset2 = new Asset("unexpectedAsset2");
-        unexpectedAsset2.setAssetType(assetType);
+        unexpectedAsset2.setAssetCategory(assetCategory);
         unexpectedAsset2.setAvailabilityStart(new SegmentedTime(12, false));
         unexpectedAsset2.setAvailabilityEnd(new SegmentedTime(14, true));
         unexpectedAsset2.setOwner(testOwnerGroup);
         assetService.insert(unexpectedAsset2);
 
         Asset unexpectedAsset3 = new Asset("unexpectedAsset3");
-        unexpectedAsset3.setAssetType(assetType);
+        unexpectedAsset3.setAssetCategory(assetCategory);
         unexpectedAsset3.setAvailabilityStart(new SegmentedTime(8, false));
         unexpectedAsset3.setAvailabilityEnd(new SegmentedTime(15, false));
         unexpectedAsset3.setOwner(testOwnerGroup);
@@ -162,9 +162,9 @@ public class ReservationServiceTest {
         reservation.setAsset(unexpectedAsset3);
         reservationService.insert(reservation);
 
-        assetType = assetTypeService.get(assetType.getId()); //Refresh AssetType
+        assetCategory = assetCategoryService.get(assetCategory.getId()); //Refresh AssetCategory
 
-        List<Asset> actualAvailableAssets = reservationService.findAvailableAssets(assetType, searchTimeRange, 0);
+        List<Asset> actualAvailableAssets = reservationService.findAvailableAssets(assetCategory, searchTimeRange, 0);
 
         for (Asset asset : actualAvailableAssets) {
             if (!expectedAvailableAssets.contains(asset)) {

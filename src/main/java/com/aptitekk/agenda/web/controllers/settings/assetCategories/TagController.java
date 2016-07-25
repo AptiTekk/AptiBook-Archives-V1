@@ -4,14 +4,14 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers.settings.assetTypes;
+package com.aptitekk.agenda.web.controllers.settings.assetCategories;
 
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tag;
 import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.services.AssetCategoryService;
 import com.aptitekk.agenda.core.services.TagService;
 
 import javax.faces.view.ViewScoped;
@@ -30,37 +30,24 @@ public class TagController implements Serializable {
     private TagService tagService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Inject
     private AssetService assetService;
 
-    private List<String> selectedAssetTypeTagNames = new ArrayList<>();
+    private List<String> selectedAssetCategoryTagNames = new ArrayList<>();
     private List<Tag> selectedAssetTags = new ArrayList<>();
 
     private Asset selectedAsset;
     private List<Tag> availableTags;
 
-    private void createNewAssetTypeTag(AssetType assetType, String tagName) {
-        if (assetType != null && tagName != null) {
+    private void createNewAssetCategoryTag(AssetCategory assetCategory, String tagName) {
+        if (assetCategory != null && tagName != null) {
             Tag tag = new Tag();
             tag.setName(tagName);
-            tag.setAssetType(assetType);
+            tag.setAssetCategory(assetCategory);
             try {
                 tagService.insert(tag);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void deleteTagfromAssetType(AssetType assetType, String tagName) {
-        if (assetType != null && tagName != null) {
-            Tag tag = tagService.findByName(assetType, tagName);
-            try {
-                if (tag != null) {
-                    tagService.delete(tag.getId());
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -78,27 +65,27 @@ public class TagController implements Serializable {
     }
 
     /**
-     * Updates the specified AssetType with the selected AssetType Tag names from this controller.
+     * Updates the specified AssetCategory with the selected AssetCategory Tag names from this controller.
      * <br/><br/>
-     * Note: If you have made any changes to the AssetType, you should merge the AssetType before calling this method.
+     * Note: If you have made any changes to the AssetCategory, you should merge the AssetCategory before calling this method.
      *
-     * @param assetType The AssetType to update.
+     * @param assetCategory The AssetCategory to update.
      */
-    void updateAssetTags(AssetType assetType) {
-        List<Tag> currentTags = assetType.getTags();
+    void updateAssetTags(AssetCategory assetCategory) {
+        List<Tag> currentTags = assetCategory.getTags();
 
-        if (selectedAssetTypeTagNames != null) {
+        if (selectedAssetCategoryTagNames != null) {
             List<String> currentTagNames = new ArrayList<>();
             for (Tag tag : currentTags) {
-                if (!selectedAssetTypeTagNames.contains(tag.getName()))
+                if (!selectedAssetCategoryTagNames.contains(tag.getName()))
                     deleteTag(tag);
                 else
                     currentTagNames.add(tag.getName());
             }
 
-            for (String tagName : selectedAssetTypeTagNames) {
+            for (String tagName : selectedAssetCategoryTagNames) {
                 if (!currentTagNames.contains(tagName))
-                    createNewAssetTypeTag(assetType, tagName);
+                    createNewAssetCategoryTag(assetCategory, tagName);
             }
         }
     }
@@ -138,7 +125,7 @@ public class TagController implements Serializable {
         }
     }
 
-    public List<String> getAssetTypeTagSuggestions(String input) {
+    public List<String> getAssetCategoryTagSuggestions(String input) {
         return null; //Intentional: we don't want any suggestions, so return null;
     }
 
@@ -159,23 +146,23 @@ public class TagController implements Serializable {
         return null;
     }
 
-    public List<String> getSelectedAssetTypeTagNames() {
-        return selectedAssetTypeTagNames;
+    public List<String> getSelectedAssetCategoryTagNames() {
+        return selectedAssetCategoryTagNames;
     }
 
-    public void setSelectedAssetTypeTagNames(List<String> selectedAssetTypeTagNames) {
-        if (selectedAssetTypeTagNames == null) {
-            if (this.selectedAssetTypeTagNames != null)
-                this.selectedAssetTypeTagNames.clear();
+    public void setSelectedAssetCategoryTagNames(List<String> selectedAssetCategoryTagNames) {
+        if (selectedAssetCategoryTagNames == null) {
+            if (this.selectedAssetCategoryTagNames != null)
+                this.selectedAssetCategoryTagNames.clear();
             else
-                this.selectedAssetTypeTagNames = new ArrayList<>();
+                this.selectedAssetCategoryTagNames = new ArrayList<>();
             return;
         }
 
         List<String> filteredTags = new ArrayList<>();
 
         //Remove commas and duplicates
-        for (String tag : selectedAssetTypeTagNames) {
+        for (String tag : selectedAssetCategoryTagNames) {
             tag = tag.trim().replaceAll("\\|", "");
 
             if (tag.contains(","))
@@ -186,7 +173,7 @@ public class TagController implements Serializable {
 
             filteredTags.add(tag);
         }
-        this.selectedAssetTypeTagNames = filteredTags;
+        this.selectedAssetCategoryTagNames = filteredTags;
     }
 
     public List<Tag> getSelectedAssetTags() {
@@ -212,7 +199,7 @@ public class TagController implements Serializable {
 
     public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
-        this.availableTags = selectedAsset != null ? selectedAsset.getAssetType().getTags() : null;
+        this.availableTags = selectedAsset != null ? selectedAsset.getAssetCategory().getTags() : null;
     }
 
 }

@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.entities.AssetType;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tag;
 import com.aptitekk.agenda.core.services.TagService;
 
@@ -18,15 +18,15 @@ import java.io.Serializable;
 public class TagServiceImpl extends MultiTenantEntityServiceAbstract<Tag> implements TagService, Serializable {
 
     @Override
-    public Tag findByName(AssetType assetType, String name) {
-        if (assetType == null || name == null)
+    public Tag findByName(AssetCategory assetCategory, String name) {
+        if (assetCategory == null || name == null)
             return null;
 
         try {
             return entityManager
-                    .createQuery("SELECT t FROM Tag t WHERE t.assetType = :assetType AND t.name = :name", Tag.class)
-                    .setParameter("assetType", assetType)
-                    .setParameter("name", name)
+                    .createQuery("SELECT t FROM Tag t WHERE t.assetCategory = ?1 AND t.name = ?2", Tag.class)
+                    .setParameter(1, assetCategory)
+                    .setParameter(2, name)
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;

@@ -35,10 +35,10 @@ public class AvailableAssetsController implements Serializable {
     private List<Tag> filterTags;
     private List<Tag> selectedFilterTags;
 
-    public void searchForAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
-        this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
+    public void searchForAssets(AssetCategory assetCategory, SegmentedTimeRange segmentedTimeRange) {
+        this.availableAssets = reservationService.findAvailableAssets(assetCategory, segmentedTimeRange, 0f);
 
-        filterTags = assetType.getTags();
+        filterTags = assetCategory.getTags();
         selectedFilterTags = new ArrayList<>();
         filterAssets();
     }

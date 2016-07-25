@@ -32,23 +32,23 @@
 
                 <h:panelGroup id="pendingReservations">
                     <b:message for="pendingReservations" showSummary="false" showDetail="true"/>
-                    <ui:fragment rendered="#{empty reservationManagementController.assetTypes}">
+                    <ui:fragment rendered="#{empty reservationManagementController.assetCategories}">
                         <b:row>
                             <b:column colXs="12">
                                 <h4>There are currently no Reservations pending approval.</h4>
                             </b:column>
                         </b:row>
                     </ui:fragment>
-                    <ui:fragment rendered="#{not empty reservationManagementController.assetTypes}">
-                        <ui:repeat value="#{reservationManagementController.assetTypes}" var="assetType">
+                    <ui:fragment rendered="#{not empty reservationManagementController.assetCategories}">
+                        <ui:repeat value="#{reservationManagementController.assetCategories}" var="assetCategory">
                             <b:row>
                                 <b:column colXs="12">
-                                    <h4>#{assetType.name}</h4>
+                                    <h4>#{assetCategory.name}</h4>
                                     <hr/>
                                 </b:column>
                             </b:row>
                             <ui:repeat
-                                    value="#{reservationManagementController.getReservationDetailsForAssetType(assetType)}"
+                                    value="#{reservationManagementController.reservationDetailsForAssetCategory(assetCategory)}"
                                     var="reservationDetails">
                                 <b:row>
                                     <b:column colXs="12">

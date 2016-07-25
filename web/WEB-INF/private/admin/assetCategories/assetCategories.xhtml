@@ -17,66 +17,66 @@
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition>
-    <h:panelGroup layout="block" id="assetsPage">
-        <b:row id="assetsPageContent">
-            <!-- Asset Type Selection List -->
+    <h:panelGroup layout="block" id="assetCategoriesPage">
+        <b:row id="assetCategoriesPageContent">
+            <!-- Asset Category Selection List -->
             <b:column colXs="12" colLg="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{assetTypeEditController.assetTypes}" var="assetType"
+                        <b:dataTable value="#{assetCategoryEditController.assetCategories}" var="assetCategory"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      responsive="true">
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Asset Type"/>
+                                    <h:outputText value="Asset Category"/>
                                 </f:facet>
-                                <b:navCommandLink value="#{assetType.name}"
+                                <b:navCommandLink value="#{assetCategory.name}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
-                                                  action="#{assetTypeEditController.setSelectedAssetType(assetType)}"
-                                                  update=":assetsPage"
-                                                  style="cursor: pointer; font-weight: #{assetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}"/>
+                                                  action="#{assetCategoryEditController.setSelectedAssetCategory(assetCategory)}"
+                                                  update=":assetCategoriesPage"
+                                                  style="cursor: pointer; font-weight: #{assetCategoryEditController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
                             </h:column>
                         </b:dataTable>
                     </div>
                     <h:panelGroup layout="block" styleClass="form-group"
-                                  rendered="#{assetTypeEditController.hasModifyPermission()}">
+                                  rendered="#{assetCategoryEditController.hasModifyPermission()}">
                         <b:button look="primary"
-                                  value="Add New Asset Type"
+                                  value="Add New Asset Category"
                                   p:data-toggle="modal"
-                                  p:data-target=".newAssetTypeModal"/>
+                                  p:data-target=".newAssetCategoryModal"/>
                     </h:panelGroup>
                 </h:form>
             </b:column>
 
-            <!-- Asset Type Edit Fields -->
+            <!-- Asset Category Edit Fields -->
             <b:column colXs="12" colLg="7">
                 <c:choose>
-                    <c:when test="#{assetTypeEditController.selectedAssetType == null}">
+                    <c:when test="#{assetCategoryEditController.selectedAssetCategory == null}">
                         <b:column colXs="9" offsetXs="3">
-                            <h4>Please select an Asset Type.</h4>
+                            <h4>Please select an Asset Category.</h4>
                             <b:messages showSummary="false" showDetail="true"/>
                         </b:column>
                     </c:when>
                     <c:otherwise>
-                        <h:form styleClass="form-horizontal" id="assetTypeEditForm">
+                        <h:form styleClass="form-horizontal" id="assetCategoryEditForm">
 
                             <div class="form-group">
                                 <b:column colXs="9" offsetXs="3">
-                                    <h4>Asset Type Settings:</h4>
+                                    <h4>Asset Category Settings:</h4>
                                     * = Required. Name must be unique.
-                                    <b:message for="assetTypeEditForm" showSummary="false"
+                                    <b:message for="assetCategoryEditForm" showSummary="false"
                                                showDetail="true"/>
                                 </b:column>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
-                                    <b:message for="assetTypeNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="assetTypeNameEdit" styleClass="form-control"
-                                                 value="#{assetTypeEditController.editableAssetTypeName}"
+                                    <b:message for="assetCategoryNameEdit" showSummary="false" showDetail="true"/>
+                                    <h:inputText id="assetCategoryNameEdit" styleClass="form-control"
+                                                 value="#{assetCategoryEditController.editableAssetCategoryName}"
                                                  required="true"
-                                                 disabled="#{!assetTypeEditController.hasModifyPermission()}"
+                                                 disabled="#{!assetCategoryEditController.hasModifyPermission()}"
                                                  requiredMessage="This is required." maxlength="32"/>
                                 </b:column>
                             </div>
@@ -84,10 +84,10 @@
                                 <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <!--@elvariable id="tag" type="java.lang.String"-->
-                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetTypeTagNames}"
-                                                     completeMethod="#{tagController.getAssetTypeTagSuggestions}"
+                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetCategoryTagNames}"
+                                                     completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
                                                      var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                                     disabled="#{!assetTypeEditController.hasModifyPermission()}"
+                                                     disabled="#{!assetCategoryEditController.hasModifyPermission()}"
                                                      onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                                         <pf:ajax event="keyup" process="@this" update="@this"/>
                                     </pf:autoComplete>
@@ -98,22 +98,22 @@
                                     <div class="btn-toolbar">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes" style="display: inline-block"
-                                                         action="#{assetTypeEditController.updateSettings()}"
-                                                         disabled="#{!assetTypeEditController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
+                                                         action="#{assetCategoryEditController.updateSettings()}"
+                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
+                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Fields" style="display: inline-block"
-                                                         action="#{assetTypeEditController.resetSettings()}"
-                                                         disabled="#{!assetTypeEditController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetsPage" onevent="loading"/>
+                                                         action="#{assetCategoryEditController.resetSettings()}"
+                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
+                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
                                         <b:button styleClass="btn btn-danger"
-                                                  value="Delete Asset Type"
+                                                  value="Delete Asset Category"
                                                   style="display: inline-block; float:right;"
                                                   p:data-toggle="modal"
-                                                  p:data-target="#assetTypeDeletionConfirmModal"
-                                                  disabled="#{!assetTypeEditController.hasModifyPermission()}"/>
+                                                  p:data-target="#assetCategoryDeletionConfirmModal"
+                                                  disabled="#{!assetCategoryEditController.hasModifyPermission()}"/>
                                     </div>
                                 </div>
                             </div>
@@ -123,8 +123,8 @@
             </b:column>
         </b:row>
 
-        <ui:include src="newAssetTypeModal.xhtml"/>
-        <ui:include src="deleteAssetTypeModal.xhtml"/>
+        <ui:include src="newAssetCategoryModal.xhtml"/>
+        <ui:include src="deleteAssetCategoryModal.xhtml"/>
 
     </h:panelGroup>
 </ui:composition>

@@ -33,7 +33,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
     private UserService userService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Inject
     private PropertiesService propertiesService;
@@ -54,7 +54,7 @@ public class StartupServiceImpl implements StartupService, Serializable {
         for (Tenant tenant : tenantService.getAll()) {
             checkForRootGroup(tenant);
             checkForAdminUser(tenant);
-            checkForAssetTypes(tenant);
+            checkForAssetCategories(tenant);
             writeDefaultProperties(tenant);
             writeDefaultPermissions(tenant);
         }
@@ -107,12 +107,12 @@ public class StartupServiceImpl implements StartupService, Serializable {
     }
 
     @Override
-    public void checkForAssetTypes(Tenant tenant) {
+    public void checkForAssetCategories(Tenant tenant) {
         //TODO: Do this when tenant is created; not on every startup.
-        if (assetTypeService.getAll(tenant).isEmpty()) {
+        if (assetCategoryService.getAll(tenant).isEmpty()) {
             try {
-                AssetType assetType = new AssetType("Rooms");
-                assetTypeService.insert(assetType, tenant);
+                AssetCategory assetCategory = new AssetCategory("Rooms");
+                assetCategoryService.insert(assetCategory, tenant);
             } catch (Exception e) {
                 e.printStackTrace();
             }

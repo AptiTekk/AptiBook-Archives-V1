@@ -27,7 +27,7 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
-    private AssetType assetType;
+    private AssetCategory assetCategory;
 
     @Basic
     private Boolean largeField;
@@ -60,12 +60,12 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.description = description;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public void setAssetType(AssetType assetType) {
-        this.assetType = assetType;
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
     }
 
     public Boolean getLargeField() {
