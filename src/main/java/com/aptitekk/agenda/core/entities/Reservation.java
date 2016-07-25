@@ -85,6 +85,18 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         return status;
     }
 
+    public boolean isPending() {
+        return status == Status.PENDING;
+    }
+
+    public boolean isApproved() {
+        return status == Status.APPROVED;
+    }
+
+    public boolean isRejected() {
+        return status == Status.REJECTED;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
