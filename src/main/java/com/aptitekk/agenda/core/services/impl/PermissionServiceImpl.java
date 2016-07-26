@@ -11,13 +11,40 @@ import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
+import com.aptitekk.agenda.core.util.LogManager;
 
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Stateful
 public class PermissionServiceImpl extends MultiTenantEntityServiceAbstract<Permission> implements PermissionService, Serializable {
+
+    @Override
+    public List<Permission> getAllJoinUsersAndGroups() {
+        try {
+            List<Permission> permissionsUsers = entityManager
+                    .createQuery("SELECT p FROM Permission p LEFT JOIN FETCH p.users WHERE p.tenant = ?1", Permission.class)
+                    .setParameter(1, getTenant())
+                    .getResultList();
+
+            List<Permission> permissionsUserGroups = entityManager
+                    .createQuery("SELECT p FROM Permission p LEFT JOIN FETCH p.userGroups WHERE p.tenant = ?1", Permission.class)
+                    .setParameter(1, getTenant())
+                    .getResultList();
+
+            for (Permission permission : permissionsUserGroups) {
+                if (permissionsUsers.contains(permission))
+                    permissionsUsers.get(permissionsUsers.indexOf(permission)).setUserGroups(permission.getUserGroups());
+            }
+            return permissionsUsers;
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     @Override
     public Permission getPermissionByDescriptor(Permission.Descriptor descriptor) {

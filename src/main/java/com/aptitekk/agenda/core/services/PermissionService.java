@@ -11,9 +11,12 @@ import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
 
 import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface PermissionService extends MultiTenantEntityService<Permission> {
+
+    List<Permission> getAllJoinUsersAndGroups();
 
     /**
      * Gets the Permission Entity that matches the Permission Descriptor, within the current Tenant.

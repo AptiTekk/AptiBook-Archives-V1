@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Permission extends MultiTenantEntity {
@@ -145,10 +146,10 @@ public class Permission extends MultiTenantEntity {
     private Descriptor descriptor;
 
     @ManyToMany
-    private List<UserGroup> userGroups;
+    private Set<UserGroup> userGroups;
 
     @ManyToMany
-    private List<User> users;
+    private Set<User> users;
 
     public int getId() {
         return id;
@@ -166,19 +167,19 @@ public class Permission extends MultiTenantEntity {
         this.descriptor = descriptor;
     }
 
-    public List<UserGroup> getUserGroups() {
+    public Set<UserGroup> getUserGroups() {
         return userGroups;
     }
 
-    public void setUserGroups(List<UserGroup> userGroups) {
+    public void setUserGroups(Set<UserGroup> userGroups) {
         this.userGroups = userGroups;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

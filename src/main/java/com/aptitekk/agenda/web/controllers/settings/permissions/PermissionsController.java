@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.PermissionService;
 import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
@@ -39,7 +40,7 @@ public class PermissionsController implements Serializable {
     private Permission assignmentPermission;
 
     private List<User> allUsers;
-    private List<User> assignedUsers;
+    private Set<User> assignedUsers;
     private List<User> availableUsers;
     private TreeNode[] assignedGroups;
 
@@ -71,14 +72,22 @@ public class PermissionsController implements Serializable {
     }
 
     private void buildPermissionDetailsList() {
+        //Load all permissions from database.
+        List<Permission> permissions = permissionService.getAllJoinUsersAndGroups();
+        Map<Permission.Descriptor, Permission> descriptorPermissionMap = new HashMap<>();
+        for (Permission permission : permissions) {
+            descriptorPermissionMap.putIfAbsent(permission.getDescriptor(), permission);
+        }
+
         permissionDetailsList = new ArrayList<>();
+
         Map<Permission.Group, List<Permission>> permissionGroupMap = new LinkedHashMap<>();
 
         for (Permission.Group group : Permission.Group.values())
             permissionGroupMap.put(group, new ArrayList<>());
 
         for (Permission.Descriptor descriptor : Permission.Descriptor.values())
-            permissionGroupMap.get(descriptor.getGroup()).add(permissionService.getPermissionByDescriptor(descriptor));
+            permissionGroupMap.get(descriptor.getGroup()).add(descriptorPermissionMap.get(descriptor));
 
         for (Map.Entry<Permission.Group, List<Permission>> entry : permissionGroupMap.entrySet())
             permissionDetailsList.add(new PermissionDetails(entry.getKey(), entry.getValue()));
@@ -97,7 +106,7 @@ public class PermissionsController implements Serializable {
             if (assignmentPermission.getUsers() == null || assignmentPermission.getUsers().isEmpty())
                 assignedUsers = null;
             else
-                assignedUsers = new ArrayList<>(assignmentPermission.getUsers());
+                assignedUsers = new LinkedHashSet<>(assignmentPermission.getUsers());
 
             availableUsers = new ArrayList<>(allUsers);
             if (assignedUsers != null) {
@@ -114,7 +123,7 @@ public class PermissionsController implements Serializable {
         if (availableUsers != null) {
             if (availableUsers.contains(user) && (assignedUsers == null || !assignedUsers.contains(user))) {
                 if (assignedUsers == null)
-                    assignedUsers = new ArrayList<>();
+                    assignedUsers = new LinkedHashSet<>();
                 assignedUsers.add(user);
                 availableUsers.remove(user);
             }
@@ -141,7 +150,7 @@ public class PermissionsController implements Serializable {
 
         if (assignmentPermission != null) {
             assignmentPermission.setUsers(assignedUsers);
-            List<UserGroup> userGroups = new ArrayList<>();
+            Set<UserGroup> userGroups = new LinkedHashSet<>();
             for (TreeNode treeNode : assignedGroups) {
                 if (treeNode.getData() != null && treeNode.getData() instanceof UserGroup)
                     userGroups.add((UserGroup) treeNode.getData());
@@ -160,11 +169,11 @@ public class PermissionsController implements Serializable {
         return permissionDetailsList;
     }
 
-    public List<User> getAssignedUsers() {
+    public Set<User> getAssignedUsers() {
         return assignedUsers;
     }
 
-    public void setAssignedUsers(List<User> users) {
+    public void setAssignedUsers(Set<User> users) {
         this.assignedUsers = users;
     }
 
