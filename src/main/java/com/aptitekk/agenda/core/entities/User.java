@@ -17,6 +17,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "\"user\"")
 public class User extends MultiTenantEntity implements Serializable {
 
     @Id

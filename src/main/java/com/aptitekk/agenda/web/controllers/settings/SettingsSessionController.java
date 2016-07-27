@@ -30,8 +30,7 @@ public class SettingsSessionController implements Serializable {
         GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
         USERS("Users", "users", "user", Permission.Group.USERS, GROUPS),
         PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, null),
-        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, null),
-        SERVICES("Services", "services", "server", null, null);
+        PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, null);
 
         private String name;
         private String fileName;

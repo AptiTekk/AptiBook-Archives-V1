@@ -19,8 +19,5 @@
     -->
 
     <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/2__AssetType_to_AssetCategory.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/3__Migrate_Properties_From_Ordinal_to_Name.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/4__Rename_Asset_Photo_to_Image.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
