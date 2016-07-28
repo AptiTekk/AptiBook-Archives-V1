@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.controllers.reservationManagement;
 
-import com.aptitekk.agenda.web.controllers.settings.SettingsSessionController;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -23,6 +23,9 @@ public class ReservationManagementViewController implements Serializable {
     @Inject
     ReservationManagementSessionController reservationManagementSessionController;
 
+    @Inject
+    private AuthenticationController authenticationController;
+
     @PostConstruct
     private void init() {
         reservationManagementSessionController.checkPagesValidity();
@@ -32,6 +35,11 @@ public class ReservationManagementViewController implements Serializable {
             if (managementPage != null && !managementPage.isEmpty()) {
                 for (ReservationManagementSessionController.ManagementPage page : reservationManagementSessionController.getPages()) {
                     if (page.getName().equalsIgnoreCase(managementPage)) {
+                        if (authenticationController.getAuthenticatedUser().getUserGroups().isEmpty()) {
+                            authenticationController.forceUserRedirect();
+                            return;
+                        }
+                        
                         reservationManagementSessionController.setCurrentPage(page);
                         break;
                     }

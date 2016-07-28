@@ -6,12 +6,13 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.util.GlobalEntity;
 import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 
 @Entity
-public class Tenant {
+public class Tenant extends GlobalEntity {
 
     @Id
     @GeneratedValue

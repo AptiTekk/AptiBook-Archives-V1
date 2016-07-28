@@ -14,7 +14,7 @@ import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
 @Stateless
-public class TenantServiceImpl extends EntityServiceAbstract<Tenant> implements TenantService, Serializable {
+public class TenantServiceImpl extends GlobalEntityServiceAbstract<Tenant> implements TenantService, Serializable {
 
     @Override
     public Tenant getTenantBySubscriptionId(int subscriptionId) {

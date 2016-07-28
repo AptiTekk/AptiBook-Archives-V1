@@ -58,6 +58,8 @@ public class AuthenticationController implements Serializable {
      * @return The outcome page.
      */
     public String login() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
         FacesContext context = FacesContext.getCurrentInstance();
         LogManager.logDebug("Logging In - User: " + username);
 
@@ -90,7 +92,7 @@ public class AuthenticationController implements Serializable {
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
 

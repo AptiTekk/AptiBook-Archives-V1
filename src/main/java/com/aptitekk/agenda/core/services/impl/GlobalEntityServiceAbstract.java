@@ -6,7 +6,8 @@
 
 package com.aptitekk.agenda.core.services.impl;
 
-import com.aptitekk.agenda.core.services.EntityService;
+import com.aptitekk.agenda.core.entities.util.GlobalEntity;
+import com.aptitekk.agenda.core.services.GlobalEntityService;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -16,15 +17,14 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-@Stateless
-public abstract class EntityServiceAbstract<T> implements EntityService<T>, Serializable {
+abstract class GlobalEntityServiceAbstract<T extends GlobalEntity> implements GlobalEntityService<T>, Serializable {
 
     @PersistenceContext
     EntityManager entityManager;
 
     private Class<T> entityType;
 
-    public EntityServiceAbstract() {
+    GlobalEntityServiceAbstract() {
         ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
         //noinspection unchecked
         this.entityType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
