@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;

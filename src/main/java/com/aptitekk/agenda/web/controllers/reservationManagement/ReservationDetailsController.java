@@ -7,12 +7,11 @@
 package com.aptitekk.agenda.web.controllers.reservationManagement;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
 

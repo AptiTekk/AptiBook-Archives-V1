@@ -19,5 +19,6 @@
     -->
 
     <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/2__Change_Notification_Id_Type.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

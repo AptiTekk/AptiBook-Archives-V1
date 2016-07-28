@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.validators;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
-import com.aptitekk.agenda.core.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;

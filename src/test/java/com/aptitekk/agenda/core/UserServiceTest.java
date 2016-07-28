@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.util.Sha256Helper;
 import org.jboss.arquillian.container.test.api.Deployment;

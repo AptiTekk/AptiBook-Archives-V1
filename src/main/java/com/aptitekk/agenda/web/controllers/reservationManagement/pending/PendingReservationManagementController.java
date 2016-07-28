@@ -7,10 +7,10 @@
 package com.aptitekk.agenda.web.controllers.reservationManagement.pending;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.NotificationService;
-import com.aptitekk.agenda.core.services.ReservationDecisionService;
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.ReservationDecisionService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import com.aptitekk.agenda.web.controllers.reservationManagement.ReservationDetails;

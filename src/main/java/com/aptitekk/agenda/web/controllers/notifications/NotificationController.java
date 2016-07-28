@@ -8,8 +8,8 @@ package com.aptitekk.agenda.web.controllers.notifications;
 
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.NotificationService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;

@@ -8,8 +8,8 @@ package com.aptitekk.agenda.web.filters;
 
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.TenantService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.TenantService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.tenant.TenantManagementService;
 import com.aptitekk.agenda.core.util.LogManager;
 

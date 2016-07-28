@@ -7,8 +7,7 @@
 package com.aptitekk.agenda.web.controllers.frontPage;
 
 import com.aptitekk.agenda.core.entities.Property;
-import com.aptitekk.agenda.core.properties.PropertyKey;
-import com.aptitekk.agenda.core.services.PropertiesService;
+import com.aptitekk.agenda.core.entities.services.PropertiesService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -26,7 +25,7 @@ public class FrontPageController implements Serializable {
 
     @PostConstruct
     private void init() {
-        this.policies = propertiesService.getPropertyByKey(PropertyKey.POLICY_BOX);
+        this.policies = propertiesService.getPropertyByKey(Property.Key.POLICY_BOX);
     }
 
     public String getPolicies() {

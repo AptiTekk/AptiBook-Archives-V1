@@ -9,9 +9,8 @@ package com.aptitekk.agenda.web.controllers.settings.permissions;
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
-import com.aptitekk.agenda.core.services.PermissionService;
-import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.entities.services.PermissionService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.primefaces.model.TreeNode;
 

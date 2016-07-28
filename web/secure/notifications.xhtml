@@ -57,10 +57,13 @@
                             .concat(' Unread Notification')
                             .concat(notificationViewController.unreadNotifications.size() > 1 ? 's' : '')}"/>
             </h4>
+            <h:outputText styleClass="text-muted" value="Previously Read Notifications will be deleted after 3 days."
+                          rendered="#{not empty notificationViewController.allNotifications}"/>
             <hr/>
 
             <ui:repeat value="#{notificationViewController.allNotifications}" var="notification">
-                <h:panelGroup layout="block" styleClass="notification #{notification.read ? 'read-notification' : null}">
+                <h:panelGroup layout="block"
+                              styleClass="notification #{notification.read ? 'read-notification' : null}">
                     <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
                     &mdash;
                     <h:outputText value="#{notification.body} "/>

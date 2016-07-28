@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.servlets;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.AssetService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;

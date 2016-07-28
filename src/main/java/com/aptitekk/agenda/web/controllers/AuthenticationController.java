@@ -8,8 +8,8 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.PermissionService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.PermissionService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.tenant.TenantSessionService;
 import com.aptitekk.agenda.core.util.FacesSessionHelper;
 import com.aptitekk.agenda.core.util.LogManager;

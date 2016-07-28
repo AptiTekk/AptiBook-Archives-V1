@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.core.tenant.impl;
 
 import com.aptitekk.agenda.core.entities.Tenant;
-import com.aptitekk.agenda.core.services.TenantService;
+import com.aptitekk.agenda.core.entities.services.TenantService;
 import com.aptitekk.agenda.core.tenant.TenantManagementService;
 import com.aptitekk.agenda.core.tenant.TenantSessionService;
 

@@ -7,10 +7,10 @@
 package com.aptitekk.agenda.web.controllers.results;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.NotificationService;
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
