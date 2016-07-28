@@ -47,7 +47,7 @@ public class AuthenticationController implements Serializable {
         if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
             Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
             if (attribute != null && attribute instanceof User) {
-                this.authenticatedUser = (User) attribute;
+                authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
     }
@@ -139,9 +139,4 @@ public class AuthenticationController implements Serializable {
         this.password = password;
     }
 
-    public void refreshUser() {
-        if (authenticatedUser != null) {
-            authenticatedUser = userService.get(authenticatedUser.getId());
-        }
-    }
 }

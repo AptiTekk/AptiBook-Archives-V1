@@ -29,7 +29,6 @@ public class ReservationDetailsController implements Serializable {
         Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap = new LinkedHashMap<>();
 
         Queue<UserGroup> queue = new LinkedList<>();
-        authenticationController.refreshUser();
         queue.addAll(authenticationController.getAuthenticatedUser().getUserGroups());
 
         //Traverse down the hierarchy and determine which reservations are approved.

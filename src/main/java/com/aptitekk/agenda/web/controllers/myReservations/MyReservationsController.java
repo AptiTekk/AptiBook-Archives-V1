@@ -37,7 +37,6 @@ public class MyReservationsController implements Serializable {
         presentReservations = new LinkedHashMap<>();
 
         if (authenticationController != null && authenticationController.getAuthenticatedUser() != null) {
-            authenticationController.refreshUser();
 
             for (Reservation reservation : authenticationController.getAuthenticatedUser().getReservations()) {
 
