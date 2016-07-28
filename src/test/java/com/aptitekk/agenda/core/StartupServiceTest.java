@@ -29,13 +29,13 @@ public class StartupServiceTest {
     }
 
     @Inject
-    UserGroupService userGroupService;
+    private UserGroupService userGroupService;
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    private AssetCategoryService assetCategoryService;
 
     @Test
     public void testEntitiesAreCreatedOnStartup() throws Exception {

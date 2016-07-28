@@ -8,9 +8,10 @@ package com.aptitekk.agenda.core.entities.services;
 
 import com.aptitekk.agenda.core.entities.ReservationField;
 
-import javax.ejb.Local;
+import javax.ejb.Stateful;
+import java.io.Serializable;
 
-@Local
-public interface ReservationFieldService extends MultiTenantEntityService<ReservationField> {
+@Stateful
+public class ReservationFieldService extends MultiTenantEntityServiceAbstract<ReservationField> implements Serializable {
 
 }

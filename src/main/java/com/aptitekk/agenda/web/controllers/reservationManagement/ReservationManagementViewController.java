@@ -39,7 +39,7 @@ public class ReservationManagementViewController implements Serializable {
                             authenticationController.forceUserRedirect();
                             return;
                         }
-                        
+
                         reservationManagementSessionController.setCurrentPage(page);
                         break;
                     }

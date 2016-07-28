@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class UniqueUserGroupValidator implements Validator, Serializable {
 
     @Inject
-    UserGroupService userGroupService;
+    private UserGroupService userGroupService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {

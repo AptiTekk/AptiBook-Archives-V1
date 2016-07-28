@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class UniqueAssetCategoryValidator implements Validator, Serializable {
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    private AssetCategoryService assetCategoryService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {

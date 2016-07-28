@@ -12,6 +12,7 @@ import com.aptitekk.agenda.core.entities.services.NotificationService;
 import com.aptitekk.agenda.core.entities.services.TenantService;
 import com.aptitekk.agenda.core.util.LogManager;
 import org.joda.time.Interval;
+import sun.rmi.runtime.Log;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
@@ -40,7 +41,7 @@ public class NotificationCleaner {
         for (Tenant tenant : tenants) {
             List<Notification> notifications = notificationService.getAll(tenant);
             for (Notification notification : notifications) {
-                if (notification.getRead() && new Interval(now.getTime(), notification.getCreation().getTime()).toDuration().getStandardDays() >= 3) {
+                if (notification.getRead() && new Interval(notification.getCreation().getTime(), now.getTime()).toDuration().getStandardDays() >= 3) {
                     try {
                         notificationService.delete(notification.getId());
                     } catch (Exception e) {

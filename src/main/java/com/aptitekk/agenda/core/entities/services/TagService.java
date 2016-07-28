@@ -9,10 +9,26 @@ package com.aptitekk.agenda.core.entities.services;
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tag;
 
-import javax.ejb.Local;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
+import java.io.Serializable;
 
-@Local
-public interface TagService extends MultiTenantEntityService<Tag> {
+@Stateful
+public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements Serializable {
 
-    Tag findByName(AssetCategory assetCategory, String tag);
+    public Tag findByName(AssetCategory assetCategory, String name) {
+        if (assetCategory == null || name == null)
+            return null;
+
+        try {
+            return entityManager
+                    .createQuery("SELECT t FROM Tag t WHERE t.assetCategory = ?1 AND t.name = ?2", Tag.class)
+                    .setParameter(1, assetCategory)
+                    .setParameter(2, name)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
+
 }
