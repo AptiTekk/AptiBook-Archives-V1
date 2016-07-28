@@ -50,15 +50,10 @@ public class Notification extends MultiTenantEntity implements Serializable {
         setBody(body);
     }
 
-
     public String getTimeAgo() {
-        PrettyTime prettyTime= new PrettyTime();
+        PrettyTime prettyTime = new PrettyTime();
         return prettyTime.format(creation);
     }
-
-    /*public void setTimeAgo(String timeAgo) {
-        this.timeAgo = timeAgo;
-    }*/
 
     public Long getId() {
         return id;

@@ -12,11 +12,14 @@
 package com.aptitekk.agenda.core.services.impl;
 
 import com.aptitekk.agenda.core.entities.Notification;
+import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
 import com.aptitekk.agenda.core.services.NotificationService;
+import com.aptitekk.agenda.core.services.UserGroupService;
 
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -26,6 +29,9 @@ import java.util.stream.Stream;
 
 @Stateful
 public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<Notification> implements NotificationService, Serializable {
+
+    @Inject
+    private UserGroupService userGroupService;
 
     @Override
     public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
@@ -47,6 +53,64 @@ public class NotificationServiceImpl extends MultiTenantEntityServiceAbstract<No
             insert(notification);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void sendNewReservationNotifications(Reservation reservation) {
+        if (reservation == null)
+            return;
+
+        if (reservation.getAsset().getNeedsApproval()) {
+            buildNotification(
+                    "New Reservation Request",
+                    "A new Reservation for "
+                            + reservation.getAsset().getName()
+                            + " has been requested by "
+                            + reservation.getUser().getFullname()
+                            + ".",
+                    userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
+        } else {
+            buildNotification(
+                    "New Reservation Approved",
+                    "A new Reservation for "
+                            + reservation.getAsset().getName()
+                            + " has been automatically approved for "
+                            + reservation.getUser().getFullname()
+                            + ".",
+                    userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
+        }
+    }
+
+    @Override
+    public void sendReservationDecisionNotification(Reservation reservation) {
+        if (reservation == null)
+            return;
+
+        if (reservation.getStatus() == Reservation.Status.APPROVED) {
+            buildNotification(
+                    "Reservation Approved",
+                    "Your Reservation for " + reservation.getAsset().getName()
+                            + " on "
+                            + reservation.getFormattedDate()
+                            + " from "
+                            + reservation.getTimeStart().getTimeString()
+                            + " to "
+                            + reservation.getTimeEnd().getTimeString()
+                            + " has been Approved!",
+                    reservation.getUser());
+        } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
+            buildNotification(
+                    "Reservation Rejected",
+                    "Your Reservation for " + reservation.getAsset().getName()
+                            + " on "
+                            + reservation.getFormattedDate()
+                            + " from "
+                            + reservation.getTimeStart().getTimeString()
+                            + " to "
+                            + reservation.getTimeEnd().getTimeString()
+                            + " has been Rejected.",
+                    reservation.getUser());
         }
     }
 

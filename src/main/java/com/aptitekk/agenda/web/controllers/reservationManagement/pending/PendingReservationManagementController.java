@@ -73,17 +73,7 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDetails.getReservation().getDecisions().add(decision);
                 if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
-                    notificationService.buildNotification(
-                            "Reservation Approved",
-                            "Your Reservation for "+reservationDetails.getReservation().getAsset().getName()
-                                    +" on "
-                                    +reservationDetails.getReservation().getFormattedDate()
-                                    +" from "
-                                    +reservationDetails.getReservation().getTimeStart().getTimeString()
-                                    +" to "
-                                    +reservationDetails.getReservation().getTimeEnd().getTimeString()
-                                    +" has been Approved!",
-                            reservationDetails.getReservation().getUser());
+                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
                 }
                 reservationService.merge(reservationDetails.getReservation());
 
@@ -110,17 +100,7 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDetails.getReservation().getDecisions().add(decision);
                 if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
-                    notificationService.buildNotification(
-                            "Reservation Rejected",
-                            "Your Reservation for "+reservationDetails.getReservation().getAsset().getName()
-                                    +" on "
-                                    +reservationDetails.getReservation().getFormattedDate()
-                                    +" from "
-                                    +reservationDetails.getReservation().getTimeStart().getTimeString()
-                                    +" to "
-                                    +reservationDetails.getReservation().getTimeEnd().getTimeString()
-                                    +" has been Rejected.",
-                            reservationDetails.getReservation().getUser());
+                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
                 }
                 reservationService.merge(reservationDetails.getReservation());
 

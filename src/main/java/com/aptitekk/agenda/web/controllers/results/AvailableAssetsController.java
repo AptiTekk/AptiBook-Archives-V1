@@ -93,11 +93,7 @@ public class AvailableAssetsController implements Serializable {
                 try {
                     reservationService.insert(reservation);
                     LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
-
-                    if (asset.getNeedsApproval())
-                        notificationService.buildNotification("New Reservation Request", "A new Reservation for " + asset.getName() + " has been requested by " + user.getFullname() + ".", userGroupService.getHierarchyUp(asset.getOwner()));
-                    else
-                        notificationService.buildNotification("New Reservation Added", "A new Reservation for " + asset.getName() + " has been added by " + user.getFullname() + ".", userGroupService.getHierarchyUp(asset.getOwner()));
+                    notificationService.sendNewReservationNotifications(reservation);
                 } catch (Exception e) {
                     LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + user.getFullname() + "Exception message: " + e.getMessage());
                     e.printStackTrace();
