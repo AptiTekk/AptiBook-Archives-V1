@@ -16,7 +16,8 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-abstract class GlobalEntityServiceAbstract<T extends GlobalEntity> implements EntityService<T>, Serializable {
+@SuppressWarnings("WeakerAccess")
+public abstract class GlobalEntityServiceAbstract<T extends GlobalEntity> implements EntityService<T>, Serializable {
 
     @PersistenceContext
     EntityManager entityManager;

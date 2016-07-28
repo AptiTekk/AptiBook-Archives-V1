@@ -74,7 +74,7 @@ public class Property extends MultiTenantEntity implements Serializable {
     public enum Key {
 
         POLICY_BOX("Policy Box Content",
-                "Here lies a disclaimer. It will be ignored, just like all disclaimers usually are. If you are not ignoring it, you will not follow it. That is the way of life; and that is how we as a society innovate. For innovation shall not be hindered by policies.",
+                "Default Policies Message.",
                 Group.FRONT_PAGE, 3, false, 256, null, null);
 
         private final String friendlyName;

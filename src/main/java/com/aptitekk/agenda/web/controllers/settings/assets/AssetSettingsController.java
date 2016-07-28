@@ -6,12 +6,10 @@
 
 package com.aptitekk.agenda.web.controllers.settings.assets;
 
-import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetCategory;
-import com.aptitekk.agenda.core.entities.Permission;
-import com.aptitekk.agenda.core.entities.UserGroup;
+import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
 import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.FileService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
@@ -42,6 +40,9 @@ public class AssetSettingsController implements Serializable {
     private AssetService assetService;
 
     @Inject
+    private FileService fileService;
+
+    @Inject
     private AssetCategoryService assetCategoryService;
 
     @Inject
@@ -63,7 +64,7 @@ public class AssetSettingsController implements Serializable {
     private UserGroup assetOwnerGroup;
     private TreeNode tree;
 
-    private Part file;
+    private Part image;
     private String fileName;
 
     @Inject
@@ -143,9 +144,10 @@ public class AssetSettingsController implements Serializable {
                 update = false;
             }
 
-            if (file != null) {
+            if (image != null) {
                 try {
-                    selectedAsset.uploadImage(file);
+                    File file = fileService.createFileFromImagePart(image);
+                    selectedAsset.setImage(file);
                 } catch (IOException e) {
                     LogManager.logError("Attempt to upload image for " + selectedAsset.getName() + " failed due to IOException.");
                     FacesContext.getCurrentInstance().addMessage("editAssetModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
@@ -283,22 +285,22 @@ public class AssetSettingsController implements Serializable {
         return tree;
     }
 
-    public Part getFile() {
-        return file;
+    public Part getImage() {
+        return image;
     }
 
-    public void setFile(Part file) {
-        if (file == null)
+    public void setImage(Part image) {
+        if (image == null)
             return;
-        this.file = file;
+        this.image = image;
     }
 
     /**
      * Called upon an image file being chosen by the user.
      */
     public void onFileChosen() {
-        if (file != null)
-            this.fileName = file.getSubmittedFileName();
+        if (image != null)
+            this.fileName = image.getSubmittedFileName();
     }
 
     public String getFileName() {

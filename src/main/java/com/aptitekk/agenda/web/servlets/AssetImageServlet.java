@@ -64,9 +64,9 @@ public class AssetImageServlet extends HttpServlet {
             Files.copy(imageNotFoundFile.toPath(), response.getOutputStream());
         } else {
             response.setHeader("Content-Type", "image/jpeg");
-            response.setHeader("Content-Length", String.valueOf(asset.getImage().length));
+            response.setHeader("Content-Length", String.valueOf(asset.getImage().getData().length));
             response.setHeader("Content-Disposition", "inline; filename=\"" + asset.getId() + ".jpg\"");
-            response.getOutputStream().write(asset.getImage());
+            response.getOutputStream().write(asset.getImage().getData());
         }
     }
 
