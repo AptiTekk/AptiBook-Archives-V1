@@ -11,7 +11,6 @@ import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -35,8 +34,9 @@ public class NotificationController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    private List<Notification> notifications;
+    private List<Notification> allNotifications;
     private List<Notification> unreadNotifications;
+    private List<Notification> readNotifications;
 
     private User user;
 
@@ -49,9 +49,11 @@ public class NotificationController implements Serializable {
     }
 
     private void loadNotifications() {
-        notifications = notificationService.getAllForUser(user);
+        allNotifications = notificationService.getAllForUser(user);
+
+        //Build Unread Notifications List
         unreadNotifications = new ArrayList<>();
-        unreadNotifications.addAll(notifications.stream().filter(n -> !n.getRead()).collect(Collectors.toList()));
+        unreadNotifications.addAll(allNotifications.stream().filter(n -> !n.getRead()).collect(Collectors.toList()));
     }
 
     void markAllAsRead() {
@@ -66,13 +68,11 @@ public class NotificationController implements Serializable {
         this.user = user;
     }
 
-    public List<Notification> getNotifications() {
-        return notifications;
+    public List<Notification> getAllNotifications() {
+        return allNotifications;
     }
 
     public List<Notification> getUnreadNotifications() {
         return unreadNotifications;
     }
-
-
 }
