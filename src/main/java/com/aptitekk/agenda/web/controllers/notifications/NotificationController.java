@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.services.NotificationService;
 import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -72,4 +73,6 @@ public class NotificationController implements Serializable {
     public List<Notification> getUnreadNotifications() {
         return unreadNotifications;
     }
+
+
 }

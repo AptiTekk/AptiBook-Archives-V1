@@ -37,6 +37,7 @@
           <element id="library" level="project" name="Maven: com.google.guava:guava-jdk5:17.0" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
           <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
+          <element id="library" level="project" name="Maven: org.ocpsoft.prettytime:prettytime:3.2.7.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
