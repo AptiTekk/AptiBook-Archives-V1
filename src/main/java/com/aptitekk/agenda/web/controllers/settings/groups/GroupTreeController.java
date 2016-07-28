@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.controllers.settings.groups;
 
 import com.aptitekk.agenda.core.entities.UserGroup;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import org.primefaces.event.TreeDragDropEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
@@ -27,7 +27,7 @@ public class GroupTreeController implements Serializable {
     @Inject
     private UserGroupService groupService;
 
-    private TreeNode buildTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, boolean allowRootSelection, boolean readOnly) {
+    private TreeNode buildTree(Collection<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, boolean allowRootSelection, boolean readOnly) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
@@ -71,7 +71,7 @@ public class GroupTreeController implements Serializable {
         return rootNode;
     }
 
-    private TreeNode buildFilteredTree(UserGroup currentlySelectedGroup, List<UserGroup> allowedGroups, boolean includeChildren) {
+    private TreeNode buildFilteredTree(UserGroup currentlySelectedGroup, Collection<UserGroup> allowedGroups, boolean includeChildren) {
         UserGroup rootGroup = groupService.getRootGroup();
 
         Queue<TreeNode> queue = new LinkedList<>();
@@ -161,7 +161,7 @@ public class GroupTreeController implements Serializable {
         }
     }
 
-    public TreeNode getMultipleSelectedTree(List<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection, Boolean readOnly) {
+    public TreeNode getMultipleSelectedTree(Collection<UserGroup> currentlySelectedGroups, UserGroup userGroupToExclude, Boolean allowRootSelection, Boolean readOnly) {
         int hashCode = 0;
 
         hashCode += currentlySelectedGroups == null ? 0 : currentlySelectedGroups.hashCode();

@@ -6,26 +6,28 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-/**
- * Entity implementation class for Entity: ReservationFieldEntry
- */
 @Entity
-public class ReservationFieldEntry implements Serializable {
+public class ReservationFieldEntry extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue
     private int id;
+
     @ManyToOne
     private Reservation reservation;
+
     @ManyToOne
     private ReservationField field;
+
     @Lob
     private String content;
+
     private static final long serialVersionUID = 1L;
 
     public ReservationFieldEntry() {

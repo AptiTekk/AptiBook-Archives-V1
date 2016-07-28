@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.validators;
 
 import com.aptitekk.agenda.core.entities.UserGroup;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;

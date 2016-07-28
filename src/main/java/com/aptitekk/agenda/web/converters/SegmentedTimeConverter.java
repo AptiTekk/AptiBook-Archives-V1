@@ -6,7 +6,7 @@
 
 package com.aptitekk.agenda.web.converters;
 
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;

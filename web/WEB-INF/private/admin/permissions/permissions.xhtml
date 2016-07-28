@@ -34,13 +34,13 @@
                             <h:outputText value="Assigned Users" style="font-weight: bold"/>
                             <br/>
                             <c:choose>
-                                <c:when test="#{empty permission.users}">
+                                <c:when test="#{empty permission.users.toArray()}">
                                     <h:outputText value="No Users are assigned to this permission."
                                                   style="font-style: italic"/>
                                 </c:when>
                                 <c:otherwise>
                                     <ul>
-                                        <c:forEach items="#{permission.users}" var="user">
+                                        <c:forEach items="#{permission.users.toArray()}" var="user">
                                             <li>#{user.username}</li>
                                         </c:forEach>
                                     </ul>
@@ -51,13 +51,13 @@
                             <h:outputText value="Assigned User Groups" style="font-weight: bold"/>
                             <br/>
                             <c:choose>
-                                <c:when test="#{empty permission.userGroups}">
+                                <c:when test="#{empty permission.userGroups.toArray()}">
                                     <h:outputText value="No User Groups are assigned to this permission."
                                                   style="font-style: italic"/>
                                 </c:when>
                                 <c:otherwise>
                                     <ul>
-                                        <c:forEach items="#{permission.userGroups}" var="userGroup">
+                                        <c:forEach items="#{permission.userGroups.toArray()}" var="userGroup">
                                             <li>#{userGroup.name}</li>
                                         </c:forEach>
                                     </ul>

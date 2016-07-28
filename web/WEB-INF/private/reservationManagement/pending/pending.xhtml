@@ -1,0 +1,213 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <h:panelGroup id="pendingReservations">
+        <b:message for="pendingReservations" showSummary="false" showDetail="true"/>
+        <ui:fragment rendered="#{empty pendingReservationManagementController.assetCategories}">
+            <b:row>
+                <b:column colXs="12">
+                    <h4>There are currently no Reservations pending approval.</h4>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+        <ui:fragment rendered="#{not empty pendingReservationManagementController.assetCategories}">
+            <ui:repeat value="#{pendingReservationManagementController.assetCategories}" var="assetCategory">
+                <b:row>
+                    <b:column colXs="12">
+                        <h4>#{assetCategory.name}</h4>
+                        <hr/>
+                    </b:column>
+                </b:row>
+                <ui:repeat
+                        value="#{pendingReservationManagementController.getReservationDetailsForAssetCategory(assetCategory)}"
+                        var="reservationDetails">
+                    <b:row>
+                        <b:column colXs="12">
+                            <b:panel styleClass="pendingReservationPanel"
+                                     look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
+                                     title="#{reservationDetails.reservation.asset.name}"
+                                     collapsible="false">
+                                <b:row>
+                                    <b:column colXs="12" colSm="2" style="width: 115px;">
+                                        <div class="form-group">
+                                            <p:lightBox>
+                                                <h:outputLink
+                                                        value="#{request.contextPath}/images/assets/#{reservationDetails.reservation.asset.id}">
+                                                    <h:graphicImage
+                                                            url="/images/assets/#{reservationDetails.reservation.asset.id}"
+                                                            style="height: 100px; border-radius: 5px"/>
+                                                </h:outputLink>
+                                            </p:lightBox>
+                                        </div>
+                                    </b:column>
+                                    <b:column colXs="12" colSm="10">
+                                        <b:row>
+                                            <b:column colXs="12" colSm="6">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Reservation Title:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.title}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                            <b:column colXs="12" colSm="3">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Requested By:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.user.fullname}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                            <b:column colXs="12" colSm="3">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Requested On:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.formattedDateCreated}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row>
+                                            <b:column colXs="12" colSm="4">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Reservation Date:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.formattedDate}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                            <b:column colXs="12" colSm="4">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Reservation Start Time:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.timeStart.timeString}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                            <b:column colXs="12" colSm="4">
+                                                <div class="form-group">
+                                                    <h:outputLabel value="Reservation End Time:"/>
+                                                    <b:inputText
+                                                            value="#{reservationDetails.reservation.timeEnd.timeString}"
+                                                            readonly="true"/>
+                                                </div>
+                                            </b:column>
+                                        </b:row>
+                                    </b:column>
+                                    <b:column colXs="12"
+                                              style="padding-top: 5px; border-top: 1px dashed #ddd">
+                                        <div class="form-group">
+                                            <ui:repeat value="#{reservationDetails.userGroups}"
+                                                       var="userGroup">
+                                                <ui:fragment
+                                                        rendered="#{!(userGroup.root and reservationDetails.getReservationDecisionFromUserGroup(userGroup) == null)}">
+                                                    <h:outputText value="#{userGroup.name} "
+                                                                  style="font-weight: bold;"/>
+                                                    <h:outputText
+                                                            rendered="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null}"
+                                                            value="User "/>
+                                                    <h:outputText
+                                                            rendered="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null}"
+                                                            value="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup).user.fullname} "
+                                                            style="font-weight: bold;"/>
+                                                    has
+                                                    <b:label
+                                                            text="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                                                                        ? (reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'approved' : 'rejected')
+                                                                        : 'not yet decided upon'}"
+                                                            severity="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                                                                        ? (reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'success' : 'danger')
+                                                                        : 'default'}"/>
+                                                    this Reservation.
+
+                                                    <ui:fragment
+                                                            rendered="#{reservationDetails.getOverridingDecisionForGroup(userGroup) != null}">
+                                                        (
+                                                        <b:label text="Overridden"
+                                                                 severity="info"/>
+                                                        by the decision of
+                                                        <h:outputText
+                                                                value="#{reservationDetails.getOverridingDecisionForGroup(userGroup).user.fullname} "
+                                                                style="font-weight: bold;"/>
+                                                        to
+                                                        <b:label
+                                                                text="#{reservationDetails.getOverridingDecisionForGroup(userGroup).approved ? 'approve' : 'reject'}"
+                                                                severity="#{reservationDetails.getOverridingDecisionForGroup(userGroup).approved ? 'success' : 'danger'}"/>
+                                                        on behalf of the
+                                                        <h:outputText
+                                                                value="#{reservationDetails.getOverridingDecisionForGroup(userGroup).userGroup.name} "
+                                                                style="font-weight: bold;"/>
+                                                        User Group.)
+                                                    </ui:fragment>
+                                                </ui:fragment>
+                                                <br/>
+                                            </ui:repeat>
+                                        </div>
+                                    </b:column>
+                                </b:row>
+                                <f:facet name="footer">
+                                    <h:panelGroup layout="block" styleClass="form-group"
+                                                  rendered="#{reservationDetails.currentDecision != null}">
+                                        <h:outputText
+                                                value="#{reservationDetails.currentDecision.user.equals(authenticationController.authenticatedUser)
+                                                                ? 'You'
+                                                                : reservationDetails.currentDecision.user.fullname}"
+                                                style="font-weight: bold;"/>
+                                        <h:outputText
+                                                value="#{reservationDetails.currentDecision.user.equals(authenticationController.authenticatedUser)
+                                                                ? ' have '
+                                                                : ' has '}"/>
+                                        already decided to
+                                        <b:label
+                                                text="#{reservationDetails.currentDecision.approved ? 'approve' : 'reject'}"
+                                                severity="#{reservationDetails.currentDecision.approved ? 'success' : 'danger'}"/>
+                                        this Reservation on behalf of the
+                                        <h:outputText
+                                                style="font-weight: bold;"
+                                                value="#{reservationDetails.currentDecision.userGroup.name}"/>
+                                        User Group.
+                                    </h:panelGroup>
+
+                                    <h:form>
+                                        <div class="btn-toolbar">
+                                            <b:commandButton value="Approve Reservation"
+                                                             action="#{pendingReservationManagementController.setReservationDetails(reservationDetails)}"
+                                                             look="success"
+                                                             ajax="true"
+                                                             update=":approveModalForm"
+                                                             oncomplete="$('.approvalConfirmationModal').modal();"/>
+                                            <b:commandButton value="Reject Reservation"
+                                                             action="#{pendingReservationManagementController.setReservationDetails(reservationDetails)}"
+                                                             look="default"
+                                                             ajax="true"
+                                                             update=":rejectModalForm"
+                                                             oncomplete="$('.rejectConfirmationModal').modal();"/>
+                                        </div>
+                                    </h:form>
+                                </f:facet>
+                            </b:panel>
+                        </b:column>
+                    </b:row>
+                </ui:repeat>
+            </ui:repeat>
+        </ui:fragment>
+    </h:panelGroup>
+
+    <ui:include src="approvalConfirmationModal.xhtml"/>
+    <ui:include src="rejectConfirmationModal.xhtml"/>
+</ui:composition>
+
+</html>

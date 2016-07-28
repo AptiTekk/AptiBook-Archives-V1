@@ -7,9 +7,9 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
-import com.aptitekk.agenda.core.utilities.Sha256Helper;
+import com.aptitekk.agenda.core.util.Sha256Helper;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -34,7 +34,7 @@ public class UserServiceTest {
 
     @Test
     public void correctCredentialsReturnsNullIfNullInput() throws Exception {
-        assertNull(userService.correctCredentials(null, null));
+        assertNull(userService.getUserWithCredentials(null, null));
     }
 
     @Test
@@ -49,10 +49,10 @@ public class UserServiceTest {
 
         userService.insert(user);
 
-        User check = userService.correctCredentials(username, rawPassword);
+        User check = userService.getUserWithCredentials(username, rawPassword);
 
-        assertNotNull("The credentials should have been correct, but correctCredentials returned null!", check);
+        assertNotNull("The credentials should have been correct, but getUserWithCredentials returned null!", check);
 
-        assertTrue("The user returned by correctCredentials does not match the original! Original: "+user.getId()+" - Returned: "+check.getId(), user.equals(check));
+        assertTrue("The user returned by getUserWithCredentials does not match the original! Original: "+user.getId()+" - Returned: "+check.getId(), user.equals(check));
     }
 }

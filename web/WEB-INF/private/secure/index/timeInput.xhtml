@@ -25,16 +25,8 @@
     <b:container>
         <b:row>
             <b:column colXs="12" colMd="3">
-                <b:panel title="Policies" collapsible="false">
-                    <ul>
-                        <li>This is a bullet point.</li>
-                        <li>This too!</li>
-                    </ul>
-                    <p>Here lies a disclaimer. It will be ignored, just like all
-                        disclaimers usually are. If you are not ignoring it, you will
-                        not follow it. That is the way of life; and that is how we as a
-                        society innovate. For innovation shall not be hindered by
-                        policies.</p>
+                <b:panel title="Policies" collapsible="false" rendered="#{not empty frontPageController.policies}">
+                    #{frontPageController.policies}
                 </b:panel>
             </b:column>
 
@@ -53,12 +45,12 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <ui:repeat value="#{timeSelectionController.assetTypes}" var="assetType">
+                                    <ui:repeat value="#{timeSelectionController.assetCategories}" var="assetCategory">
                                         <tr>
                                             <td>
-                                                <h:commandLink value="#{assetType.name}"
-                                                               action="#{timeSelectionController.setSelectedAssetType(assetType)}"
-                                                               style="font-weight: #{timeSelectionController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                                <h:commandLink value="#{assetCategory.name}"
+                                                               action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
+                                                               style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
                                                     <f:ajax render=":timeForm"/>
                                                 </h:commandLink>
                                             </td>
@@ -85,11 +77,12 @@
                             <h:outputText value="From" styleClass="lead"/>
                             <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
                                              styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                             disabled="#{timeSelectionController.selectedAssetType == null}">
+                                             disabled="#{timeSelectionController.selectedAssetCategory == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
-                                               var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                                <f:selectItems
+                                        value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>
@@ -109,7 +102,7 @@
                                     styleClass="btn btn-primary btn-block btn-large"
                                     value="Begin Search"
                                     disabled="#{timeSelectionController.selectedEndTime == null}"
-                                    action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetType, timeSelectionController.segmentedTimeRange)}">
+                                    action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}">
                                 <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                             </h:commandButton>
                         </b:column>

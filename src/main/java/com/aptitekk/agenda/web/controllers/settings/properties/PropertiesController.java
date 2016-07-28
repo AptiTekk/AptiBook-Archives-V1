@@ -8,9 +8,7 @@ package com.aptitekk.agenda.web.controllers.settings.properties;
 
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.Property;
-import com.aptitekk.agenda.core.properties.PropertyGroup;
-import com.aptitekk.agenda.core.properties.PropertyKey;
-import com.aptitekk.agenda.core.services.PropertiesService;
+import com.aptitekk.agenda.core.entities.services.PropertiesService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
@@ -55,17 +53,17 @@ public class PropertiesController implements Serializable {
     }
 
     private void buildPropertyInputGroups() {
-        Map<PropertyGroup, List<Property>> propertyGroupKeyEntityMap = new LinkedHashMap<>();
+        Map<Property.Group, List<Property>> propertyGroupKeyEntityMap = new LinkedHashMap<>();
         propertyInputGroups = new ArrayList<>();
 
-        for (PropertyKey propertyKey : PropertyKey.values()) {
+        for (Property.Key propertyKey : Property.Key.values()) {
             if (!propertyGroupKeyEntityMap.containsKey(propertyKey.getGroup()))
                 propertyGroupKeyEntityMap.put(propertyKey.getGroup(), new ArrayList<>());
 
             propertyGroupKeyEntityMap.get(propertyKey.getGroup()).add(propertiesService.getPropertyByKey(propertyKey));
         }
 
-        for (Map.Entry<PropertyGroup, List<Property>> entry : propertyGroupKeyEntityMap.entrySet()) {
+        for (Map.Entry<Property.Group, List<Property>> entry : propertyGroupKeyEntityMap.entrySet()) {
             propertyInputGroups.add(new PropertyInputGroup(entry.getKey(), entry.getValue()));
         }
     }
@@ -78,12 +76,12 @@ public class PropertiesController implements Serializable {
         for (PropertyInputGroup propertyInputGroup : propertyInputGroups) {
             String groupClientId = "propertiesEditForm:propertyGroup" + propertyInputGroup.getPropertyGroup().ordinal();
 
-            Map<PropertyKey, String> propertiesInputMap = propertyInputGroup.getPropertiesInputMap();
+            Map<Property.Key, String> propertiesInputMap = propertyInputGroup.getPropertiesInputMap();
             List<Property> propertyEntityList = propertyInputGroup.getPropertyEntityList();
 
             //Validate each property.
             boolean validationFailed = false;
-            for (Map.Entry<PropertyKey, String> entry : propertiesInputMap.entrySet()) {
+            for (Map.Entry<Property.Key, String> entry : propertiesInputMap.entrySet()) {
                 String propertyClientId = "propertiesEditForm:propertyField" + entry.getKey().ordinal();
 
                 if (entry.getValue() != null && entry.getValue().length() > entry.getKey().getMaxLength()) {

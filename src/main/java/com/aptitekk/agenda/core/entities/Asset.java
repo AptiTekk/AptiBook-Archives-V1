@@ -6,9 +6,10 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 
@@ -23,14 +24,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
-/**
- * The persistent class for the Room database table.
- */
 @Entity
-@NamedQuery(name = "Asset.findAll", query = "SELECT r FROM Asset r")
-public class Asset implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Asset extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue
@@ -38,10 +33,10 @@ public class Asset implements Serializable {
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    private byte[] photo;
+    private byte[] image;
 
     @Transient
-    private static final int MAX_PHOTO_SIZE_PX = 1000;
+    private static final int MAX_IMAGE_SIZE_PX = 1000;
 
     @Column(columnDefinition = "time")
     private SegmentedTime availabilityEnd;
@@ -58,7 +53,7 @@ public class Asset implements Serializable {
     private List<Reservation> reservations = new ArrayList<>();
 
     @ManyToOne
-    private AssetType assetType;
+    private AssetCategory assetCategory;
 
     @ManyToOne
     private UserGroup owner;
@@ -122,26 +117,12 @@ public class Asset implements Serializable {
         this.reservations = reservations;
     }
 
-    public Reservation addReservation(Reservation reservation) {
-        getReservations().add(reservation);
-        reservation.setAsset(this);
-
-        return reservation;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public Reservation removeReservation(Reservation reservation) {
-        getReservations().remove(reservation);
-        reservation.setAsset(null);
-
-        return reservation;
-    }
-
-    public AssetType getAssetType() {
-        return assetType;
-    }
-
-    public void setAssetType(AssetType type) {
-        this.assetType = type;
+    public void setAssetCategory(AssetCategory type) {
+        this.assetCategory = type;
     }
 
     public UserGroup getOwner() {
@@ -160,12 +141,12 @@ public class Asset implements Serializable {
         this.tags = tags;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public byte[] getImage() {
+        return image;
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     /**
@@ -174,7 +155,7 @@ public class Asset implements Serializable {
      * @param part The image part file.
      * @throws IOException If the image is not a true image, or otherwise cannot be parsed.
      */
-    public void uploadPhoto(Part part) throws IOException {
+    public void uploadImage(Part part) throws IOException {
         if (part == null) {
             LogManager.logError("Attempt to upload image for " + name + " failed due to a null Part");
             return;
@@ -194,8 +175,8 @@ public class Asset implements Serializable {
         // Scale the image up or down first
         int requiredWidthHeight;
 
-        if (bufferedImage.getWidth() > MAX_PHOTO_SIZE_PX || bufferedImage.getHeight() > MAX_PHOTO_SIZE_PX)
-            requiredWidthHeight = MAX_PHOTO_SIZE_PX;
+        if (bufferedImage.getWidth() > MAX_IMAGE_SIZE_PX || bufferedImage.getHeight() > MAX_IMAGE_SIZE_PX)
+            requiredWidthHeight = MAX_IMAGE_SIZE_PX;
         else if (bufferedImage.getWidth() > bufferedImage.getHeight())
             requiredWidthHeight = bufferedImage.getWidth();
         else
@@ -212,7 +193,7 @@ public class Asset implements Serializable {
         byte[] output = outputStream.toByteArray();
         if (output != null) {
             LogManager.logInfo("Image uploaded to " + name + " successfully.");
-            this.setPhoto(output);
+            this.setImage(output);
         } else {
             LogManager.logError("Attempt to upload image for " + name + " failed due to a null byte array output.");
         }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition>
+    <h:form id="approveModalForm">
+        <b:modal title="Reservation Approval Confirmation" styleClass="approvalConfirmationModal"
+                 close-on-escape="false" backdrop="false">
+            You are deciding on behalf of the
+            <h:outputText style="font-weight: bold"
+                          value="#{pendingReservationManagementController.reservationDetails.behalfUserGroup.name}"/>
+            User Group. Do you want to continue?
+            <b:alert severity="warning"
+                     rendered="#{not empty pendingReservationManagementController.reservationDetails.lowerApprovalOverrides}"
+                     title="If you Approve this Reservation, you will be overriding previous decisions:">
+                <ui:repeat
+                        value="#{pendingReservationManagementController.reservationDetails.lowerApprovalOverrides}"
+                        var="userGroup">
+                    <h:outputText value=" #{userGroup.name}: "/>
+                    <b:label
+                            text="#{pendingReservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                 ? (pendingReservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'approved' : 'rejected') :'not yet decided'}"
+                            severity="#{pendingReservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
+                 ? (pendingReservationManagementController.reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'success' : 'danger') : 'default'}"/>
+                    <br/>
+                </ui:repeat>
+            </b:alert>
+            <f:facet name="footer">
+                <b:button value="Cancel" dismiss="modal" onclick="return false;"/>
+
+                <b:commandButton value="Approve Reservation" look="success"
+                                 action="#{pendingReservationManagementController.approveReservation(pendingReservationManagementController.reservationDetails)}"
+                                 ajax="true" update=":pendingReservations"
+                                 oncomplete="$('.approvalConfirmationModal').modal('hide')"/>
+
+            </f:facet>
+
+        </b:modal>
+    </h:form>
+</ui:composition>
+</html>

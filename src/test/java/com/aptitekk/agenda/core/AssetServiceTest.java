@@ -7,9 +7,9 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetTypeService;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -37,7 +37,7 @@ public class AssetServiceTest {
     private AssetService assetService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @Test
     public void getByNameReturnsCorrectAsset() throws Exception {
@@ -56,22 +56,22 @@ public class AssetServiceTest {
     @Transactional
     public void getAssetsFromTypeReturnsCorrectAssets() throws Exception {
         List<Asset> assetList = new ArrayList<>();
-        AssetType assetType = new AssetType("Test Type");
-        assetTypeService.insert(assetType);
+        AssetCategory assetCategory = new AssetCategory("Test Type");
+        assetCategoryService.insert(assetCategory);
 
         for(int i = 0; i < 5; i++) {
             String assetName = UUID.randomUUID().toString();
             Asset asset = new Asset(assetName);
-            asset.setAssetType(assetType);
+            asset.setAssetCategory(assetCategory);
             assetService.insert(asset);
             assetList.add(asset);
         }
 
-        //Refresh asset type
-        assetType = assetTypeService.get(assetType.getId());
+        //Refresh AssetCategory
+        assetCategory = assetCategoryService.get(assetCategory.getId());
 
-        //Get assets from asset type
-        List<Asset> returnedAssets = assetType.getAssets();
+        //Get assets from AssetCategory
+        List<Asset> returnedAssets = assetCategory.getAssets();
         assertTrue("List is empty!", returnedAssets.size() > 0);
 
         assertNotNull("The returned asset list was null!", returnedAssets);

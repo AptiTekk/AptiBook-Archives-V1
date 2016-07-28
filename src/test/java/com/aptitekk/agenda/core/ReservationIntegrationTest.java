@@ -7,9 +7,9 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.*;
+import com.aptitekk.agenda.core.entities.services.*;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -35,7 +35,7 @@ public class ReservationIntegrationTest {
     @Inject
     UserGroupService userGroupService;
     @Inject
-    AssetTypeService typeService;
+    AssetCategoryService typeService;
     @Inject
     AssetService assetService;
     @Inject
@@ -60,12 +60,12 @@ public class ReservationIntegrationTest {
         testUser.setLastName("Renter");
         testUser.setUsername("testUser");
 
-        AssetType testAssetType = new AssetType();
-        testAssetType.setName("TestType");
+        AssetCategory testAssetCategory = new AssetCategory();
+        testAssetCategory.setName("TestType");
 
         Asset testAsset = new Asset();
         testAsset.setName("TestReservable");
-        testAsset.setAssetType(testAssetType);
+        testAsset.setAssetCategory(testAssetCategory);
         testAsset.setOwner(testOwnerGroup);
 
         userService.insert(testOwner);
@@ -73,7 +73,7 @@ public class ReservationIntegrationTest {
 
         userGroupService.insert(testOwnerGroup);
 
-        typeService.insert(testAssetType);
+        typeService.insert(testAssetCategory);
         assetService.insert(testAsset);
 
         Reservation reservation = new Reservation();

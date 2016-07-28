@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.services.AssetTypeService;
-import com.aptitekk.agenda.core.services.TagService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.TagService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -28,27 +28,27 @@ public class TagTest {
     }
 
     @Inject
-    AssetTypeService assetTypeService;
+    AssetCategoryService assetCategoryService;
 
     @Inject
     TagService tagService;
 
     @Test
-    public void testDeletingAssetTypeDeletesTags() throws Exception {
-        AssetType assetType = new AssetType();
-        assetType.setName("Test AssetType");
+    public void testDeletingAssetCategoryDeletesTags() throws Exception {
+        AssetCategory assetCategory = new AssetCategory();
+        assetCategory.setName("Test AssetCategory");
 
-        assetTypeService.insert(assetType);
+        assetCategoryService.insert(assetCategory);
 
         Tag tag = new Tag();
         tag.setName("Test Tag");
-        tag.setAssetType(assetType);
+        tag.setAssetCategory(assetCategory);
 
         tagService.insert(tag);
 
         assertEquals("Incorrect number of Tags in database!", 1, tagService.getAll().size());
 
-        assetTypeService.delete(assetType.getId());
+        assetCategoryService.delete(assetCategory.getId());
 
         assertEquals("There is still a Tag in the database!", 0, tagService.getAll().size());
     }

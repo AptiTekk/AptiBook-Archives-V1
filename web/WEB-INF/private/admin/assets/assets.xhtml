@@ -17,23 +17,23 @@
 <ui:composition>
     <h:panelGroup layout="block" id="assetsPage">
         <h:panelGroup layout="block" id="assetsPageContent">
-            <c:forEach items="#{assetSettingsController.assetTypeList}" var="assetType">
+            <c:forEach items="#{assetSettingsController.assetCategoryList}" var="assetCategory">
                 <b:row>
                     <b:column colXs="12">
-                        <h3>#{assetType.name}</h3>
+                        <h3>#{assetCategory.name}</h3>
                         <hr/>
                     </b:column>
                 </b:row>
                 <b:row>
                     <b:column colXs="12">
-                        <h:form id="assetsForm_#{assetType.id}">
+                        <h:form id="assetsForm_#{assetCategory.id}">
                             <div class="form-group">
-                                <b:message for="assetsForm_#{assetType.id}" showSummary="false"
+                                <b:message for="assetsForm_#{assetCategory.id}" showSummary="false"
                                            showDetail="true"/>
                             </div>
                             <div class="form-group">
                                 <b:dataTable
-                                        value="#{assetSettingsController.assetMap.get(assetType)}"
+                                        value="#{assetSettingsController.assetMap.get(assetCategory)}"
                                         var="asset">
                                     <h:column>
                                         <f:facet name="header">
@@ -72,7 +72,7 @@
                                 <!-- Add new Asset Button -->
                                 <h:commandButton styleClass="btn btn-primary"
                                                  value="Add New Asset" style="display: inline-block"
-                                                 action="#{assetSettingsController.addNewAsset(assetType)}">
+                                                 action="#{assetSettingsController.addNewAsset(assetCategory)}">
                                     <f:ajax render="@form"
                                             onevent="loading"/>
                                 </h:commandButton>

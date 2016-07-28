@@ -6,8 +6,9 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,12 +17,8 @@ import java.util.Calendar;
 import java.util.List;
 
 
-/**
- * The persistent class for the Reservation database table.
- */
 @Entity
-@NamedQuery(name = "Reservation.findAll", query = "SELECT r FROM Reservation r")
-public class Reservation implements Serializable {
+public class Reservation extends MultiTenantEntity implements Serializable {
     public enum Status {
         PENDING,
         APPROVED,
@@ -86,6 +83,18 @@ public class Reservation implements Serializable {
 
     public Status getStatus() {
         return status;
+    }
+
+    public boolean isPending() {
+        return status == Status.PENDING;
+    }
+
+    public boolean isApproved() {
+        return status == Status.APPROVED;
+    }
+
+    public boolean isRejected() {
+        return status == Status.REJECTED;
     }
 
     public void setStatus(Status status) {

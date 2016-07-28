@@ -6,8 +6,9 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.entities.services.UserService;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,19 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * The persistent class for the User database table.
- */
 @Entity
-@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
-public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+@Table(name = "\"user\"")
+public class User extends MultiTenantEntity implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private int id;
 
-    @Column(unique = true)
     private String username;
 
     private String firstName;

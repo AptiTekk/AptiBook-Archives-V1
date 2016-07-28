@@ -6,12 +6,12 @@
 
 package com.aptitekk.agenda.web.controllers;
 
-import com.aptitekk.agenda.core.entities.AssetType;
-import com.aptitekk.agenda.core.services.AssetTypeService;
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.utilities.time.CalendarRange;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTime;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
+import com.aptitekk.agenda.core.util.time.CalendarRange;
+import com.aptitekk.agenda.core.util.time.SegmentedTime;
+import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -56,14 +56,14 @@ public class TimeSelectionController implements Serializable {
     private SegmentedTimeRange allowedTimeRange;
     private List<SegmentedTime> allowedTimeSegments;
 
-    private List<AssetType> assetTypes;
-    private AssetType selectedAssetType;
+    private List<AssetCategory> assetCategories;
+    private AssetCategory selectedAssetCategory;
 
     @Inject
     private ReservationService reservationService;
 
     @Inject
-    private AssetTypeService assetTypeService;
+    private AssetCategoryService assetCategoryService;
 
     @PostConstruct
     public void init() {
@@ -98,7 +98,7 @@ public class TimeSelectionController implements Serializable {
         setSelectedDate(getMinDate());
 
         //--End Duplicated code--//
-        assetTypes = assetTypeService.getAll();
+        assetCategories = assetCategoryService.getAll();
     }
 
     public Date getSelectedDate() {
@@ -182,20 +182,20 @@ public class TimeSelectionController implements Serializable {
         this.selectedEndTime = selectedEndTime;
     }
 
-    public List<AssetType> getAssetTypes() {
-        return assetTypes;
+    public List<AssetCategory> getAssetCategories() {
+        return assetCategories;
     }
 
-    public void setAssetTypes(List<AssetType> assetTypes) {
-        this.assetTypes = assetTypes;
+    public void setAssetCategories(List<AssetCategory> assetCategories) {
+        this.assetCategories = assetCategories;
     }
 
-    public AssetType getSelectedAssetType() {
-        return selectedAssetType;
+    public AssetCategory getSelectedAssetCategory() {
+        return selectedAssetCategory;
     }
 
-    public void setSelectedAssetType(AssetType selectedAssetType) {
-        this.selectedAssetType = selectedAssetType;
+    public void setSelectedAssetCategory(AssetCategory selectedAssetCategory) {
+        this.selectedAssetCategory = selectedAssetCategory;
         this.setSelectedDate(getSelectedDate());
     }
 

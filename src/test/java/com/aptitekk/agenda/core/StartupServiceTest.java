@@ -6,9 +6,9 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.services.AssetTypeService;
-import com.aptitekk.agenda.core.services.UserGroupService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -35,7 +35,7 @@ public class StartupServiceTest {
     UserService userService;
 
     @Inject
-    AssetTypeService assetTypeService;
+    AssetCategoryService assetCategoryService;
 
     @Test
     public void testEntitiesAreCreatedOnStartup() throws Exception {
@@ -44,6 +44,6 @@ public class StartupServiceTest {
 
         assertNotNull("Admin User is Null!", userService.findByName(UserService.ADMIN_USERNAME));
 
-        assertNotNull("Rooms Asset Type is Null!", assetTypeService.findByName("Rooms"));
+        assertNotNull("Rooms AssetCategory is Null!", assetCategoryService.findByName("Rooms"));
     }
 }

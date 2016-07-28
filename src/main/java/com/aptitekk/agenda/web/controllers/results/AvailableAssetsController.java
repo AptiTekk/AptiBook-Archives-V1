@@ -7,9 +7,12 @@
 package com.aptitekk.agenda.web.controllers.results;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.utilities.time.SegmentedTimeRange;
+import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
+import com.aptitekk.agenda.core.util.LogManager;
+import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -26,6 +29,12 @@ public class AvailableAssetsController implements Serializable {
     private ReservationService reservationService;
 
     @Inject
+    private NotificationService notificationService;
+
+    @Inject
+    private UserGroupService userGroupService;
+
+    @Inject
     private AssetService assetService;
 
     private List<Asset> availableAssets;
@@ -34,10 +43,10 @@ public class AvailableAssetsController implements Serializable {
     private List<Tag> filterTags;
     private List<Tag> selectedFilterTags;
 
-    public void searchForAssets(AssetType assetType, SegmentedTimeRange segmentedTimeRange) {
-        this.availableAssets = reservationService.findAvailableAssets(assetType, segmentedTimeRange, 0f);
+    public void searchForAssets(AssetCategory assetCategory, SegmentedTimeRange segmentedTimeRange) {
+        this.availableAssets = reservationService.findAvailableAssets(assetCategory, segmentedTimeRange, 0f);
 
-        filterTags = assetType.getTags();
+        filterTags = assetCategory.getTags();
         selectedFilterTags = new ArrayList<>();
         filterAssets();
     }
@@ -83,7 +92,10 @@ public class AvailableAssetsController implements Serializable {
 
                 try {
                     reservationService.insert(reservation);
+                    LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
+                    notificationService.sendNewReservationNotifications(reservation);
                 } catch (Exception e) {
+                    LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + user.getFullname() + "Exception message: " + e.getMessage());
                     e.printStackTrace();
                 }
             }

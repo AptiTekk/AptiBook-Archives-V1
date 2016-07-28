@@ -6,13 +6,15 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Permission {
+public class Permission extends MultiTenantEntity {
 
     /**
      * Defines the groups of permissions.
@@ -23,7 +25,7 @@ public class Permission {
     public enum Group {
 
         GENERAL("General"),
-        ASSET_TYPES("Asset Types"),
+        ASSET_CATEGORIES("Asset Categories"),
         ASSETS("Assets"),
         USERS("Users"),
         GROUPS("Groups"),
@@ -58,11 +60,11 @@ public class Permission {
                         "<li>If a User Group is given this permission, any Users within the User Group are granted all permissions.</li>" +
                         "</ul>"),
 
-        ASSET_TYPES_MODIFY_ALL(Group.ASSET_TYPES, "May Modify Any Asset Types",
-                "Users and User Groups with this permission may create, edit, and delete any Asset Types." +
+        ASSET_CATEGORIES_MODIFY_ALL(Group.ASSET_CATEGORIES, "May Modify Any Asset Categories",
+                "Users and User Groups with this permission may create, edit, and delete any Asset Categories." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Types.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Types.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Categories.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Categories.</li>" +
                         "</ul>"),
 
         ASSETS_MODIFY_OWN(Group.ASSETS, "May Modify Own Group's Assets",
@@ -143,11 +145,11 @@ public class Permission {
     @Enumerated(value = EnumType.STRING)
     private Descriptor descriptor;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<UserGroup> userGroups;
+    @ManyToMany
+    private Set<UserGroup> userGroups;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<User> users;
+    @ManyToMany
+    private Set<User> users;
 
     public int getId() {
         return id;
@@ -165,19 +167,19 @@ public class Permission {
         this.descriptor = descriptor;
     }
 
-    public List<UserGroup> getUserGroups() {
+    public Set<UserGroup> getUserGroups() {
         return userGroups;
     }
 
-    public void setUserGroups(List<UserGroup> userGroups) {
+    public void setUserGroups(Set<UserGroup> userGroups) {
         this.userGroups = userGroups;
     }
 
-    public List<User> getUsers() {
+    public Set<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users) {
         this.users = users;
     }
 

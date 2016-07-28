@@ -23,16 +23,16 @@
             <b:column colXs="12" colLg="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{reservationFieldEditorController.assetTypes}" var="assetType"
+                        <b:dataTable value="#{reservationFieldEditorController.assetCategories}" var="assetCategory"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      responsive="true">
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="Asset Type"/>
                                 </f:facet>
-                                <h:commandLink value="#{assetType.name}"
-                                               action="#{reservationFieldEditorController.setType(assetType)}"
-                                               style="font-weight: #{assetTypeEditController.selectedAssetType == assetType ? 'bold' : 'normal'}">
+                                <h:commandLink value="#{assetCategory.name}"
+                                               action="#{reservationFieldEditorController.setType(assetCategory)}"
+                                               style="font-weight: #{assetCategoryEditController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
                                     <f:ajax render=":assetsPage"/>
                                 </h:commandLink>
                             </h:column>

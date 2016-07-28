@@ -6,13 +6,14 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-public class ReservationField implements Serializable {
+public class ReservationField extends MultiTenantEntity implements Serializable {
 
     @Id
     @GeneratedValue
@@ -26,7 +27,7 @@ public class ReservationField implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ManyToOne
-    private AssetType assetType;
+    private AssetCategory assetCategory;
 
     @Basic
     private Boolean largeField;
@@ -59,12 +60,12 @@ public class ReservationField implements Serializable {
         this.description = description;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public void setAssetType(AssetType assetType) {
-        this.assetType = assetType;
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
     }
 
     public Boolean getLargeField() {

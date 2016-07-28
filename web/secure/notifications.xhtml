@@ -10,35 +10,68 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
+
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="css">
+        <style type="text/css">
+            .read-notification {
+                opacity: 0.4;
+            }
+
+            .notification {
+                height: 100%;
+                padding-top: 15px;
+            }
+
+            hr {
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+
+            .read-notification:hover {
+                opacity: 1;
+            }
+        </style>
+    </ui:define>
     <ui:define name="content">
         <b:container>
-            <h2 style="margin-top:50px">Notifications</h2>
+            <b:row>
+                <b:column colXs="12">
+                    <ol class="breadcrumb" style="margin-top: 20px">
+                        <li><h:link outcome="index" value="Home"/></li>
+                        <li class="active">Notifications</li>
+                    </ol>
+                </b:column>
+            </b:row>
 
-            <b:column colSm="6" offsetSm="3">
-                <ui:fragment rendered="#{not empty notificationViewController.notifications}">
-                    <!--<b:accordion>-->
-                    <ui:repeat value="#{notificationViewController.notifications}" var="notification">
-                        <b:panel id="notification#{notification.id}" title="#{notification.subject}">
-                            <f:attribute name="look" value="#{notification.read? 'default' : 'primary'}"/>
-                            #{notification.body}
-                            <f:facet name="footer">
-                                <h:outputText value="#{notificationController.formatDateTime(notification.creation)}"/>
-                            </f:facet>
-                        </b:panel>
-                    </ui:repeat>
-                    <!--</b:accordion>-->
-                </ui:fragment>
-                <ui:fragment rendered="#{empty notificationViewController.notifications}">
-                    <h5 class="text-center">
-                        <small>No Notifications</small>
-                    </h5>
-                </ui:fragment>
-            </b:column>
+            <h4>
+                <h:outputText
+                        value="#{empty notificationViewController.unreadNotifications
+                        ? 'No Unread Notifications'
+                        : notificationViewController.unreadNotifications
+                            .size()
+                            .toString()
+                            .concat(' Unread Notification')
+                            .concat(notificationViewController.unreadNotifications.size() > 1 ? 's' : '')}"/>
+            </h4>
+            <h:outputText styleClass="text-muted" value="Previously Read Notifications will be deleted after 3 days."
+                          rendered="#{not empty notificationViewController.allNotifications}"/>
+            <hr/>
+
+            <ui:repeat value="#{notificationViewController.allNotifications}" var="notification">
+                <h:panelGroup layout="block"
+                              styleClass="notification #{notification.read ? 'read-notification' : null}">
+                    <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
+                    &mdash;
+                    <h:outputText value="#{notification.body} "/>
+                    <br/>
+                    <h:outputText value="#{notification.timeAgo}" style="color:#808080"/>
+                    <hr/>
+                </h:panelGroup>
+            </ui:repeat>
         </b:container>
     </ui:define>
 </ui:composition>

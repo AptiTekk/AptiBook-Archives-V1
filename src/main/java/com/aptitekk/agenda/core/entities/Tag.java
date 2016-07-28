@@ -6,14 +6,15 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Tag implements Comparable<Tag> {
+public class Tag extends MultiTenantEntity implements Comparable<Tag> {
 
     @Id
     @GeneratedValue
@@ -22,7 +23,7 @@ public class Tag implements Comparable<Tag> {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private AssetType assetType;
+    private AssetCategory assetCategory;
 
     @ManyToMany(mappedBy = "tags")
     private List<Asset> assets = new ArrayList<>();
@@ -43,12 +44,12 @@ public class Tag implements Comparable<Tag> {
         this.name = name;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
+    public AssetCategory getAssetCategory() {
+        return assetCategory;
     }
 
-    public void setAssetType(AssetType assetType) {
-        this.assetType = assetType;
+    public void setAssetCategory(AssetCategory assetCategory) {
+        this.assetCategory = assetCategory;
     }
 
     public List<Asset> getAssets() {
@@ -69,12 +70,12 @@ public class Tag implements Comparable<Tag> {
 
         Tag other = (Tag) o;
 
-        return EqualsHelper.areEquals(getName(), other.getName()) && EqualsHelper.areEquals(getAssetType(), other.getAssetType());
+        return EqualsHelper.areEquals(getName(), other.getName()) && EqualsHelper.areEquals(getAssetCategory(), other.getAssetCategory());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName(), getAssetType());
+        return EqualsHelper.calculateHashCode(getName(), getAssetCategory());
     }
 
     @Override

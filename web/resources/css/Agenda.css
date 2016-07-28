@@ -54,11 +54,19 @@
     height: 40px;
 }
 
-.dropdown-menu > li > a > span {
+.navbar-nav > li > .dropdown-menu {
+    width: 100%;
+}
+
+.navbar-nav > li > .dropdown-menu > li > a {
+    padding: 3px 15px !important;
+}
+
+.navbar-nav > li > .dropdown-menu > li > a > span {
     margin-right: 5px;
 }
 
-.dropdown-menu .fa {
+.navbar-nav > li > .dropdown-menu .fa {
     width: 16px;
 }
 
@@ -91,26 +99,26 @@
 
 /* ---------------------------------- END RESULTS PAGE MODIFICATIONS ---------------------------------- */
 
-/* ---------------------------------- BEGIN SETTINGS PAGE MODIFICATIONS ---------------------------------- */
+/* ---------------------------------- BEGIN SIDEBAR MODIFICATIONS ---------------------------------- */
 
-#settingsPage .nav > li > a {
+#sidebar .nav > li > a {
     color: #777;
 }
 
-#settingsPage .nav > li.active > a {
+#sidebar .nav > li.active > a {
     font-weight: bold;
     color: #4272b7;
 }
 
-#settingsPage .nav > li > a > span {
+#sidebar .nav > li > a > span {
     margin-right: 5px;
 }
 
-#settingsPage .nav > li > a > span > i {
+#sidebar .nav > li > a > span > i {
     width: 16px;
 }
 
-/* ---------------------------------- END SETTINGS PAGE MODIFICATIONS ---------------------------------- */
+/* ---------------------------------- END SIDEBAR MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN PRIMEFACES UI MODIFICATIONS ---------------------------------- */
 

@@ -6,20 +6,23 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.utilities.EqualsHelper;
+import com.aptitekk.agenda.core.entities.util.GlobalEntity;
+import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 
 @Entity
-@Table(schema = "MASTER")
-@NamedQueries({@NamedQuery(name = "Tenant.getBySubscriptionId", query = "SELECT t FROM Tenant t WHERE t.subscriptionId = :subscriptionId")})
-public class Tenant {
+public class Tenant extends GlobalEntity {
 
     @Id
     @GeneratedValue
     private int id;
 
+    @Column(nullable = false, unique = true)
     private int subscriptionId;
+
+    @Column(nullable = false, unique = true, length = 32)
+    private String slug;
 
     public int getId() {
         return id;
@@ -33,6 +36,14 @@ public class Tenant {
         this.subscriptionId = subscriptionId;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug.toLowerCase();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,11 +54,12 @@ public class Tenant {
 
         Tenant other = (Tenant) o;
 
-        return EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId());
+        return EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
+                && EqualsHelper.areEquals(getSlug(), other.getSlug());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getSubscriptionId());
+        return EqualsHelper.calculateHashCode(getSubscriptionId(), getSlug());
     }
 }

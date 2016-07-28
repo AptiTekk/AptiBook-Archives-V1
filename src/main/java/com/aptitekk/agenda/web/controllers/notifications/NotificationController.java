@@ -8,28 +8,22 @@ package com.aptitekk.agenda.web.controllers.notifications;
 
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.NotificationService;
-import com.aptitekk.agenda.core.services.UserService;
-import com.aptitekk.agenda.core.utilities.FacesSessionHelper;
-import com.aptitekk.agenda.core.utilities.LogManager;
-import com.aptitekk.agenda.core.utilities.notification.NotificationListener;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.UserService;
+import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Named
-@SessionScoped
-public class NotificationController implements NotificationListener, Serializable {
+@RequestScoped
+public class NotificationController implements Serializable {
 
     @Inject
     private UserService userService;
@@ -37,44 +31,33 @@ public class NotificationController implements NotificationListener, Serializabl
     @Inject
     private NotificationService notificationService;
 
-    private List<Notification> notifications;
+    @Inject
+    private AuthenticationController authenticationController;
 
-    private List<Notification> unread;
+    private List<Notification> allNotifications;
+    private List<Notification> unreadNotifications;
+    private List<Notification> readNotifications;
 
     private User user;
 
     @PostConstruct
     public void init() {
-        String loggedInUser
-                = FacesSessionHelper.getSessionVariableAsString(UserService.SESSION_VAR_USERNAME);
-        if (loggedInUser != null) {
-            this.setUser(userService.findByName(loggedInUser));
-            pullNotifications();
-            notificationService.registerListener(this);
+        if (authenticationController != null && authenticationController.getAuthenticatedUser() != null) {
+            this.user = authenticationController.getAuthenticatedUser();
+            loadNotifications();
         }
     }
 
-    @PreDestroy
-    public void deinit() {
-        notificationService.unregisterListener(this);
+    private void loadNotifications() {
+        allNotifications = notificationService.getAllForUser(user);
+
+        //Build Unread Notifications List
+        unreadNotifications = new ArrayList<>();
+        unreadNotifications.addAll(allNotifications.stream().filter(n -> !n.getRead()).collect(Collectors.toList()));
     }
 
-    public void pullNotifications() {
-        setNotifications(notificationService.getAllByUser(user));
-        setUnread(notificationService.getUnread(user));
-    }
-
-    public void markUnreadRead() {
-        System.out.println("Marking all unread as read");
-        if (unread != null)
-            unread.forEach(notification -> {
-                try {
-                    notificationService.markAsRead(notification);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
-        pullNotifications();
+    void markAllAsRead() {
+        notificationService.markAllAsReadForUser(user);
     }
 
     public User getUser() {
@@ -85,32 +68,11 @@ public class NotificationController implements NotificationListener, Serializabl
         this.user = user;
     }
 
-    public List<Notification> getNotifications() {
-        return notifications;
+    public List<Notification> getAllNotifications() {
+        return allNotifications;
     }
 
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
-    }
-
-    public List<Notification> getUnread() {
-        return unread;
-    }
-
-    public void setUnread(List<Notification> unread) {
-        this.unread = unread;
-    }
-
-    public String formatDateTime(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat(NotificationService.NOTIFICATION_DATEFORMAT);
-        return dateFormat.format(date);
-    }
-
-    @Override
-    public void pushNotification(Notification n) {
-        LogManager.logDebug("Notification pushed to frontend!");
-        FacesMessage message = new FacesMessage(n.getSubject(), (n.getBody().length() > 30 ? n.getBody().substring(0, 30) + "..." : n.getBody()));
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, message);
+    public List<Notification> getUnreadNotifications() {
+        return unreadNotifications;
     }
 }
