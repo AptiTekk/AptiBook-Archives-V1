@@ -11,34 +11,42 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pf="http://primefaces.org/ui"
       xmlns:b="http://bootsfaces.net/ui"
+
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
-        <b:container>
-            <h2 style="margin-top:50px">Notifications</h2>
+      <b:container>
+          <h2 style="margin-top:50px">New notifications</h2>
+          <pf:separator/>
+          <ui:repeat value="#{notificationViewController.unread}" var="notification">
+              <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
+              <h:outputText value="#{notification.body} "/>
+              <!--<h:outputText value="#{notification.user.fullname}." style="font-weight:bold"/>-->
+              <br/>
+              <h:outputText value="#{notification.timeAgo}" style="color:#808080"/>
+              <pf:separator/>
+              <br/>
+          </ui:repeat>
 
-            <b:column colSm="6" offsetSm="3">
-                <ui:fragment rendered="#{not empty notificationViewController.notifications}">
-                    <!--<b:accordion>-->
-                    <ui:repeat value="#{notificationViewController.notifications}" var="notification">
-                        <b:panel id="notification#{notification.id}" title="#{notification.subject}">
-                            <f:attribute name="look" value="#{notification.read? 'default' : 'primary'}"/>
-                            #{notification.body}
-                            <f:facet name="footer">
-                                <h:outputText value="#{notificationController.formatDateTime(notification.creation)}"/>
-                            </f:facet>
-                        </b:panel>
-                    </ui:repeat>
-                    <!--</b:accordion>-->
-                </ui:fragment>
-                <ui:fragment rendered="#{empty notificationViewController.notifications}">
-                    <h5 class="text-center">
-                        <small>No Notifications</small>
-                    </h5>
-                </ui:fragment>
-            </b:column>
+
+
+
+            <b:well>
+            <h2 style="margin-top:50px">Read notifications</h2>
+          <pf:separator/>
+            <ui:repeat value="#{notificationViewController.notifications}" var="notification">
+                <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
+                <h:outputText value="#{notification.body} "/>
+                <!--<h:outputText value="#{notification.user.fullname}." style="font-weight:bold"/>-->
+                <br/>
+                <h:outputText value="#{notification.timeAgo}" style="color:#808080"/>
+                <pf:separator/>
+                <br/>
+            </ui:repeat>
+            </b:well>
         </b:container>
     </ui:define>
 </ui:composition>

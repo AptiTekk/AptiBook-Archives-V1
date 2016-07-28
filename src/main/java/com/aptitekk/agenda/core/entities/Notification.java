@@ -13,10 +13,12 @@ package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.util.EqualsHelper;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
 
 @Entity
 public class Notification extends MultiTenantEntity implements Serializable {
@@ -47,6 +49,16 @@ public class Notification extends MultiTenantEntity implements Serializable {
         setSubject(subject);
         setBody(body);
     }
+
+
+    public String getTimeAgo() {
+        PrettyTime prettyTime= new PrettyTime();
+        return prettyTime.format(creation);
+    }
+
+    /*public void setTimeAgo(String timeAgo) {
+        this.timeAgo = timeAgo;
+    }*/
 
     public Long getId() {
         return id;
