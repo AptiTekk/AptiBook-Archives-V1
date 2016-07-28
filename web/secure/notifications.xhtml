@@ -15,6 +15,27 @@
 >
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="css">
+        <style type="text/css">
+            .read-notification {
+                opacity: 0.4;
+            }
+
+            .notification {
+                height: 100%;
+                padding-top: 15px;
+            }
+
+            hr {
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+
+            .read-notification:hover {
+                opacity: 1;
+            }
+        </style>
+    </ui:define>
     <ui:define name="content">
         <b:container>
             <b:row>
@@ -39,7 +60,7 @@
             <hr/>
 
             <ui:repeat value="#{notificationViewController.allNotifications}" var="notification">
-                <h:panelGroup layout="block" style="#{notification.read ? 'opacity: 0.4;' : null}">
+                <h:panelGroup layout="block" styleClass="notification #{notification.read ? 'read-notification' : null}">
                     <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
                     &mdash;
                     <h:outputText value="#{notification.body} "/>
