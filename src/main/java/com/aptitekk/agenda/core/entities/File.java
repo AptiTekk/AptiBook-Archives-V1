@@ -20,7 +20,6 @@ public class File extends MultiTenantEntity {
     @GeneratedValue
     private int id;
 
-    @Lob
     private byte[] data;
 
     public int getId() {
