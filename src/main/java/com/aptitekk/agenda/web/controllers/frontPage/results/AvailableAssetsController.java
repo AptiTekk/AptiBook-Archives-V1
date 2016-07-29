@@ -4,15 +4,17 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.web.controllers.results;
+package com.aptitekk.agenda.web.controllers.frontPage.results;
 
-import com.aptitekk.agenda.core.entities.*;
+import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.entities.Tag;
 import com.aptitekk.agenda.core.entities.services.AssetService;
 import com.aptitekk.agenda.core.entities.services.NotificationService;
 import com.aptitekk.agenda.core.entities.services.ReservationService;
 import com.aptitekk.agenda.core.entities.services.UserGroupService;
-import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
+import com.aptitekk.agenda.web.controllers.frontPage.reserve.RequestReservationViewController;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -24,6 +26,9 @@ import java.util.List;
 @Named
 @ViewScoped
 public class AvailableAssetsController implements Serializable {
+
+    @Inject
+    private RequestReservationViewController requestReservationViewController;
 
     @Inject
     private ReservationService reservationService;
@@ -73,33 +78,16 @@ public class AvailableAssetsController implements Serializable {
         }
     }
 
-    public void onMakeReservationFired(User user, Asset asset, SegmentedTimeRange segmentedTimeRange) {
-
-        //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
-        //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
-        if (availableAssets != null && availableAssets.contains(asset)) {
-            asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
-
-            if (reservationService.isAssetAvailableForReservation(asset, segmentedTimeRange)) {
-                Reservation reservation = new Reservation();
-                reservation.setUser(user);
-                reservation.setAsset(asset);
-                reservation.setDate(segmentedTimeRange.getDate());
-                reservation.setTimeStart(segmentedTimeRange.getStartTime());
-                reservation.setTimeEnd(segmentedTimeRange.getEndTime());
-                if (!asset.getNeedsApproval())
-                    reservation.setStatus(Reservation.Status.APPROVED);
-
-                try {
-                    reservationService.insert(reservation);
-                    LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
-                    notificationService.sendNewReservationNotifications(reservation);
-                } catch (Exception e) {
-                    LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + user.getFullname() + "Exception message: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-        }
+    /**
+     * Loads the RequestReservationViewController with the proper details.
+     * The page should be reloaded with ajax after this method is called.
+     *
+     * @param asset              The Asset that the user wants to reserve.
+     * @param segmentedTimeRange The Segmented Time Range of the requested reservation.
+     */
+    public void onMakeReservationFired(Asset asset, SegmentedTimeRange segmentedTimeRange) {
+        requestReservationViewController.setAsset(asset);
+        requestReservationViewController.setSegmentedTimeRange(segmentedTimeRange);
     }
 
     public List<Asset> getAvailableAssets() {
