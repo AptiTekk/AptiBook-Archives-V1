@@ -10,10 +10,83 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition>
     <b:container>
         <h2>Enter details for reservation of #{requestReservationViewController.asset.name}</h2>
+        <h:form>
+        <b:tabView activeIndex="0">
+            <b:tab title="Details">
+                <b:row>
+                    <b:column span="3">
+                         <h4>
+                             <label>
+                             Title:
+                            </label>
+                         </h4>
+                     </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="5">
+                        <b:inputText value="#{requestReservationViewController.reservationTitle}" a:placeholder="What is this reservation for?"/>
+                    </b:column>
+                </b:row>
+               <!-- Non-editable fields:-->
+                <b:row>
+                    <b:column span="2">
+                        <label>
+                            Start Time:
+                        </label>
+                    </b:column>
+                    <b:column span="3" offset="-6">
+                        <label>
+                            End Time:
+                        </label>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="2">
+                        <h:outputText value="#{requestReservationViewController.segmentedTimeRange.startTime.timeString}" styleClass="form-control"/>
+                    </b:column>
+                    <b:column span="2">
+                        <h:outputText value="#{requestReservationViewController.segmentedTimeRange.endTime.timeString}" styleClass="form-control"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="2">
+                         <label>
+                             Date:
+                         </label>
+                </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="2">
+                        <h:outputText value="#{requestReservationViewController.segmentedTimeRange.date.time}" styleClass="form-control">
+                            <f:convertDateTime type="both" pattern="EEEE, dd MMMM, yyyy" />
+                        </h:outputText>
+                    </b:column>
+                </b:row>
+                <!-- End Non-editable fields-->
+            </b:tab>
+            <b:tab title="Recurring">
+                <p>For recurring reservations</p>
+            </b:tab>
+        </b:tabView>
+        <!--Footer-->
+        <p:separator/>
+        <div class="btn-toolbar">
+            <h:commandButton styleClass="btn btn-success" value="Make Reservation"
+                         action="#{requestReservationViewController.makeReservation}">
+            </h:commandButton>
+            <h:commandButton styleClass="btn btn-default" value="Cancel"
+                         action="#{requestReservationViewController.cancel}">
+            </h:commandButton>
+        </div>
+        </h:form>
     </b:container>
 </ui:composition>
 </html>
