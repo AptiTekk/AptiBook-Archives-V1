@@ -9,18 +9,16 @@ package com.aptitekk.agenda.core.entities.services;
 import com.aptitekk.agenda.core.entities.Tenant;
 import com.aptitekk.agenda.core.entities.UserGroup;
 
-import javax.ejb.Local;
+import javax.ejb.Stateful;
+import javax.persistence.PersistenceException;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-@Local
-public interface UserGroupService extends MultiTenantEntityService<UserGroup> {
+@Stateful
+public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup> implements Serializable {
 
-    String ROOT_GROUP_NAME = "root";
-
-    /**
-     * Forces a reload of the tree, starting at the root element and propagating downward.
-     */
-    void loadTree();
+    public static final String ROOT_GROUP_NAME = "root";
 
     /**
      * Finds Group Entity by its name, within the current Tenant.
@@ -28,7 +26,9 @@ public interface UserGroupService extends MultiTenantEntityService<UserGroup> {
      * @param userGroupName The name of the group to search for.
      * @return A User Group with the specified name, or null if one does not exist.
      */
-    UserGroup findByName(String userGroupName);
+    public UserGroup findByName(String userGroupName) {
+        return findByName(userGroupName, getTenant());
+    }
 
     /**
      * Finds Group Entity by its name, within the specified Tenant.
@@ -37,17 +37,48 @@ public interface UserGroupService extends MultiTenantEntityService<UserGroup> {
      * @param tenant    The Tenant of the User Group to search for.
      * @return A User Group with the specified name, or null if one does not exist.
      */
-    UserGroup findByName(String userGroupName, Tenant tenant);
+    public UserGroup findByName(String userGroupName, Tenant tenant) {
+        if (userGroupName == null || tenant == null)
+            return null;
+
+        try {
+            return entityManager
+                    .createQuery("SELECT g FROM UserGroup g WHERE g.name = :name AND g.tenant = :tenant", UserGroup.class)
+                    .setParameter("name", userGroupName)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
 
     /**
      * @return The Root UserGroup of the current Tenant.
      */
-    UserGroup getRootGroup();
+    public UserGroup getRootGroup() {
+        return getRootGroup(getTenant());
+    }
 
     /**
      * @return The Root UserGroup of the specified Tenant.
      */
-    UserGroup getRootGroup(Tenant tenant);
+    public UserGroup getRootGroup(Tenant tenant) {
+        return findByName(ROOT_GROUP_NAME, tenant);
+    }
 
-    List<UserGroup> getHierarchyUp(UserGroup origin);
+    public List<UserGroup> getHierarchyUp(UserGroup origin) {
+        List<UserGroup> hierarchy = new ArrayList<>();
+        hierarchy.add(origin);
+
+        UserGroup currentGroup = origin;
+        UserGroup parentGroup;
+        while ((parentGroup = currentGroup.getParent()) != null) {
+            hierarchy.add(parentGroup);
+            currentGroup = parentGroup;
+        }
+
+        return hierarchy;
+    }
+
+
 }

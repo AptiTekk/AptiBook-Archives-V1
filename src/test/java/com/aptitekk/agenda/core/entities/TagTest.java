@@ -28,10 +28,10 @@ public class TagTest {
     }
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    private AssetCategoryService assetCategoryService;
 
     @Inject
-    TagService tagService;
+    private TagService tagService;
 
     @Test
     public void testDeletingAssetCategoryDeletesTags() throws Exception {

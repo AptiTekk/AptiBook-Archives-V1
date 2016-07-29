@@ -27,10 +27,10 @@ import java.util.List;
 public class NotificationSorterTest {
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Inject
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     @Deployment
     public static WebArchive createDeployment() {

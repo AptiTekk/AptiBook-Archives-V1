@@ -8,13 +8,32 @@ package com.aptitekk.agenda.core.entities.services;
 
 import com.aptitekk.agenda.core.entities.Tenant;
 
-import javax.ejb.Local;
+import javax.ejb.Stateless;
+import javax.persistence.PersistenceException;
+import java.io.Serializable;
 
-@Local
-public interface TenantService extends EntityService<Tenant> {
+@Stateless
+public class TenantService extends GlobalEntityServiceAbstract<Tenant> implements Serializable {
 
-    Tenant getTenantBySubscriptionId(int subscriptionId);
+    public Tenant getTenantBySubscriptionId(int subscriptionId) {
+        try {
+            return entityManager
+                    .createQuery("SELECT t FROM Tenant t WHERE t.subscriptionId = ?1", Tenant.class)
+                    .setParameter(1, subscriptionId)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
 
-    Tenant getTenantBySlug(String slug);
-
+    public Tenant getTenantBySlug(String slug) {
+        try {
+            return entityManager
+                    .createQuery("SELECT t FROM Tenant t WHERE t.slug = ?1", Tenant.class)
+                    .setParameter(1, slug)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
 }

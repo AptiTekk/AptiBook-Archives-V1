@@ -15,8 +15,7 @@ public class PermissionDetails {
     private Permission.Group group;
     private List<Permission> permissions;
 
-    public PermissionDetails(Permission.Group group, List<Permission> permissions)
-    {
+    public PermissionDetails(Permission.Group group, List<Permission> permissions) {
         this.group = group;
         this.permissions = permissions;
     }

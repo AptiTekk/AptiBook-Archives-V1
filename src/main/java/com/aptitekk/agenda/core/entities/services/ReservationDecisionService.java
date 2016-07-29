@@ -8,9 +8,10 @@ package com.aptitekk.agenda.core.entities.services;
 
 import com.aptitekk.agenda.core.entities.ReservationDecision;
 
-import javax.ejb.Local;
+import javax.ejb.Stateful;
+import java.io.Serializable;
 
-@Local
-public interface ReservationDecisionService extends MultiTenantEntityService<ReservationDecision> {
+@Stateful
+public class ReservationDecisionService extends MultiTenantEntityServiceAbstract<ReservationDecision> implements Serializable {
 
 }

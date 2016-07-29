@@ -1,0 +1,39 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!-- Created 7/28/2016-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+
+    <!-- Adds the "File" Entity and integrates it with the "Asset" entity. -->
+    <changeSet id="3" author="MitchTalmadge">
+
+        <!-- Create File Table -->
+        <createTable tableName="file">
+            <column name="id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="file_pkey" unique="true"
+                             uniqueConstraintName="file_pkey"/>
+            </column>
+            <column name="data" type="BYTEA"/>
+            <column name="tenant_id" type="INTEGER"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="file" baseColumnNames="tenant_id" constraintName="fk_file_tenant"
+                                 referencedTableName="tenant"
+                                 referencedColumnNames="id"/>
+
+        <!-- Update Asset Table -->
+        <dropColumn tableName="asset" columnName="image"/>
+        <addColumn tableName="asset">
+            <column name="image_id" type="INTEGER"/>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="asset" baseColumnNames="image_id" constraintName="fk_asset_file"
+                                 referencedTableName="file"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
