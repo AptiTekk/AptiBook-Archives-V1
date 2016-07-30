@@ -63,9 +63,11 @@
             <div class="btn-toolbar">
                 <h:commandButton styleClass="btn btn-success" value="Make Reservation"
                                  action="#{requestReservationViewController.makeReservation}">
+                    <f:ajax render=":includeGroup"/>
                 </h:commandButton>
                 <h:commandButton styleClass="btn btn-default" value="Cancel"
                                  action="#{requestReservationViewController.cancel}">
+                    <f:ajax render=":includeGroup"/>
                 </h:commandButton>
             </div>
         </h:form>
