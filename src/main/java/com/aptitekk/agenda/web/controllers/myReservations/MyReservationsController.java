@@ -8,9 +8,10 @@ package com.aptitekk.agenda.web.controllers.myReservations;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
-import com.aptitekk.agenda.core.util.time.DateUtils;
 import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -41,9 +42,12 @@ public class MyReservationsController implements Serializable {
             for (Reservation reservation : authenticationController.getAuthenticatedUser().getReservations()) {
 
                 //Make sure that the reservation is after right now.
-                if (DateUtils.isBeforeDay(reservation.getDate(), Calendar.getInstance()))
+                LocalDate reservationDate = new DateTime(reservation.getDate()).toLocalDate();
+                LocalDate nowDate = new DateTime().toLocalDate();
+
+                if (reservationDate.isBefore(nowDate))
                     continue;
-                if (reservation.getTimeEnd().compareTo(new SegmentedTime()) < 0)
+                if (reservationDate.isEqual(nowDate) && reservation.getTimeEnd().compareTo(new SegmentedTime()) <= 0)
                     continue;
 
                 presentReservations.putIfAbsent(reservation.getAsset().getAssetCategory(), new ArrayList<>());
