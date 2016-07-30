@@ -46,7 +46,12 @@ public class RequestReservationViewController implements Serializable {
      */
     private SegmentedTimeRange segmentedTimeRange;
 
-    private void makeReservation() {
+    /**
+     * The Title for reservation being edited.
+     */
+    private String reservationTitle;
+
+    public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
         //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
         asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
@@ -58,6 +63,7 @@ public class RequestReservationViewController implements Serializable {
             reservation.setDate(segmentedTimeRange.getDate());
             reservation.setTimeStart(segmentedTimeRange.getStartTime());
             reservation.setTimeEnd(segmentedTimeRange.getEndTime());
+            reservation.setTitle(reservationTitle);
             if (!asset.getNeedsApproval())
                 reservation.setStatus(Reservation.Status.APPROVED);
 
@@ -94,5 +100,13 @@ public class RequestReservationViewController implements Serializable {
 
     public void setSegmentedTimeRange(SegmentedTimeRange segmentedTimeRange) {
         this.segmentedTimeRange = segmentedTimeRange;
+    }
+
+    public String getReservationTitle() {
+        return reservationTitle;
+    }
+
+    public void setReservationTitle(String reservationTitle) {
+        this.reservationTitle = reservationTitle;
     }
 }
