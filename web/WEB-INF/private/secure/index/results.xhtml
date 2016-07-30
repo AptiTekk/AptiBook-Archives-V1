@@ -90,7 +90,6 @@
                         <c:when test="#{empty availableAssetsController.filteredAssets}">
                             <h2>No Available #{timeSelectionController.selectedAssetCategory.name} Found!</h2>
                             <h4>Try adjusting your reservation time or filters.</h4>
-                            <h4>Try adjusting your reservation time or filters.</h4>
                         </c:when>
                         <c:otherwise>
 
@@ -105,7 +104,7 @@
                                         </p:lightBox>
                                     </h:panelGroup>
                                     <div class="form-group">
-                                        <h:commandButton styleClass="btn btn-default" value="Edit Reservation"
+                                        <h:commandButton styleClass="btn btn-default" value="Make Reservation"
                                                          action="#{availableAssetsController.onMakeReservationFired(asset, timeSelectionController.segmentedTimeRange)}">
                                             <f:ajax render=":includeGroup"/>
                                         </h:commandButton>
