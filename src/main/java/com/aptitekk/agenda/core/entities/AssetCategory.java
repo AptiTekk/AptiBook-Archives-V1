@@ -24,6 +24,7 @@ public class AssetCategory extends MultiTenantEntity implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)
+    @OrderBy(value = "name")
     private List<Asset> assets = new ArrayList<>();
 
     @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)

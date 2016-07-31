@@ -13,6 +13,8 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.List;
 
 @Stateful
 public class AssetService extends MultiTenantEntityServiceAbstract<Asset> implements Serializable {
@@ -49,6 +51,31 @@ public class AssetService extends MultiTenantEntityServiceAbstract<Asset> implem
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;
+        }
+    }
+
+    @Override
+    public List<Asset> getAll() {
+        List<Asset> assets = super.getAll();
+        assets.sort(new AssetComparator());
+        return assets;
+    }
+
+    @Override
+    public List<Asset> getAll(Tenant tenant) {
+        List<Asset> assets = super.getAll(tenant);
+        assets.sort(new AssetComparator());
+        return assets;
+    }
+
+    /**
+     * Sorts Asset Categories by name.
+     */
+    private class AssetComparator implements Comparator<Asset> {
+
+        @Override
+        public int compare(Asset o1, Asset o2) {
+            return o1.getName().compareTo(o2.getName());
         }
     }
 }
