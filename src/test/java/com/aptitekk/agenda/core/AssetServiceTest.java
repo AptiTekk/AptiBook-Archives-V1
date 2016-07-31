@@ -40,19 +40,6 @@ public class AssetServiceTest {
     private AssetCategoryService assetCategoryService;
 
     @Test
-    public void getByNameReturnsCorrectAsset() throws Exception {
-        String assetName = UUID.randomUUID().toString();
-
-        Asset asset = new Asset(assetName);
-        assetService.insert(asset);
-
-        Asset foundAsset = assetService.findByName(assetName);
-
-        assertNotNull("The asset search returned null!", foundAsset);
-        assertEquals("Unable to locate the correct asset by name!", asset, foundAsset);
-    }
-
-    @Test
     @Transactional
     public void getAssetsFromTypeReturnsCorrectAssets() throws Exception {
         List<Asset> assetList = new ArrayList<>();

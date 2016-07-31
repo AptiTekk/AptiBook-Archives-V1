@@ -34,6 +34,8 @@
                                  requiredMessage="This is required."
                                  maxlength="32">
                         <f:validator binding="#{uniqueAssetValidator}"/>
+                        <f:attribute name="assetCategory"
+                                     value="#{assetSettingsController.selectedAsset.assetCategory}"/>
                         <f:attribute name="exception" value="#{assetSettingsController.selectedAsset}"/>
                     </h:inputText>
                 </div>
@@ -144,22 +146,18 @@
             </h:panelGroup>
 
             <f:facet name="footer">
-                <h:commandButton styleClass="btn btn-primary"
-                                 value="Save Changes"
+                <b:commandButton look="danger" style="float: left;" value="Delete Asset"
+                                 ajax="true" update=":deleteAssetModalForm"
+                                 oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
+                <h:commandButton styleClass="btn btn-primary" value="Save Changes"
                                  action="#{assetSettingsController.updateSettings()}"
                                  actionListener="#{groupTreeController.invalidateTrees}">
                     <f:ajax execute="@form"
                             render="editAssetModalContent :assetsPageContent"
                             onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editAssetModal').modal('hide')}}}"/>
                 </h:commandButton>
-                <b:button value="Cancel"
-                          look="default"
+                <b:button value="Cancel" look="default"
                           onclick="$('.editAssetModal').modal('hide');"/>
-                <b:commandButton look="danger"
-                                 value="Delete Asset"
-                                 ajax="true"
-                                 update=":deleteAssetModalForm"
-                                 oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
             </f:facet>
         </b:modal>
     </h:form>

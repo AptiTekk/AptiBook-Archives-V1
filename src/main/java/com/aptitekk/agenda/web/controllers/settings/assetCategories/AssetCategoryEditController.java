@@ -8,7 +8,7 @@ package com.aptitekk.agenda.web.controllers.settings.assetCategories;
 
 import com.aptitekk.agenda.core.entities.*;
 import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
-import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.ReservationFieldService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
@@ -31,10 +31,16 @@ import java.util.Queue;
 public class AssetCategoryEditController implements Serializable {
 
     @Inject
+    private TagController tagController;
+
+    @Inject
+    private AuthenticationController authenticationController;
+
+    @Inject
     private AssetCategoryService assetCategoryService;
 
     @Inject
-    private AssetService assetService;
+    private ReservationFieldService reservationFieldService;
 
     private List<AssetCategory> assetCategories;
     private AssetCategory selectedAssetCategory;
@@ -43,11 +49,7 @@ public class AssetCategoryEditController implements Serializable {
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableAssetCategoryName;
 
-    @Inject
-    private TagController tagController;
-
-    @Inject
-    private AuthenticationController authenticationController;
+    private List<ReservationField> reservationFields;
 
     @PostConstruct
     public void init() {
@@ -109,6 +111,7 @@ public class AssetCategoryEditController implements Serializable {
         //Refresh selected AssetCategory
         if (selectedAssetCategory != null)
             selectedAssetCategory = assetCategoryService.get(selectedAssetCategory.getId());
+        resetSettings();
     }
 
     public void updateSettings() {
@@ -148,6 +151,7 @@ public class AssetCategoryEditController implements Serializable {
     public void resetSettings() {
         if (selectedAssetCategory != null) {
             editableAssetCategoryName = selectedAssetCategory.getName();
+            reservationFields = selectedAssetCategory.getReservationFields();
 
             List<Tag> tags = selectedAssetCategory.getTags();
             List<String> tagNames = new ArrayList<>();
@@ -156,6 +160,7 @@ public class AssetCategoryEditController implements Serializable {
             tagController.setSelectedAssetCategoryTagNames(tagNames);
         } else {
             editableAssetCategoryName = "";
+            reservationFields = null;
             tagController.setSelectedAssetCategoryTagNames(null);
         }
     }
@@ -183,6 +188,25 @@ public class AssetCategoryEditController implements Serializable {
         refreshAssetCategories();
     }
 
+    public void addNewReservationField() {
+        if (selectedAssetCategory != null) {
+            ReservationField reservationField = new ReservationField();
+            reservationField.setAssetCategory(selectedAssetCategory);
+            reservationField.setTitle("New Reservation Field");
+            reservationField.setMultiLine(false);
+
+            try {
+                reservationFieldService.insert(reservationField);
+                refreshAssetCategories();
+
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New Reservation Field Added."));
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
+                LogManager.logError("Error while adding new Reservation Field to " + selectedAssetCategory.getName() + " Asset Category.");
+            }
+        }
+    }
+
     public List<AssetCategory> getAssetCategories() {
         return assetCategories;
     }
@@ -206,5 +230,9 @@ public class AssetCategoryEditController implements Serializable {
 
     public void setEditableAssetCategoryName(String editableAssetCategoryName) {
         this.editableAssetCategoryName = editableAssetCategoryName;
+    }
+
+    public List<ReservationField> getReservationFields() {
+        return reservationFields;
     }
 }

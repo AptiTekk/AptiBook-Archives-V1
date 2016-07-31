@@ -31,9 +31,6 @@ public class NewAssetCategoryController implements Serializable {
     private String name;
 
     @Inject
-    private TagController tagController;
-
-    @Inject
     private AssetCategoryEditController assetCategoryEditController;
 
     public void addAssetCategory() throws Exception {
@@ -41,9 +38,6 @@ public class NewAssetCategoryController implements Serializable {
         assetCategory.setName(name);
         assetCategoryService.insert(assetCategory);
         LogManager.logInfo("New Asset Category persisted , Asset Category Id and Name: " + assetCategory.getId() + ", " + assetCategory.getName());
-
-        if (tagController != null)
-            tagController.updateAssetTags(assetCategory);
 
         assetCategory = assetCategoryService.get(assetCategory.getId());
 

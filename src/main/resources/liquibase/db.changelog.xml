@@ -10,16 +10,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <!--
-    ~ Please remember: Once a changeSet has been deployed to live servers, modifications to it will NOT be seen.
-    ~ You must create a new changeSet, not modify past ones! Check the date before modifying a changeSet; has a release
-    ~ been deployed since then? If so, make a NEW changeSet.
-    ~
-    ~ If adding a new Entity, don't forget to add an entry to the `hibernate_sequence` table.
-    -->
-
     <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/2__Change_Notification_Id_Type.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/3__Add_File_Entity.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/4__Modify_Reservation_Field.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
