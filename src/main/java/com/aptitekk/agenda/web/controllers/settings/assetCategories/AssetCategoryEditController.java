@@ -111,6 +111,7 @@ public class AssetCategoryEditController implements Serializable {
         //Refresh selected AssetCategory
         if (selectedAssetCategory != null)
             selectedAssetCategory = assetCategoryService.get(selectedAssetCategory.getId());
+        resetSettings();
     }
 
     public void updateSettings() {
@@ -196,7 +197,7 @@ public class AssetCategoryEditController implements Serializable {
 
             try {
                 reservationFieldService.insert(reservationField);
-                resetSettings();
+                refreshAssetCategories();
 
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New Reservation Field Added."));
             } catch (Exception e) {

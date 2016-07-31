@@ -36,18 +36,6 @@
                         </h:inputText>
                     </b:column>
                 </div>
-                <div class="form-group">
-                    <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
-                    <b:column colXs="9">
-                        <!--@elvariable id="tag" type="java.lang.String"-->
-                        <pf:autoComplete multiple="true" value="#{tagController.selectedAssetCategoryTagNames}"
-                                         completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
-                                         var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                         onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
-                            <pf:ajax event="keyup" process="@this" update="@this"/>
-                        </pf:autoComplete>
-                    </b:column>
-                </div>
                 <b:fetchBeanInfos/>
             </h:panelGroup>
             <f:facet name="footer">
