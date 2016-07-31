@@ -12,6 +12,8 @@ import com.aptitekk.agenda.core.entities.Tenant;
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.util.Comparator;
+import java.util.List;
 
 @Stateful
 public class AssetCategoryService extends MultiTenantEntityServiceAbstract<AssetCategory> implements Serializable {
@@ -30,7 +32,7 @@ public class AssetCategoryService extends MultiTenantEntityServiceAbstract<Asset
      * Finds AssetCategory by its name, within the supplied Tenant.
      *
      * @param assetCategoryName The name of the AssetCategory
-     * @param tenant        The Tenant of the AssetCategory being searched for.
+     * @param tenant            The Tenant of the AssetCategory being searched for.
      * @return An AssetCategory with the specified name, or null if one does not exist.
      */
     public AssetCategory findByName(String assetCategoryName, Tenant tenant) {
@@ -45,6 +47,31 @@ public class AssetCategoryService extends MultiTenantEntityServiceAbstract<Asset
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;
+        }
+    }
+
+    @Override
+    public List<AssetCategory> getAll() {
+        List<AssetCategory> assetCategories = super.getAll();
+        assetCategories.sort(new AssetCategoryComparator());
+        return assetCategories;
+    }
+
+    @Override
+    public List<AssetCategory> getAll(Tenant tenant) {
+        List<AssetCategory> assetCategories = super.getAll(tenant);
+        assetCategories.sort(new AssetCategoryComparator());
+        return assetCategories;
+    }
+
+    /**
+     * Sorts Asset Categories by name.
+     */
+    private class AssetCategoryComparator implements Comparator<AssetCategory> {
+
+        @Override
+        public int compare(AssetCategory o1, AssetCategory o2) {
+            return o1.getName().compareTo(o2.getName());
         }
     }
 }
