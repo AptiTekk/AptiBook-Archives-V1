@@ -21,37 +21,13 @@ import java.io.Serializable;
 
 @Named
 @RequestScoped
-public class NewReservationFieldController implements Serializable {
+public class NewReservationFieldController extends ReservationFieldFieldSupplier implements Serializable {
 
     @Inject
     private AssetCategoryEditController assetCategoryEditController;
 
     @Inject
     private ReservationFieldService reservationFieldService;
-
-    /**
-     * Title of the Reservation Field.
-     */
-    @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String title;
-
-    /**
-     * Description of the Reservation Field.
-     */
-    @Size(max = 256, message = "This may only be 256 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String description;
-
-    /**
-     * Values for the size selection combo box.
-     */
-    private final String[] sizes = {"Single-Line", "Multi-Line"};
-
-    /**
-     * Chosen size from the combo box.
-     */
-    private String size;
 
     public void createReservationField() {
         if (assetCategoryEditController.getSelectedAssetCategory() != null) {

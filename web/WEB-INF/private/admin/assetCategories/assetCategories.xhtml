@@ -110,7 +110,7 @@
                         <hr/>
                         <h:form id="reservationFieldEditForm">
                             <div class="form-group">
-                                <h4>Reservation Fields:</h4>
+                                <h4>Reservation Request Fields:</h4>
                                 <b:message for="reservationFieldEditForm" showSummary="false"
                                            showDetail="true"/>
                             </div>
@@ -121,7 +121,13 @@
                                         <f:facet name="header">
                                             Title
                                         </f:facet>
-                                        #{reservationField.title}
+                                        <b:navCommandLink value="#{reservationField.title}"
+                                                          iconAwesome="pencil-square-o"
+                                                          ajax="true"
+                                                          action="#{editReservationFieldController.setReservationField(reservationField)}"
+                                                          update=":editReservationFieldModalForm"
+                                                          oncomplete="$('.editReservationFieldModal').modal()"
+                                                          style="cursor: pointer;"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
@@ -152,6 +158,8 @@
 
         <ui:include src="newAssetCategoryModal.xhtml"/>
         <ui:include src="newReservationFieldModal.xhtml"/>
+        <ui:include src="editReservationFieldModal.xhtml"/>
+        <ui:include src="deleteReservationFieldModal.xhtml"/>
         <ui:include src="deleteAssetCategoryModal.xhtml"/>
 
     </h:panelGroup>

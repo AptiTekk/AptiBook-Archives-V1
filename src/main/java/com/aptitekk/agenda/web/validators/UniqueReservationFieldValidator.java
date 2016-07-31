@@ -39,7 +39,7 @@ public class UniqueReservationFieldValidator implements Validator, Serializable 
             if (otherReservationFields != null) {
                 if (otherReservationFields.isEmpty())
                     return;
-                if (otherReservationFields.size() > 1 || (exemptionAttribute != null && !otherReservationFields.get(0).equals(exemptionAttribute)))
+                if (otherReservationFields.size() > 1 || exemptionAttribute == null || !otherReservationFields.get(0).equals(exemptionAttribute))
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservation Field with this name already exists."));
             }
         } else {

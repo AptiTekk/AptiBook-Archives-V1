@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition>
+    <h:form id="editReservationFieldModalForm">
+        <b:modal styleClass="editReservationFieldModal"
+                 title="Editing Reservation Field '#{editReservationFieldController.reservationField.title}' for '#{assetCategoryEditController.selectedAssetCategory.name}'">
+            <h:panelGroup id="editReservationFieldFields">
+                <div class="form-group">
+                    * = Required. Title must be unique.
+                </div>
+                <div class="form-group">
+                    <b:message for="editReservationFieldTitle" showSummary="false" showDetail="true"/>
+                    <b:inputText id="editReservationFieldTitle" label="Title:"
+                                 value="#{editReservationFieldController.title}"
+                                 required="true"
+                                 requiredMessage="This is required." maxlength="64">
+                        <f:validator binding="#{uniqueReservationFieldValidator}"/>
+                        <f:attribute name="assetCategory" value="#{assetCategoryEditController.selectedAssetCategory}"/>
+                    </b:inputText>
+                </div>
+                <div class="form-group">
+                    <b:message for="editReservationFieldDescription" showSummary="false" showDetail="true"/>
+                    <b:inputTextarea id="editReservationFieldDescription" label="Description:" rows="3"
+                                     value="#{editReservationFieldController.description}"
+                                     maxlength="256"/>
+                </div>
+                <div class="form-group">
+                    <b:message for="editReservationFieldSize" showSummary="false" showDetail="true"/>
+                    <b:selectOneMenu id="editReservationFieldSize" value="#{editReservationFieldController.size}"
+                                     label="Size:" required="true" requiredMessage="This is required.">
+                        <f:selectItems value="#{editReservationFieldController.sizes}"/>
+                    </b:selectOneMenu>
+                </div>
+                <b:fetchBeanInfos/>
+            </h:panelGroup>
+            <f:facet name="footer">
+                <b:commandButton value="Delete Field" look="danger" style="float:left;" ajax="true"
+                                 update=":deleteReservationFieldModalForm"
+                                 oncomplete="$('.deleteReservationFieldModal').modal();$('.editReservationFieldModal').modal('hide')"/>
+                <b:commandButton value="Save Changes" look="primary" ajax="true"
+                                 update="editReservationFieldFields :assetCategoriesPageContent"
+                                 oncomplete="if(!validationFailed) $('.editReservationFieldModal').modal('hide')"
+                                 action="#{editReservationFieldController.saveChanges}"/>
+                <b:button styleClass="btn btn-default"
+                          p:data-dismiss="modal" value="Cancel"/>
+            </f:facet>
+        </b:modal>
+    </h:form>
+</ui:composition>
+
+</html>
