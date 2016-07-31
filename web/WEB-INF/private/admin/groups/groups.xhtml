@@ -13,7 +13,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:pf="http://primefaces.org/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 <ui:composition>
@@ -91,24 +90,21 @@
                             <div class="form-group">
                                 <div class="col-xs-offset-3 col-xs-9">
                                     <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{groupEditController.updateSettings()}">
-                                            <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                        </h:commandButton>
-
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
-                                                         action="#{groupEditController.resetSettings()}">
-                                            <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                        </h:commandButton>
-
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete User Group"
-                                                  style="display: inline-block"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"/>
-
+                                        <b:commandButton look="danger" value="Delete User Group" ajax="true"
+                                                         update=":deletionConfirmModalForm"
+                                                         oncomplete="$('.deletionConfirmModal').modal()"/>
+                                        <div class="btn-toolbar pull-right">
+                                            <h:commandButton styleClass="btn btn-primary"
+                                                             value="Save Changes"
+                                                             action="#{groupEditController.updateSettings()}">
+                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                            </h:commandButton>
+                                            <h:commandButton styleClass="btn btn-default"
+                                                             value="Reset Form"
+                                                             action="#{groupEditController.resetSettings()}">
+                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                            </h:commandButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

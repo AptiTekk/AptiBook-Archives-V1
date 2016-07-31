@@ -9,27 +9,28 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:h="http://java.sun.com/jsf/html">
 
 <ui:composition>
-    <b:modal id="assetCategoryDeletionConfirmModal" title="Asset Category
+    <h:form id="assetCategoryDeletionConfirmModalForm">
+        <b:modal class="assetCategoryDeletionConfirmModal" title="Asset Category
                          Deletion Confirmation">
-        Are you sure you want to delete the Asset Category '#{assetCategoryEditController.selectedAssetCategory.name}'?
-        <br/>
-        <p style="text-decoration: underline">All associated Assets and Reservations will be deleted as well!</p>
-        <f:facet name="footer">
-            <b:button styleClass="btn btn-default"
-                      p:data-dismiss="modal" value="Cancel"/>
-            <h:commandButton styleClass="btn btn-danger"
-                             p:data-dismiss="modal" value="Delete"
-                             action="#{assetCategoryEditController.deleteSelectedAssetCategory}">
-                <f:ajax render=":assetCategoriesPage" onevent="loading"/>
-            </h:commandButton>
-        </f:facet>
-    </b:modal>
+            Are you sure you want to delete the Asset Category '#{assetCategoryEditController.selectedAssetCategory.name}'?
+            <br/>
+            <p style="text-decoration: underline">All associated Assets and Reservations will be deleted as well!</p>
+            <f:facet name="footer">
+                <b:commandButton look="danger" value="Delete" ajax="true"
+                                 action="#{assetCategoryEditController.deleteSelectedAssetCategory}"
+                                 update=":assetCategoriesPageContent"
+                                 oncomplete="$('.assetCategoryDeletionConfirmModal').modal('hide')"/>
+                <b:button styleClass="btn btn-default"
+                          p:data-dismiss="modal" value="Cancel"/>
+            </f:facet>
+        </b:modal>
+    </h:form>
 </ui:composition>
 
 </html>

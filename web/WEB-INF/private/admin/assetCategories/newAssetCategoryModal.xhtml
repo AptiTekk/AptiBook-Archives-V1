@@ -35,7 +35,7 @@
             </h:panelGroup>
             <f:facet name="footer">
                 <b:commandButton value="Add" look="primary" ajax="true"
-                                 update="newAssetCategoryFields :assetCategoriesPageContent :assetCategoryDeletionConfirmModal"
+                                 update="newAssetCategoryFields :assetCategoriesPageContent"
                                  oncomplete="if(!validationFailed) $('.newAssetCategoryModal').modal('hide')"
                                  action="#{newAssetCategoryController.addAssetCategory}"/>
                 <b:button styleClass="btn btn-default"
