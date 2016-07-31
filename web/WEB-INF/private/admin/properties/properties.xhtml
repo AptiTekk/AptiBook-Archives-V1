@@ -55,14 +55,14 @@
                         <hr/>
                     </c:forEach>
                     <div class="form-group">
-                        <div class="btn-toolbar">
+                        <div class="btn-toolbar pull-right">
                             <h:commandButton styleClass="btn btn-primary"
-                                             value="Save Changes" style="display: inline-block"
+                                             value="Save Changes"
                                              action="#{propertiesController.saveProperties}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>
                             <h:commandButton styleClass="btn btn-default"
-                                             value="Reset Fields" style="display: inline-block"
+                                             value="Reset Fields"
                                              action="#{propertiesController.resetFields}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>

@@ -173,14 +173,13 @@
                 <b:fetchBeanInfos/>
             </h:panelGroup>
             <f:facet name="footer">
-
-                <b:button styleClass="btn btn-default"
-                          p:data-dismiss="modal" value="Cancel"/>
                 <b:commandButton value="Add" look="primary" ajax="true"
                                  update="newUserFields :usersPageContent :deletionConfirmModal"
                                  oncomplete="if(!validationFailed) $('.newUserModal').modal('hide')"
                                  action="#{newUserController.addUser}"
                                  actionListener="#{groupTreeController.invalidateTrees()}"/>
+                <b:button styleClass="btn btn-default"
+                          p:data-dismiss="modal" value="Cancel"/>
             </f:facet>
         </b:modal>
     </h:form>

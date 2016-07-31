@@ -230,22 +230,23 @@
                             <div class="form-group">
                                 <div class="col-xs-offset-3 col-xs-9">
                                     <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{userEditController.updateSettings()}">
-                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
-                                                         action="#{userEditController.resetFields()}">
-                                            <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
-                                        </h:commandButton>
-                                        <b:button styleClass="btn btn-danger"
+                                        <b:button look="danger"
                                                   value="Delete User"
-                                                  style="display: inline-block"
                                                   p:data-toggle="modal"
                                                   p:data-target="#deletionConfirmModal"
                                                   disabled="#{userEditController.selectedUser.admin}"/>
+                                        <div class="btn-toolbar pull-right">
+                                            <h:commandButton styleClass="btn btn-primary"
+                                                             value="Save Changes"
+                                                             action="#{userEditController.updateSettings()}">
+                                                <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                            </h:commandButton>
+                                            <h:commandButton styleClass="btn btn-default"
+                                                             value="Reset Form"
+                                                             action="#{userEditController.resetFields()}">
+                                                <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
+                                            </h:commandButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

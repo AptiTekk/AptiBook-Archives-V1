@@ -19,13 +19,13 @@
                          Deletion Confirmation">
         Are you sure you want to delete User '#{userEditController.selectedUser.username}'?
         <f:facet name="footer">
-            <b:button styleClass="btn btn-default"
-                      p:data-dismiss="modal" value="Cancel"/>
             <h:commandButton styleClass="btn btn-danger"
                              p:data-dismiss="modal" value="Delete"
                              action="#{userEditController.deleteSelectedUser}">
                 <f:ajax render=":usersPage" onevent="loading"/>
             </h:commandButton>
+            <b:button styleClass="btn btn-default"
+                      p:data-dismiss="modal" value="Cancel"/>
         </f:facet>
     </b:modal>
 </ui:composition>
