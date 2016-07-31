@@ -27,10 +27,9 @@ public class AssetCategory extends MultiTenantEntity implements Serializable {
     private List<Asset> assets = new ArrayList<>();
 
     @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)
-    @OrderColumn(name = "`Order`")
     private List<ReservationField> reservationFields = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "assetCategory")
+    @OneToMany(mappedBy = "assetCategory", cascade = CascadeType.REMOVE)
     @OrderBy(value = "name")
     private List<Tag> tags = new ArrayList<>();
 

@@ -84,7 +84,8 @@
                                 <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
                                 <b:column colXs="9">
                                     <!--@elvariable id="tag" type="java.lang.String"-->
-                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetCategoryTagNames}"
+                                    <pf:autoComplete multiple="true"
+                                                     value="#{tagController.selectedAssetCategoryTagNames}"
                                                      completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
                                                      var="tag" itemLabel="#{tag}" itemValue="#{tag}"
                                                      disabled="#{!assetCategoryEditController.hasModifyPermission()}"
@@ -103,7 +104,7 @@
                                             <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
+                                                         value="Reset Form" style="display: inline-block"
                                                          action="#{assetCategoryEditController.resetSettings()}"
                                                          disabled="#{!assetCategoryEditController.hasModifyPermission()}">
                                             <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
@@ -114,6 +115,49 @@
                                                   p:data-toggle="modal"
                                                   p:data-target="#assetCategoryDeletionConfirmModal"
                                                   disabled="#{!assetCategoryEditController.hasModifyPermission()}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:form>
+                        <h:form styleClass="form-horizontal" id="reservationFieldEditForm">
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <h4>Reservation Fields:</h4>
+                                    <b:message for="reservationFieldEditForm" showSummary="false"
+                                               showDetail="true"/>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <b:column colXs="9" offsetXs="3">
+                                    <b:dataTable value="#{assetCategoryEditController.reservationFields}"
+                                                 var="reservationField" searching="false" paginated="false">
+                                        <h:column>
+                                            <f:facet name="header">
+                                                Title
+                                            </f:facet>
+                                            #{reservationField.title}
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                Description
+                                            </f:facet>
+                                            #{reservationField.description}
+                                        </h:column>
+                                        <h:column>
+                                            <f:facet name="header">
+                                                Size
+                                            </f:facet>
+                                            #{reservationField.multiLine ? 'Multi-Line' : 'Single-Line'}
+                                        </h:column>
+                                    </b:dataTable>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-offset-3 col-xs-9">
+                                    <div class="btn-toolbar">
+                                        <b:commandButton look="primary" value="Add New Field" ajax="true"
+                                                         action="#{assetCategoryEditController.addNewReservationField}"
+                                                         update="@form"/>
                                     </div>
                                 </div>
                             </div>
