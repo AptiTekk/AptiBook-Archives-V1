@@ -20,32 +20,46 @@
         <b:modal styleClass="newReservationFieldModal"
                  title="New Reservation Field for '#{assetCategoryEditController.selectedAssetCategory.name}'">
             <h:panelGroup id="newReservationFieldFields">
-                <div class="form-group">
-                    * = Required. Title must be unique.
-                </div>
-                <div class="form-group">
-                    <b:message for="newReservationFieldTitle" showSummary="false" showDetail="true"/>
-                    <b:inputText id="newReservationFieldTitle" label="Title:"
-                                 value="#{newReservationFieldController.title}"
-                                 required="true"
-                                 requiredMessage="This is required." maxlength="64">
-                        <f:validator binding="#{uniqueReservationFieldValidator}"/>
-                        <f:attribute name="assetCategory" value="#{assetCategoryEditController.selectedAssetCategory}"/>
-                    </b:inputText>
-                </div>
-                <div class="form-group">
-                    <b:message for="newReservationFieldDescription" showSummary="false" showDetail="true"/>
-                    <b:inputTextarea id="newReservationFieldDescription" label="Description:" rows="3"
-                                     value="#{newReservationFieldController.description}"
-                                     maxlength="256"/>
-                </div>
-                <div class="form-group">
-                    <b:message for="newReservationFieldSize" showSummary="false" showDetail="true"/>
-                    <b:selectOneMenu id="newReservationFieldSize" value="#{newReservationFieldController.size}"
-                                     label="Size:" required="true" requiredMessage="This is required.">
-                        <f:selectItems value="#{newReservationFieldController.sizes}"/>
-                    </b:selectOneMenu>
-                </div>
+                <b:row>
+                    <b:column colXs="12">
+                        * = Required. Title must be unique.
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colXs="12">
+                        <b:message for="newReservationFieldTitle" showSummary="false" showDetail="true"/>
+                        <b:inputText id="newReservationFieldTitle" label="Title:"
+                                     value="#{newReservationFieldController.title}"
+                                     required="true"
+                                     requiredMessage="This is required." maxlength="64">
+                            <f:validator binding="#{uniqueReservationFieldValidator}"/>
+                            <f:attribute name="assetCategory"
+                                         value="#{assetCategoryEditController.selectedAssetCategory}"/>
+                        </b:inputText>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colXs="12">
+                        <b:message for="newReservationFieldDescription" showSummary="false" showDetail="true"/>
+                        <b:inputTextarea id="newReservationFieldDescription" label="Description:" rows="3"
+                                         value="#{newReservationFieldController.description}"
+                                         maxlength="256"/>
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column colXs="12" colMd="3">
+                        <b:message for="newReservationFieldRequired" showSummary="false" showDetail="true"/>
+                        <b:switch id="newReservationFieldRequired" label="Required:" on-text="Yes" off-text="No"
+                                  value="#{newReservationFieldController.required}"/>
+                    </b:column>
+                    <b:column colXs="12" colMd="9">
+                        <b:message for="newReservationFieldSize" showSummary="false" showDetail="true"/>
+                        <b:selectOneMenu id="newReservationFieldSize" value="#{newReservationFieldController.size}"
+                                         label="Size:" required="true" requiredMessage="This is required.">
+                            <f:selectItems value="#{newReservationFieldController.sizes}"/>
+                        </b:selectOneMenu>
+                    </b:column>
+                </b:row>
                 <b:fetchBeanInfos/>
             </h:panelGroup>
             <f:facet name="footer">

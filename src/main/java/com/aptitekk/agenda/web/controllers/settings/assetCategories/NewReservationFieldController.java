@@ -15,8 +15,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 @Named
@@ -35,6 +33,7 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
             reservationField.setAssetCategory(assetCategoryEditController.getSelectedAssetCategory());
             reservationField.setTitle(title);
             reservationField.setDescription(description);
+            reservationField.setRequired(required);
             reservationField.setMultiLine(size.equals(sizes[1]));
 
             try {
@@ -50,31 +49,4 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
         }
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String[] getSizes() {
-        return sizes;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
 }

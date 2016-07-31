@@ -26,6 +26,11 @@ public class ReservationFieldFieldSupplier {
     String description;
 
     /**
+     * Whether or not the field is required.
+     */
+    boolean required;
+
+    /**
      * Values for the size selection combo box.
      */
     final String[] sizes = {"Single-Line", "Multi-Line"};
@@ -35,4 +40,39 @@ public class ReservationFieldFieldSupplier {
      */
     String size;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
+    public String[] getSizes() {
+        return sizes;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
 }

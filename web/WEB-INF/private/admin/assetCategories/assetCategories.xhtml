@@ -121,19 +121,26 @@
                                         <f:facet name="header">
                                             Title
                                         </f:facet>
-                                        <b:navCommandLink value="#{reservationField.title}"
-                                                          iconAwesome="pencil-square-o"
-                                                          ajax="true"
-                                                          action="#{editReservationFieldController.setReservationField(reservationField)}"
-                                                          update=":editReservationFieldModalForm"
-                                                          oncomplete="$('.editReservationFieldModal').modal()"
-                                                          style="cursor: pointer;"/>
+                                        <b:navCommandLink
+                                                value="#{reservationField.title.length() > 32 ? reservationField.title.substring(0, 32).concat('...') : reservationField.title}"
+                                                iconAwesome="pencil-square-o"
+                                                ajax="true"
+                                                action="#{editReservationFieldController.setReservationField(reservationField)}"
+                                                update=":editReservationFieldModalForm"
+                                                oncomplete="$('.editReservationFieldModal').modal()"
+                                                style="cursor: pointer;"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
                                             Description
                                         </f:facet>
-                                        #{reservationField.description}
+                                        #{reservationField.description.length() > 32 ? reservationField.description.substring(0, 32).concat("...") : reservationField.description}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Required
+                                        </f:facet>
+                                        #{reservationField.required ? 'Yes' : 'No'}
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
