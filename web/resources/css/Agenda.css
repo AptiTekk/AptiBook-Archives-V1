@@ -91,6 +91,15 @@
     align-items: center;
 }
 
+.checkbox label.bf-no-message {
+    padding-left: 0 !important;
+}
+
+.checkbox {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
 /* ---------------------------------- BEGIN RESULTS PAGE MODIFICATIONS ---------------------------------- */
 
 #results-time-selection {

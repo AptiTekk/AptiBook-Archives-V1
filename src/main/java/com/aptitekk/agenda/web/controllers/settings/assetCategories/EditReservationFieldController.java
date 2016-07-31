@@ -34,6 +34,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
             reservationField.setTitle(title);
             reservationField.setDescription(description);
             reservationField.setMultiLine(size.equals(sizes[1]));
+            reservationField.setRequired(required);
             try {
                 reservationFieldService.merge(reservationField);
                 assetCategoryEditController.refreshAssetCategories();
@@ -70,34 +71,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
 
         title = reservationField.getTitle();
         description = reservationField.getDescription();
+        required = reservationField.isRequired();
         size = reservationField.isMultiLine() ? sizes[1] : sizes[0];
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String[] getSizes() {
-        return sizes;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 }

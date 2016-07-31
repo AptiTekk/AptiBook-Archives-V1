@@ -23,6 +23,8 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
 
     private String description;
 
+    private boolean required;
+
     @ManyToOne
     private AssetCategory assetCategory;
 
@@ -56,6 +58,14 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.description = description;
     }
 
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     public AssetCategory getAssetCategory() {
         return assetCategory;
     }
@@ -84,11 +94,12 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
 
         return EqualsHelper.areEquals(getTitle(), other.getTitle())
                 && EqualsHelper.areEquals(getDescription(), other.getDescription())
+                && EqualsHelper.areEquals(isRequired(), other.isRequired())
                 && EqualsHelper.areEquals(isMultiLine(), other.isMultiLine());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), isMultiLine());
+        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), isRequired(), isMultiLine());
     }
 }

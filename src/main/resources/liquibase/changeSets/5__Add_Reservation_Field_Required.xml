@@ -1,19 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
   ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
+<!-- Created 7/30/2016-->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/2__Change_Notification_Id_Type.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/3__Add_File_Entity.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/4__Modify_Reservation_Field.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/5__Add_Reservation_Field_Required.xml" relativeToChangelogFile="true" />
+    <!-- Adds "required" column to Reservation Field. -->
+    <changeSet id="5" author="MitchTalmadge">
+        <addColumn tableName="reservationfield">
+            <column name="required" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

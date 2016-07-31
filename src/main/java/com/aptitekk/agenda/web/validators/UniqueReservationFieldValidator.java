@@ -32,21 +32,21 @@ public class UniqueReservationFieldValidator implements Validator, Serializable 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
         Object assetCategory = uiComponent.getAttributes().get("assetCategory");
-        Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
+        Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
         if (inputText != null && inputText instanceof String && assetCategory != null && assetCategory instanceof AssetCategory) {
             List<ReservationField> otherReservationFields = reservationFieldService.findByTitle((String) inputText, (AssetCategory) assetCategory);
             if (otherReservationFields != null) {
                 if (otherReservationFields.isEmpty())
                     return;
-                if (otherReservationFields.size() > 1 || exemptionAttribute == null || !otherReservationFields.get(0).equals(exemptionAttribute))
+                if (otherReservationFields.size() > 1 || exceptionAttribute == null || !otherReservationFields.get(0).equals(exceptionAttribute))
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservation Field with this name already exists."));
             }
         } else {
             LogManager.logError("Could not Validate:\n" +
                     "input: " + inputText + "\n" +
                     "assetCategory: " + assetCategory + "\n" +
-                    "exemption: " + exemptionAttribute + "\n" +
+                    "exemption: " + exceptionAttribute + "\n" +
                     "service: " + reservationFieldService);
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error during validation."));
         }
