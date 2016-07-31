@@ -61,8 +61,10 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "New Reservation Request",
                     "A new Reservation for "
                             + reservation.getAsset().getName()
-                            + " has been requested by "
+                            + " has been <i>requested</i> by "
+                            + "<b>"
                             + reservation.getUser().getFullname()
+                            + "</b>"
                             + ".",
                     userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
         } else {
@@ -70,8 +72,10 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "New Reservation Approved",
                     "A new Reservation for "
                             + reservation.getAsset().getName()
-                            + " has been automatically approved for "
-                            + reservation.getUser().getFullname()
+                            + " has been automatically <i>approved</i> for "
+                            + "<b>"
+                            +reservation.getUser().getFullname()
+                            + "</b>"
                             + ".",
                     userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
         }
@@ -91,7 +95,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                             + reservation.getTimeStart().getTimeString()
                             + " to "
                             + reservation.getTimeEnd().getTimeString()
-                            + " has been Approved!",
+                            + " has been <i>Approved!</i>",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
             buildNotification(
@@ -103,7 +107,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                             + reservation.getTimeStart().getTimeString()
                             + " to "
                             + reservation.getTimeEnd().getTimeString()
-                            + " has been Rejected.",
+                            + " has been <i>Rejected.<i>",
                     reservation.getUser());
         }
     }
