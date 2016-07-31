@@ -66,7 +66,7 @@
                               styleClass="notification #{notification.read ? 'read-notification' : null}">
                     <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
                     &mdash;
-                    <h:outputText value="#{notification.body} "/>
+                    <h:outputText value="#{notification.body}" escape="false"/>
                     <br/>
                     <h:outputText value="#{notification.timeAgo}" style="color:#808080"/>
                     <hr/>
