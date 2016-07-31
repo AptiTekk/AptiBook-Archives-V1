@@ -7,6 +7,7 @@
 package com.aptitekk.agenda.core.entities.services;
 
 import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tenant;
 
 import javax.ejb.Stateful;
@@ -23,31 +24,22 @@ public class AssetService extends MultiTenantEntityServiceAbstract<Asset> implem
     private AssetCategoryService assetCategoryService;
 
     /**
-     * Finds Asset by its name, within the current Tenant.
+     * Finds Asset by its name within an Asset Category.
      *
-     * @param assetName The name of the Asset.
+     * @param name          The name of the Asset.
+     * @param assetCategory The Asset Category to search within.
      * @return An Asset with the specified name, or null if one does not exist.
      */
-    public Asset findByName(String assetName) {
-        return findByName(assetName, getTenant());
-    }
-
-    /**
-     * Finds Asset by its name, within the supplied Tenant.
-     *
-     * @param assetName The name of the Asset.
-     * @param tenant    The Tenant of the Asset being searched for.
-     * @return An Asset with the specified name, or null if one does not exist.
-     */
-    public Asset findByName(String assetName, Tenant tenant) {
-        if (assetName == null || tenant == null)
+    public Asset findByName(String name, AssetCategory assetCategory) {
+        if (name == null || assetCategory == null)
             return null;
 
         try {
             return entityManager
-                    .createQuery("SELECT a FROM Asset a WHERE a.name = :assetName AND a.tenant = :tenant", Asset.class)
-                    .setParameter("assetName", assetName)
-                    .setParameter("tenant", tenant)
+                    .createQuery("SELECT a FROM Asset a WHERE a.name = ?1 AND a.assetCategory = ?2 AND a.tenant = ?3", Asset.class)
+                    .setParameter(1, name)
+                    .setParameter(2, assetCategory)
+                    .setParameter(3, getTenant())
                     .getSingleResult();
         } catch (PersistenceException e) {
             return null;

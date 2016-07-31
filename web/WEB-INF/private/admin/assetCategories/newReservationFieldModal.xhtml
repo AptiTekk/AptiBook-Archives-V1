@@ -29,16 +29,15 @@
                                  value="#{newReservationFieldController.title}"
                                  required="true"
                                  requiredMessage="This is required." maxlength="64">
-                        <f:validator binding="#{uniqueAssetCategoryValidator}"/>
+                        <f:validator binding="#{uniqueReservationFieldValidator}"/>
+                        <f:attribute name="assetCategory" value="#{assetCategoryEditController.selectedAssetCategory}"/>
                     </b:inputText>
                 </div>
                 <div class="form-group">
                     <b:message for="newReservationFieldDescription" showSummary="false" showDetail="true"/>
                     <b:inputTextarea id="newReservationFieldDescription" label="Description:" rows="3"
                                      value="#{newReservationFieldController.description}"
-                                     maxlength="256">
-                        <f:validator binding="#{uniqueAssetCategoryValidator}"/>
-                    </b:inputTextarea>
+                                     maxlength="256"/>
                 </div>
                 <div class="form-group">
                     <b:message for="newReservationFieldSize" showSummary="false" showDetail="true"/>
