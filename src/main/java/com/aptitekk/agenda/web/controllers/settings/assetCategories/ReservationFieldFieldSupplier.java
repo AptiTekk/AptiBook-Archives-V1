@@ -61,7 +61,6 @@ public class ReservationFieldFieldSupplier {
     }
 
     public void setRequired(boolean required) {
-        if(required )
         this.required = required;
     }
 
