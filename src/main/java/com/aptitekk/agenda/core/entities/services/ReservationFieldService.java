@@ -6,6 +6,8 @@
 
 package com.aptitekk.agenda.core.entities.services;
 
+import com.aptitekk.agenda.core.entities.Asset;
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.ReservationField;
 
@@ -15,6 +17,14 @@ import java.util.List;
 
 @Stateful
 public class ReservationFieldService extends MultiTenantEntityServiceAbstract<ReservationField> implements Serializable {
+
+    public List<ReservationField> getAllForAssetCategory(AssetCategory assetCategory) {
+        return entityManager
+                .createQuery("SELECT rf FROM ReservationField rf WHERE rf.assetCategory = ?1 AND rf.tenant = ?2", ReservationField.class)
+                .setParameter(1, assetCategory)
+                .setParameter(2, getTenant())
+                .getResultList();
+    }
 
     public List<ReservationField> findByTitle(String title, AssetCategory assetCategory) {
         if (title == null || assetCategory == null)

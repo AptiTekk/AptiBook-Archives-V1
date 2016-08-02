@@ -11,7 +11,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://primefaces.org/ui">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
     <h:panelGroup id="pendingReservations">
@@ -36,10 +37,10 @@
                         var="reservationDetails">
                     <b:row>
                         <b:column colXs="12">
-                            <b:panel styleClass="pendingReservationPanel"
-                                     look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
-                                     title="#{reservationDetails.reservation.asset.name}"
-                                     collapsible="false">
+                            <b:panel
+                                    look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
+                                    title="#{reservationDetails.reservation.asset.name}"
+                                    collapsible="false">
                                 <b:row>
                                     <b:column colXs="12" colSm="2" style="width: 115px;">
                                         <div class="form-group">
@@ -104,6 +105,27 @@
                                                             value="#{reservationDetails.reservation.timeEnd.timeString}"
                                                             readonly="true"/>
                                                 </div>
+                                            </b:column>
+                                        </b:row>
+                                        <b:row>
+                                            <b:column colXs="12">
+                                                <b:panel title="Field Entries" look="default" collapsible="true"
+                                                         collapsed="true">
+                                                    <ui:repeat
+                                                            value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                            var="reservationField">
+                                                        <ui:fragment rendered="#{reservationField.multiLine}">
+                                                            <b:inputTextarea label="#{reservationField.title}"
+                                                                    value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                    rows="3" readonly="true"/>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{not reservationField.multiLine}">
+                                                            <b:inputText label="#{reservationField.title}"
+                                                                    value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                    readonly="true"/>
+                                                        </ui:fragment>
+                                                    </ui:repeat>
+                                                </b:panel>
                                             </b:column>
                                         </b:row>
                                     </b:column>
