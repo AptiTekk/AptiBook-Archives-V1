@@ -112,7 +112,7 @@
                                                 <b:panel title="Field Entries" look="default" collapsible="true"
                                                          collapsed="true">
                                                     <ui:repeat
-                                                            value="#{reservationDetailsController.getReservationFields(assetCategory)}"
+                                                            value="#{reservationFieldController.getReservationFields(assetCategory)}"
                                                             var="reservationField">
                                                         <ui:fragment rendered="#{reservationField.multiLine}">
                                                             <b:inputTextarea label="#{reservationField.title}"

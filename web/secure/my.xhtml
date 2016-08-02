@@ -106,6 +106,27 @@
                                                     </div>
                                                 </b:column>
                                             </b:row>
+                                            <b:row>
+                                                <b:column colXs="12">
+                                                    <b:panel title="Field Entries" look="default" collapsible="true"
+                                                             collapsed="true">
+                                                        <ui:repeat
+                                                                value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                                var="reservationField">
+                                                            <ui:fragment rendered="#{reservationField.multiLine}">
+                                                                <b:inputTextarea label="#{reservationField.title}"
+                                                                                 value="#{reservation.getReservationFieldEntryText(reservationField)}"
+                                                                                 rows="3" readonly="true"/>
+                                                            </ui:fragment>
+                                                            <ui:fragment rendered="#{not reservationField.multiLine}">
+                                                                <b:inputText label="#{reservationField.title}"
+                                                                             value="#{reservation.getReservationFieldEntryText(reservationField)}"
+                                                                             readonly="true"/>
+                                                            </ui:fragment>
+                                                        </ui:repeat>
+                                                    </b:panel>
+                                                </b:column>
+                                            </b:row>
                                         </b:column>
                                     </b:row>
                                 </b:panel>

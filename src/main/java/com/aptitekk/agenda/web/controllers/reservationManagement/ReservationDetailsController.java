@@ -27,11 +27,6 @@ public class ReservationDetailsController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    @Inject
-    private ReservationFieldService reservationFieldService;
-
-    private Map<AssetCategory, List<ReservationField>> reservationFieldCache = new HashMap<>();
-
     public Map<AssetCategory, List<ReservationDetails>> buildReservationList(Reservation.Status status) {
         Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap = new LinkedHashMap<>();
 
@@ -90,14 +85,6 @@ public class ReservationDetailsController implements Serializable {
         }
 
         return new ReservationDetails(reservation, behalfUserGroup, currentDecision, hierarchyDecisions);
-    }
-
-    public Object getReservationFields(AssetCategory assetCategory) {
-        //noinspection Java8CollectionsApi (Otherwise we are calling getAllForAssetCategory every time this method is called.)
-        if (reservationFieldCache.get(assetCategory) == null)
-            reservationFieldCache.put(assetCategory, reservationFieldService.getAllForAssetCategory(assetCategory));
-
-        return reservationFieldCache.get(assetCategory);
     }
 
 }
