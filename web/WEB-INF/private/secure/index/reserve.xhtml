@@ -47,6 +47,24 @@
                                                  a:placeholder="What is this reservation for?" label="Title:"/>
                                 </b:column>
                             </b:row>
+                            <b:row>
+                                <b:column colXs="12">
+                                    <ui:repeat
+                                            value="#{requestReservationViewController.asset.assetCategory.reservationFields}"
+                                            var="input">
+                                        <b:message for="@next" showSummary="false" showDetail="true"/>
+                                        <b:inputText value="#{requestReservationViewController.fieldMap[input]}"
+                                                         rendered="#{input.multiLine != true}" label="#{input.title}:"
+                                                         required="#{input.required}"
+                                                         requiredMessage="This is required"/>
+                                        <b:message for="@next" showSummary="false" showDetail="true"/>
+                                        <b:inputTextarea value="#{requestReservationViewController.fieldMap[input]}"
+                                                         rendered="#{input.multiLine}" rows="3" label="#{input.title}:"
+                                                         required="#{input.required}"
+                                                         requiredMessage="This is required"/>
+                                    </ui:repeat>
+                                </b:column>
+                            </b:row>
                             <!-- Non-editable fields:-->
                             <b:row>
                                 <b:column colXs="12" colMd="6">

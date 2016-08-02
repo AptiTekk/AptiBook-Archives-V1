@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class ReservationField extends MultiTenantEntity implements Serializable {
@@ -29,6 +30,9 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
     private AssetCategory assetCategory;
 
     private boolean multiLine = false;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ReservationFieldEntry> reservationFieldEntries;
 
     public ReservationField() {
         super();
@@ -101,5 +105,13 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
     @Override
     public int hashCode() {
         return EqualsHelper.calculateHashCode(getTitle(), getDescription(), isRequired(), isMultiLine());
+    }
+
+    public List<ReservationFieldEntry> getReservationFieldEntries() {
+        return reservationFieldEntries;
+    }
+
+    public void setReservationFieldEntries(List<ReservationFieldEntry> reservationFieldEntries) {
+        this.reservationFieldEntries = reservationFieldEntries;
     }
 }
