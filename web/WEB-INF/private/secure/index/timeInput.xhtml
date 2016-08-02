@@ -25,16 +25,8 @@
     <b:container>
         <b:row>
             <b:column colXs="12" colMd="3">
-                <b:panel title="Policies" collapsible="false">
-                    <ul>
-                        <li>This is a bullet point.</li>
-                        <li>This too!</li>
-                    </ul>
-                    <p>Here lies a disclaimer. It will be ignored, just like all
-                        disclaimers usually are. If you are not ignoring it, you will
-                        not follow it. That is the way of life; and that is how we as a
-                        society innovate. For innovation shall not be hindered by
-                        policies.</p>
+                <b:panel title="Policies" collapsible="false" rendered="#{not empty frontPageController.policies}">
+                    #{frontPageController.policies}
                 </b:panel>
             </b:column>
 
@@ -49,7 +41,7 @@
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                     <tr>
-                                        <th>Type</th>
+                                        <th>Category</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -88,8 +80,9 @@
                                              disabled="#{timeSelectionController.selectedAssetCategory == null}">
                                 <f:selectItem itemValue="#{null}"
                                               itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
-                                               var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                                <f:selectItems
+                                        value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                                 <f:ajax render=":timeForm"/>
                             </h:selectOneMenu>
                             <h:outputText value="Until" styleClass="lead"/>

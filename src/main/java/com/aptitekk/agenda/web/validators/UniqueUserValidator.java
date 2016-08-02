@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.validators;
 
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class UniqueUserValidator implements Validator, Serializable {
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {

@@ -8,8 +8,8 @@ package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.NotificationService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -27,10 +27,10 @@ import java.util.List;
 public class NotificationSorterTest {
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Inject
-    NotificationService notificationService;
+    private NotificationService notificationService;
 
     @Deployment
     public static WebArchive createDeployment() {

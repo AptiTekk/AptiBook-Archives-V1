@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.entities;
 
-import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.services.TagService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.TagService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -28,10 +28,10 @@ public class TagTest {
     }
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    private AssetCategoryService assetCategoryService;
 
     @Inject
-    TagService tagService;
+    private TagService tagService;
 
     @Test
     public void testDeletingAssetCategoryDeletesTags() throws Exception {

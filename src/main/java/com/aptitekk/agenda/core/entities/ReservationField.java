@@ -11,6 +11,7 @@ import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class ReservationField extends MultiTenantEntity implements Serializable {
@@ -19,18 +20,19 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
     @GeneratedValue
     private int id;
 
-    @Column(length = 32)
-    private String name;
+    private String title;
 
-    @Lob
     private String description;
-    private static final long serialVersionUID = 1L;
+
+    private boolean required;
 
     @ManyToOne
     private AssetCategory assetCategory;
 
-    @Basic
-    private Boolean largeField;
+    private boolean multiLine = false;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ReservationFieldEntry> reservationFieldEntries;
 
     public ReservationField() {
         super();
@@ -44,12 +46,12 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.id = id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getTitle() {
+        return this.title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String name) {
+        this.title = name;
     }
 
     public String getDescription() {
@@ -60,6 +62,14 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.description = description;
     }
 
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     public AssetCategory getAssetCategory() {
         return assetCategory;
     }
@@ -68,12 +78,12 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.assetCategory = assetCategory;
     }
 
-    public Boolean getLargeField() {
-        return largeField;
+    public boolean isMultiLine() {
+        return multiLine;
     }
 
-    public void setLargeField(Boolean largeField) {
-        this.largeField = largeField;
+    public void setMultiLine(boolean multiLine) {
+        this.multiLine = multiLine;
     }
 
     @Override
@@ -86,12 +96,22 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
 
         ReservationField other = (ReservationField) o;
 
-        return EqualsHelper.areEquals(getName(), other.getName())
-                && EqualsHelper.areEquals(getDescription(), other.getDescription());
+        return EqualsHelper.areEquals(getTitle(), other.getTitle())
+                && EqualsHelper.areEquals(getDescription(), other.getDescription())
+                && EqualsHelper.areEquals(isRequired(), other.isRequired())
+                && EqualsHelper.areEquals(isMultiLine(), other.isMultiLine());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName(), getDescription());
+        return EqualsHelper.calculateHashCode(getTitle(), getDescription(), isRequired(), isMultiLine());
+    }
+
+    public List<ReservationFieldEntry> getReservationFieldEntries() {
+        return reservationFieldEntries;
+    }
+
+    public void setReservationFieldEntries(List<ReservationFieldEntry> reservationFieldEntries) {
+        this.reservationFieldEntries = reservationFieldEntries;
     }
 }

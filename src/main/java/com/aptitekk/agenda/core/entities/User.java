@@ -6,8 +6,8 @@
 
 package com.aptitekk.agenda.core.entities;
 
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
-import com.aptitekk.agenda.core.services.UserService;
 import com.aptitekk.agenda.core.util.EqualsHelper;
 
 import javax.persistence.*;
@@ -17,6 +17,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "\"user\"")
 public class User extends MultiTenantEntity implements Serializable {
 
     @Id
@@ -50,7 +51,7 @@ public class User extends MultiTenantEntity implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<Notification> notifications = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    @ManyToMany(mappedBy = "users")
     private List<Permission> permissions;
 
     public int getId() {

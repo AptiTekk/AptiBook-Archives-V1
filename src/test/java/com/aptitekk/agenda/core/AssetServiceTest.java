@@ -8,8 +8,8 @@ package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.AssetCategory;
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.AssetService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -38,19 +38,6 @@ public class AssetServiceTest {
 
     @Inject
     private AssetCategoryService assetCategoryService;
-
-    @Test
-    public void getByNameReturnsCorrectAsset() throws Exception {
-        String assetName = UUID.randomUUID().toString();
-
-        Asset asset = new Asset(assetName);
-        assetService.insert(asset);
-
-        Asset foundAsset = assetService.findByName(assetName);
-
-        assertNotNull("The asset search returned null!", foundAsset);
-        assertEquals("Unable to locate the correct asset by name!", asset, foundAsset);
-    }
 
     @Test
     @Transactional

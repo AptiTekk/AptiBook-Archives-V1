@@ -7,22 +7,135 @@
 package com.aptitekk.agenda.core.entities;
 
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
-import com.aptitekk.agenda.core.properties.PropertyKey;
 import com.aptitekk.agenda.core.util.EqualsHelper;
+import com.aptitekk.agenda.core.util.LogManager;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.UnsatisfiedResolutionException;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 public class Property extends MultiTenantEntity implements Serializable {
+
+    public enum Group {
+
+        FRONT_PAGE("Front Page", null);
+
+        private String friendlyName;
+        private Class<? extends ChangeListener> propertyGroupChangeListenerClass;
+
+        Group(String friendlyName, Class<? extends ChangeListener> propertyGroupChangeListenerClass) {
+            this.friendlyName = friendlyName;
+            this.propertyGroupChangeListenerClass = propertyGroupChangeListenerClass;
+        }
+
+        public String getFriendlyName() {
+            return friendlyName;
+        }
+
+        public void firePropertiesChangedEvent() {
+            if (propertyGroupChangeListenerClass != null) {
+                try {
+                    BeanManager beanManager = CDI.current().getBeanManager();
+                    Set<Bean<?>> beanSet = beanManager.getBeans(ChangeListener.class);
+                    Bean<?> bean = null;
+                    for (Bean<?> beanInSet : beanSet) {
+                        if (beanInSet.getBeanClass().equals(propertyGroupChangeListenerClass)) {
+                            bean = beanInSet;
+                            break;
+                        }
+                    }
+
+                    if (bean != null) {
+                        CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
+                        ChangeListener listener = (ChangeListener) beanManager.getReference(bean, ChangeListener.class, creationalContext);
+                        if (listener != null)
+                            listener.onPropertiesChanged(this);
+                    } else {
+                        LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it in the bean set.");
+                    }
+                } catch (UnsatisfiedResolutionException e) {
+                    LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it." +
+                            "\nError: " + e.getMessage());
+                }
+            }
+        }
+
+        interface ChangeListener {
+            void onPropertiesChanged(Group propertyGroup);
+        }
+    }
+
+    public enum Key {
+
+        POLICY_BOX("Policy Box Content",
+                "Default Policies Message.",
+                Group.FRONT_PAGE, 3, false, 256, null, null);
+
+        private final String friendlyName;
+        private final String defaultValue;
+        private final Group group;
+        private int rows;
+        private boolean secret;
+        private final int maxLength;
+        private final String regex;
+        private final String regexMessage;
+
+        Key(String friendlyName, String defaultValue, Group group, int rows, boolean secret, int maxLength, String regex, String regexMessage) {
+            this.friendlyName = friendlyName;
+            this.defaultValue = defaultValue;
+            this.group = group;
+            this.rows = rows;
+            this.secret = secret;
+            this.maxLength = maxLength;
+            this.regex = regex;
+            this.regexMessage = regexMessage;
+        }
+
+        public String getFriendlyName() {
+            return friendlyName;
+        }
+
+        public String getDefaultValue() {
+            return defaultValue;
+        }
+
+        public Group getGroup() {
+            return group;
+        }
+
+        public int getRows() {
+            return rows;
+        }
+
+        public boolean isSecret() {
+            return secret;
+        }
+
+        public int getMaxLength() {
+            return maxLength;
+        }
+
+        public String getRegex() {
+            return regex;
+        }
+
+        public String getRegexMessage() {
+            return regexMessage;
+        }
+    }
 
     @Id
     @GeneratedValue
     private int id;
 
-    private PropertyKey propertyKey;
+    @Enumerated(EnumType.STRING)
+    private Key propertyKey;
 
     private String propertyValue;
 
@@ -31,16 +144,16 @@ public class Property extends MultiTenantEntity implements Serializable {
     public Property() {
     }
 
-    public Property(PropertyKey propertyKey, String propertyValue) {
+    public Property(Key propertyKey, String propertyValue) {
         setPropertyKey(propertyKey);
         setPropertyValue(propertyValue);
     }
 
-    public PropertyKey getPropertyKey() {
+    public Key getPropertyKey() {
         return this.propertyKey;
     }
 
-    public void setPropertyKey(PropertyKey key) {
+    public void setPropertyKey(Key key) {
         this.propertyKey = key;
     }
 

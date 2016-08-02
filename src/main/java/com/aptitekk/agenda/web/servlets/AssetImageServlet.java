@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.web.servlets;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.AssetService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ public class AssetImageServlet extends HttpServlet {
 
     @Override
     public void init() {
-        String imageNotFoundPath = "/resources/images/notFound.png";
+        String imageNotFoundPath = "/resources/images/notFound.jpg";
         try {
             imageNotFoundFile = new File(getServletContext().getResource(imageNotFoundPath).toURI());
         } catch (MalformedURLException | URISyntaxException e) {
@@ -57,16 +57,16 @@ public class AssetImageServlet extends HttpServlet {
         if (response == null)
             return;
 
-        if (asset == null || asset.getPhoto() == null) {
+        if (asset == null || asset.getImage() == null) {
             response.setHeader("Content-Type", "image/jpeg");
             response.setHeader("Content-Length", String.valueOf(imageNotFoundFile.length()));
             response.setHeader("Content-Disposition", "inline; filename=\"notfound.jpg\"");
             Files.copy(imageNotFoundFile.toPath(), response.getOutputStream());
         } else {
             response.setHeader("Content-Type", "image/jpeg");
-            response.setHeader("Content-Length", String.valueOf(asset.getPhoto().length));
+            response.setHeader("Content-Length", String.valueOf(asset.getImage().getData().length));
             response.setHeader("Content-Disposition", "inline; filename=\"" + asset.getId() + ".jpg\"");
-            response.getOutputStream().write(asset.getPhoto());
+            response.getOutputStream().write(asset.getImage().getData());
         }
     }
 

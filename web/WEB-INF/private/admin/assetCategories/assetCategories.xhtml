@@ -14,7 +14,7 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:pf="http://primefaces.org/ui"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+>
 
 <ui:composition>
     <h:panelGroup layout="block" id="assetCategoriesPage">
@@ -39,82 +39,122 @@
                             </h:column>
                         </b:dataTable>
                     </div>
-                    <h:panelGroup layout="block" styleClass="form-group"
+                    <h:panelGroup layout="block" styleClass="btn-toolbar"
                                   rendered="#{assetCategoryEditController.hasModifyPermission()}">
-                        <b:button look="primary"
-                                  value="Add New Asset Category"
-                                  p:data-toggle="modal"
-                                  p:data-target=".newAssetCategoryModal"/>
+                        <b:commandButton look="primary" value="Add New Asset Category" ajax="true"
+                                         update=":newAssetCategoryModalForm"
+                                         oncomplete="$('.newAssetCategoryModal').modal()"/>
                     </h:panelGroup>
                 </h:form>
             </b:column>
 
             <!-- Asset Category Edit Fields -->
-            <b:column colXs="12" colLg="7">
+            <b:column colXs="12" colLg="6" offsetLg="1">
                 <c:choose>
                     <c:when test="#{assetCategoryEditController.selectedAssetCategory == null}">
-                        <b:column colXs="9" offsetXs="3">
-                            <h4>Please select an Asset Category.</h4>
-                            <b:messages showSummary="false" showDetail="true"/>
-                        </b:column>
+                        <h4>Please select an Asset Category.</h4>
+                        <b:messages showSummary="false" showDetail="true"/>
                     </c:when>
                     <c:otherwise>
-                        <h:form styleClass="form-horizontal" id="assetCategoryEditForm">
+                        <h:form id="assetCategoryEditForm">
 
                             <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>Asset Category Settings:</h4>
-                                    * = Required. Name must be unique.
-                                    <b:message for="assetCategoryEditForm" showSummary="false"
-                                               showDetail="true"/>
-                                </b:column>
+                                <h4>Asset Category Settings:</h4>
+                                * = Required. Name must be unique.
+                                <b:message for="assetCategoryEditForm" showSummary="false"
+                                           showDetail="true"/>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="assetCategoryNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="assetCategoryNameEdit" styleClass="form-control"
-                                                 value="#{assetCategoryEditController.editableAssetCategoryName}"
-                                                 required="true"
+                                <b:message for="assetCategoryNameEdit" showSummary="false" showDetail="true"/>
+                                <b:inputText id="assetCategoryNameEdit" label="Name:"
+                                             value="#{assetCategoryEditController.editableAssetCategoryName}"
+                                             required="true"
+                                             disabled="#{!assetCategoryEditController.hasModifyPermission()}"
+                                             requiredMessage="This is required." maxlength="32"/>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Asset Tags:"/>
+                                <!--@elvariable id="tag" type="java.lang.String"-->
+                                <pf:autoComplete multiple="true"
+                                                 value="#{tagController.selectedAssetCategoryTagNames}"
+                                                 completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
+                                                 var="tag" itemLabel="#{tag}" itemValue="#{tag}"
                                                  disabled="#{!assetCategoryEditController.hasModifyPermission()}"
-                                                 requiredMessage="This is required." maxlength="32"/>
-                                </b:column>
+                                                 onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
+                                    <pf:ajax event="keyup" process="@this" update="@this"/>
+                                </pf:autoComplete>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Asset Tags:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <!--@elvariable id="tag" type="java.lang.String"-->
-                                    <pf:autoComplete multiple="true" value="#{tagController.selectedAssetCategoryTagNames}"
-                                                     completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
-                                                     var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                                     disabled="#{!assetCategoryEditController.hasModifyPermission()}"
-                                                     onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
-                                        <pf:ajax event="keyup" process="@this" update="@this"/>
-                                    </pf:autoComplete>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-xs-offset-3 col-xs-9">
-                                    <div class="btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes" style="display: inline-block"
-                                                         action="#{assetCategoryEditController.updateSettings()}"
-                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
-                                        </h:commandButton>
+                                <div class="btn-toolbar">
+                                    <b:commandButton look="danger" value="Delete Asset Category" ajax="true"
+                                                     update=":assetCategoryDeletionConfirmModalForm"
+                                                     oncomplete="$('.assetCategoryDeletionConfirmModal').modal()"
+                                                     disabled="#{!assetCategoryEditController.hasModifyPermission()}"/>
+                                    <div class="pull-right btn-toolbar">
                                         <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Fields" style="display: inline-block"
+                                                         value="Reset Form"
                                                          action="#{assetCategoryEditController.resetSettings()}"
                                                          disabled="#{!assetCategoryEditController.hasModifyPermission()}">
                                             <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
-                                        <b:button styleClass="btn btn-danger"
-                                                  value="Delete Asset Category"
-                                                  style="display: inline-block; float:right;"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#assetCategoryDeletionConfirmModal"
-                                                  disabled="#{!assetCategoryEditController.hasModifyPermission()}"/>
+                                        <h:commandButton styleClass="btn btn-primary"
+                                                         value="Save Changes"
+                                                         action="#{assetCategoryEditController.updateSettings()}"
+                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
+                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
+                                        </h:commandButton>
                                     </div>
+                                </div>
+                            </div>
+                        </h:form>
+                        <hr/>
+                        <h:form id="reservationFieldEditForm">
+                            <div class="form-group">
+                                <h4>Reservation Request Fields:</h4>
+                                <b:message for="reservationFieldEditForm" showSummary="false"
+                                           showDetail="true"/>
+                            </div>
+                            <div class="form-group">
+                                <b:dataTable value="#{assetCategoryEditController.reservationFields}"
+                                             var="reservationField" searching="false" paginated="false">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Title
+                                        </f:facet>
+                                        <b:navCommandLink
+                                                value="#{reservationField.title.length() > 32 ? reservationField.title.substring(0, 32).concat('...') : reservationField.title}"
+                                                iconAwesome="pencil-square-o"
+                                                ajax="true"
+                                                action="#{editReservationFieldController.setReservationField(reservationField)}"
+                                                update=":editReservationFieldModalForm"
+                                                oncomplete="$('.editReservationFieldModal').modal()"
+                                                style="cursor: pointer;"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Description
+                                        </f:facet>
+                                        #{reservationField.description.length() > 32 ? reservationField.description.substring(0, 32).concat("...") : reservationField.description}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Required
+                                        </f:facet>
+                                        #{reservationField.required ? 'Yes' : 'No'}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Size
+                                        </f:facet>
+                                        #{reservationField.multiLine ? 'Multi-Line' : 'Single-Line'}
+                                    </h:column>
+                                </b:dataTable>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-toolbar">
+                                    <b:commandButton look="primary" value="Add New Field" ajax="true"
+                                                     update=":newReservationFieldModalForm"
+                                                     oncomplete="$('.newReservationFieldModal').modal()"/>
                                 </div>
                             </div>
                         </h:form>
@@ -124,9 +164,12 @@
         </b:row>
 
         <ui:include src="newAssetCategoryModal.xhtml"/>
+        <ui:include src="newReservationFieldModal.xhtml"/>
+        <ui:include src="editReservationFieldModal.xhtml"/>
+        <ui:include src="deleteReservationFieldModal.xhtml"/>
         <ui:include src="deleteAssetCategoryModal.xhtml"/>
-
     </h:panelGroup>
+
 </ui:composition>
 
 </html>

@@ -7,7 +7,7 @@
 package com.aptitekk.agenda.core;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.*;
+import com.aptitekk.agenda.core.entities.services.*;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import org.jboss.arquillian.container.test.api.Deployment;

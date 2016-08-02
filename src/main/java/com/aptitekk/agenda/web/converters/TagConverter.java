@@ -8,8 +8,8 @@ package com.aptitekk.agenda.web.converters;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tag;
-import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.services.TagService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.TagService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;
@@ -49,7 +49,6 @@ public class TagConverter implements Converter {
         if (o instanceof Tag) {
             return ((Tag) o).getAssetCategory().getName() + "|" + ((Tag) o).getName();
         }
-
 
 
         return "";

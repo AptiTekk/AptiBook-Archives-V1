@@ -6,9 +6,9 @@
 
 package com.aptitekk.agenda.core;
 
-import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.services.UserGroupService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.testingUtil.TestUtils;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -29,13 +29,13 @@ public class StartupServiceTest {
     }
 
     @Inject
-    UserGroupService userGroupService;
+    private UserGroupService userGroupService;
 
     @Inject
-    UserService userService;
+    private UserService userService;
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    private AssetCategoryService assetCategoryService;
 
     @Test
     public void testEntitiesAreCreatedOnStartup() throws Exception {

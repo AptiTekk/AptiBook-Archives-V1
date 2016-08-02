@@ -7,12 +7,42 @@
 package com.aptitekk.agenda.core.tenant;
 
 import com.aptitekk.agenda.core.entities.Tenant;
+import com.aptitekk.agenda.core.entities.services.TenantService;
 
-import javax.ejb.Local;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 
-@Local
-public interface TenantSessionService {
+@Stateful
+public class TenantSessionService {
 
-    Tenant getCurrentTenant();
+    @Inject
+    private TenantManagementService tenantManagementService;
 
+    @Inject
+    private TenantService tenantService;
+
+    @Inject
+    private HttpServletRequest httpRequest;
+
+    @PostConstruct
+    private void init() {
+        try {
+            if (httpRequest != null)
+                httpRequest.getAttribute("tenant");
+        } catch (Exception ignored) {
+            httpRequest = null;
+        }
+    }
+
+    public Tenant getCurrentTenant() {
+        if (httpRequest != null) {
+            Object attribute = httpRequest.getAttribute("tenant");
+            if (attribute != null && attribute instanceof Tenant)
+                return (Tenant) attribute;
+        }
+
+        return null;
+    }
 }

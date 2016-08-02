@@ -7,7 +7,8 @@
 package com.aptitekk.agenda.web.validators;
 
 import com.aptitekk.agenda.core.entities.Asset;
-import com.aptitekk.agenda.core.services.AssetService;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.entities.services.AssetService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -24,14 +25,15 @@ import java.io.Serializable;
 public class UniqueAssetValidator implements Validator, Serializable {
 
     @Inject
-    AssetService assetService;
+    private AssetService assetService;
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
+        Object assetCategory = uiComponent.getAttributes().get("assetCategory");
         Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
-        if (inputText != null && inputText instanceof String && assetService != null) {
-            Asset otherAsset = assetService.findByName((String) inputText);
+        if (inputText != null && inputText instanceof String && assetCategory != null && assetCategory instanceof AssetCategory) {
+            Asset otherAsset = assetService.findByName((String) inputText, (AssetCategory) assetCategory);
             if (otherAsset != null) {
                 if (exceptionAttribute != null && exceptionAttribute instanceof Asset && otherAsset.equals(exceptionAttribute))
                     return;

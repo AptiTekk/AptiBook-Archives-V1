@@ -7,8 +7,8 @@
 package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
-import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.services.ReservationService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
 import com.aptitekk.agenda.core.util.time.CalendarRange;
 import com.aptitekk.agenda.core.util.time.SegmentedTime;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
@@ -155,8 +155,8 @@ public class TimeSelectionController implements Serializable {
         int selectedTimeIndex = allowedTimeSegments.indexOf(selectedStartTime);
         endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
 
-        if(selectedEndTime != null)
-            if(endTimes.contains(selectedEndTime))
+        if (selectedEndTime != null)
+            if (endTimes.contains(selectedEndTime))
                 return;
 
         selectedEndTime = endTimes.get(0);

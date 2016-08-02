@@ -9,16 +9,132 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:b="http://bootsfaces.net/ui">
+      xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html">
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
         <b:container>
             <b:row>
                 <b:column colXs="12">
-                    <h2>WIP</h2>
+                    <ol class="breadcrumb" style="margin-top: 20px">
+                        <li><h:link outcome="index" value="Home"/></li>
+                        <li class="active">My Reservations</li>
+                        <li class="active">Upcoming</li>
+                    </ol>
                 </b:column>
             </b:row>
+
+            <ui:fragment rendered="#{empty myReservationsController.assetCategories}">
+                <b:row>
+                    <b:column colXs="12">
+                        <h4>You do not have any upcoming Reservations.</h4>
+                    </b:column>
+                </b:row>
+            </ui:fragment>
+            <ui:fragment rendered="#{not empty myReservationsController.assetCategories}">
+                <ui:repeat value="#{myReservationsController.assetCategories.toArray()}" var="assetCategory">
+                    <b:row>
+                        <b:column colXs="12">
+                            <h4>#{assetCategory.name}</h4>
+                            <hr/>
+                        </b:column>
+                    </b:row>
+                    <ui:repeat
+                            value="#{myReservationsController.getPresentReservationsForCategory(assetCategory)}"
+                            var="reservation">
+                        <b:row>
+                            <b:column colXs="12">
+                                <b:panel styleClass="approvedReservationPanel"
+                                         look="#{reservation.pending ? 'default' : (reservation.approved ? 'success' : 'danger')}"
+                                         title="#{reservation.asset.name} - #{reservation.pending ? 'Pending Approval' : (reservation.approved ? 'Approved' : 'Rejected')}"
+                                         collapsible="false">
+                                    <b:row>
+                                        <b:column colXs="12" colSm="2" style="width: 115px;">
+                                            <div class="form-group">
+                                                <p:lightBox>
+                                                    <h:outputLink
+                                                            value="#{request.contextPath}/images/assets/#{reservation.asset.id}">
+                                                        <h:graphicImage
+                                                                url="/images/assets/#{reservation.asset.id}"
+                                                                style="height: 100px; border-radius: 5px"/>
+                                                    </h:outputLink>
+                                                </p:lightBox>
+                                            </div>
+                                        </b:column>
+                                        <b:column colXs="12" colSm="10">
+                                            <b:row>
+                                                <b:column colXs="12" colSm="7">
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Reservation Title:"/>
+                                                        <b:inputText
+                                                                value="#{reservation.title}"
+                                                                readonly="true"/>
+                                                    </div>
+                                                </b:column>
+                                                <b:column colXs="12" colSm="5">
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Requested On:"/>
+                                                        <b:inputText
+                                                                value="#{reservation.formattedDateCreated}"
+                                                                readonly="true"/>
+                                                    </div>
+                                                </b:column>
+                                            </b:row>
+                                            <b:row>
+                                                <b:column colXs="12" colSm="4">
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Reservation Date:"/>
+                                                        <b:inputText
+                                                                value="#{reservation.formattedDate}"
+                                                                readonly="true"/>
+                                                    </div>
+                                                </b:column>
+                                                <b:column colXs="12" colSm="4">
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Reservation Start Time:"/>
+                                                        <b:inputText
+                                                                value="#{reservation.timeStart.timeString}"
+                                                                readonly="true"/>
+                                                    </div>
+                                                </b:column>
+                                                <b:column colXs="12" colSm="4">
+                                                    <div class="form-group">
+                                                        <h:outputLabel value="Reservation End Time:"/>
+                                                        <b:inputText
+                                                                value="#{reservation.timeEnd.timeString}"
+                                                                readonly="true"/>
+                                                    </div>
+                                                </b:column>
+                                            </b:row>
+                                            <b:row>
+                                                <b:column colXs="12">
+                                                    <b:panel title="Field Entries" look="default" collapsible="true"
+                                                             collapsed="true">
+                                                        <ui:repeat
+                                                                value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                                var="reservationField">
+                                                            <ui:fragment rendered="#{reservationField.multiLine}">
+                                                                <b:inputTextarea label="#{reservationField.title}"
+                                                                                 value="#{reservation.getReservationFieldEntryText(reservationField)}"
+                                                                                 rows="3" readonly="true"/>
+                                                            </ui:fragment>
+                                                            <ui:fragment rendered="#{not reservationField.multiLine}">
+                                                                <b:inputText label="#{reservationField.title}"
+                                                                             value="#{reservation.getReservationFieldEntryText(reservationField)}"
+                                                                             readonly="true"/>
+                                                            </ui:fragment>
+                                                        </ui:repeat>
+                                                    </b:panel>
+                                                </b:column>
+                                            </b:row>
+                                        </b:column>
+                                    </b:row>
+                                </b:panel>
+                            </b:column>
+                        </b:row>
+                    </ui:repeat>
+                </ui:repeat>
+            </ui:fragment>
         </b:container>
     </ui:define>
 </ui:composition>

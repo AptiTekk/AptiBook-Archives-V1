@@ -10,7 +10,6 @@
           <element id="library" level="project" name="Maven: org.liquibase:liquibase-core:3.5.1" />
           <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.13" />
           <element id="library" level="project" name="Maven: org.liquibase:liquibase-cdi:3.5.1" />
-          <element id="library" level="project" name="Maven: javax.mail:javax.mail-api:1.5.5" />
           <element id="library" level="project" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" />
           <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.9.0" />
           <element id="library" level="project" name="Maven: org.primefaces:primefaces:6.0" />
@@ -37,6 +36,8 @@
           <element id="library" level="project" name="Maven: com.google.guava:guava-jdk5:17.0" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.4" />
           <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
+          <element id="library" level="project" name="Maven: org.ocpsoft.prettytime:prettytime:3.2.7.Final" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.9.4" />
         </element>
       </element>
       <element id="directory" name="META-INF">

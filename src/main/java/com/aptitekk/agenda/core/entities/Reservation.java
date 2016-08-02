@@ -85,6 +85,18 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         return status;
     }
 
+    public boolean isPending() {
+        return status == Status.PENDING;
+    }
+
+    public boolean isApproved() {
+        return status == Status.APPROVED;
+    }
+
+    public boolean isRejected() {
+        return status == Status.REJECTED;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -139,6 +151,17 @@ public class Reservation extends MultiTenantEntity implements Serializable {
 
     public void setDecisions(List<ReservationDecision> decisions) {
         this.decisions = decisions;
+    }
+
+    public String getReservationFieldEntryText(ReservationField reservationField) {
+        if (reservationField == null)
+            return null;
+
+        for (ReservationFieldEntry fieldEntry : fieldEntries) {
+            if (fieldEntry.getField().equals(reservationField))
+                return fieldEntry.getContent();
+        }
+        return null;
     }
 
     public List<ReservationFieldEntry> getFieldEntries() {

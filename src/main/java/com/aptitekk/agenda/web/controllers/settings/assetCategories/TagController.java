@@ -10,9 +10,9 @@ package com.aptitekk.agenda.web.controllers.settings.assetCategories;
 import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Tag;
-import com.aptitekk.agenda.core.services.AssetService;
-import com.aptitekk.agenda.core.services.AssetCategoryService;
-import com.aptitekk.agenda.core.services.TagService;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
+import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.TagService;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

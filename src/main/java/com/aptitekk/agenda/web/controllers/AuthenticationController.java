@@ -8,8 +8,8 @@ package com.aptitekk.agenda.web.controllers;
 
 import com.aptitekk.agenda.core.entities.Permission;
 import com.aptitekk.agenda.core.entities.User;
-import com.aptitekk.agenda.core.services.PermissionService;
-import com.aptitekk.agenda.core.services.UserService;
+import com.aptitekk.agenda.core.entities.services.PermissionService;
+import com.aptitekk.agenda.core.entities.services.UserService;
 import com.aptitekk.agenda.core.tenant.TenantSessionService;
 import com.aptitekk.agenda.core.util.FacesSessionHelper;
 import com.aptitekk.agenda.core.util.LogManager;
@@ -47,7 +47,7 @@ public class AuthenticationController implements Serializable {
         if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
             Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
             if (attribute != null && attribute instanceof User) {
-                this.authenticatedUser = (User) attribute;
+                authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
     }
@@ -58,6 +58,8 @@ public class AuthenticationController implements Serializable {
      * @return The outcome page.
      */
     public String login() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+
         FacesContext context = FacesContext.getCurrentInstance();
         LogManager.logDebug("Logging In - User: " + username);
 
@@ -90,7 +92,7 @@ public class AuthenticationController implements Serializable {
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
 
@@ -139,9 +141,4 @@ public class AuthenticationController implements Serializable {
         this.password = password;
     }
 
-    public void refreshUser() {
-        if (authenticatedUser != null) {
-            authenticatedUser = userService.get(authenticatedUser.getId());
-        }
-    }
 }

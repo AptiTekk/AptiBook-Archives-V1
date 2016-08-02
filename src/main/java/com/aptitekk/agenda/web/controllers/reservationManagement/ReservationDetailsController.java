@@ -7,7 +7,8 @@
 package com.aptitekk.agenda.web.controllers.reservationManagement;
 
 import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.ReservationFieldService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,6 +17,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.*;
 
+@Named
 @RequestScoped
 public class ReservationDetailsController implements Serializable {
 
@@ -29,7 +31,6 @@ public class ReservationDetailsController implements Serializable {
         Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap = new LinkedHashMap<>();
 
         Queue<UserGroup> queue = new LinkedList<>();
-        authenticationController.refreshUser();
         queue.addAll(authenticationController.getAuthenticatedUser().getUserGroups());
 
         //Traverse down the hierarchy and determine which reservations are approved.
@@ -46,7 +47,7 @@ public class ReservationDetailsController implements Serializable {
                         //If there is not an AssetCategory already in the map, add one with an empty list.
                         reservationDetailsMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
 
-                        reservationDetailsMap.get(asset.getAssetCategory()).add(generateReservationDetails(asset, reservation));
+                        reservationDetailsMap.get(asset.getAssetCategory()).add(generateReservationDetails(reservation));
                     }
                 }
             }
@@ -55,7 +56,7 @@ public class ReservationDetailsController implements Serializable {
         return reservationDetailsMap;
     }
 
-    private ReservationDetails generateReservationDetails(Asset asset, Reservation reservation) {
+    private ReservationDetails generateReservationDetails(Reservation reservation) {
         //Traverse up the hierarchy and determine the decisions that have already been made.
         LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
         List<UserGroup> hierarchyUp = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());

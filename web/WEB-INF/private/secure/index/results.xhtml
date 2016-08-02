@@ -19,13 +19,24 @@
     <b:container>
         <b:row>
             <b:column colXs="12">
+                <ol class="breadcrumb" style="margin-top: 20px">
+                    <li><h:link outcome="index" value="Home"/></li>
+                    <li class="active">Search</li>
+                </ol>
+            </b:column>
+        </b:row>
+
+        <b:row>
+            <b:column colXs="12">
                 <h:form id="results-time-selection" styleClass="form-inline" style="margin-top:30px">
                     <div class="form-group">
                         Available
-                        <h:selectOneMenu value="#{timeSelectionController.selectedAssetCategory}" styleClass="form-control"
+                        <h:selectOneMenu value="#{timeSelectionController.selectedAssetCategory}"
+                                         styleClass="form-control"
                                          converter="#{assetCategoryConverter}">
                             <f:selectItems value="#{timeSelectionController.assetCategories}"
-                                           var="assetCategory" itemLabel="#{assetCategory.name}" itemValue="#{assetCategory}"/>
+                                           var="assetCategory" itemLabel="#{assetCategory.name}"
+                                           itemValue="#{assetCategory}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
@@ -93,7 +104,7 @@
 
                             <ui:repeat value="#{availableAssetsController.filteredAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
-                                    <h:panelGroup layout="block" class="form-group" rendered="#{asset.photo != null}">
+                                    <h:panelGroup layout="block" class="form-group" rendered="#{asset.image != null}">
                                         <p:lightBox>
                                             <h:outputLink value="#{request.contextPath}/images/assets/#{asset.id}">
                                                 <h:graphicImage url="/images/assets/#{asset.id}"
@@ -103,7 +114,9 @@
                                     </h:panelGroup>
                                     <div class="form-group">
                                         <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                         action="#{availableAssetsController.onMakeReservationFired(authenticationController.authenticatedUser, asset, timeSelectionController.segmentedTimeRange)}"/>
+                                                         action="#{availableAssetsController.onMakeReservationFired(asset, timeSelectionController.segmentedTimeRange)}">
+                                            <f:ajax render=":includeGroup"/>
+                                        </h:commandButton>
                                     </div>
                                 </b:panel>
                             </ui:repeat>

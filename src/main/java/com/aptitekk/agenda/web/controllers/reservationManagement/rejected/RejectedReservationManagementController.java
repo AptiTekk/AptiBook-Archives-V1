@@ -8,7 +8,7 @@ package com.aptitekk.agenda.web.controllers.reservationManagement.rejected;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.web.controllers.reservationManagement.ReservationDetails;
 import com.aptitekk.agenda.web.controllers.reservationManagement.ReservationDetailsController;
 

@@ -6,10 +6,13 @@
 
 package com.aptitekk.agenda.web.controllers.reservationManagement.pending;
 
-import com.aptitekk.agenda.core.entities.*;
-import com.aptitekk.agenda.core.services.ReservationDecisionService;
-import com.aptitekk.agenda.core.services.ReservationService;
-import com.aptitekk.agenda.core.services.UserGroupService;
+import com.aptitekk.agenda.core.entities.AssetCategory;
+import com.aptitekk.agenda.core.entities.Reservation;
+import com.aptitekk.agenda.core.entities.ReservationDecision;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.ReservationDecisionService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
+import com.aptitekk.agenda.core.entities.services.UserGroupService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import com.aptitekk.agenda.web.controllers.reservationManagement.ReservationDetails;
@@ -22,7 +25,9 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Named
 @ViewScoped
@@ -42,6 +47,9 @@ public class PendingReservationManagementController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;
+
+    @Inject
+    private NotificationService notificationService;
 
     private Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap;
 
@@ -67,15 +75,17 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
+                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                }
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
-                LogManager.logError("Error approving reservation. Reservation title and id: " + reservationDetails.getReservation().getTitle() + reservationDetails.getReservation().getId()  +  "Reservation for: " +  "Exception message: " + e.getMessage());
+                LogManager.logError("Error approving reservation. Reservation title and id: " + reservationDetails.getReservation().getTitle() + reservationDetails.getReservation().getId() + "Reservation for: " + "Exception message: " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -92,8 +102,10 @@ public class PendingReservationManagementController implements Serializable {
                 reservationDecisionService.insert(decision);
 
                 reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot())
+                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
                     reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
+                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                }
                 reservationService.merge(reservationDetails.getReservation());
 
                 buildReservationList();

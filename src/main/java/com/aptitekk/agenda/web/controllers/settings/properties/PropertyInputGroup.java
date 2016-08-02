@@ -7,8 +7,6 @@
 package com.aptitekk.agenda.web.controllers.settings.properties;
 
 import com.aptitekk.agenda.core.entities.Property;
-import com.aptitekk.agenda.core.properties.PropertyGroup;
-import com.aptitekk.agenda.core.properties.PropertyKey;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,12 +15,12 @@ import java.util.Map;
 
 public class PropertyInputGroup {
 
-    private PropertyGroup propertyGroup;
-    private Map<PropertyKey, String> propertiesInputMap = new LinkedHashMap<>();
+    private Property.Group propertyGroup;
+    private Map<Property.Key, String> propertiesInputMap = new LinkedHashMap<>();
 
     private List<Property> propertyEntityList = new ArrayList<>();
 
-    PropertyInputGroup(PropertyGroup propertyGroup, List<Property> propertyEntityList) {
+    PropertyInputGroup(Property.Group propertyGroup, List<Property> propertyEntityList) {
         this.propertyGroup = propertyGroup;
 
         this.propertyEntityList = propertyEntityList;
@@ -37,11 +35,11 @@ public class PropertyInputGroup {
         }
     }
 
-    public PropertyGroup getPropertyGroup() {
+    public Property.Group getPropertyGroup() {
         return propertyGroup;
     }
 
-    public Map<PropertyKey, String> getPropertiesInputMap() {
+    public Map<Property.Key, String> getPropertiesInputMap() {
         return propertiesInputMap;
     }
 

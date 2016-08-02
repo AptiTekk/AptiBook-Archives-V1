@@ -1,0 +1,21 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!-- Created 7/30/2016-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+
+    <!-- Changes ReservationField "name"(32) column to "title"(TEXT), "largefield" column to "multiline", and removes "Order" column. -->
+    <changeSet id="4" author="MitchTalmadge">
+        <renameColumn tableName="reservationfield" oldColumnName="name" newColumnName="title"/>
+        <modifyDataType tableName="reservationfield" columnName="title" newDataType="TEXT"/>
+        <renameColumn tableName="reservationfield" oldColumnName="largefield" newColumnName="multiline"/>
+        <dropColumn tableName="reservationfield" columnName="Order"/>
+    </changeSet>
+
+</databaseChangeLog>

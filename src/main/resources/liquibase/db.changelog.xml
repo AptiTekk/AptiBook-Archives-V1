@@ -10,56 +10,10 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <!--
-    ~ Please remember: Once a changeSet has been deployed to live servers, modifications to it will NOT be seen.
-    ~ You must create a new changeSet, not modify past ones! Check the date before modifying a changeSet; has a release
-    ~ been deployed since then? If so, make a NEW changeSet.
-    ~
-    ~ If adding a new Entity, don't forget to add an entry to the `hibernate_sequence` table.
-    -->
-
-    <!-- Creates the initial database schema. -->
-    <changeSet id="1__Initial_Schema__7_23_2016" author="MitchTalmadge">
-        <sqlFile path="liquibase/1__Initial_Schema.sql"/>
-    </changeSet>
-
-    <!-- Renames AssetType to AssetCategory -->
-    <changeSet id="2__AssetType_to_AssetCategory__7_24_2016" author="MitchTalmadge">
-        <renameTable oldTableName="AssetType" newTableName="AssetCategory"/>
-        <dropForeignKeyConstraint baseTableName="AssetCategory" constraintName="FK_AssetType_Tenant"/>
-        <addForeignKeyConstraint baseTableName="AssetCategory" baseColumnNames="tenant_id"
-                                 constraintName="FK_AssetCategory_Tenant"
-                                 referencedTableName="Tenant"
-                                 referencedColumnNames="id"/>
-
-        <dropForeignKeyConstraint baseTableName="Asset" constraintName="FK_Asset_AssetType"/>
-        <renameColumn tableName="Asset" oldColumnName="assetType_id" newColumnName="assetCategory_id" columnDataType="int"/>
-        <addForeignKeyConstraint baseTableName="Asset" baseColumnNames="assetCategory_id"
-                                 constraintName="FK_Asset_AssetCategory"
-                                 referencedTableName="AssetCategory"
-                                 referencedColumnNames="id"/>
-
-        <dropForeignKeyConstraint baseTableName="ReservationField" constraintName="FK_ReservationField_AssetType"/>
-        <renameColumn tableName="ReservationField" oldColumnName="assetType_id" newColumnName="assetCategory_id" columnDataType="int"/>
-        <addForeignKeyConstraint baseTableName="ReservationField" baseColumnNames="assetCategory_id"
-                                 constraintName="FK_ReservationField_AssetCategory"
-                                 referencedTableName="AssetCategory"
-                                 referencedColumnNames="id"/>
-
-        <dropForeignKeyConstraint baseTableName="Tag" constraintName="FK_Tag_AssetType"/>
-        <renameColumn tableName="Tag" oldColumnName="assetType_id" newColumnName="assetCategory_id" columnDataType="int"/>
-        <addForeignKeyConstraint baseTableName="Tag" baseColumnNames="assetCategory_id"
-                                 constraintName="FK_Tag_AssetCategory"
-                                 referencedTableName="AssetCategory"
-                                 referencedColumnNames="id"/>
-
-        <update tableName="Permission">
-            <column name="descriptor" value="ASSET_CATEGORIES_MODIFY_ALL"/>
-            <where>descriptor=:value</where>
-            <whereParams>
-                <param value="ASSET_TYPES_MODIFY_ALL" />
-            </whereParams>
-        </update>
-    </changeSet>
+    <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/2__Change_Notification_Id_Type.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/3__Add_File_Entity.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/4__Modify_Reservation_Field.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/5__Add_Reservation_Field_Required.xml" relativeToChangelogFile="true" />
 
 </databaseChangeLog>

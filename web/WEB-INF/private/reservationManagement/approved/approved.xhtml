@@ -37,8 +37,7 @@
                         var="reservationDetails">
                     <b:row>
                         <b:column colXs="12">
-                            <b:panel styleClass="approvedReservationPanel"
-                                     look="success"
+                            <b:panel look="success"
                                      title="#{reservationDetails.reservation.asset.name}"
                                      collapsible="false">
                                 <b:row>
@@ -107,6 +106,27 @@
                                                 </div>
                                             </b:column>
                                         </b:row>
+                                        <b:row>
+                                            <b:column colXs="12">
+                                                <b:panel title="Field Entries" look="default" collapsible="true"
+                                                         collapsed="true">
+                                                    <ui:repeat
+                                                            value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                            var="reservationField">
+                                                        <ui:fragment rendered="#{reservationField.multiLine}">
+                                                            <b:inputTextarea label="#{reservationField.title}"
+                                                                             value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                             rows="3" readonly="true"/>
+                                                        </ui:fragment>
+                                                        <ui:fragment rendered="#{not reservationField.multiLine}">
+                                                            <b:inputText label="#{reservationField.title}"
+                                                                         value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                         readonly="true"/>
+                                                        </ui:fragment>
+                                                    </ui:repeat>
+                                                </b:panel>
+                                            </b:column>
+                                        </b:row>
                                     </b:column>
                                     <b:column colXs="12"
                                               style="padding-top: 5px; border-top: 1px dashed #ddd">
@@ -128,7 +148,7 @@
                                                     <b:label
                                                             text="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
                                                                         ? (reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'approved' : 'rejected')
-                                                                        : 'not yet decided upon'}"
+                                                                        : 'not decided upon'}"
                                                             severity="#{reservationDetails.getReservationDecisionFromUserGroup(userGroup) != null
                                                                         ? (reservationDetails.getReservationDecisionFromUserGroup(userGroup).approved ? 'success' : 'danger')
                                                                         : 'default'}"/>
