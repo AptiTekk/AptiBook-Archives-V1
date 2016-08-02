@@ -43,6 +43,7 @@ public class RequestReservationViewController implements Serializable {
 
     @Inject
     private ReservationFieldEntryService reservationFieldEntryService;
+
     /**
      * The asset that is being requested for reservation.
      */
@@ -57,15 +58,12 @@ public class RequestReservationViewController implements Serializable {
      * The Title for reservation being edited.
      */
     private String reservationTitle;
-    private HashMap<ReservationField, String> fieldMap = new HashMap<ReservationField, String>();
-    private ArrayList<String> inputValue = new ArrayList<String>();
 
+    /**
+     * A map containing a String for each Reservation Field to store the user's input.
+     */
+    private HashMap<ReservationField, String> fieldMap = new HashMap<>();
 
-    /*    @PostConstruct
-       public void init(){
-           ReservationField reservationField = new ReservationField();
-           fieldMap.put(reservationField, "");
-       }*/
     public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
         //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
@@ -92,8 +90,6 @@ public class RequestReservationViewController implements Serializable {
                         LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
                         e.printStackTrace();
                     }
-                    //System.out.println("Key: " + entry.getKey().toString());
-                    //System.out.println("Value: " + entry.getValue());
                 }
             }
 
@@ -151,7 +147,4 @@ public class RequestReservationViewController implements Serializable {
         this.fieldMap = fieldMap;
     }
 
-    public ArrayList<String> getInputValue() {
-        return inputValue;
-    }
 }

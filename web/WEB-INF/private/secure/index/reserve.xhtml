@@ -52,15 +52,22 @@
                                     <ui:repeat
                                             value="#{requestReservationViewController.asset.assetCategory.reservationFields}"
                                             var="reservationField">
-                                        <b:message for="@next" showSummary="false" showDetail="true"/>
-                                        <b:inputText value="#{requestReservationViewController.fieldMap[reservationField]}"
-                                                     rendered="#{reservationField.multiLine != true}" label="#{reservationField.title}:"
-                                                     required="#{reservationField.required}"
-                                                     requiredMessage="This is required"/>
-                                        <b:inputTextarea value="#{requestReservationViewController.fieldMap[reservationField]}"
-                                                         rendered="#{reservationField.multiLine}" rows="3" label="#{reservationField.title}:"
-                                                         required="#{reservationField.required}"
-                                                         requiredMessage="This is required"/>
+                                        <ui:fragment rendered="#{reservationField.multiLine != true}">
+                                            <b:message for="@next" showSummary="false" showDetail="true"/>
+                                            <b:inputText
+                                                    value="#{requestReservationViewController.fieldMap[reservationField]}"
+                                                    label="#{reservationField.title}:"
+                                                    required="#{reservationField.required}"
+                                                    requiredMessage="This is required"/>
+                                        </ui:fragment>
+                                        <ui:fragment rendered="#{reservationField.multiLine}">
+                                            <b:message for="@next" showSummary="false" showDetail="true"/>
+                                            <b:inputTextarea
+                                                    value="#{requestReservationViewController.fieldMap[reservationField]}"
+                                                    rows="3" label="#{reservationField.title}:"
+                                                    required="#{reservationField.required}"
+                                                    requiredMessage="This is required"/>
+                                        </ui:fragment>
                                     </ui:repeat>
                                 </b:column>
                             </b:row>
