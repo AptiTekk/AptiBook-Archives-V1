@@ -15,6 +15,7 @@ import com.aptitekk.agenda.core.entities.Notification;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.UserGroup;
+import com.aptitekk.agenda.core.util.LogManager;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -49,16 +50,15 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
-/*
-            if(user.wantsEmails())
-            {
 
-            }*/
-            if(notification.getUser() != null && notification.getUser().getEmail() != null) {
-                System.out.println("Email: " + notification.getUser().getEmail());
-                emailService.sendEmailNotification(notification);
+            if(user.isWantsEmailNotifications()) {
+                if(notification.getUser() != null && notification.getUser().getEmail() != null) {
+                    //System.out.println("Email: " + notification.getUser().getEmail());
+                    emailService.sendEmailNotification(notification);
+                }
             }
         } catch (Exception e) {
+            LogManager.logError("Error in building Notification, or sending Email notification. Notfication id: " + notification.getId() );
             e.printStackTrace();
         }
     }

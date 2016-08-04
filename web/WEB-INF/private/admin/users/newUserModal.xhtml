@@ -130,12 +130,14 @@
                     </b:column>
                 </div>
                 <div class="form-group">
-                    <h:outputLabel value="Recieve Email Notifications:" styleClass="col-xs-3 control-label"/>
-                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk"/></span>
-                        <h:selectBooleanCheckbox value="#{userEditController.wantsEmailNotifications}"/>
-                    </div>
+                    <h:outputLabel value="Recieve Email Notifications:"
+                                   styleClass="col-xs-3 control-label"/>
+                    <b:column colXs="9">
+                        <div class="input-group">
+                            <b:switch value="#{userEditController.wantsEmailNotifications}"
+                                      styleClass="form-control" />
+                        </div>
+                    </b:column>
                 </div>
                 <div class="form-group">
                     <b:column colXs="9" offsetXs="3">

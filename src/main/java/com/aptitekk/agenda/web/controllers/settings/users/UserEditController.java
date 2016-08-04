@@ -191,4 +191,7 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
     public boolean isWantsEmailNotifications() {
         return wantsEmailNotifications;
     }
+    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
+        this.wantsEmailNotifications = wantsEmailNotifications;
+    }
 }
