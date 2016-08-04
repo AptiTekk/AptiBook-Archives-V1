@@ -43,14 +43,14 @@ public class User extends MultiTenantEntity implements Serializable {
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @OrderBy("dateCreated desc")
     private List<Reservation> reservations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<ReservationDecision> reservationDecisions = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 
     @ManyToMany(mappedBy = "users")

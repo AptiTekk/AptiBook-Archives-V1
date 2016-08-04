@@ -55,10 +55,10 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<ReservationDecision> decisions;
 
-    @OneToMany(mappedBy = "reservation")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.REMOVE)
     private List<ReservationFieldEntry> fieldEntries;
 
     public int getId() {
@@ -151,17 +151,6 @@ public class Reservation extends MultiTenantEntity implements Serializable {
 
     public void setDecisions(List<ReservationDecision> decisions) {
         this.decisions = decisions;
-    }
-
-    public String getReservationFieldEntryText(ReservationField reservationField) {
-        if (reservationField == null)
-            return null;
-
-        for (ReservationFieldEntry fieldEntry : fieldEntries) {
-            if (fieldEntry.getField().equals(reservationField))
-                return fieldEntry.getContent();
-        }
-        return null;
     }
 
     public List<ReservationFieldEntry> getFieldEntries() {
