@@ -31,6 +31,8 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     @Inject
     private UserGroupService userGroupService;
 
+    @Inject EmailService emailService;
+
     public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)
             return;
@@ -47,6 +49,15 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
+/*
+            if(user.wantsEmails())
+            {
+
+            }*/
+            if(notification.getUser() != null && notification.getUser().getEmail() != null) {
+                System.out.println("Email: " + notification.getUser().getEmail());
+                emailService.sendEmailNotification(notification);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

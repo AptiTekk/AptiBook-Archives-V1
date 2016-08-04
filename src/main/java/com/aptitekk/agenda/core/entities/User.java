@@ -38,6 +38,8 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private byte[] password;
 
+    private boolean wantsEmailNotifications;
+
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
 
@@ -195,4 +197,11 @@ public class User extends MultiTenantEntity implements Serializable {
         return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getEmail(), getPhoneNumber(), getLocation(), getPassword());
     }
 
+    public boolean isWantsEmailNotifications() {
+        return wantsEmailNotifications;
+    }
+
+    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
+        this.wantsEmailNotifications = wantsEmailNotifications;
+    }
 }
