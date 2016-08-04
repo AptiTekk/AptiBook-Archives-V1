@@ -10,20 +10,20 @@ import com.aptitekk.agenda.core.entities.Asset;
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.entities.ReservationField;
 import com.aptitekk.agenda.core.entities.ReservationFieldEntry;
-import com.aptitekk.agenda.core.entities.services.*;
+import com.aptitekk.agenda.core.entities.services.AssetService;
+import com.aptitekk.agenda.core.entities.services.NotificationService;
+import com.aptitekk.agenda.core.entities.services.ReservationFieldEntryService;
+import com.aptitekk.agenda.core.entities.services.ReservationService;
 import com.aptitekk.agenda.core.util.LogManager;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 import com.aptitekk.agenda.web.controllers.AuthenticationController;
 
-import java.util.ArrayList;
-import java.util.Map.Entry;
-import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map.Entry;
 
 @Named
 @ViewScoped
@@ -78,27 +78,29 @@ public class RequestReservationViewController implements Serializable {
             reservation.setTimeEnd(segmentedTimeRange.getEndTime());
             reservation.setTitle(reservationTitle);
 
-            for (Entry<ReservationField, String> entry : fieldMap.entrySet()) {
-                if (entry.getKey() != null && entry.getValue() != null) {
-                    ReservationFieldEntry reservationFieldEntry = new ReservationFieldEntry();
-                    reservationFieldEntry.setField(entry.getKey());
-                    reservationFieldEntry.setContent(entry.getValue());
-                    try {
-                        reservationFieldEntryService.insert(reservationFieldEntry);
-                        LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
-                    } catch (Exception e) {
-                        LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
-                        e.printStackTrace();
-                    }
-                }
-            }
-
             if (!asset.getNeedsApproval())
                 reservation.setStatus(Reservation.Status.APPROVED);
 
             try {
                 reservationService.insert(reservation);
                 LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
+
+                for (Entry<ReservationField, String> entry : fieldMap.entrySet()) {
+                    if (entry.getKey() != null && entry.getValue() != null) {
+                        ReservationFieldEntry reservationFieldEntry = new ReservationFieldEntry();
+                        reservationFieldEntry.setReservation(reservation);
+                        reservationFieldEntry.setField(entry.getKey());
+                        reservationFieldEntry.setContent(entry.getValue());
+                        try {
+                            reservationFieldEntryService.insert(reservationFieldEntry);
+                            LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
+                        } catch (Exception e) {
+                            LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 notificationService.sendNewReservationNotifications(reservation);
             } catch (Exception e) {
                 LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + authenticationController.getAuthenticatedUser().getFullname() + "Exception message: " + e.getMessage());

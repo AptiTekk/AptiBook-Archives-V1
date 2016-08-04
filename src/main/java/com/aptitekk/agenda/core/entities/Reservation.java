@@ -153,17 +153,6 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         this.decisions = decisions;
     }
 
-    public String getReservationFieldEntryText(ReservationField reservationField) {
-        if (reservationField == null)
-            return null;
-
-        for (ReservationFieldEntry fieldEntry : fieldEntries) {
-            if (fieldEntry.getField().equals(reservationField))
-                return fieldEntry.getContent();
-        }
-        return null;
-    }
-
     public List<ReservationFieldEntry> getFieldEntries() {
         return fieldEntries;
     }
