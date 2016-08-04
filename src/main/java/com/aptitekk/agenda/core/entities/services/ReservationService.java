@@ -77,6 +77,10 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
 
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {
+            //Skip rejected reservations. They aren't in the way.
+            if (reservation.getStatus() == Reservation.Status.REJECTED)
+                continue;
+
             //Check date of reservation -- Skip if it's not same day as requested.
             if (reservation.getDate().get(Calendar.DAY_OF_YEAR) != segmentedTimeRange.getDate().get(Calendar.DAY_OF_YEAR) || reservation.getDate().get(Calendar.YEAR) != segmentedTimeRange.getDate().get(Calendar.YEAR))
                 continue;
