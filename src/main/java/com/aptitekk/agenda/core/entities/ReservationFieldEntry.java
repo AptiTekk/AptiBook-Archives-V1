@@ -9,7 +9,10 @@ package com.aptitekk.agenda.core.entities;
 import com.aptitekk.agenda.core.entities.util.MultiTenantEntity;
 import com.aptitekk.agenda.core.util.EqualsHelper;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Entity
@@ -25,7 +28,6 @@ public class ReservationFieldEntry extends MultiTenantEntity implements Serializ
     @ManyToOne
     private ReservationField field;
 
-    @Lob
     private String content;
 
     private static final long serialVersionUID = 1L;
