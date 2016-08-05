@@ -197,7 +197,7 @@ public class User extends MultiTenantEntity implements Serializable {
         return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getEmail(), getPhoneNumber(), getLocation(), getPassword());
     }
 
-    public boolean isWantsEmailNotifications() {
+    public boolean getWantsEmailNotifications() {
         return wantsEmailNotifications;
     }
 

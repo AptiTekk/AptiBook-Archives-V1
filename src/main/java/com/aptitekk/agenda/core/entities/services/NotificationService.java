@@ -51,11 +51,8 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         try {
             insert(notification);
 
-            if(user.isWantsEmailNotifications()) {
-                if(notification.getUser() != null && notification.getUser().getEmail() != null) {
-                    //System.out.println("Email: " + notification.getUser().getEmail());
+            if(user.getWantsEmailNotifications()) {
                     emailService.sendEmailNotification(notification);
-                }
             }
         } catch (Exception e) {
             LogManager.logError("Error in building Notification, or sending Email notification. Notfication id: " + notification.getId() );

@@ -61,7 +61,7 @@ public abstract class UserFieldSupplier {
             email = user.getEmail();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
-            wantsEmailNotifications = user.isWantsEmailNotifications();
+            wantsEmailNotifications = user.getWantsEmailNotifications();
         } else {
             username = null;
             firstName = null;
@@ -147,4 +147,10 @@ public abstract class UserFieldSupplier {
     public void setUserGroupNodes(TreeNode[] userGroupNodes) {
         this.userGroupNodes = userGroupNodes;
     }
+
+    public boolean getWantsEmailNotifications() {
+        return wantsEmailNotifications;
+    }
+
+    public void setWantsEmailNotifications(boolean wantsEmailNotifications) { this.wantsEmailNotifications = wantsEmailNotifications; }
 }

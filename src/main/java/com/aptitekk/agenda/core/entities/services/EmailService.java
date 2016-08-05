@@ -45,14 +45,13 @@ public class EmailService implements Serializable {
 
     public void resetProperties() {
         mailSessionProps.put("mail.smtp.auth", propertiesService.getPropertyByKey(Property.Key.EMAIL_AUTH).getPropertyValue());
-        mailSessionProps.put("mail.smtp.starttls.enable", propertiesService.getPropertyByKey(Property.Key.STARTTLS).getPropertyValue());
-        mailSessionProps.put("mail.smtp.host",propertiesService.getPropertyByKey(Property.Key.HOST).getPropertyValue());
-        mailSessionProps.put("mail.smtp.user",(username = propertiesService.getPropertyByKey(Property.Key.USERNAME).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.password",(password = propertiesService.getPropertyByKey(Property.Key.PASSWORD).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.port", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.PORT).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.connectiontimeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.CONNECTIONTIMEOUT).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.timeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTPTIMEOUT).getPropertyValue()));
-        LogManager.logInfo("############## Reset Properties!");
+        mailSessionProps.put("mail.smtp.starttls.enable", propertiesService.getPropertyByKey(Property.Key.EMAIL_STARTTLS).getPropertyValue());
+        mailSessionProps.put("mail.smtp.host",propertiesService.getPropertyByKey(Property.Key.SMTP_HOST).getPropertyValue());
+        mailSessionProps.put("mail.smtp.user",(username = propertiesService.getPropertyByKey(Property.Key.EMAIL_USERNAME).getPropertyValue()));
+        mailSessionProps.put("mail.smtp.password",(password = propertiesService.getPropertyByKey(Property.Key.EMAIL_PASSWORD).getPropertyValue()));
+        mailSessionProps.put("mail.smtp.port", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_PORT).getPropertyValue()));
+        mailSessionProps.put("mail.smtp.connectiontimeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.EMAIL_CONNECTIONTIMEOUT).getPropertyValue()));
+        mailSessionProps.put("mail.smtp.timeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_TIMEOUT).getPropertyValue()));
     }
 
     public void sendEmailNotification(Notification notification){
