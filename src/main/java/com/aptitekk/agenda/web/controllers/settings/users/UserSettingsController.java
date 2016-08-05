@@ -56,6 +56,7 @@ public class UserSettingsController extends UserFieldSupplier implements Seriali
             user.setEmail(email);
             user.setPhoneNumber(phoneNumber);
             user.setLocation(location);
+            user.setWantsEmailNotifications(wantsEmailNotifications);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
