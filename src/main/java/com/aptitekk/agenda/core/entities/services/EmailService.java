@@ -66,7 +66,8 @@ public class EmailService implements Serializable {
             MimeMessage mimeMessage = new MimeMessage(mailSession);
             Address from = new InternetAddress(username);
             mimeMessage.setFrom(from);
-            mimeMessage.setRecipients(Message.RecipientType.TO, notification.getUser().getEmail());
+            Address recipient = new InternetAddress(java.net.IDN.toASCII(notification.getUser().getEmail()));
+            mimeMessage.setRecipient(Message.RecipientType.TO,recipient);
             mimeMessage.setSubject(notification.getSubject());
             mimeMessage.setSentDate(new Date());
             BodyPart messageBodyPart = new MimeBodyPart();

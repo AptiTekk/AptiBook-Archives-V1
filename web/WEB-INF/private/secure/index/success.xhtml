@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+<ui:composition>
+    <b:container>
+        <b:row>
+            <b:column colXs="12">
+                <ol class="breadcrumb" style="margin-top: 20px">
+                    <li><h:link outcome="index" value="Home"/></li>
+                    <li>
+                        <b:navCommandLink value="Search" ajax="true" style="cursor:pointer"
+                                          action="#{requestReservationViewController.cancel}"
+                                          update=":includeGroup"/>
+                    </li>
+                    <li><b:navCommandLink value="Request Reservation" ajax="true" style="cursor:pointer"
+                                          update=":includeGroup"/></li>
+                    <li class="active">Success</li>
+                </ol>
+            </b:column>
+        </b:row>
+        <b:row>
+        </b:row>
+        <ui:fragment rendered="#{requestReservationViewController.asset.needsApproval}">
+            <b:row>
+                <b:column colXs="12">
+                    <b:panel title="Reservation Requested" look="success">
+                        <h4>Success!</h4>
+                        <h:outputText
+                                value="Your reservation for  #{requestReservationViewController.reservationTitle} has been requested"
+                                rendered="#{not empty requestReservationViewController.reservationTitle}"/>
+                        <h:outputText
+                                value="Your reservation for  #{requestReservationViewController.asset.name} has been requested"
+                                rendered="#{empty requestReservationViewController.reservationTitle}"/>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+        <ui:fragment rendered="#{!requestReservationViewController.asset.needsApproval}">
+            <b:row>
+                <b:column colXs="12">
+                    <b:panel title="Reservation Reserved" look="success">
+                        <h4>Success!</h4>
+                        <h:outputText
+                                value="Your reservation for  #{requestReservationViewController.reservationTitle} has been requested and automatically approved"
+                                rendered="#{not empty requestReservationViewController.reservationTitle.length}"/>
+                        <h:outputText
+                                value="Your reservation for  #{requestReservationViewController.asset.name} has been requested and automatically approved"
+                                rendered="#{empty requestReservationViewController.reservationTitle}"/>
+                    </b:panel>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+        <b:row>
+            <b:column colXs="12">
+                <b:button outcome="index" value="Home"/>
+            </b:column>
+        </b:row>
+    </b:container>
+</ui:composition>
+
+
+</html>

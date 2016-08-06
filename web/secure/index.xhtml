@@ -18,7 +18,7 @@
 
         <h:panelGroup layout="block" id="includeGroup">
             <ui:include
-                    src="/WEB-INF/private/secure/index/#{requestReservationViewController.asset != null ? 'reserve' : availableAssetsController.availableAssets != null ? 'results' : 'timeInput'}.xhtml"/>
+                    src="/WEB-INF/private/secure/index/#{requestReservationViewController.successfulReservation != null ? 'success' : requestReservationViewController.asset != null ? 'reserve' : availableAssetsController.availableAssets != null ? 'results' : 'timeInput'}.xhtml"/>
         </h:panelGroup>
     </ui:define>
 </ui:composition>

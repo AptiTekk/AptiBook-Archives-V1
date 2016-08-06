@@ -63,6 +63,14 @@ public class RequestReservationViewController implements Serializable {
      * A map containing a String for each Reservation Field to store the user's input.
      */
     private HashMap<ReservationField, String> fieldMap = new HashMap<>();
+    /**
+     * Variable to check if we can redirect to success page.
+     */
+    private String successfulReservation = null;
+    /**
+     * Current Reservation being edited by user
+     */
+
 
     public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
@@ -94,6 +102,7 @@ public class RequestReservationViewController implements Serializable {
                         try {
                             reservationFieldEntryService.insert(reservationFieldEntry);
                             LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
+                            successfulReservation = "success";
                         } catch (Exception e) {
                             LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
                             e.printStackTrace();
@@ -107,7 +116,9 @@ public class RequestReservationViewController implements Serializable {
                 e.printStackTrace();
             }
         }
+
     }
+
 
     /**
      * Used when the user decides to cancel making a reservation request.
@@ -149,4 +160,11 @@ public class RequestReservationViewController implements Serializable {
         this.fieldMap = fieldMap;
     }
 
+    public String getSuccessfulReservation() {
+        return successfulReservation;
+    }
+
+    public void setSuccessfulReservation(String successfulReservation) {
+        this.successfulReservation = successfulReservation;
+    }
 }
