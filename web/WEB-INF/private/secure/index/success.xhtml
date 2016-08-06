@@ -31,11 +31,11 @@
                     <b:panel title="Reservation Requested" look="success">
                         <h4>Success!</h4>
                         <h:outputText
-                                value="Your reservation for  #{requestReservationViewController.reservationTitle} has been requested"
-                                rendered="#{not empty requestReservationViewController.reservationTitle}"/>
+                                value="Your reservation for  #{requestReservationViewController.successfulReservation.title} has been requested"
+                                rendered="#{not empty requestReservationViewController.successfulReservation.title}"/>
                         <h:outputText
                                 value="Your reservation for  #{requestReservationViewController.asset.name} has been requested"
-                                rendered="#{empty requestReservationViewController.reservationTitle}"/>
+                                rendered="#{empty requestReservationViewController.successfulReservation.title}"/>
                     </b:panel>
                 </b:column>
             </b:row>

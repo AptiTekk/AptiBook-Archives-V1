@@ -64,13 +64,9 @@ public class RequestReservationViewController implements Serializable {
      */
     private HashMap<ReservationField, String> fieldMap = new HashMap<>();
     /**
-     * Variable to check if we can redirect to success page.
+     * Current Reservation being edited by user, variable to check if we can redirect to success page.
      */
-    private String successfulReservation = null;
-    /**
-     * Current Reservation being edited by user
-     */
-
+    private Reservation successfulReservation = null;
 
     public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
@@ -92,7 +88,7 @@ public class RequestReservationViewController implements Serializable {
             try {
                 reservationService.insert(reservation);
                 LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
-
+                successfulReservation = reservation;
                 for (Entry<ReservationField, String> entry : fieldMap.entrySet()) {
                     if (entry.getKey() != null && entry.getValue() != null) {
                         ReservationFieldEntry reservationFieldEntry = new ReservationFieldEntry();
@@ -102,7 +98,6 @@ public class RequestReservationViewController implements Serializable {
                         try {
                             reservationFieldEntryService.insert(reservationFieldEntry);
                             LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
-                            successfulReservation = "success";
                         } catch (Exception e) {
                             LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
                             e.printStackTrace();
@@ -160,11 +155,12 @@ public class RequestReservationViewController implements Serializable {
         this.fieldMap = fieldMap;
     }
 
-    public String getSuccessfulReservation() {
+
+    public Reservation getSuccessfulReservation() {
         return successfulReservation;
     }
 
-    public void setSuccessfulReservation(String successfulReservation) {
+    public void setSuccessfulReservation(Reservation successfulReservation) {
         this.successfulReservation = successfulReservation;
     }
 }
