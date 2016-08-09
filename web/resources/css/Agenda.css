@@ -33,6 +33,11 @@
     background-image: url("#{resource['images:background.png']}");
 }
 
+hr {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 .navbar {
     background-color: white;
     box-shadow: black 0 -5px 20px 1px;

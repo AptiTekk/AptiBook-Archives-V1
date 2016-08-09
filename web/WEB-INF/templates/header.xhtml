@@ -27,12 +27,12 @@
     <b:navBar brandImg="#{resource['images:Logo.svg']}"
               brandHref="#{facesNavigationController.getUrlFromNavigationCase('secure')}"
               fixed="top"
-              onclick="loading_start()">
+              onclick="loading_start()" fluid="true">
         <h:panelGroup
                 layout="block" id="header">
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
-                    <b:navbarLinks pull="right">
+                    <b:navbarLinks pull="right" style="margin-right: 20px">
                         <b:dropMenu value="Reservation Management" iconAwesome="calendar-check-o"
                                     rendered="#{not empty reservationManagementViewController.pages}">
                             <ui:repeat value="#{reservationManagementViewController.pages}" var="page">
