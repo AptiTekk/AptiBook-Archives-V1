@@ -21,15 +21,15 @@
                 <h3>Calendar Options</h3>
                 <hr/>
             </b:column>
-            <b:column colXs="0" colSm="0" colMd="7" colLg="6">
+            <b:column colXs="0" colSm="0" colMd="7">
                 <h3>Reservation Calendar</h3>
                 <hr/>
-                <p:schedule value="#{frontPageController.scheduleModel}" timeZone="#{frontPageController.timeZone}">
+                <p:schedule value="#{frontPageController.scheduleModel}" timeZone="#{frontPageController.timeZone}" aspectRatio="1.6">
                     <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
                             update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                 </p:schedule>
             </b:column>
-            <b:column colXs="12" colMd="3" colLg="4">
+            <b:column colXs="12" colMd="3">
                 <h3>New Reservation</h3>
                 <hr/>
                 <!-- Time Selection Form -->
