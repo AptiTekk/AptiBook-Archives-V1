@@ -349,6 +349,14 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     background-color: #0081c2 !important;
 }
 
+td.fc-day.fc-today {
+    background-color: #effaff !important;
+}
+
+td.fc-day-number.fc-today {
+    color: inherit;
+}
+
 /* ---------------------------------- END SCHEDULE ---------------------------------- */
 
 /* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
