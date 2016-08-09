@@ -15,6 +15,17 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 <ui:composition>
+    <style type="text/css">
+        .filter-checkboxes input {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+
+        .filter-checkboxes label {
+            font-size: 12pt;
+        }
+    </style>
     <b:container fluid="true">
         <b:row>
             <b:column colXs="0" colSm="0" colMd="2">
@@ -24,7 +35,8 @@
                 <h:form>
                     <h4>Categories Displayed</h4>
                     <h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
-                                          layout="pageDirection" converter="#{assetCategoryConverter}">
+                                          layout="pageDirection" converter="#{assetCategoryConverter}"
+                                          styleClass="filter-checkboxes">
                         <f:selectItems value="#{frontPageController.assetCategories}" var="category"
                                        itemValue="#{category}" itemLabel="#{category.name}"/>
                         <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
