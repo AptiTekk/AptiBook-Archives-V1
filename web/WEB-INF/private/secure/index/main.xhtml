@@ -24,7 +24,7 @@
             <b:column colXs="0" colSm="0" colMd="7" colLg="6">
                 <h3>Reservation Calendar</h3>
                 <hr/>
-                <p:schedule value="#{frontPageController.scheduleModel}">
+                <p:schedule value="#{frontPageController.scheduleModel}" timeZone="#{frontPageController.timeZone}">
                     <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
                             update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                 </p:schedule>

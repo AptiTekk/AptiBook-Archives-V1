@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @Named
 @ViewScoped
@@ -61,6 +62,10 @@ public class FrontPageController implements Serializable {
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
+    }
+
+    public TimeZone getTimeZone() {
+        return TimeZone.getDefault();
     }
 
     public void onEventSelect(SelectEvent selectEvent) {
