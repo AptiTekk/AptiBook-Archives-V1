@@ -24,7 +24,10 @@
             <b:column colXs="0" colSm="0" colMd="7" colLg="6">
                 <h3>Reservation Calendar</h3>
                 <hr/>
-                <p:schedule value="#{frontPageController.scheduleModel}"/>
+                <p:schedule value="#{frontPageController.scheduleModel}">
+                    <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
+                            update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
+                </p:schedule>
             </b:column>
             <b:column colXs="12" colMd="3" colLg="4">
                 <h3>New Reservation</h3>
@@ -64,8 +67,8 @@
                         <b:column colXs="12" colSm="4">
                             <h:outputText value="On" styleClass="lead"/>
                             <p:calendar value="#{timeSelectionController.selectedDate}"
-                                         mindate="#{timeSelectionController.minDate}"
-                                         mode="inline" styleClass="datepicker-fullwidth">
+                                        mindate="#{timeSelectionController.minDate}"
+                                        mode="inline" styleClass="datepicker-fullwidth">
                                 <f:ajax event="dateSelect" render=":timeForm"/>
                             </p:calendar>
                         </b:column>
@@ -109,5 +112,7 @@
             </b:column>
         </b:row>
     </b:container>
+
+    <ui:include src="viewEventModal.xhtml"/>
 </ui:composition>
 </html>

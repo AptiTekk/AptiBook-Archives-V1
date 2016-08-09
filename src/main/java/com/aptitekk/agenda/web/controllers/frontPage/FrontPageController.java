@@ -6,13 +6,12 @@
 
 package com.aptitekk.agenda.web.controllers.frontPage;
 
-import com.aptitekk.agenda.core.entities.Property;
 import com.aptitekk.agenda.core.entities.Reservation;
-import com.aptitekk.agenda.core.entities.services.PropertiesService;
 import com.aptitekk.agenda.core.entities.services.ReservationService;
-import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
-import org.primefaces.model.DefaultScheduleEvent;
+import com.aptitekk.agenda.core.util.ReservationScheduleEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyScheduleModel;
+import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
@@ -29,14 +28,11 @@ import java.util.List;
 public class FrontPageController implements Serializable {
 
     @Inject
-    private PropertiesService propertiesService;
-
-    @Inject
     private ReservationService reservationService;
 
     private LazyScheduleModel scheduleModel;
 
-    private Property policies;
+    private ReservationScheduleEvent selectedEvent;
 
     @PostConstruct
     private void init() {
@@ -54,27 +50,24 @@ public class FrontPageController implements Serializable {
 
                 List<Reservation> reservationList = reservationService.getAllBetweenDates(startCalendar, endCalendar);
                 for (Reservation reservation : reservationList) {
-                    DefaultScheduleEvent event = new DefaultScheduleEvent();
-                    event.setTitle(reservation.getAsset().getName() + " - " + (reservation.getTitle() != null ? reservation.getTitle() : "No Title."));
-
-                    SegmentedTimeRange timeRange = new SegmentedTimeRange(reservation.getDate(), reservation.getTimeStart(), reservation.getTimeEnd());
-                    event.setStartDate(timeRange.getDateWithStartTime().getTime());
-                    event.setEndDate(timeRange.getDateWithEndTime().getTime());
+                    ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
 
                     event.setEditable(false);
                     scheduleModel.addEvent(event);
                 }
             }
         };
-
-        this.policies = propertiesService.getPropertyByKey(Property.Key.POLICY_BOX);
-    }
-
-    public String getPolicies() {
-        return (policies != null ? policies.getPropertyValue() : null);
     }
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
+    }
+
+    public void onEventSelect(SelectEvent selectEvent) {
+        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
+    }
+
+    public ReservationScheduleEvent getSelectedEvent() {
+        return selectedEvent;
     }
 }
