@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.agenda.core.util;
+package com.aptitekk.agenda.core.util.schedule;
 
 import com.aptitekk.agenda.core.entities.Reservation;
 import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;

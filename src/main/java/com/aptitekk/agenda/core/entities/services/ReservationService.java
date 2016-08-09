@@ -16,6 +16,7 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -67,21 +68,47 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
 
     /**
      * Retrieves reservations from the database that occur within the specified dates.
+     * Only reservations within the specified categories will be returned.
+     *
+     * @param start           The start date.
+     * @param end             The end date. Should be after the start date.
+     * @param assetCategories The categories to filter by. Null if no category filtering should be performed.
+     * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
+     */
+    public List<Reservation> getAllBetweenDates(Calendar start, Calendar end, AssetCategory... assetCategories) {
+        if (start == null || end == null || start.compareTo(end) > 0)
+            return null;
+
+        if (assetCategories != null) {
+            if (assetCategories.length == 0)
+                return null;
+
+            return entityManager
+                    .createQuery("SELECT r FROM Reservation r JOIN r.asset a WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3 AND a.assetCategory IN ?4", Reservation.class)
+                    .setParameter(1, start)
+                    .setParameter(2, end)
+                    .setParameter(3, getTenant())
+                    .setParameter(4, Arrays.asList(assetCategories))
+                    .getResultList();
+        } else {
+            return entityManager
+                    .createQuery("SELECT r FROM Reservation r WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3", Reservation.class)
+                    .setParameter(1, start)
+                    .setParameter(2, end)
+                    .setParameter(3, getTenant())
+                    .getResultList();
+        }
+    }
+
+    /**
+     * Retrieves reservations from the database that occur within the specified dates.
      *
      * @param start The start date.
      * @param end   The end date. Should be after the start date.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
     public List<Reservation> getAllBetweenDates(Calendar start, Calendar end) {
-        if (start == null || end == null || start.compareTo(end) > 0)
-            return null;
-
-        return entityManager
-                .createQuery("SELECT r FROM Reservation r WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3", Reservation.class)
-                .setParameter(1, start)
-                .setParameter(2, end)
-                .setParameter(3, getTenant())
-                .getResultList();
+        return getAllBetweenDates(start, end, (AssetCategory[]) null);
     }
 
     /**

@@ -6,12 +6,13 @@
 
 package com.aptitekk.agenda.web.controllers.frontPage;
 
+import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
+import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
 import com.aptitekk.agenda.core.entities.services.ReservationService;
-import com.aptitekk.agenda.core.util.ReservationScheduleEvent;
+import com.aptitekk.agenda.core.util.schedule.ReservationScheduleEvent;
+import com.aptitekk.agenda.core.util.schedule.ReservationScheduleModel;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.LazyScheduleModel;
-import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -31,33 +31,30 @@ public class FrontPageController implements Serializable {
     @Inject
     private ReservationService reservationService;
 
-    private LazyScheduleModel scheduleModel;
+    @Inject
+    private AssetCategoryService assetCategoryService;
+
+    private ReservationScheduleModel scheduleModel;
 
     private ReservationScheduleEvent selectedEvent;
 
+    private List<AssetCategory> assetCategories;
+
+    private AssetCategory[] assetCategoriesDisplayed;
+
     @PostConstruct
     private void init() {
-        scheduleModel = new LazyScheduleModel() {
-
+        scheduleModel = new ReservationScheduleModel() {
             @Override
-            public void loadEvents(Date start, Date end) {
-                //TODO: Create an expanding cache
-
-                Calendar startCalendar = Calendar.getInstance();
-                startCalendar.setTime(start);
-
-                Calendar endCalendar = Calendar.getInstance();
-                endCalendar.setTime(end);
-
-                List<Reservation> reservationList = reservationService.getAllBetweenDates(startCalendar, endCalendar);
-                for (Reservation reservation : reservationList) {
-                    ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
-
-                    event.setEditable(false);
-                    scheduleModel.addEvent(event);
-                }
+            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end, AssetCategory[] assetCategories) {
+                return reservationService.getAllBetweenDates(start, end, assetCategories);
             }
         };
+
+        assetCategories = assetCategoryService.getAll();
+        assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
+        assetCategories.toArray(assetCategoriesDisplayed);
+        scheduleModel.setSelectedAssetCategories(assetCategoriesDisplayed);
     }
 
     public ScheduleModel getScheduleModel() {
@@ -74,5 +71,18 @@ public class FrontPageController implements Serializable {
 
     public ReservationScheduleEvent getSelectedEvent() {
         return selectedEvent;
+    }
+
+    public List<AssetCategory> getAssetCategories() {
+        return assetCategories;
+    }
+
+    public AssetCategory[] getAssetCategoriesDisplayed() {
+        return assetCategoriesDisplayed;
+    }
+
+    public void setAssetCategoriesDisplayed(AssetCategory[] assetCategoriesDisplayed) {
+        this.assetCategoriesDisplayed = assetCategoriesDisplayed;
+        scheduleModel.setSelectedAssetCategories(assetCategoriesDisplayed);
     }
 }

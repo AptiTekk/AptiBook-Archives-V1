@@ -29,12 +29,13 @@ public class AssetCategoryConverter implements Converter, Serializable {
         if (string == null || string.isEmpty() || assetCategoryService == null)
             return null;
 
-        return assetCategoryService.findByName(string);
+        return fc.getExternalContext().getSessionMap().get("AssetCategory_" + string);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
         if (o instanceof AssetCategory) {
+            fc.getExternalContext().getSessionMap().put("AssetCategory_" + ((AssetCategory) o).getName(), o);
             return ((AssetCategory) o).getName();
         }
         return "";

@@ -20,11 +20,23 @@
             <b:column colXs="0" colSm="0" colMd="2">
                 <h3>Calendar Options</h3>
                 <hr/>
+
+                <h:form>
+                    <h4>Categories Displayed</h4>
+                    <h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
+                                          layout="pageDirection" converter="#{assetCategoryConverter}">
+                        <f:selectItems value="#{frontPageController.assetCategories}" var="category"
+                                       itemValue="#{category}" itemLabel="#{category.name}"/>
+                        <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
+                                execute="@this"/>
+                    </h:selectManyCheckbox>
+                </h:form>
             </b:column>
             <b:column colXs="0" colSm="0" colMd="7">
                 <h3>Reservation Calendar</h3>
                 <hr/>
-                <p:schedule value="#{frontPageController.scheduleModel}" timeZone="#{frontPageController.timeZone}" aspectRatio="1.6" allDaySlot="false">
+                <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
+                            timeZone="#{frontPageController.timeZone}" aspectRatio="1.6" allDaySlot="false">
                     <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
                             update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                 </p:schedule>
