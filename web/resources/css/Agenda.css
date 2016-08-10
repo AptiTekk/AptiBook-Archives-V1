@@ -33,6 +33,11 @@
     background-image: url("#{resource['images:background.png']}");
 }
 
+hr {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
 .navbar {
     background-color: white;
     box-shadow: black 0 -5px 20px 1px;
@@ -336,6 +341,23 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 }
 
 /* ---------------------------------- END DATEPICKER ---------------------------------- */
+
+/* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
+
+.fc-event {
+    border-color: #0081c2 !important;
+    background-color: #0081c2 !important;
+}
+
+td.fc-day.fc-today {
+    background-color: #effaff !important;
+}
+
+td.fc-day-number.fc-today {
+    color: inherit;
+}
+
+/* ---------------------------------- END SCHEDULE ---------------------------------- */
 
 /* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
 

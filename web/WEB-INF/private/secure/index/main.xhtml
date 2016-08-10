@@ -1,0 +1,142 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition>
+    <style type="text/css">
+        .filter-checkboxes input {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+
+        .filter-checkboxes label {
+            font-size: 12pt;
+        }
+    </style>
+    <b:container fluid="true">
+        <b:row>
+            <b:column colXs="0" colSm="0" colMd="2">
+                <h3>Calendar Options</h3>
+                <hr/>
+
+                <h:form>
+                    <h4>Displayed Categories</h4>
+                    <h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
+                                          layout="pageDirection" converter="#{assetCategoryConverter}"
+                                          styleClass="filter-checkboxes">
+                        <f:selectItems value="#{frontPageController.assetCategories}" var="category"
+                                       itemValue="#{category}" itemLabel="#{category.name}"/>
+                        <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
+                                execute="@this"/>
+                    </h:selectManyCheckbox>
+                </h:form>
+            </b:column>
+            <b:column colXs="0" colSm="0" colMd="7">
+                <h3>Reservation Calendar</h3>
+                <hr/>
+                <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
+                            timeZone="#{frontPageController.timeZone}" aspectRatio="1.6" allDaySlot="false">
+                    <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
+                            update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
+                </p:schedule>
+            </b:column>
+            <b:column colXs="12" colMd="3">
+                <h3>New Reservation</h3>
+                <hr/>
+                <!-- Time Selection Form -->
+                <h:form id="timeForm">
+                    <b:row>
+                        <!-- Column 1: Asset Type Selection -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="I'm looking for" styleClass="lead"/>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <ui:repeat value="#{timeSelectionController.assetCategories}" var="assetCategory">
+                                        <tr>
+                                            <td>
+                                                <h:commandLink value="#{assetCategory.name}"
+                                                               action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
+                                                               style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
+                                                    <f:ajax render=":timeForm"/>
+                                                </h:commandLink>
+                                            </td>
+                                        </tr>
+                                    </ui:repeat>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </b:column>
+
+
+                        <!-- Column 2: Inline Date Selection -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="On" styleClass="lead"/>
+                            <p:calendar value="#{timeSelectionController.selectedDate}"
+                                        mindate="#{timeSelectionController.minDate}"
+                                        mode="inline" styleClass="datepicker-fullwidth">
+                                <f:ajax event="dateSelect" render=":timeForm"/>
+                            </p:calendar>
+                        </b:column>
+
+                        <!-- Column 3: Time Selection & Submit Button -->
+                        <b:column colXs="12" colSm="4">
+                            <h:outputText value="From" styleClass="lead"/>
+                            <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
+                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
+                                             disabled="#{timeSelectionController.selectedAssetCategory == null}">
+                                <f:selectItem itemValue="#{null}"
+                                              itemLabel="--- Select a Time ---" noSelectionOption="true"/>
+                                <f:selectItems
+                                        value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                                <f:ajax render=":timeForm"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="Until" styleClass="lead"/>
+                            <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
+                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
+                                             disabled="#{timeSelectionController.selectedStartTime == null}">
+                                <f:selectItems
+                                        value="#{timeSelectionController.endTimes}"
+                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                                <f:ajax render=":timeForm"/>
+                            </h:selectOneMenu>
+                        </b:column>
+                    </b:row>
+                    <b:row style="margin-top:20px">
+                        <b:column colXs="12">
+                            <h:commandButton
+                                    styleClass="btn btn-primary btn-block btn-large"
+                                    value="Begin Search"
+                                    disabled="#{timeSelectionController.selectedEndTime == null}"
+                                    action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}">
+                                <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
+                            </h:commandButton>
+                        </b:column>
+                    </b:row>
+                </h:form>
+            </b:column>
+        </b:row>
+    </b:container>
+
+    <ui:include src="viewEventModal.xhtml"/>
+</ui:composition>
+</html>

@@ -59,6 +59,23 @@ public class SegmentedTimeRange {
         this.endTime = endTime;
     }
 
+    public Calendar getDateWithStartTime() {
+        return embedDateWithTime(startTime);
+    }
+
+    public Calendar getDateWithEndTime() {
+        return embedDateWithTime(endTime);
+    }
+
+    private Calendar embedDateWithTime(SegmentedTime segmentedTime) {
+        Calendar dateTime = (Calendar) date.clone();
+        dateTime.set(Calendar.SECOND, 0);
+        dateTime.set(Calendar.MINUTE, segmentedTime.getMinute());
+        dateTime.set(Calendar.HOUR_OF_DAY, segmentedTime.getHourOfDay());
+
+        return dateTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
