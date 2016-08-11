@@ -16,7 +16,7 @@
 
 <ui:composition>
     <h:form id="newAssetModalForm" enctype="multipart/form-data">
-        <b:modal styleClass="newAssetModal" title="New Asset '#{newAssetController.asset.name}'">
+        <b:modal styleClass="newAssetModal" title="New Asset">
             <h:panelGroup id="newAssetModalContent">
                 <div class="form-group">
                     * = Required. Name must be unique.
@@ -35,8 +35,7 @@
                                  maxlength="32">
                         <f:validator binding="#{uniqueAssetValidator}"/>
                         <f:attribute name="assetCategory"
-                                     value="#{newAssetController.asset.assetCategory}"/>
-                        <f:attribute name="exception" value="#{newAssetController.asset}"/>
+                                     value="#{newAssetController.assetCategory}"/>
                     </h:inputText>
                 </div>
                 <div class="form-group">
@@ -146,9 +145,6 @@
             </h:panelGroup>
 
             <f:facet name="footer">
-               <!-- <b:commandButton look="default" style="float: left;" value="Delete Asset"
-                                 ajax="true" update=":newAssetModalForm"
-                                 oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>-->
                 <h:commandButton styleClass="btn btn-primary" value="Save Asset"
                                  action="#{newAssetController.addNewAsset}"
                                  actionListener="#{groupTreeController.invalidateTrees}">
@@ -156,9 +152,6 @@
                             render="newAssetModalContent :assetsPageContent"
                             onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.newAssetModal').modal('hide')}}}"/>
                 </h:commandButton>
-               <!-- <h:commandButton styleClass="btn btn-default" value="Cancel"
-                                 action="#{newAssetController.resetSettings}"
-                                 onclick="$('.newAssetModal').modal('hide');"/>-->
                 <b:button value="Cancel" look="default"
                           onclick="$('.newAssetModal').modal('hide');"
                 />

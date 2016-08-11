@@ -34,7 +34,7 @@ import java.util.*;
 
 @Named
 @ViewScoped
-public class AssetSettingsController implements Serializable {
+public class AssetSettingsController extends AssetFieldSupplier implements Serializable {
 
     @Inject
     private AssetService assetService;
@@ -54,18 +54,6 @@ public class AssetSettingsController implements Serializable {
     private List<AssetCategory> assetCategoryList;
     private HashMap<AssetCategory, List<Asset>> assetMap;
     private Asset selectedAsset;
-
-    @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    private String assetName;
-
-    private boolean assetApprovalRequired;
-
-    private UserGroup assetOwnerGroup;
-    private TreeNode tree;
-
-    private Part image;
-    private String fileName;
 
     @Inject
     private TimeSelectionController timeSelectionController;
@@ -87,7 +75,7 @@ public class AssetSettingsController implements Serializable {
         refreshAssets();
     }
 
-    private void refreshAssets() {
+    void refreshAssets() {
         assetCategoryList = new ArrayList<>();
         assetMap = new HashMap<>();
 
@@ -239,57 +227,6 @@ public class AssetSettingsController implements Serializable {
     public void setSelectedAsset(Asset selectedAsset) {
         this.selectedAsset = selectedAsset;
         resetSettings();
-    }
-
-    public String getAssetName() {
-        return assetName;
-    }
-
-    public void setAssetName(String assetName) {
-        this.assetName = assetName;
-    }
-
-    public boolean isAssetApprovalRequired() {
-        return assetApprovalRequired;
-    }
-
-    public void setAssetApprovalRequired(boolean assetApprovalRequired) {
-        this.assetApprovalRequired = assetApprovalRequired;
-    }
-
-    public void onOwnerSelected(NodeSelectEvent event) {
-        if (event.getTreeNode() != null && event.getTreeNode().getData() != null && event.getTreeNode().getData() instanceof UserGroup)
-            this.assetOwnerGroup = (UserGroup) event.getTreeNode().getData();
-    }
-
-    public TreeNode getTree() {
-        return tree;
-    }
-
-    public Part getImage() {
-        return image;
-    }
-
-    public void setImage(Part image) {
-        if (image == null)
-            return;
-        this.image = image;
-    }
-
-    /**
-     * Called upon an image file being chosen by the user.
-     */
-    public void onFileChosen() {
-        if (image != null)
-            this.fileName = image.getSubmittedFileName();
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
 }
