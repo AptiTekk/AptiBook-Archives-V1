@@ -20,7 +20,7 @@ import java.sql.SQLException;
 @Named
 public class LiquibaseProducer {
 
-    @Resource(lookup = "java:jboss/datasources/PostgreSQLDS")
+    @Resource(lookup = "java:jboss/datasources/AgendaDS")
     private DataSource dataSource;
 
     @Produces
