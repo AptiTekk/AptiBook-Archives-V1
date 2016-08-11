@@ -71,8 +71,12 @@
                             <div class="form-group">
                                 <!-- Add new Asset Button -->
                                 <h:commandButton styleClass="btn btn-primary"
-                                                 value="Add New Asset" style="display: inline-block"
-                                                 action="#{assetSettingsController.addNewAsset(assetCategory)}">
+                                                 value="Add New Asset"
+                                                 style="display: inline-block"
+                                                 action="#{newAssetController.setAssetCategory(assetCategory)}"
+                                                 ajax="true"
+                                                 update=":newAssetModalForm"
+                                                 onclick="$('.newAssetModal').modal();">
                                     <f:ajax render="@form"
                                             onevent="loading"/>
                                 </h:commandButton>
@@ -85,6 +89,7 @@
 
         <ui:include src="editAssetModal.xhtml"/>
         <ui:include src="deleteAssetModal.xhtml"/>
+        <ui:include src="newAssetModal.xhtml"/>
 
     </h:panelGroup>
 </ui:composition>

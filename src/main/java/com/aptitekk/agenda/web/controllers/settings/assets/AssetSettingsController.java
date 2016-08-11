@@ -204,25 +204,6 @@ public class AssetSettingsController implements Serializable {
         }
         this.fileName = null;
     }
-
-    public void addNewAsset(AssetCategory assetCategory) {
-        if (assetCategory != null) {
-            try {
-                Asset asset = new Asset("New Asset");
-                asset.setAssetCategory(assetCategory);
-                assetService.insert(asset);
-                LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
-                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
-
-                refreshAssets();
-            } catch (Exception e) {
-                e.printStackTrace();
-                LogManager.logError("Error persisting asset: " + e.getMessage());
-                FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
-            }
-        }
-    }
-
     public void deleteSelectedAsset() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
