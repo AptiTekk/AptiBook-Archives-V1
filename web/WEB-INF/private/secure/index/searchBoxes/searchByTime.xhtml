@@ -1,0 +1,139 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+
+<ui:composition>
+    <h:form id="searchByTimeForm">
+
+        <!-- Step 0: Select an Asset Category -->
+        <ui:fragment rendered="#{searchByTimeController.currentStep == 0}">
+            <b:row>
+                <b:column colXs="12">
+                    <h:outputText value="Select a Category" styleClass="lead"/>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Category</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ui:repeat value="#{timeSelectionController.assetCategories}" var="assetCategory">
+                                <tr>
+                                    <td>
+                                        <h:commandLink value="#{assetCategory.name}"
+                                                       action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
+                                                       style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
+                                            <f:ajax render=":searchByTimeForm"/>
+                                        </h:commandLink>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </b:column>
+            </b:row>
+
+            <b:row>
+                <b:column colXs="12">
+                    <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right" iconAlign="right"
+                                     style="width: 50%; margin-left: 50%;" ajax="true"
+                                     action="#{searchByTimeController.nextStep}" update="@form"
+                                     disabled="#{timeSelectionController.selectedAssetCategory == null}"/>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+
+        <!-- Step 1: Select a Date -->
+        <ui:fragment rendered="#{searchByTimeController.currentStep == 1}">
+
+            <b:row>
+                <b:column colXs="12">
+                    <h:outputText value="Select a Date" styleClass="lead"/>
+                    <p:calendar value="#{timeSelectionController.selectedDate}"
+                                mindate="#{timeSelectionController.minDate}"
+                                mode="inline" styleClass="datepicker-fullwidth">
+                        <f:ajax event="dateSelect" render=":searchByTimeForm"/>
+                    </p:calendar>
+                </b:column>
+            </b:row>
+
+            <b:row style="margin-top: 20px;">
+                <b:column colXs="12">
+                    <b:buttonGroup style="width: 100%;">
+                        <b:commandButton look="default" value="Previous Step" iconAwesome="arrow-left"
+                                         style="width: 50%;"
+                                         ajax="true"
+                                         action="#{searchByTimeController.previousStep}" update="@form"/>
+                        <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right"
+                                         iconAlign="right"
+                                         style="width: 50%;"
+                                         ajax="true"
+                                         action="#{searchByTimeController.nextStep}" update="@form"
+                                         disabled="#{timeSelectionController.selectedDate == null}"/>
+                    </b:buttonGroup>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+
+        <!-- Step 2: Select a Time -->
+        <ui:fragment rendered="#{searchByTimeController.currentStep == 2}">
+
+            <b:row>
+                <b:column colXs="12">
+                    <h:outputText value="Start Time" styleClass="lead"/>
+                    <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
+                                     styleClass="big-select" converter="#{SegmentedTimeConverter}"
+                                     disabled="#{timeSelectionController.selectedAssetCategory == null}">
+                        <f:selectItem itemValue="#{null}"
+                                      itemLabel="--- Select a Time ---" noSelectionOption="true"/>
+                        <f:selectItems
+                                value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                        <f:ajax render=":searchByTimeForm"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="End Time" styleClass="lead"/>
+                    <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
+                                     styleClass="big-select" converter="#{SegmentedTimeConverter}"
+                                     disabled="#{timeSelectionController.selectedStartTime == null}">
+                        <f:selectItems
+                                value="#{timeSelectionController.endTimes}"
+                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                        <f:ajax render=":searchByTimeForm"/>
+                    </h:selectOneMenu>
+                </b:column>
+            </b:row>
+
+            <b:row style="margin-top: 20px;">
+                <b:column colXs="12">
+                    <b:buttonGroup style="width: 100%;">
+                        <b:commandButton look="default" value="Previous Step" iconAwesome="arrow-left"
+                                         style="width: 50%;"
+                                         ajax="true"
+                                         action="#{searchByTimeController.previousStep}" update="@form"/>
+                        <b:commandButton look="primary" value="Begin Search!" iconAwesome="search"
+                                         iconAlign="right"
+                                         style="width: 50%;"
+                                         ajax="true" process="@form"
+                                         action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}"
+                                         update=":includeGroup"
+                                         disabled="#{timeSelectionController.selectedEndTime == null}"/>
+                    </b:buttonGroup>
+                </b:column>
+            </b:row>
+        </ui:fragment>
+    </h:form>
+</ui:composition>
+</html>
