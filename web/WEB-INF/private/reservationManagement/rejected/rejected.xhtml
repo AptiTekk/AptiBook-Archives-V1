@@ -17,7 +17,7 @@
 <ui:composition>
     <h:panelGroup id="rejectedReservations">
         <b:message for="rejectedReservations" showSummary="false" showDetail="true"/>
-        <ui:fragment rendered="#{empty approvedReservationManagementController.assetCategories}">
+        <ui:fragment rendered="#{empty rejectedReservationManagementController.assetCategories}">
             <b:row>
                 <b:column colXs="12">
                     <h4>No Reservations have been Rejected.</h4>
