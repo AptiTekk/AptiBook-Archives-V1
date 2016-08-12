@@ -6,13 +6,11 @@
 
 package com.aptitekk.agenda;
 
-import org.jboss.shrinkwrap.api.Filters;
-import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
-import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.wildfly.swarm.container.Container;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
+import org.wildfly.swarm.infinispan.InfinispanFraction;
 import org.wildfly.swarm.jpa.postgresql.PostgreSQLJPAFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 
@@ -27,6 +25,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Container container = new Container();
 
+        //Configure AgendaDS
         container.fraction(new DatasourcesFraction()
                 .jdbcDriver("postgresql", (d) -> {
                     d.driverClassName("org.postgresql.Driver");
@@ -40,7 +39,10 @@ public class Main {
                 })
         );
 
-        // Prevent JPA Fraction from installing it's default datasource fraction
+        //Enable Infinispan Caching
+        container.fraction(InfinispanFraction.createDefaultFraction());
+
+        //Disable "ExampleDS" default datasource; make default AgendaDS.
         container.fraction(new PostgreSQLJPAFraction()
                 .inhibitDefaultDatasource()
                 .defaultDatasource("java:jboss/datasources/AgendaDS")
@@ -48,7 +50,7 @@ public class Main {
 
         container.start();
 
-        //-------------------------------------------------------------- ShrinkWrap WAR Generation
+        // ---------------------------- ShrinkWrap WAR Generation ----------------------------
         WARArchive deployment = ShrinkWrap.create(WARArchive.class);
 
         //Add all Agenda classes
@@ -65,7 +67,7 @@ public class Main {
 
         //Add all Maven dependencies
         deployment.addAllDependencies();
-        //-------------------------------------------------------------- END ShrinkWrap WAR Generation
+        // ---------------------------- END ShrinkWrap WAR Generation ------------------------
 
         container.deploy(deployment);
     }
@@ -79,7 +81,6 @@ public class Main {
                 else {
                     if (file.getPath().startsWith(RESOURCES.getPath())) {
                         String filePath = file.getPath().substring(RESOURCES.getPath().length() + 1).replaceAll("\\\\", "/");
-                        System.out.println("Adding Resource: " + filePath);
                         deployment.addAsWebInfResource(new ClassLoaderAsset(filePath, Main.class.getClassLoader()), "classes/" + filePath);
                     }
                 }
@@ -96,11 +97,9 @@ public class Main {
                 else {
                     if (file.getPath().startsWith(WEB_INF.getPath())) {
                         String filePath = file.getPath().substring(WEB_INF.getPath().length() + 1).replaceAll("\\\\", "/");
-                        System.out.println("Adding WEB-INF Resource: " + filePath);
                         deployment.addAsWebInfResource(file, filePath);
-                    } else if(file.getPath().startsWith(WEB.getPath())) {
+                    } else if (file.getPath().startsWith(WEB.getPath())) {
                         String filePath = file.getPath().substring(WEB.getPath().length() + 1).replaceAll("\\\\", "/");
-                        System.out.println("Adding Web Resource: " + filePath);
                         deployment.addAsWebResource(file, filePath);
                     }
                 }

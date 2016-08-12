@@ -218,7 +218,7 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>transactions</artifactId>
+            <artifactId>infinispan</artifactId>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>

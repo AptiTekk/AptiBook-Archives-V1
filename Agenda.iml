@@ -17,6 +17,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="Agenda" value="a3d9ed9c-aca5-441b-9580-fffaf50d7a81" />
+          <factory-entry name="AgendaDS" />
         </datasource-mapping>
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
       </configuration>
@@ -73,6 +74,10 @@
     <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.1-PFD" level="project" />
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jgroups-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:ee-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow-modules:1.0.2.Final" level="project" />
@@ -90,6 +95,10 @@
     <orderEntry type="library" name="Maven: org.glassfish:javax.el-impl:3.0.1-b08-jbossorg-1" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:naming:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.narayana.jts:narayana-jts-idlj:5.2.12.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.openjdk-orb:openjdk-orb:8.0.4.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-api:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-modules:1.0.2.Final" level="project" />
@@ -121,8 +130,6 @@
     <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:connector-modules:1.0.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:jgroups-modules:1.0.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jca:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-api:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:connector:1.0.2.Final" level="project" />
@@ -133,7 +140,6 @@
     <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-api:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-api:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-modules:1.0.2.Final" level="project" />
@@ -141,11 +147,15 @@
     <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources-modules:1.0.2.Final" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources:1.0.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-api:1.0.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.narayana.jts:narayana-jts-idlj:5.2.12.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.openjdk-orb:openjdk-orb:8.0.4.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.msc:jboss-msc:1.2.6.Final" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-api:1.0.2.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-core:5.2.1.Final" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.20.0-GA" level="project" />
