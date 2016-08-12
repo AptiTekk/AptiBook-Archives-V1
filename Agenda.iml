@@ -9,12 +9,7 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-          <root url="file://$MODULE_DIR$/target/generated-sources/annotations" />
-          <root url="file://$MODULE_DIR$/target/generated-sources/java" />
-        </sourceRoots>
+        <sourceRoots />
       </configuration>
     </facet>
     <facet type="jpa" name="JPA">
@@ -34,10 +29,8 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/annotations" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/target/generated-sources/java" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/target/agenda" />
       <excludeFolder url="file://$MODULE_DIR$/target/agenda-1.0-SNAPSHOT" />
       <excludeFolder url="file://$MODULE_DIR$/target/classes" />
@@ -51,332 +44,254 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.enterprise:cdi-api:1.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.4.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.faces:jboss-jsf-api_2.2_spec:2.2.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.json:jboss-json-api_1.0_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.servlet.jsp:jboss-jsp-api_2.3_spec:1.0.1.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.servlet.jstl:jboss-jstl-api_1.2_spec:1.1.2.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.websocket:jboss-websocket-api_1.1_spec:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.xml.bind:jboss-jaxb-api_2.2_spec:1.0.4.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-entitymanager:5.0.7.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-core:5.0.7.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.18.1-GA" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-jpamodelgen:5.0.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.junit:arquillian-junit-container:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.junit:arquillian-junit-core:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-impl-base:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-transaction-spi:1.0.3.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-transaction-api:1.0.3.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.protocol:arquillian-protocol-servlet:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:2.0.0-alpha-8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.config:arquillian-config-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.config:arquillian-config-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:2.0.0-alpha-8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-api:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-spi:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-impl:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:littleproxy:1.0.0-beta5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-cli:commons-cli:1.2" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-all:4.0.14.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.barchart.udt:barchart-udt-bundle:2.3.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:dnssec4j:0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:dnsjava:2.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-log4j12:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: javassist:javassist:3.12.1.GA" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-api:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-spi:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-configuration:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-impl:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-webdriver:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-api:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.json:json:20080701" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-java:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-safari-driver:2.53.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty:3.5.7.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.webbitserver:webbit:0.4.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-support:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-firefox-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-exec:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-htmlunit-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit:2.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xalan:xalan:2.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xalan:serializer:2.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.httpcomponents:httpmime:4.3.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit-core-js:2.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xerces:xercesImpl:2.11.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.nekohtml:nekohtml:1.9.20" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.cssparser:cssparser:0.9.13" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.w3c.css:sac:1.3" level="project" />
-    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-websocket:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-util:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-http:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.3.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-ie-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.java.dev.jna:jna:3.4.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.java.dev.jna:platform:3.4.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib-nodep:2.1_3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.opera:operadriver:1.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.opera:operalaunchers:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-jxpath:commons-jxpath:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.ini4j:ini4j:0.5.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-phantom-driver:1.2.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.codeborne:phantomjsdriver:1.2.1" level="project" />
-    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-impl:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-spi:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-api:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib:2.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: asm:asm:3.3.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.0.M1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.sisu:org.eclipse.sisu.inject:0.3.0.M1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-compiler-javac:2.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-compiler-api:2.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-spi:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl:1.1.0-beta-1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-api:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-impl:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-spi:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-util:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-connector-basic:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-transport-wagon:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-aether-provider:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-model:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-model-builder:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-repository-metadata:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-settings:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-settings-builder:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.guava:guava:18.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-interpolation:1.21" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-utils:3.0.20" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.sonatype.plexus:plexus-sec-dispatcher:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-file:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-http-lightweight:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-http-shared:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jsoup:jsoup:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-core:2.3.4.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-api:2.3.SP2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-spi:2.3.SP2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.classfilewriter:jboss-classfilewriter:1.1.2.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.enterprise:cdi-api:1.2" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.inject:javax.inject:1" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.4.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.faces:jboss-jsf-api_2.2_spec:2.2.11" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.json:jboss-json-api_1.0_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.servlet:jboss-servlet-api_3.1_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.servlet.jsp:jboss-jsp-api_2.3_spec:1.0.1.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.servlet.jstl:jboss-jstl-api_1.2_spec:1.1.2.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.websocket:jboss-websocket-api_1.1_spec:1.1.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.spec.javax.xml.bind:jboss-jaxb-api_2.2_spec:1.0.4.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-entitymanager:5.0.7.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-core:5.0.7.Final" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.18.1-GA" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:spi-api:1.0.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bootstrap:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api-modules:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.ow2.asm:asm-all:5.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-impl-base:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-spi:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-jboss:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-javaee:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-jboss:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7.jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.7.jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.sql:jboss-javax-sql-api_7.0_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.1-PFD" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jgroups-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-ext:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.enterprise.concurrent:jboss-concurrency-api_1.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:javax.el-impl:3.0.1-b08-jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.narayana.jts:narayana-jts-idlj:5.2.12.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.openjdk-orb:openjdk-orb:8.0.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.faces:jboss-jsf-api_2.2_spec:2.2.12" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-base:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.websocket:jboss-websocket-api_1.1_spec:1.1.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-servlet:1.3.15.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-core:1.3.15.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.3.4.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jboss.xnio:xnio-nio:3.3.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api-runtime:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.ejb3:jboss-ejb3-ext-api:2.2.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.msc:jboss-msc:1.2.6.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-core:5.2.1.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.20.0-GA" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml:classmate:1.3.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.el:el-api:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec:1.0.0.Beta1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.0.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.5" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:spi-api:1.0.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bootstrap:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:container-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api-modules:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.ow2.asm:asm-all:5.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-impl-base:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap:shrinkwrap-spi:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-jboss:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-javaee:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-jboss:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:logging-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.7.jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.7.jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.sql:jboss-javax-sql-api_7.0_spec:2.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.1-PFD" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jgroups-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:cdi-ext:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.annotation:jsr250-api:1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ee-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.enterprise.concurrent:jboss-concurrency-api_1.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:javax.el-impl:3.0.1-b08-jbossorg-1" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.narayana.jts:narayana-jts-idlj:5.2.12.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.openjdk-orb:openjdk-orb:8.0.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jsf-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.faces:jboss-jsf-api_2.2_spec:2.2.12" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-base:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:2.0.0-alpha-9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.servlet:jboss-servlet-api_3.1_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.websocket:jboss-websocket-api_1.1_spec:1.1.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-servlet:1.3.15.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.undertow:undertow-core:1.3.15.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.xnio:xnio-api:3.3.4.Final" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.jboss.xnio:xnio-nio:3.3.4.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.annotation:jboss-annotations-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api-runtime:0.4.4" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.ejb3:jboss-ejb3-ext-api:2.2.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:ejb-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jca-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:connector-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:security:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:mail-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jpa-postgresql-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:datasources:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:infinispan-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:jmx-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:msc-modules:1.0.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.msc:jboss-msc:1.2.6.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming-api:1.0.2.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-core:5.2.1.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.javassist:javassist:3.20.0-GA" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: antlr:antlr:2.7.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jboss:jandex:2.0.0.Final" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fasterxml:classmate:1.3.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final" level="project" />
-    <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.hibernate:hibernate-jpamodelgen:5.0.7.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.el:el-api:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.1_spec:1.0.0.Beta1" level="project" />
     <orderEntry type="library" name="Maven: org.liquibase:liquibase-core:3.5.1" level="project" />
-    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.13" level="project" />
     <orderEntry type="library" name="Maven: org.liquibase:liquibase-cdi:3.5.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.logmanager:jboss-logmanager:2.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: net.bootsfaces:bootsfaces:0.9.0" level="project" />
     <orderEntry type="library" name="Maven: org.primefaces:primefaces:6.0" level="project" />
     <orderEntry type="library" name="Maven: org.primefaces.themes:bootstrap:1.0.10" level="project" />
     <orderEntry type="library" name="Maven: org.omnifaces:omnifaces:2.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.junit:arquillian-junit-container:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.junit:arquillian-junit-core:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-spi:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.core:arquillian-core-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.test:arquillian-test-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.config:arquillian-config-api:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.config:arquillian-config-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-spi:2.0.0-alpha-8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.container:arquillian-container-test-impl-base:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-impl-base:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-spi:1.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-transaction-spi:1.0.3.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-transaction-api:1.0.3.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.protocol:arquillian-protocol-servlet:1.1.10.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-base:2.0.0-alpha-8" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-api:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-spi:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-warp-impl:1.0.0.Alpha7" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:littleproxy:1.0.0-beta5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.guava:guava:18.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-cli:commons-cli:1.2" level="project" />
-    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.7" level="project" />
-    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-lang3:3.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty-all:4.0.14.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.barchart.udt:barchart-udt-bundle:2.3.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:dnssec4j:0.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.littleshoot:dnsjava:2.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-log4j12:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.slf4j:slf4j-api:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: javassist:javassist:3.12.1.GA" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-api:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-spi:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-configuration:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-impl:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-drone-webdriver:1.3.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-api:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.json:json:20080701" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-java:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-htmlunit-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-firefox-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-ie-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-safari-driver:2.53.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty:3.5.7.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-support:2.42.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.webbitserver:webbit:0.4.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-exec:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit:2.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xalan:xalan:2.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xalan:serializer:2.7.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.3.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.httpcomponents:httpmime:4.3.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit-core-js:2.14" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: xerces:xercesImpl:2.11.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.nekohtml:nekohtml:1.9.20" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.cssparser:cssparser:0.9.13" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.w3c.css:sac:1.3" level="project" />
-    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-websocket:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-util:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-http:8.1.14.v20131031" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.java.dev.jna:jna:3.4.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: net.java.dev.jna:platform:3.4.0" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib-nodep:2.1_3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.opera:operadriver:1.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.opera:operalaunchers:1.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.protobuf:protobuf-java:2.4.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-jxpath:commons-jxpath:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.ini4j:ini4j:0.5.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.extension:arquillian-phantom-driver:1.2.1.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.codeborne:phantomjsdriver:1.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-impl:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-spi:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.arquillian.graphene:graphene-webdriver-api:2.1.0.CR2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib:2.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: asm:asm:3.3.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.objenesis:objenesis:1.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi-maven-archive:2.2.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.sisu:org.eclipse.sisu.plexus:0.3.0.M1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.sisu:org.eclipse.sisu.inject:0.3.0.M1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-compiler-javac:2.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-compiler-api:2.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-utils:3.0.20" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl:1.1.0-beta-1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-api:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-impl:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-spi:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-util:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-connector-basic:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.aether:aether-transport-wagon:1.0.0.v20140518" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-aether-provider:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-model:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-model-builder:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-repository-metadata:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.codehaus.plexus:plexus-interpolation:1.21" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-settings:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven:maven-settings-builder:3.2.5" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.sonatype.plexus:plexus-sec-dispatcher:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-provider-api:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-file:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-lang:commons-lang:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-http-lightweight:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.apache.maven.wagon:wagon-http-shared:2.6" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jsoup:jsoup:1.7.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-core:2.3.4.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-api:2.3.SP2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.weld:weld-spi:2.3.SP2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jboss.classfilewriter:jboss-classfilewriter:1.1.2.Final" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.5" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client-servlet:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.oauth-client:google-oauth-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.0.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client-jdo:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: javax.jdo:jdo2-api:2.3-eb" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
@@ -386,10 +301,9 @@
     <orderEntry type="library" name="Maven: com.google.http-client:google-http-client-jackson2:1.21.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.1.3" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava-jdk5:17.0" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
     <orderEntry type="library" name="Maven: net.coobird:thumbnailator:0.4.8" level="project" />
     <orderEntry type="library" name="Maven: org.ocpsoft.prettytime:prettytime:3.2.7.Final" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.5" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1.1" level="project" />
   </component>
 </module>

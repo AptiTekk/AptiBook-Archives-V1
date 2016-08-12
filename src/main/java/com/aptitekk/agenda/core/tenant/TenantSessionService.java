@@ -13,9 +13,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 @Stateful
-public class TenantSessionService {
+public class TenantSessionService implements Serializable {
 
     @Inject
     private TenantManagementService tenantManagementService;
