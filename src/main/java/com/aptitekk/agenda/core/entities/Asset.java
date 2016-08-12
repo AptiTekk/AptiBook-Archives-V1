@@ -31,7 +31,7 @@ public class Asset extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private File image;
 
     @Column(columnDefinition = "time")
