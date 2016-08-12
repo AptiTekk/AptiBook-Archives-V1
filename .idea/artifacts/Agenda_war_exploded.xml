@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="Agenda:war exploded">
+  <artifact type="exploded-war" build-on-make="true" name="Agenda:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/Agenda_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
@@ -139,6 +139,15 @@
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.servlet:jboss-servlet-api_3.1_spec:1.0.0.Final" />
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.ejb:jboss-ejb-api_3.2_spec:1.0.0.Final" />
           <element id="library" level="project" name="Maven: javax.servlet:servlet-api:2.5" />
+          <element id="library" level="project" name="Maven: org.jboss.msc:jboss-msc:1.2.6.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:infinispan-api:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:infinispan-modules:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:infinispan:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:jmx-api:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:jmx:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:msc-api:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:msc-modules:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:msc:1.0.2.Final" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="Agenda/web/Web" />

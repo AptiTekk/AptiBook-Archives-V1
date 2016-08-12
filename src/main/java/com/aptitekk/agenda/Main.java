@@ -25,13 +25,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Container container = new Container();
 
-        //Configure AgendaDS
+        //Configure PostgreSQLDS
         container.fraction(new DatasourcesFraction()
                 .jdbcDriver("postgresql", (d) -> {
                     d.driverClassName("org.postgresql.Driver");
                     d.driverModuleName("org.postgresql");
                 })
-                .dataSource("AgendaDS", (ds) -> {
+                .dataSource("PostgreSQLDS", (ds) -> {
                     ds.driverName("postgresql");
                     ds.connectionUrl(System.getenv("JDBC_DATABASE_URL"));
                     ds.userName(System.getenv("JDBC_DATABASE_USERNAME"));
@@ -42,10 +42,10 @@ public class Main {
         //Enable Infinispan Caching
         container.fraction(InfinispanFraction.createDefaultFraction());
 
-        //Disable "ExampleDS" default datasource; make default AgendaDS.
+        //Disable "ExampleDS" default datasource; make default PostgreSQLDS.
         container.fraction(new PostgreSQLJPAFraction()
                 .inhibitDefaultDatasource()
-                .defaultDatasource("java:jboss/datasources/AgendaDS")
+                .defaultDatasource("java:jboss/datasources/PostgreSQLDS")
         );
 
         container.start();
