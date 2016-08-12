@@ -47,7 +47,7 @@
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for  #{requestReservationViewController.reservationTitle} has been requested and automatically approved"
-                                rendered="#{not empty requestReservationViewController.reservationTitle.length}"/>
+                                rendered="#{not empty requestReservationViewController.reservationTitle}"/>
                         <h:outputText
                                 value="Your reservation for  #{requestReservationViewController.asset.name} has been requested and automatically approved"
                                 rendered="#{empty requestReservationViewController.reservationTitle}"/>
