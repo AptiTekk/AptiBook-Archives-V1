@@ -56,83 +56,10 @@
             <b:column colXs="12" colMd="3">
                 <h3>New Reservation</h3>
                 <hr/>
-                <!-- Time Selection Form -->
-                <h:form id="timeForm">
-                    <b:row>
-                        <!-- Column 1: Asset Type Selection -->
-                        <b:column colXs="12" colSm="4">
-                            <h:outputText value="I'm looking for" styleClass="lead"/>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>Category</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <ui:repeat value="#{timeSelectionController.assetCategories}" var="assetCategory">
-                                        <tr>
-                                            <td>
-                                                <h:commandLink value="#{assetCategory.name}"
-                                                               action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
-                                                               style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
-                                                    <f:ajax render=":timeForm"/>
-                                                </h:commandLink>
-                                            </td>
-                                        </tr>
-                                    </ui:repeat>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </b:column>
 
-
-                        <!-- Column 2: Inline Date Selection -->
-                        <b:column colXs="12" colSm="4">
-                            <h:outputText value="On" styleClass="lead"/>
-                            <p:calendar value="#{timeSelectionController.selectedDate}"
-                                        mindate="#{timeSelectionController.minDate}"
-                                        mode="inline" styleClass="datepicker-fullwidth">
-                                <f:ajax event="dateSelect" render=":timeForm"/>
-                            </p:calendar>
-                        </b:column>
-
-                        <!-- Column 3: Time Selection & Submit Button -->
-                        <b:column colXs="12" colSm="4">
-                            <h:outputText value="From" styleClass="lead"/>
-                            <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
-                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                             disabled="#{timeSelectionController.selectedAssetCategory == null}">
-                                <f:selectItem itemValue="#{null}"
-                                              itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                                <f:selectItems
-                                        value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
-                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                                <f:ajax render=":timeForm"/>
-                            </h:selectOneMenu>
-                            <h:outputText value="Until" styleClass="lead"/>
-                            <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
-                                             styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                             disabled="#{timeSelectionController.selectedStartTime == null}">
-                                <f:selectItems
-                                        value="#{timeSelectionController.endTimes}"
-                                        var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                                <f:ajax render=":timeForm"/>
-                            </h:selectOneMenu>
-                        </b:column>
-                    </b:row>
-                    <b:row style="margin-top:20px">
-                        <b:column colXs="12">
-                            <h:commandButton
-                                    styleClass="btn btn-primary btn-block btn-large"
-                                    value="Begin Search"
-                                    disabled="#{timeSelectionController.selectedEndTime == null}"
-                                    action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}">
-                                <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
-                            </h:commandButton>
-                        </b:column>
-                    </b:row>
-                </h:form>
+                <b:panel look="default" title="Search By Time" collapsible="false" showCollapseLink="false">
+                    <ui:include src="searchBoxes/searchByTime.xhtml"/>
+                </b:panel>
             </b:column>
         </b:row>
     </b:container>
