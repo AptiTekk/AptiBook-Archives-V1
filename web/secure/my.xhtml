@@ -13,6 +13,7 @@
 
 <ui:composition template="/WEB-INF/templates/default_header.xhtml">
     <ui:define name="content">
+
         <b:container>
             <b:row>
                 <b:column colXs="12">
@@ -23,7 +24,19 @@
                     </ol>
                 </b:column>
             </b:row>
-
+            <b:tabView activeIndex="0">
+                <b:tab title="Reservation Calendar">
+            <b:column colXs="0" colSm="0" colMd="7">
+                <h3>Reservation Calendar</h3>
+                <hr/>
+                <p:schedule widgetVar="calendar" value="#{myReservationsController.eventModel}"
+                            timeZone="#{myReservationsController.timeZone}" aspectRatio="1.6" allDaySlot="false">
+                    <p:ajax event="eventSelect" listener="#{myReservationsController.onEventSelect}"
+                            update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
+                </p:schedule>
+            </b:column>
+                </b:tab>
+                <b:tab title="My Reservations">
             <ui:fragment rendered="#{empty myReservationsController.assetCategories}">
                 <b:row>
                     <b:column colXs="12">
@@ -135,7 +148,10 @@
                     </ui:repeat>
                 </ui:repeat>
             </ui:fragment>
+                </b:tab>
+            </b:tabView>
         </b:container>
+        <ui:include src="/WEB-INF/private/secure/index/viewEventModal.xhtml"/>
     </ui:define>
 </ui:composition>
 

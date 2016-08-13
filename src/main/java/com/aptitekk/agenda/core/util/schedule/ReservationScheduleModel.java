@@ -13,6 +13,7 @@ import org.primefaces.model.LazyScheduleModel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public abstract class ReservationScheduleModel extends LazyScheduleModel {
 
@@ -48,4 +49,5 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
     public void setSelectedAssetCategories(AssetCategory[] selectedAssetCategories) {
         this.selectedAssetCategories = selectedAssetCategories;
     }
+
 }
