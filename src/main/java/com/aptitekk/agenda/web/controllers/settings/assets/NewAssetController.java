@@ -45,9 +45,6 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
     private FileService fileService;
 
     @Inject
-    private TimeSelectionController timeSelectionController;
-
-    @Inject
     private TagController tagController;
 
     @Inject
@@ -93,9 +90,6 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                     asset.setNeedsApproval(assetApprovalRequired);
                     asset.setOwner(assetOwnerGroup);
                     asset.setAssetCategory(assetCategory);
-                    SegmentedTimeRange availabilityRange = timeSelectionController.getSegmentedTimeRange();
-                    asset.setAvailabilityStart(availabilityRange.getStartTime());
-                    asset.setAvailabilityEnd(availabilityRange.getEndTime());
                     assetService.insert(asset);
                     assetSettingsController.refreshAssets();
                     LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
@@ -114,8 +108,6 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
         tagController.setSelectedAsset(null);
         tagController.setSelectedAssetTags(null);
         assetApprovalRequired = false;
-        timeSelectionController.setSelectedStartTime(null);
-        timeSelectionController.setSelectedEndTime(null);
         this.assetOwnerGroup = null;
 
         groupTreeController.invalidateTrees();

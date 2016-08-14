@@ -144,14 +144,6 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
     public boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
         LogManager.logDebug("Checking " + asset.getName());
 
-        //If the asset does not specify a start/end time, return false.
-        if (asset.getAvailabilityStart() == null || asset.getAvailabilityEnd() == null)
-            return false;
-
-        //Return false if the reservation start or end time is not within the availability time of the asset
-        if (asset.getAvailabilityStart().compareTo(segmentedTimeRange.getStartTime()) > 0 || asset.getAvailabilityEnd().compareTo(segmentedTimeRange.getEndTime()) < 0)
-            return false;
-
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {
             //Skip rejected reservations. They aren't in the way.

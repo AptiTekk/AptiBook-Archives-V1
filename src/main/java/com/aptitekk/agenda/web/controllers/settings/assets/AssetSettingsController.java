@@ -56,9 +56,6 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
     private Asset selectedAsset;
 
     @Inject
-    private TimeSelectionController timeSelectionController;
-
-    @Inject
     private TagController tagController;
 
     private boolean hasPagePermission() {
@@ -149,10 +146,6 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
                 tagController.updateAssetTags(selectedAsset);
                 selectedAsset.setNeedsApproval(assetApprovalRequired);
 
-                SegmentedTimeRange availabilityRange = timeSelectionController.getSegmentedTimeRange();
-                selectedAsset.setAvailabilityStart(availabilityRange.getStartTime());
-                selectedAsset.setAvailabilityEnd(availabilityRange.getEndTime());
-
                 try {
                     if (assetOwnerGroup != null)
                         selectedAsset.setOwner(assetOwnerGroup);
@@ -175,9 +168,6 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
             tagController.setSelectedAsset(selectedAsset);
             tagController.setSelectedAssetTags(selectedAsset.getTags());
             assetApprovalRequired = selectedAsset.getNeedsApproval();
-            SegmentedTimeRange availabilityRange = new SegmentedTimeRange(null, selectedAsset.getAvailabilityStart(), selectedAsset.getAvailabilityEnd());
-            timeSelectionController.setSelectedStartTime(availabilityRange.getStartTime());
-            timeSelectionController.setSelectedEndTime(availabilityRange.getEndTime());
             this.assetOwnerGroup = selectedAsset.getOwner();
 
             groupTreeController.invalidateTrees();

@@ -34,12 +34,6 @@ public class Asset extends MultiTenantEntity implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private File image;
 
-    @Column(columnDefinition = "time")
-    private SegmentedTime availabilityEnd;
-
-    @Column(columnDefinition = "time")
-    private SegmentedTime availabilityStart;
-
     private String name;
 
     private Boolean needsApproval = false;
@@ -71,22 +65,6 @@ public class Asset extends MultiTenantEntity implements Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public SegmentedTime getAvailabilityEnd() {
-        return this.availabilityEnd;
-    }
-
-    public void setAvailabilityEnd(SegmentedTime availabilityEnd) {
-        this.availabilityEnd = availabilityEnd;
-    }
-
-    public SegmentedTime getAvailabilityStart() {
-        return this.availabilityStart;
-    }
-
-    public void setAvailabilityStart(SegmentedTime availabilityStart) {
-        this.availabilityStart = availabilityStart;
     }
 
     public String getName() {
@@ -156,14 +134,12 @@ public class Asset extends MultiTenantEntity implements Serializable {
         Asset other = (Asset) o;
 
         return EqualsHelper.areEquals(getName(), other.getName())
-                && EqualsHelper.areEquals(getAvailabilityStart(), other.getAvailabilityStart())
-                && EqualsHelper.areEquals(getAvailabilityEnd(), other.getAvailabilityEnd())
                 && EqualsHelper.areEquals(getNeedsApproval(), other.getNeedsApproval());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName(), getAvailabilityStart(), getAvailabilityEnd(), getNeedsApproval());
+        return EqualsHelper.calculateHashCode(getName(), getNeedsApproval());
     }
 
 }

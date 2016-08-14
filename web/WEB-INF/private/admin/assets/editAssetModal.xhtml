@@ -61,46 +61,6 @@
                                              value="#{assetSettingsController.assetApprovalRequired}"/>
                 </div>
 
-                <h:panelGroup id="assetAvailability" layout="block">
-                    <div class="form-group">
-                        <h:outputLabel value="Availability Time Start: *"/>
-                        <b:message for="startTime" showSummary="false" showDetail="true"/>
-                        <h:selectOneMenu id="startTime"
-                                         value="#{timeSelectionController.selectedStartTime}"
-                                         styleClass="big-select"
-                                         converter="#{SegmentedTimeConverter}" required="true"
-                                         requiredMessage="This is required.">
-                            <f:selectItem itemValue="#{null}"
-                                          itemLabel="--- Select a Time ---"
-                                          noSelectionOption="true"/>
-                            <f:selectItems
-                                    value="#{timeSelectionController.getStartTimes(false)}"
-                                    var="time" itemValue="#{time}"
-                                    itemLabel="#{time.timeString}"/>
-                            <f:ajax render="assetAvailability"
-                                    onevent="loading"/>
-                        </h:selectOneMenu>
-                    </div>
-
-                    <div class="form-group">
-                        <h:outputLabel value="Availability Time End: *"/>
-                        <b:message for="endTime" showSummary="false" showDetail="true"/>
-                        <h:selectOneMenu id="endTime"
-                                         value="#{timeSelectionController.selectedEndTime}"
-                                         styleClass="big-select"
-                                         converter="#{SegmentedTimeConverter}"
-                                         disabled="#{timeSelectionController.selectedStartTime == null}" required="true"
-                                         requiredMessage="This is required.">
-                            <f:selectItems
-                                    value="#{timeSelectionController.endTimes}"
-                                    var="time" itemValue="#{time}"
-                                    itemLabel="#{time.timeString}"/>
-                            <f:ajax render="assetAvailability"
-                                    onevent="loading"/>
-                        </h:selectOneMenu>
-                    </div>
-                </h:panelGroup>
-
                 <div class="form-group">
                     <h:outputLabel value="Owner Group: *"/>
                     <b:message for="ownerGroup"
