@@ -13,14 +13,18 @@
 
 <ui:composition template="/WEB-INF/templates/default.xhtml">
 	<ui:define name="default">
+
 		<header style="height:50px"> <ui:include
 			src="/WEB-INF/templates/header.xhtml" /> </header>
 
 		<main style="min-height: calc(100vh - 60px - 50px);padding-bottom:60px;"> <ui:insert
-			name="content" /> </main>
+			name="content" />
+
+		</main>
 
 		<footer class="footer"> <ui:include
 			src="/WEB-INF/templates/footer.xhtml" /></footer>
 	</ui:define>
+
 </ui:composition>
 </html>

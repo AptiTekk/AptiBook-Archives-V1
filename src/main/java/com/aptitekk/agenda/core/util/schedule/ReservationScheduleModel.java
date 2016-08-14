@@ -16,8 +16,6 @@ import java.util.List;
 
 public abstract class ReservationScheduleModel extends LazyScheduleModel {
 
-    private AssetCategory[] selectedAssetCategories;
-
     @Override
     public void loadEvents(Date start, Date end) {
         //TODO: Create an expanding cache
@@ -28,7 +26,7 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTime(end);
 
-        List<Reservation> reservationList = getReservationsBetweenDates(startCalendar, endCalendar, selectedAssetCategories);
+        List<Reservation> reservationList = getReservationsBetweenDates(startCalendar, endCalendar);
         if (reservationList != null) {
             for (Reservation reservation : reservationList) {
                 ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
@@ -39,13 +37,6 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
         }
     }
 
-    public abstract List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end, AssetCategory[] assetCategories);
+    public abstract List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end);
 
-    public AssetCategory[] getSelectedAssetCategories() {
-        return selectedAssetCategories;
-    }
-
-    public void setSelectedAssetCategories(AssetCategory[] selectedAssetCategories) {
-        this.selectedAssetCategories = selectedAssetCategories;
-    }
 }

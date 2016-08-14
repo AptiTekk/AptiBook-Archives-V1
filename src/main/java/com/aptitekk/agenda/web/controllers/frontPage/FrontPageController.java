@@ -44,17 +44,15 @@ public class FrontPageController implements Serializable {
 
     @PostConstruct
     private void init() {
-        scheduleModel = new ReservationScheduleModel() {
-            @Override
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end, AssetCategory[] assetCategories) {
-                return reservationService.getAllBetweenDates(start, end, assetCategories);
-            }
-        };
-
         assetCategories = assetCategoryService.getAll();
         assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
         assetCategories.toArray(assetCategoriesDisplayed);
-        scheduleModel.setSelectedAssetCategories(assetCategoriesDisplayed);
+        scheduleModel = new ReservationScheduleModel() {
+            @Override
+            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+                return reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
+            }
+        };
     }
 
     public ScheduleModel getScheduleModel() {
@@ -83,6 +81,5 @@ public class FrontPageController implements Serializable {
 
     public void setAssetCategoriesDisplayed(AssetCategory[] assetCategoriesDisplayed) {
         this.assetCategoriesDisplayed = assetCategoriesDisplayed;
-        scheduleModel.setSelectedAssetCategories(assetCategoriesDisplayed);
     }
 }
