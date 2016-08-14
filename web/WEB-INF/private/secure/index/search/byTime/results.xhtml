@@ -28,7 +28,7 @@
 
         <b:row>
             <b:column colXs="12">
-                <h:form id="results-time-selection" styleClass="form-inline" style="margin-top:30px">
+                <h:form id="results-time-selection" styleClass="form-inline">
                     <div class="form-group">
                         Available
                         <h:selectOneMenu value="#{searchByTimeController.assetCategory}"
@@ -66,7 +66,7 @@
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
                                          disabled="#{searchByTimeController.startTime == null}">
                             <f:selectItems
-                                    value="#{searchByTimeController.endTime}"
+                                    value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>

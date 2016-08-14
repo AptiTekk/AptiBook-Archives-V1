@@ -107,8 +107,6 @@
                     <h:selectOneMenu value="#{searchByTimeController.endTime}"
                                      styleClass="big-select" converter="#{SegmentedTimeConverter}"
                                      disabled="#{searchByTimeController.startTime == null}">
-                        <f:selectItem itemValue="#{null}"
-                                      itemLabel="--- Select a Time ---" noSelectionOption="true"/>
                         <f:selectItems
                                 value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
                                 var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
@@ -130,7 +128,7 @@
                                          ajax="true" process="@form"
                                          action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
                                          update=":includeGroup"
-                                         disabled="#{searchByTimeController.endTime == null}"/>
+                                         disabled="#{searchByTimeController.startTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>
