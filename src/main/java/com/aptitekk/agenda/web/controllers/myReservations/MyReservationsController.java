@@ -56,7 +56,15 @@ public class MyReservationsController implements Serializable {
         assetCategories.toArray(assetCategoriesDisplayed);
         eventModel = new ReservationScheduleModel() {
             public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
-                return reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
+                List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
+
+                Iterator<Reservation> iterator = allBetweenDates.iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next().getStatus() == Reservation.Status.REJECTED)
+                        iterator.remove();
+                }
+
+                return allBetweenDates;
             }
         };
     }

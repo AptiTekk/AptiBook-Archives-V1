@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -50,7 +51,15 @@ public class FrontPageController implements Serializable {
         scheduleModel = new ReservationScheduleModel() {
             @Override
             public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
-                return reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
+                List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
+
+                Iterator<Reservation> iterator = allBetweenDates.iterator();
+                while (iterator.hasNext()) {
+                    if (iterator.next().getStatus() == Reservation.Status.REJECTED)
+                        iterator.remove();
+                }
+
+                return allBetweenDates;
             }
         };
     }
