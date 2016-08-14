@@ -8,7 +8,6 @@ package com.aptitekk.agenda.web.controllers.myReservations;
 
 import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
-import com.aptitekk.agenda.core.entities.User;
 import com.aptitekk.agenda.core.entities.services.AssetCategoryService;
 import com.aptitekk.agenda.core.entities.services.ReservationService;
 import com.aptitekk.agenda.core.entities.services.UserService;
@@ -19,9 +18,6 @@ import com.aptitekk.agenda.web.controllers.AuthenticationController;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -49,24 +45,20 @@ public class MyReservationsController implements Serializable {
 
     private ReservationScheduleModel eventModel;
 
-    private List<AssetCategory> assetCategories;
-
-    private AssetCategory[] assetCategoriesDisplayed;
-
     private ReservationScheduleEvent selectedEvent;
 
     @PostConstruct
     private void init() {
         buildPresentReservationList();
+
+        List<AssetCategory> assetCategories = assetCategoryService.getAll();
+        AssetCategory[] assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
+        assetCategories.toArray(assetCategoriesDisplayed);
         eventModel = new ReservationScheduleModel() {
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end, AssetCategory[] assetCategories) {
-                return reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategories);
+            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+                return reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
             }
         };
-        assetCategories = assetCategoryService.getAll();
-        assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
-        assetCategories.toArray(assetCategoriesDisplayed);
-        eventModel.setSelectedAssetCategories(assetCategoriesDisplayed);
     }
 
 
@@ -91,6 +83,7 @@ public class MyReservationsController implements Serializable {
             }
         }
     }
+
     public void onEventSelect(SelectEvent selectEvent) {
         selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
     }
@@ -102,6 +95,7 @@ public class MyReservationsController implements Serializable {
     public List<Reservation> getPresentReservationsForCategory(AssetCategory assetCategory) {
         return presentReservations.get(assetCategory);
     }
+
     public ReservationScheduleModel getEventModel() {
         return eventModel;
     }
@@ -109,6 +103,7 @@ public class MyReservationsController implements Serializable {
     public void setEventModel(ReservationScheduleModel eventModel) {
         this.eventModel = eventModel;
     }
+
     public TimeZone getTimeZone() {
         return TimeZone.getDefault();
     }

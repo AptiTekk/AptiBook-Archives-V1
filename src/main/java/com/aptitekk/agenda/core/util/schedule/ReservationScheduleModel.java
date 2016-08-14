@@ -13,11 +13,8 @@ import org.primefaces.model.LazyScheduleModel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public abstract class ReservationScheduleModel extends LazyScheduleModel {
-
-    private AssetCategory[] selectedAssetCategories;
 
     @Override
     public void loadEvents(Date start, Date end) {
@@ -29,7 +26,7 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
         Calendar endCalendar = Calendar.getInstance();
         endCalendar.setTime(end);
 
-        List<Reservation> reservationList = getReservationsBetweenDates(startCalendar, endCalendar, selectedAssetCategories);
+        List<Reservation> reservationList = getReservationsBetweenDates(startCalendar, endCalendar);
         if (reservationList != null) {
             for (Reservation reservation : reservationList) {
                 ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
@@ -40,14 +37,6 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
         }
     }
 
-    public abstract List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end, AssetCategory[] assetCategories);
-
-    public AssetCategory[] getSelectedAssetCategories() {
-        return selectedAssetCategories;
-    }
-
-    public void setSelectedAssetCategories(AssetCategory[] selectedAssetCategories) {
-        this.selectedAssetCategories = selectedAssetCategories;
-    }
+    public abstract List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end);
 
 }
