@@ -28,13 +28,13 @@
 
         <b:row>
             <b:column colXs="12">
-                <h:form id="results-time-selection" styleClass="form-inline" style="margin-top:30px">
+                <h:form id="results-time-selection" styleClass="form-inline">
                     <div class="form-group">
                         Available
-                        <h:selectOneMenu value="#{timeSelectionController.selectedAssetCategory}"
+                        <h:selectOneMenu value="#{searchByTimeController.assetCategory}"
                                          styleClass="form-control"
                                          converter="#{assetCategoryConverter}">
-                            <f:selectItems value="#{timeSelectionController.assetCategories}"
+                            <f:selectItems value="#{searchByTimeController.assetCategories}"
                                            var="assetCategory" itemLabel="#{assetCategory.name}"
                                            itemValue="#{assetCategory}"/>
                             <f:ajax render="@form"/>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="form-group">
                         on
-                        <p:calendar mode="popup" value="#{timeSelectionController.selectedDate}"
+                        <p:calendar mode="popup" value="#{searchByTimeController.date}"
                                     mindate="#{timeSelectionController.minDate}"
                                     pattern="#{timeSelectionController.friendlyDatePattern}"
                                     styleClass="inline-calendar-form-control">
@@ -51,29 +51,29 @@
                     </div>
                     <div class="form-group">
                         from
-                        <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
+                        <h:selectOneMenu value="#{searchByTimeController.startTime}"
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
-                                         disabled="#{timeSelectionController.selectedAssetCategory == null}">
+                                         disabled="#{searchByTimeController.assetCategory == null}">
                             <f:selectItems
-                                    value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                    value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
                         to
-                        <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
+                        <h:selectOneMenu value="#{searchByTimeController.endTime}"
                                          styleClass="form-control" converter="#{SegmentedTimeConverter}"
-                                         disabled="#{timeSelectionController.selectedStartTime == null}">
+                                         disabled="#{searchByTimeController.startTime == null}">
                             <f:selectItems
-                                    value="#{timeSelectionController.endTimes}"
+                                    value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
                                     var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
                         <h:commandButton styleClass="btn btn-primary" value="Update Time"
-                                         action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}">
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}">
                             <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
                         </h:commandButton>
                     </div>
@@ -97,7 +97,7 @@
                 <h:form id="availableAssetsList">
                     <c:choose>
                         <c:when test="#{empty availableAssetsController.filteredAssets}">
-                            <h2>No Available #{timeSelectionController.selectedAssetCategory.name} Found!</h2>
+                            <h2>No Available #{searchByTimeController.assetCategory.name} Found!</h2>
                             <h4>Try adjusting your reservation time or filters.</h4>
                         </c:when>
                         <c:otherwise>
@@ -114,7 +114,7 @@
                                     </h:panelGroup>
                                     <div class="form-group">
                                         <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                         action="#{availableAssetsController.onMakeReservationFired(asset, timeSelectionController.segmentedTimeRange)}">
+                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.segmentedTimeRange)}">
                                             <f:ajax render=":includeGroup"/>
                                         </h:commandButton>
                                     </div>

@@ -15,11 +15,9 @@ import com.aptitekk.agenda.core.util.time.SegmentedTimeRange;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.persistence.TypedQuery;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @Stateful
 public class ReservationService extends MultiTenantEntityServiceAbstract<Reservation> implements Serializable {
@@ -112,25 +110,32 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
             if (assetCategories.length == 0)
                 return null;
 
-        if (user == null) {
-            return entityManager
-                    .createQuery("SELECT r FROM Reservation r JOIN r.asset a WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3 " + (assetCategories != null ? "AND a.assetCategory IN ?4 " : "") + (user != null ? "AND r.user = ?5" : ""), Reservation.class)
-                    .setParameter(1, start)
-                    .setParameter(2, end)
-                    .setParameter(3, getTenant())
-                    .setParameter(4, assetCategories != null ? Arrays.asList(assetCategories) : null)
-                    .getResultList();
-        } else {
-            return entityManager
-                    .createQuery("SELECT r FROM Reservation r JOIN r.asset a WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3 " + (assetCategories != null ? "AND a.assetCategory IN ?4 " : "") + (user != null ? "AND r.user = ?5" : ""), Reservation.class)
-                    .setParameter(1, start)
-                    .setParameter(2, end)
-                    .setParameter(3, getTenant())
-                    .setParameter(4, assetCategories != null ? Arrays.asList(assetCategories) : null)
-                    .setParameter(5, user)
-                    .getResultList();
+        StringBuilder queryBuilder = new StringBuilder("SELECT r FROM Reservation r JOIN r.asset a WHERE r.date BETWEEN ?1 AND ?2 AND r.tenant = ?3 ");
+        HashMap<Integer, Object> parameterMap = new HashMap<>();
+
+        if (assetCategories != null) {
+            queryBuilder.append("AND a.assetCategory IN ?4 ");
+            parameterMap.put(4, Arrays.asList(assetCategories));
         }
+
+        if (user != null) {
+            queryBuilder.append("AND r.user = ?5 ");
+            parameterMap.put(5, user);
+        }
+
+        TypedQuery<Reservation> query = entityManager
+                .createQuery(queryBuilder.toString(), Reservation.class)
+                .setParameter(1, start)
+                .setParameter(2, end)
+                .setParameter(3, getTenant());
+
+        for (Map.Entry<Integer, Object> parameter : parameterMap.entrySet()) {
+            query.setParameter(parameter.getKey(), parameter.getValue());
+        }
+
+        return query.getResultList();
     }
+
     /**
      * Finds and returns a list of assets that are available for reservation at the given times from the given AssetCategory.
      *
@@ -163,14 +168,6 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      */
     public boolean isAssetAvailableForReservation(Asset asset, SegmentedTimeRange segmentedTimeRange) {
         LogManager.logDebug("Checking " + asset.getName());
-
-        //If the asset does not specify a start/end time, return false.
-        if (asset.getAvailabilityStart() == null || asset.getAvailabilityEnd() == null)
-            return false;
-
-        //Return false if the reservation start or end time is not within the availability time of the asset
-        if (asset.getAvailabilityStart().compareTo(segmentedTimeRange.getStartTime()) > 0 || asset.getAvailabilityEnd().compareTo(segmentedTimeRange.getEndTime()) < 0)
-            return false;
 
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {

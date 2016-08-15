@@ -29,13 +29,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <ui:repeat value="#{timeSelectionController.assetCategories}" var="assetCategory">
+                            <ui:repeat value="#{searchByTimeController.assetCategories}" var="assetCategory">
                                 <tr>
                                     <td>
                                         <h:commandLink value="#{assetCategory.name}"
-                                                       action="#{timeSelectionController.setSelectedAssetCategory(assetCategory)}"
-                                                       style="font-weight: #{timeSelectionController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}">
-                                            <f:ajax render=":searchByTimeForm"/>
+                                                       action="#{searchByTimeController.setAssetCategory(assetCategory)}"
+                                                       style="font-weight: #{searchByTimeController.assetCategory == assetCategory ? 'bold' : 'normal'}">
+                                            <f:ajax render="@form"/>
                                         </h:commandLink>
                                     </td>
                                 </tr>
@@ -51,7 +51,7 @@
                     <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right" iconAlign="right"
                                      style="width: 50%; margin-left: 50%;" ajax="true"
                                      action="#{searchByTimeController.nextStep}" update="@form"
-                                     disabled="#{timeSelectionController.selectedAssetCategory == null}"/>
+                                     disabled="#{searchByTimeController.assetCategory == null}"/>
                 </b:column>
             </b:row>
         </ui:fragment>
@@ -62,7 +62,7 @@
             <b:row>
                 <b:column colXs="12">
                     <h:outputText value="Select a Date" styleClass="lead"/>
-                    <p:calendar value="#{timeSelectionController.selectedDate}"
+                    <p:calendar value="#{searchByTimeController.date}"
                                 mindate="#{timeSelectionController.minDate}"
                                 mode="inline" styleClass="datepicker-fullwidth">
                         <f:ajax event="dateSelect" render=":searchByTimeForm"/>
@@ -82,7 +82,7 @@
                                          style="width: 50%;"
                                          ajax="true"
                                          action="#{searchByTimeController.nextStep}" update="@form"
-                                         disabled="#{timeSelectionController.selectedDate == null}"/>
+                                         disabled="#{searchByTimeController.date == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>
@@ -94,22 +94,21 @@
             <b:row>
                 <b:column colXs="12">
                     <h:outputText value="Start Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{timeSelectionController.selectedStartTime}"
-                                     styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                     disabled="#{timeSelectionController.selectedAssetCategory == null}">
+                    <h:selectOneMenu value="#{searchByTimeController.startTime}"
+                                     styleClass="big-select" converter="#{SegmentedTimeConverter}">
                         <f:selectItem itemValue="#{null}"
                                       itemLabel="--- Select a Time ---" noSelectionOption="true"/>
                         <f:selectItems
-                                value="#{timeSelectionController.getStartTimes(timeSelectionController.todaySelected)}"
+                                value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
                                 var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                         <f:ajax render=":searchByTimeForm"/>
                     </h:selectOneMenu>
                     <h:outputText value="End Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{timeSelectionController.selectedEndTime}"
+                    <h:selectOneMenu value="#{searchByTimeController.endTime}"
                                      styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                     disabled="#{timeSelectionController.selectedStartTime == null}">
+                                     disabled="#{searchByTimeController.startTime == null}">
                         <f:selectItems
-                                value="#{timeSelectionController.endTimes}"
+                                value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
                                 var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
                         <f:ajax render=":searchByTimeForm"/>
                     </h:selectOneMenu>
@@ -123,13 +122,13 @@
                                          style="width: 50%;"
                                          ajax="true"
                                          action="#{searchByTimeController.previousStep}" update="@form"/>
-                        <b:commandButton look="primary" value="Begin Search!" iconAwesome="search"
+                        <b:commandButton look="primary" value="Begin Search" iconAwesome="search"
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
-                                         action="#{availableAssetsController.searchForAssets(timeSelectionController.selectedAssetCategory, timeSelectionController.segmentedTimeRange)}"
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
                                          update=":includeGroup"
-                                         disabled="#{timeSelectionController.selectedEndTime == null}"/>
+                                         disabled="#{searchByTimeController.startTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>

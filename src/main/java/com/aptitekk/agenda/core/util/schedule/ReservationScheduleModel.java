@@ -6,7 +6,6 @@
 
 package com.aptitekk.agenda.core.util.schedule;
 
-import com.aptitekk.agenda.core.entities.AssetCategory;
 import com.aptitekk.agenda.core.entities.Reservation;
 import org.primefaces.model.LazyScheduleModel;
 
