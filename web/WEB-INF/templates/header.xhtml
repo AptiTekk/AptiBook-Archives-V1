@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -44,7 +44,7 @@
                                 </b:navLink>
                             </ui:repeat>
                         </b:dropMenu>
-                        <b:dropMenu value="Agenda Settings" iconAwesome="cogs"
+                        <b:dropMenu value="AptiBook Settings" iconAwesome="cogs"
                                     rendered="#{not empty settingsViewController.pages}">
                             <ui:repeat value="#{settingsViewController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"

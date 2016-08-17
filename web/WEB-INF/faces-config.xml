@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -11,10 +11,10 @@
         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
         version="2.2">
     <application>
-        <view-handler>com.aptitekk.agenda.web.viewHandlers.TenantViewHandler</view-handler>
+        <view-handler>com.aptitekk.aptibook.web.viewHandlers.TenantViewHandler</view-handler>
     </application>
     <!--<lifecycle>
-        <phase-listener>com.aptitekk.agenda.web.AgendaPhaseListener</phase-listener>
+        <phase-listener>com.aptitekk.aptibookok.web.JSFPhaseListener</phase-listener>
     </lifecycle>-->
     <navigation-rule>
         <display-name>*</display-name>
