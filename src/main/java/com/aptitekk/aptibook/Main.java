@@ -62,9 +62,6 @@ public class Main {
         //Add all web files
         recursiveAddAsWebResource(deployment, WEB);
 
-        //Add web.xml
-        deployment.setWebXML(new File(WEB_INF, "web.xml"));
-
         //Add all Maven dependencies
         deployment.addAllDependencies();
         // ---------------------------- END ShrinkWrap WAR Generation ------------------------
@@ -79,6 +76,7 @@ public class Main {
                 if (file.isDirectory())
                     recursiveAddAsClassesResource(deployment, file);
                 else {
+                    System.out.println(file.getPath());
                     if (file.getPath().startsWith(RESOURCES.getPath())) {
                         String filePath = file.getPath().substring(RESOURCES.getPath().length() + 1).replaceAll("\\\\", "/");
                         deployment.addAsWebInfResource(new ClassLoaderAsset(filePath, Main.class.getClassLoader()), "classes/" + filePath);
@@ -95,9 +93,14 @@ public class Main {
                 if (file.isDirectory())
                     recursiveAddAsWebResource(deployment, file);
                 else {
+                    System.out.println(file.getPath());
                     if (file.getPath().startsWith(WEB_INF.getPath())) {
-                        String filePath = file.getPath().substring(WEB_INF.getPath().length() + 1).replaceAll("\\\\", "/");
-                        deployment.addAsWebInfResource(file, filePath);
+                        if (file.getName().equals("web.xml")) {
+                            deployment.setWebXML(file);
+                        } else {
+                            String filePath = file.getPath().substring(WEB_INF.getPath().length() + 1).replaceAll("\\\\", "/");
+                            deployment.addAsWebInfResource(file, filePath);
+                        }
                     } else if (file.getPath().startsWith(WEB.getPath())) {
                         String filePath = file.getPath().substring(WEB.getPath().length() + 1).replaceAll("\\\\", "/");
                         deployment.addAsWebResource(file, filePath);
