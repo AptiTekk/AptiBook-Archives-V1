@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Agenda" />
+        <module name="AptiBook" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="Agenda" target="1.8" />
+      <module name="AptiBook" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

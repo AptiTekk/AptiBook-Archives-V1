@@ -1,6 +1,13 @@
+/*
+ * Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+ * Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+ * Proprietary and confidential.
+ */
+
 node {
-    def qaGearName = "agendaqa"
-    def qaUrl = "https://" + qaGearName + "-aptitekk.rhcloud.com"
+    def herokuAppName = "aptitekk-aptibook"
+    def liveUrl = "https://aptibook.aptitekk.com/"
+    dev pingUrl = "https://aptibook.aptitekk.com/ping"
     def mvnHome = tool "Maven"
 
     try {
@@ -8,42 +15,37 @@ node {
         checkoutFromGit()
 
         stage "Test"
-        runTests(mvnHome)
-        hipchatSend color: 'GREEN', message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Deploying to QA...", notify: false, v2enabled: true
+        //runTests(mvnHome)
+        slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
 
-        stage "Build"
-        buildStableWAR(mvnHome)
-
-        stage "Deploy to QA"
-        deployToQA(qaGearName, qaUrl)
-
-        stage "QA Verification"
-        if (!getQAInput(qaUrl)) {
+        stage "Deploy Approval"
+        if (!getDeploymentApproval()) {
             echo "Aborted by User."
-            hipchatSend color: 'YELLOW', message: "The ${env.JOB_NAME} Pipeline has been aborted by user. (Job ${env.BUILD_NUMBER})", notify: true, v2enabled: true
+            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by the user. (Job ${env.BUILD_NUMBER})"
             return
         }
+
+        stage "Deploy to Production"
+        deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl)
+
     } catch (err) {
-        hipchatSend color: 'RED', message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}", notify: true, v2enabled: true
+        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}). Error: ${err}"
         error err
     }
 }
 
 def checkoutFromGit() {
     def branch = "stable"
-    def url = "ssh://git@util.aptitekk.com:2005/ag/agenda-core.git"
+    def url = "ssh://git@util.aptitekk.com:2005/ab/aptibook.git"
     def credentialsId = "542239bb-3d63-40bc-9cfa-e5ed56a1fc5b"
 
     checkout([$class                           : "GitSCM",
               branches                         : [[name: "*/${branch}"]],
-              browser                          : [$class: "GogsGit"],
+              browser                          : [$class: 'BitbucketWeb', repoUrl: 'https://dev.aptitekk.com/git/projects/AB/repos/aptibook/browse'],
               doGenerateSubmoduleConfigurations: false,
               extensions                       : [],
               submoduleCfg                     : [],
-              userRemoteConfigs                : [[
-                                                          credentialsId: "${credentialsId}",
-                                                          url          : "${url}"
-                                                  ]]
+              userRemoteConfigs                : [[credentialsId: "${credentialsId}", url: "${url}"]]
     ])
 }
 
@@ -51,39 +53,36 @@ def runTests(mvnHome) {
     sh "${mvnHome}/bin/mvn clean install -P wildfly-managed -U"
 }
 
-def buildStableWAR(mvnHome) {
-    sh "${mvnHome}/bin/mvn clean install -P openshift -U"
-}
-
-def deployToQA(qaGearName, qaUrl) {
-    sh "rhc app stop ${qaGearName}"
-    sh "rhc scp ${qaGearName} upload deployments/ROOT.war wildfly/standalone/deployments/"
-    sh "rhc ssh ${qaGearName} \"rm -irf wildfly/welcome-content\""
-    sh "rhc app start ${qaGearName}"
+def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
+    sh "${mvnHome}/bin/mvn clean install -U"
+    sh "heroku maintenance:on --app ${herokuAppName}"
+    sh "git push heroku stable:master"
+    sleep 60
+    sh "heroku maintenance:off --app ${herokuAppName}"
 
     def i = 0;
 
-    while (i < 10) {
-        sh "curl -o /dev/null --silent --head --write-out '%{http_code}' ${qaUrl} > .${env.JOB_NAME}${env.BUILD_NUMBER}qa-status"
-        def status = readFile ".${env.JOB_NAME}${env.BUILD_NUMBER}qa-status"
+    while (i < 60) {
+        sh "curl --silent ${pingUrl} > ping"
+        def response = readFile "ping"
 
-        if (status == "200") {
+        if (response == "pong") {
             break
         }
 
-        sleep 30
+        sleep 5
         i++
     }
 
     if (i == 10) {
-        error "Could not connect to QA deployment after 5 minutes. Did it deploy?"
+        error "Could not connect to Production deployment after 5 minutes. Did it deploy?"
     }
 }
 
-def boolean getQAInput(qaUrl) {
+def boolean getDeploymentApproval() {
     try {
-        hipchatSend color: 'GREEN', message: "A new QA build is ready for testing! Access it here: ${qaUrl}", notify: true, v2enabled: true
-        input message: "Please test ${qaUrl} and proceed when ready.", ok: "Proceed"
+        slackSend color: "#4272b7", message: "Please approve or abort the pending deployment."
+        input message: "Please approve when you are ready to deploy.", ok: "Approve"
         return true
     } catch (ignored) {
         return false

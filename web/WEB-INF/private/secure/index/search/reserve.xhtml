@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -13,7 +13,6 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
 >
 <ui:composition>
     <b:container>
@@ -43,8 +42,11 @@
                         <b:column colXs="12" colMd="6">
                             <b:row>
                                 <b:column colXs="12">
-                                    <b:inputText value="#{requestReservationViewController.reservationTitle}"
-                                                 a:placeholder="What is this reservation for?" label="Title:"/>
+                                    <b:inputText label="Title:"
+                                                 placeholder="What is this reservation for?"
+                                                 value="#{requestReservationViewController.reservationTitle}"
+                                                 required="true"
+                                                 requiredMessage="This is required."/>
                                 </b:column>
                             </b:row>
                             <b:row>
@@ -55,10 +57,10 @@
                                         <ui:fragment rendered="#{reservationField.multiLine != true}">
                                             <b:message for="@next" showSummary="false" showDetail="true"/>
                                             <b:inputText
-                                                    value="#{requestReservationViewController.fieldMap[reservationField]}"
                                                     label="#{reservationField.title}:"
+                                                    value="#{requestReservationViewController.fieldMap[reservationField]}"
                                                     required="#{reservationField.required}"
-                                                    requiredMessage="This is required"/>
+                                                    requiredMessage="This is required."/>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{reservationField.multiLine}">
                                             <b:message for="@next" showSummary="false" showDetail="true"/>
@@ -66,7 +68,7 @@
                                                     value="#{requestReservationViewController.fieldMap[reservationField]}"
                                                     rows="3" label="#{reservationField.title}:"
                                                     required="#{reservationField.required}"
-                                                    requiredMessage="This is required"/>
+                                                    requiredMessage="This is required."/>
                                         </ui:fragment>
                                     </ui:repeat>
                                 </b:column>
