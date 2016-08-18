@@ -7,7 +7,7 @@
 node {
     def herokuAppName = "aptitekk-aptibook"
     def liveUrl = "https://aptibook.aptitekk.com/"
-    dev pingUrl = "https://aptibook.aptitekk.com/ping"
+    def pingUrl = "https://aptibook.aptitekk.com/ping"
     def mvnHome = tool "Maven"
 
     try {
@@ -56,7 +56,8 @@ def runTests(mvnHome) {
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     sh "${mvnHome}/bin/mvn clean install -U"
     sh "heroku maintenance:on --app ${herokuAppName}"
-    sh "git push heroku stable:master"
+    sh "heroku git:remote --app ${herokuAppName}"
+    sh "git push heroku HEAD:master"
     sleep 60
     sh "heroku maintenance:off --app ${herokuAppName}"
 
@@ -77,6 +78,8 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     if (i == 10) {
         error "Could not connect to Production deployment after 5 minutes. Did it deploy?"
     }
+
+    slackSend color: "good", message: "A new deployment of ${herokuAppName} has been deployed successfully at ${liveUrl}."
 }
 
 def boolean getDeploymentApproval() {
