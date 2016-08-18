@@ -1,0 +1,452 @@
+/*
+ * Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+ * Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+ * Proprietary and confidential.
+ */
+
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.6) url("#{resource['images:spinner.gif']}") no-repeat center;
+    transition: opacity 0.1s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+}
+
+._hiddenUplFile {
+    top: 0;
+    margin: 0;
+    margin-left: -12px !important;
+    cursor: inherit;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    height: 30px;
+    width: 80px;
+}
+
+.texture-bg {
+    background-image: url("#{resource['images:background.png']}");
+}
+
+hr {
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.navbar {
+    background-color: white;
+    box-shadow: black 0 -5px 20px 1px;
+}
+
+.navbar-fixed-top {
+    border: none !important;
+}
+
+.navbar-toggle .icon-bar {
+    background-color: #6D6E71;
+}
+
+.navbar-brand {
+    padding-top: 5px !important;
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav > li > .dropdown-menu {
+    width: 100%;
+}
+
+.navbar-nav > li > .dropdown-menu > li > a {
+    padding: 3px 15px !important;
+}
+
+.navbar-nav > li > .dropdown-menu > li > a > span {
+    margin-right: 5px;
+}
+
+.navbar-nav > li > .dropdown-menu .fa {
+    width: 16px;
+}
+
+.manage-nav-link a::before {
+    content: '<span class="glyphicon glyphicon-edit" />';
+}
+
+.footer {
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    background-color: #f5f5f5;
+    padding-top: 20px;
+    box-shadow: 0 10px 25px 0;
+}
+
+#main-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox label.bf-no-message {
+    padding-left: 0 !important;
+}
+
+.checkbox {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* ---------------------------------- BEGIN RESULTS PAGE MODIFICATIONS ---------------------------------- */
+
+#results-time-selection {
+    font-size: 18px;
+}
+
+/* ---------------------------------- END RESULTS PAGE MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN SIDEBAR MODIFICATIONS ---------------------------------- */
+
+#sidebar .nav > li > a {
+    color: #777;
+}
+
+#sidebar .nav > li.active > a {
+    font-weight: bold;
+    color: #4272b7;
+}
+
+#sidebar .nav > li > a > span {
+    margin-right: 5px;
+}
+
+#sidebar .nav > li > a > span > i {
+    width: 16px;
+}
+
+/* ---------------------------------- END SIDEBAR MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN PRIMEFACES UI MODIFICATIONS ---------------------------------- */
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+    background-image: none;
+    text-shadow: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.ui-growl {
+    margin-top: 40px;
+}
+
+div.ui-autocomplete, div.ui-autocomplete > ul {
+    width: 100%;
+}
+
+.dropdown > .ui-autocomplete-multiple-container.ui-inputfield {
+    display: inline-block;
+    width: calc(100% - 2.4em);
+}
+
+.dropdown.ui-autocomplete .ui-autocomplete-dropdown {
+    height: calc(100% - 4px);
+}
+
+.ui-autocomplete-token {
+    font-size: 14px;
+    border: 1px solid #4272b7;
+    background: none !important;
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
+    opacity: 1;
+    background-color: #eeeeee;
+}
+
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+    border-radius: 4px;
+}
+
+/* ---------------------------------- END PRIMEFACES UI MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN ACCORDION ---------------------------------- */
+
+.ui-accordion .ui-accordion-header.ui-state-active {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ui-accordion .ui-accordion-content.ui-widget-content {
+    background-color: #eeeeee;
+}
+
+/* ---------------------------------- END ACCORDION ---------------------------------- */
+
+/* ---------------------------------- BEGIN DATATABLE ---------------------------------- */
+
+/* Styles a panel like a BootsFaces data table */
+.dataTablePanel.panel {
+    border-radius: 0;
+}
+
+.dataTablePanel > .panel-heading {
+    background-color: #fff !important;
+    border-bottom-width: 2px;
+}
+
+.dataTablePanel > .panel-heading > .panel-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.dataTablePanel .panel-body {
+    background-color: #f9f9f9;
+}
+
+.ui-datatable .ui-datatable-tablewrapper {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 2px;
+}
+
+.ui-datatable th {
+    cursor: initial;
+    border-radius: 0;
+}
+
+.ui-datatable th:first-child {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.ui-datatable th:last-child {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.ui-datatable tbody, .ui-datatable tr, .ui-datatable td, .ui-datatable th {
+    border-style: none !important;
+}
+
+/* ---------------------------------- END DATATABLE ---------------------------------- */
+
+/* ---------------------------------- BEGIN DATEPICKER ---------------------------------- */
+
+.ui-datepicker td.ui-state-disabled {
+    opacity: 0 !important;
+}
+
+.ui-datepicker td > a.ui-state-highlight {
+    background-color: #f5f5f5;
+    color: inherit !important;
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.ui-datepicker td > a.ui-state-hover {
+    background-color: #e6e6e6;
+    color: inherit !important;
+}
+
+.ui-datepicker td > a.ui-state-active {
+    background-color: #0081c2;
+    color: #FFF !important;
+}
+
+.ui-datepicker td > a {
+    border: none !important;
+    text-align: center !important;
+    padding: 5px !important;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    color: #333 !important;
+    border: none;
+}
+
+.ui-datepicker .ui-datepicker-header > a {
+    top: 3px !important;
+}
+
+.ui-datepicker .ui-datepicker-header > a > span {
+    color: #333 !important;
+}
+
+.ui-datepicker .ui-datepicker-header > a.ui-state-hover {
+    top: 3px !important;
+    background: none !important;
+}
+
+.ui-datepicker .ui-datepicker-header > a.ui-state-hover > span {
+    color: #0081c2 !important;
+}
+
+.ui-datepicker .ui-datepicker-header > a.ui-datepicker-next-hover {
+    right: 2px !important;
+}
+
+.ui-datepicker .ui-datepicker-header > a.ui-datepicker-prev-hover {
+    left: 2px !important;
+}
+
+@media ( min-width: 992px) {
+    .ui-datepicker .ui-datepicker-inline {
+        width: 100%;
+    }
+}
+
+@media ( max-width: 767px) {
+    .ui-datepicker .ui-datepicker-inline {
+        width: 100%;
+        font-size: 20px;
+    }
+}
+
+.ui-datepicker .ui-datepicker-calendar {
+    margin: 0 !important;
+}
+
+.ui-datepicker.ui-datepicker-inline {
+    padding: 2px !important;
+}
+
+.datepicker-fullwidth .ui-datepicker {
+    width: 100%;
+}
+
+.inline-calendar-form-control > input {
+    height: 34px;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+/* ---------------------------------- END DATEPICKER ---------------------------------- */
+
+/* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
+
+.fc-event {
+    border-color: #0081c2 !important;
+    background-color: #0081c2 !important;
+}
+
+td.fc-day.fc-today {
+    background-color: #effaff !important;
+}
+
+td.fc-day-number.fc-today {
+    color: inherit;
+}
+
+/* ---------------------------------- END SCHEDULE ---------------------------------- */
+
+/* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
+
+.ui-tree {
+    width: 100% !important;
+}
+
+.ui-tree .ui-treenode {
+    border-left: 1px dashed #aaa;
+}
+
+.ui-draggable-dragging {
+    border: 1px dotted black;
+    height: 25px !important;
+}
+
+.ui-tree .ui-tree-selectable .ui-treenode-label, .ui-tree .ui-tree-selectable .ui-treenode-icon,
+.ui-tree .ui-treenode-label.ui-state-hover, .ui-tree .ui-treenode-label.ui-state-highlight {
+    border: 1px solid #ccc !important;
+    border-radius: 0 !important;
+}
+
+.ui-tree-droppoint {
+    height: 10px !important;
+}
+
+.ui-tree.ui-widget-content {
+    border: none !important;
+}
+
+.ui-tree .ui-treenode-label {
+    padding: 2px 5px !important;
+}
+
+.ui-tree .ui-tree-toggler {
+    margin-top: 4px;
+    margin-right: 2px;
+}
+
+.ui-tree .ui-chkbox-box {
+    width: 20px !important;
+    height: 22px !important;
+    margin-top: 2px;
+}
+
+.ui-chkbox-icon.ui-icon {
+    margin-left: 1px;
+}
+
+/* ---------------------------------- END DRAG DROP ---------------------------------- */
+
+/* ---------------------------------- BEGIN LIGHTBOX ---------------------------------- */
+
+.ui-widget-overlay {
+    background: rgba(255, 255, 255, 0.6);
+    opacity: 1;
+}
+
+.ui-lightbox-nav-right, .ui-lightbox-nav-left {
+    display: none !important;
+}
+
+.ui-lightbox-caption {
+    height: 24px;
+}
+
+.ui-lightbox-close {
+    padding: 0 !important;
+}
+
+/* ---------------------------------- END LIGHTBOX ---------------------------------- */
+
+select.big-select {
+    display: block;
+    font-size: 20px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 0 12px;
+    margin-bottom: 10px;
+}
+
+select.big-select:disabled {
+    background-color: #eee;
+}
+
+select.form-control {
+    height: 34px !important;
+}
+
+.btn.btn-large {
+    font-size: 30px;
+}

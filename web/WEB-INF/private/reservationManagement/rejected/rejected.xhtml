@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -17,7 +17,7 @@
 <ui:composition>
     <h:panelGroup id="rejectedReservations">
         <b:message for="rejectedReservations" showSummary="false" showDetail="true"/>
-        <ui:fragment rendered="#{empty approvedReservationManagementController.assetCategories}">
+        <ui:fragment rendered="#{empty rejectedReservationManagementController.assetCategories}">
             <b:row>
                 <b:column colXs="12">
                     <h4>No Reservations have been Rejected.</h4>
@@ -115,12 +115,12 @@
                                                             var="reservationField">
                                                         <ui:fragment rendered="#{reservationField.multiLine}">
                                                             <b:inputTextarea label="#{reservationField.title}"
-                                                                             value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                             value="#{reservationFieldController.getEntryTextForReservationField(reservationDetails.reservation, reservationField)}"
                                                                              rows="3" readonly="true"/>
                                                         </ui:fragment>
                                                         <ui:fragment rendered="#{not reservationField.multiLine}">
                                                             <b:inputText label="#{reservationField.title}"
-                                                                         value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                         value="#{reservationFieldController.getEntryTextForReservationField(reservationDetails.reservation, reservationField)}"
                                                                          readonly="true"/>
                                                         </ui:fragment>
                                                     </ui:repeat>

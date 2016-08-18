@@ -1,0 +1,69 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition>
+    <style type="text/css">
+        .filter-checkboxes input {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+        }
+
+        .filter-checkboxes label {
+            font-size: 12pt;
+        }
+    </style>
+    <b:container fluid="true">
+        <b:row>
+            <b:column colXs="0" colSm="0" colMd="2">
+                <h3>Calendar Options</h3>
+                <hr/>
+
+                <h:form>
+                    <h4>Displayed Categories</h4>
+                    <h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
+                                          layout="pageDirection" converter="#{assetCategoryConverter}"
+                                          styleClass="filter-checkboxes">
+                        <f:selectItems value="#{frontPageController.assetCategories}" var="category"
+                                       itemValue="#{category}" itemLabel="#{category.name}"/>
+                        <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
+                                execute="@this"/>
+                    </h:selectManyCheckbox>
+                </h:form>
+            </b:column>
+            <b:column colXs="0" colSm="0" colMd="7">
+                <h3>Reservation Calendar</h3>
+                <hr/>
+                <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
+                            timeZone="#{frontPageController.timeZone}" aspectRatio="1.6" allDaySlot="false">
+                    <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
+                            update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
+                </p:schedule>
+            </b:column>
+            <b:column colXs="12" colMd="3">
+                <h3>New Reservation</h3>
+                <hr/>
+
+                <b:panel look="default" title="Search By Time" collapsible="false" showCollapseLink="false">
+                    <ui:include src="search/byTime/searchByTime.xhtml"/>
+                </b:panel>
+            </b:column>
+        </b:row>
+    </b:container>
+
+    <ui:include src="viewEventModal.xhtml"/>
+</ui:composition>
+</html>

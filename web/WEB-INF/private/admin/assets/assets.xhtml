@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -55,12 +55,6 @@
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
-                                            Availability
-                                        </f:facet>
-                                        #{asset.availabilityStart.timeString} - #{asset.availabilityEnd.timeString}
-                                    </h:column>
-                                    <h:column>
-                                        <f:facet name="header">
                                             Owner Group
                                         </f:facet>
                                         #{asset.owner.name}
@@ -71,8 +65,12 @@
                             <div class="form-group">
                                 <!-- Add new Asset Button -->
                                 <h:commandButton styleClass="btn btn-primary"
-                                                 value="Add New Asset" style="display: inline-block"
-                                                 action="#{assetSettingsController.addNewAsset(assetCategory)}">
+                                                 value="Add New Asset"
+                                                 style="display: inline-block"
+                                                 action="#{newAssetController.setAssetCategory(assetCategory)}"
+                                                 ajax="true"
+                                                 update=":newAssetModalForm"
+                                                 onclick="$('.newAssetModal').modal();">
                                     <f:ajax render="@form"
                                             onevent="loading"/>
                                 </h:commandButton>
@@ -85,6 +83,7 @@
 
         <ui:include src="editAssetModal.xhtml"/>
         <ui:include src="deleteAssetModal.xhtml"/>
+        <ui:include src="newAssetModal.xhtml"/>
 
     </h:panelGroup>
 </ui:composition>

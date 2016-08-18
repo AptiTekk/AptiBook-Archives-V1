@@ -1,0 +1,19 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!-- Created 8/13/2016-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+
+    <!-- Removes the "availabilitystart" and end columns from asset . -->
+    <changeSet id="7" author="MitchTalmadge">
+        <dropColumn tableName="asset" columnName="availabilitystart" />
+        <dropColumn tableName="asset" columnName="availabilityend" />
+    </changeSet>
+
+</databaseChangeLog>

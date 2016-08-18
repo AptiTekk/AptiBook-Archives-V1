@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -175,6 +175,16 @@
                                         <h:inputSecret styleClass="form-control"
                                                        value="#{userEditController.confirmPassword}"
                                                        maxlength="32"/>
+                                    </div>
+                                </b:column>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Recieve Email Notifications:"
+                                               styleClass="col-xs-3 control-label"/>
+                                <b:column colXs="9">
+                                    <div class="input-group">
+                                        <b:switch value="#{userEditController.wantsEmailNotifications}"
+                                                  styleClass="form-control" />
                                     </div>
                                 </b:column>
                             </div>

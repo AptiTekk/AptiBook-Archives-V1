@@ -1,6 +1,6 @@
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
-  ~ Unauthorized copying of any part of Agenda, via any medium, is strictly prohibited.
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
@@ -116,12 +116,12 @@
                                                             var="reservationField">
                                                         <ui:fragment rendered="#{reservationField.multiLine}">
                                                             <b:inputTextarea label="#{reservationField.title}"
-                                                                    value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                    value="#{reservationFieldController.getEntryTextForReservationField(reservationDetails.reservation, reservationField)}"
                                                                     rows="3" readonly="true"/>
                                                         </ui:fragment>
                                                         <ui:fragment rendered="#{not reservationField.multiLine}">
                                                             <b:inputText label="#{reservationField.title}"
-                                                                    value="#{reservationDetails.reservation.getReservationFieldEntryText(reservationField)}"
+                                                                    value="#{reservationFieldController.getEntryTextForReservationField(reservationDetails.reservation, reservationField)}"
                                                                     readonly="true"/>
                                                         </ui:fragment>
                                                     </ui:repeat>
