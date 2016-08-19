@@ -31,9 +31,9 @@ import java.util.*;
 public class EmailService implements Serializable {
 
     //private Properties mailSessionProps = new Properties();
-    String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
-    Client client = new Client(API_KEY);
-    String endPoint = "https://api.sparkpost.com/api/v1";
+    private String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
+    private Client client = new Client(API_KEY);
+    private String endPoint = "https://api.sparkpost.com/api/v1";
 
     @Inject
     private PropertiesService propertiesService;
