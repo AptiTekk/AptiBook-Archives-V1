@@ -89,13 +89,10 @@ public class EmailService implements Serializable {
             transmission.setContentAttributes(template);
         }
         // Send the Email
-        RestConnection connection = new RestConnection(client, getEndPoint());
+        RestConnection connection = new RestConnection(client, endPoint);
         Response response = ResourceTransmissions.create(connection, 0, transmission);
 
         LogManager.logDebug("Transmission Response: " + response);
     }
 
-    public String getEndPoint() {
-        return endPoint;
-    }
 }
