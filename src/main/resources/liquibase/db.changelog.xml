@@ -17,5 +17,6 @@
     <include file="changeSets/5__Add_Reservation_Field_Required.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/6__Add_User_Field_Receive_Emails.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/7__Remove_Asset_Available_Times.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/8__Remove_Email_Enum_Properties.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

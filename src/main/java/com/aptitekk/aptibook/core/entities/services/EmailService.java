@@ -28,8 +28,6 @@ import java.util.Properties;
 public class EmailService implements Serializable {
 
     private Properties mailSessionProps = new Properties();
-    private String username;
-    private String password;
 
     @Inject
     private PropertiesService propertiesService;
@@ -40,14 +38,25 @@ public class EmailService implements Serializable {
     }
 
     public void resetProperties() {
-        mailSessionProps.put("mail.smtp.auth", propertiesService.getPropertyByKey(Property.Key.EMAIL_AUTH).getPropertyValue());
-        mailSessionProps.put("mail.smtp.starttls.enable", propertiesService.getPropertyByKey(Property.Key.EMAIL_STARTTLS).getPropertyValue());
-        mailSessionProps.put("mail.smtp.host", propertiesService.getPropertyByKey(Property.Key.SMTP_HOST).getPropertyValue());
-        mailSessionProps.put("mail.smtp.user", (username = propertiesService.getPropertyByKey(Property.Key.EMAIL_USERNAME).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.password", (password = propertiesService.getPropertyByKey(Property.Key.EMAIL_PASSWORD).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.port", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_PORT).getPropertyValue()));
+
+
+        mailSessionProps.put("mail.smtp.host", System.getenv("SPARKPOST_SMTP_HOST"));
+        mailSessionProps.put("mail.smtp.password", System.getenv("SPARKPOST_SMTP_PASSWORD"));
+        mailSessionProps.put("mail.smtp.port", System.getenv("SPARKPOST_SMTP_PORT"));
+        mailSessionProps.put("mail.smtp.user", System.getenv("SPARKPOST_SMTP_USERNAME"));
+        mailSessionProps.put("mail.smtp.starttls.enable","true");
+        mailSessionProps.put("mail.smtp.auth","true");
+        mailSessionProps.put("mail.smtp.connectiontimeout",5000);
+        mailSessionProps.put("mail.smtp.timeout",5000);
+
+        /*mailSessionProps.put("mail.smtp.auth", propertiesService.getPropertyByKey(Property.Key.EMAIL_AUTH).getPropertyValue());
+       / mailSessionProps.put("mail.smtp.starttls.enable", propertiesService.getPropertyByKey(Property.Key.EMAIL_STARTTLS).getPropertyValue());
+      /  mailSessionProps.put("mail.smtp.host", propertiesService.getPropertyByKey(Property.Key.SMTP_HOST).getPropertyValue());
+       / mailSessionProps.put("mail.smtp.user", (username = propertiesService.getPropertyByKey(Property.Key.EMAIL_USERNAME).getPropertyValue()));
+      /  mailSessionProps.put("mail.smtp.password", (password = propertiesService.getPropertyByKey(Property.Key.EMAIL_PASSWORD).getPropertyValue()));
+       / mailSessionProps.put("mail.smtp.port", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_PORT).getPropertyValue()));
         mailSessionProps.put("mail.smtp.connectiontimeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.EMAIL_CONNECTIONTIMEOUT).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.timeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_TIMEOUT).getPropertyValue()));
+        mailSessionProps.put("mail.smtp.timeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_TIMEOUT).getPropertyValue()));*/
     }
 
     public void sendEmailNotification(Notification notification) {
@@ -56,13 +65,13 @@ public class EmailService implements Serializable {
 
         Session mailSession = Session.getInstance(mailSessionProps, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(username, password);
+                return new PasswordAuthentication(System.getenv("SPARKPOST_SMTP_USERNAME"), System.getenv("SPARKPOST_SMTP_PASSWORD"));
             }
         });
 
         try {
             MimeMessage mimeMessage = new MimeMessage(mailSession);
-            Address from = new InternetAddress(username);
+            Address from = new InternetAddress("noreply@aptibook.aptitekk.com");
             mimeMessage.setFrom(from);
             Address recipient = new InternetAddress(java.net.IDN.toASCII(notification.getUser().getEmail()));
             mimeMessage.setRecipient(Message.RecipientType.TO, recipient);
