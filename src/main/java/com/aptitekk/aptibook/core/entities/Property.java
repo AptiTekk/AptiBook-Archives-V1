@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.core.entities;
 
-import com.aptitekk.aptibook.core.entities.propertyChangeListeners.EmailPropertyChangeListener;
+
 import com.aptitekk.aptibook.core.entities.util.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -26,7 +26,6 @@ public class Property extends MultiTenantEntity implements Serializable {
     public enum Group {
 
         FRONT_PAGE("Front Page", null);
-        //EMAIL_SETTINGS("Email Settings", EmailPropertyChangeListener.class);
 
         private String friendlyName;
         private Class<? extends ChangeListener> propertyGroupChangeListenerClass;
@@ -79,15 +78,6 @@ public class Property extends MultiTenantEntity implements Serializable {
                 "Default Policies Message.",
                 Group.FRONT_PAGE, 3, false, 256, null, null);
 
-       /* EMAIL_AUTH("Email Authentication", "true", Group.EMAIL_SETTINGS, 0, false, 5, "^true|false$", "Please enter true or false."),
-        EMAIL_STARTTLS("Start TLS enable", "true", Group.EMAIL_SETTINGS, 0, false, 5, "^true|false$", "Please enter true of false"),
-        SMTP_HOST("SMTP Host", "smtp.gmail.com", Group.EMAIL_SETTINGS, 0, false, 20, null, ""),
-        EMAIL_USERNAME("Username", "Username", Group.EMAIL_SETTINGS, 0, false, 20, null, ""),
-        EMAIL_PASSWORD("Password", "Password", Group.EMAIL_SETTINGS, 0, true, 40, null, ""),
-        SMTP_PORT("Post number", "587", Group.EMAIL_SETTINGS, 0, false, 5,  "[0-9]+", "Only numbers are allowed"),
-        EMAIL_CONNECTIONTIMEOUT("Connection time out(milliseconds)", "5000", Group.EMAIL_SETTINGS, 0, false, 8,"[0-9]+", "Only numbers are allowed"),
-        SMTP_TIMEOUT("SMTP timeout", "5000", Group.EMAIL_SETTINGS, 0, false,8,"[0-9]+", "Only numbers are allowed" );
-*/
         private final String friendlyName;
         private final String defaultValue;
         private final Group group;

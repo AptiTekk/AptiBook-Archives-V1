@@ -8,90 +8,94 @@ package com.aptitekk.aptibook.core.entities.services;
 
 
 import com.aptitekk.aptibook.core.entities.Notification;
-import com.aptitekk.aptibook.core.entities.Property;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.sparkpost.Client;
+import com.sparkpost.exception.SparkPostException;
+import com.sparkpost.model.AddressAttributes;
+import com.sparkpost.model.RecipientAttributes;
+import com.sparkpost.model.TemplateContentAttributes;
+import com.sparkpost.model.TransmissionWithRecipientArray;
+import com.sparkpost.model.responses.Response;
+import com.sparkpost.resources.ResourceTransmissions;
+import com.sparkpost.transport.RestConnection;
+
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
 
 
 @Stateless
 public class EmailService implements Serializable {
 
-    private Properties mailSessionProps = new Properties();
+    //private Properties mailSessionProps = new Properties();
+    String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
+    Client client = new Client(API_KEY);
+    String endPoint = "https://api.sparkpost.com/api/v1";
 
     @Inject
     private PropertiesService propertiesService;
 
     @PostConstruct
     private void init() {
-        resetProperties();
     }
 
-    public void resetProperties() {
 
-
-        mailSessionProps.put("mail.smtp.host", System.getenv("SPARKPOST_SMTP_HOST"));
-        mailSessionProps.put("mail.smtp.password", System.getenv("SPARKPOST_SMTP_PASSWORD"));
-        mailSessionProps.put("mail.smtp.port", System.getenv("SPARKPOST_SMTP_PORT"));
-        mailSessionProps.put("mail.smtp.user", System.getenv("SPARKPOST_SMTP_USERNAME"));
-        mailSessionProps.put("mail.smtp.starttls.enable","true");
-        mailSessionProps.put("mail.smtp.auth","true");
-        mailSessionProps.put("mail.smtp.connectiontimeout",5000);
-        mailSessionProps.put("mail.smtp.timeout",5000);
-
-        /*mailSessionProps.put("mail.smtp.auth", propertiesService.getPropertyByKey(Property.Key.EMAIL_AUTH).getPropertyValue());
-       / mailSessionProps.put("mail.smtp.starttls.enable", propertiesService.getPropertyByKey(Property.Key.EMAIL_STARTTLS).getPropertyValue());
-      /  mailSessionProps.put("mail.smtp.host", propertiesService.getPropertyByKey(Property.Key.SMTP_HOST).getPropertyValue());
-       / mailSessionProps.put("mail.smtp.user", (username = propertiesService.getPropertyByKey(Property.Key.EMAIL_USERNAME).getPropertyValue()));
-      /  mailSessionProps.put("mail.smtp.password", (password = propertiesService.getPropertyByKey(Property.Key.EMAIL_PASSWORD).getPropertyValue()));
-       / mailSessionProps.put("mail.smtp.port", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_PORT).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.connectiontimeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.EMAIL_CONNECTIONTIMEOUT).getPropertyValue()));
-        mailSessionProps.put("mail.smtp.timeout", Integer.parseInt(propertiesService.getPropertyByKey(Property.Key.SMTP_TIMEOUT).getPropertyValue()));*/
-    }
-
-    public void sendEmailNotification(Notification notification) {
+    public void sendEmailNotification(Notification notification) throws SparkPostException {
         if (notification.getUser() == null || notification.getUser().getEmail() == null || notification.getUser().getEmail().isEmpty())
             return;
-
-        Session mailSession = Session.getInstance(mailSessionProps, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(System.getenv("SPARKPOST_SMTP_USERNAME"), System.getenv("SPARKPOST_SMTP_PASSWORD"));
-            }
-        });
-
-        try {
-            MimeMessage mimeMessage = new MimeMessage(mailSession);
-            Address from = new InternetAddress("noreply@aptibook.aptitekk.com");
-            mimeMessage.setFrom(from);
-            Address recipient = new InternetAddress(java.net.IDN.toASCII(notification.getUser().getEmail()));
-            mimeMessage.setRecipient(Message.RecipientType.TO, recipient);
-            mimeMessage.setSubject(notification.getSubject());
-            mimeMessage.setSentDate(new Date());
-            BodyPart messageBodyPart = new MimeBodyPart();
-            // Fill the message
-            messageBodyPart.setContent(notification.getBody(), "text/html");
-            // Create a multipart message
-            Multipart multipart = new MimeMultipart();
-            // Set text message part
-            multipart.addBodyPart(messageBodyPart);
-            /*Next would be attachement, but not gonna worry about that yet*/
-            mimeMessage.setContent(multipart);
-            Transport.send(mimeMessage);
-            mailSession.getTransport().close(); //technically not needed, because not sending through mailSession object
-        } catch (javax.mail.MessagingException e) {
-            LogManager.logError("Error sending email");
-            e.printStackTrace();
-        }
+        String[] recipients = new String[1];
+        recipients[0] = java.net.IDN.toASCII(notification.getUser().getEmail());
+        String from = "noreply@aptibook.aptitekk.com";
+        String subject = notification.getSubject();
+        String body = notification.getBody();
+        String templateId = "notification";
+        sendEmail(from, recipients, subject, body, templateId);
     }
 
+
+    private void sendEmail(String from, String[] recipients, String subject, String body, String templateId) throws SparkPostException {
+        TransmissionWithRecipientArray transmission = new TransmissionWithRecipientArray();
+
+        // Populate Recipients
+        List<RecipientAttributes> recipientArray = new ArrayList<RecipientAttributes>();
+        for (String recipient : recipients) {
+            RecipientAttributes recipientAttribs = new RecipientAttributes();
+            recipientAttribs.setAddress(new AddressAttributes(recipient));
+            recipientArray.add(recipientAttribs);
+        }
+        transmission.setRecipientArray(recipientArray);
+
+        // Populate Substitution Data
+        Map<String, Object> substitutionData = new HashMap<String, Object>();
+        substitutionData.put("yourContent", "You can add substitution data too.");
+        transmission.setSubstitutionData(substitutionData);
+
+        // Populate Email Body, Will Change if Using a Template
+        TemplateContentAttributes contentAttributes = new TemplateContentAttributes();
+        contentAttributes.setFrom(new AddressAttributes(from));
+        contentAttributes.setSubject(subject);
+        contentAttributes.setText(body);
+        contentAttributes.setHtml("<p>Your <b>HTML</b> content here.  {{yourContent}}</p>");
+        transmission.setContentAttributes(contentAttributes);
+
+        //Set Template if Template id is Passed in
+        if (templateId != null) {
+            TemplateContentAttributes template = new TemplateContentAttributes();
+            template.setUseDraftTemplate(false); //Set to true if you want to use draft.
+            template.setTemplateId(templateId);
+            transmission.setContentAttributes(template);
+        }
+        // Send the Email
+        RestConnection connection = new RestConnection(client, getEndPoint());
+        Response response = ResourceTransmissions.create(connection, 0, transmission);
+
+        LogManager.logDebug("Transmission Response: " + response);
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
 }
