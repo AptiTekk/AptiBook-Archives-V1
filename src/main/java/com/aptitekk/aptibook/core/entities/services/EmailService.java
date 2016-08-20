@@ -15,52 +15,77 @@ import com.sparkpost.model.AddressAttributes;
 import com.sparkpost.model.RecipientAttributes;
 import com.sparkpost.model.TemplateContentAttributes;
 import com.sparkpost.model.TransmissionWithRecipientArray;
-import com.sparkpost.model.responses.Response;
 import com.sparkpost.resources.ResourceTransmissions;
 import com.sparkpost.transport.RestConnection;
-
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Stateless
 public class EmailService implements Serializable {
 
-    //private Properties mailSessionProps = new Properties();
-    private String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
-    private Client client = new Client(API_KEY);
-    private String endPoint = "https://api.sparkpost.com/api/v1";
+    private static final String API_KEY = System.getenv("SPARKPOST_API_KEY");
+    private static final String API_URL = System.getenv("SPARKPOST_API_URL");
 
-    @Inject
-    private PropertiesService propertiesService;
+    private Client client;
 
     @PostConstruct
     private void init() {
+        if (API_KEY != null && API_URL != null) {
+            client = new Client(API_KEY);
+        } else {
+            LogManager.logError("Could not create EmailService Client. API_KEY or API_URL is null!");
+            LogManager.logError("API_KEY: " + API_KEY + " | API_URL: " + API_URL);
+        }
     }
 
 
     public void sendEmailNotification(Notification notification) throws SparkPostException {
-        if (notification.getUser() == null || notification.getUser().getEmail() == null || notification.getUser().getEmail().isEmpty())
+        if (notification.getUser() == null || notification.getUser().getEmail() == null || notification.getUser().getEmail().isEmpty() || !notification.getUser().getWantsEmailNotifications())
             return;
-        String[] recipients = new String[1];
-        recipients[0] = java.net.IDN.toASCII(notification.getUser().getEmail());
-        String from = "noreply@aptibook.aptitekk.com";
-        String subject = notification.getSubject();
-        String body = notification.getBody();
-        String templateId = "notification";
-        sendEmail(from, recipients, subject, body, templateId);
+
+        Map<String, Object> substitutionData = new HashMap<>();
+        substitutionData.put("subject", notification.getSubject());
+        substitutionData.put("body", notification.getBody());
+
+        sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getEmail()));
     }
 
+    /**
+     * Sends an email to the specified recipients with SparkPost using the specified template ID, substitution data.
+     *
+     * @param templateId       The ID of the template from which the email will derive. Can be found in the SparkPost control panel.
+     * @param substitutionData The substitution data, as required by the template.
+     * @param recipients       The recipients to send the email to. More than one may be specified.
+     * @throws SparkPostException If a problem occurs while sending the emails.
+     */
+    private void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) throws SparkPostException {
+        if (client == null)
+            return;
 
-    private void sendEmail(String from, String[] recipients, String subject, String body, String templateId) throws SparkPostException {
+        if (templateId == null || templateId.isEmpty() || recipients == null)
+            return;
+
         TransmissionWithRecipientArray transmission = new TransmissionWithRecipientArray();
 
-        // Populate Recipients
-        List<RecipientAttributes> recipientArray = new ArrayList<RecipientAttributes>();
+        // Set Template ID
+        TemplateContentAttributes template = new TemplateContentAttributes();
+        template.setUseDraftTemplate(false);
+        template.setTemplateId(templateId);
+        transmission.setContentAttributes(template);
+
+        // Set Substitution Data
+        transmission.setSubstitutionData(substitutionData);
+
+        // Set Recipients
+        List<RecipientAttributes> recipientArray = new ArrayList<>();
         for (String recipient : recipients) {
             RecipientAttributes recipientAttribs = new RecipientAttributes();
             recipientAttribs.setAddress(new AddressAttributes(recipient));
@@ -68,31 +93,9 @@ public class EmailService implements Serializable {
         }
         transmission.setRecipientArray(recipientArray);
 
-        // Populate Substitution Data
-        Map<String, Object> substitutionData = new HashMap<String, Object>();
-        substitutionData.put("yourContent", "You can add substitution data too.");
-        transmission.setSubstitutionData(substitutionData);
-
-        // Populate Email Body, Will Change if Using a Template
-        TemplateContentAttributes contentAttributes = new TemplateContentAttributes();
-        contentAttributes.setFrom(new AddressAttributes(from));
-        contentAttributes.setSubject(subject);
-        contentAttributes.setText(body);
-        contentAttributes.setHtml("<p>Your <b>HTML</b> content here.  {{yourContent}}</p>");
-        transmission.setContentAttributes(contentAttributes);
-
-        //Set Template if Template id is Passed in
-        if (templateId != null) {
-            TemplateContentAttributes template = new TemplateContentAttributes();
-            template.setUseDraftTemplate(false); //Set to true if you want to use draft.
-            template.setTemplateId(templateId);
-            transmission.setContentAttributes(template);
-        }
         // Send the Email
-        RestConnection connection = new RestConnection(client, endPoint);
-        Response response = ResourceTransmissions.create(connection, 0, transmission);
-
-        LogManager.logDebug("Transmission Response: " + response);
+        RestConnection connection = new RestConnection(client, API_URL);
+        ResourceTransmissions.create(connection, 0, transmission);
     }
 
 }

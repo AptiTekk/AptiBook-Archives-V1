@@ -46,7 +46,6 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     }
 
     public void buildNotification(String subject, String body, User user) {
-        System.out.println("Notification body: " + body);
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
