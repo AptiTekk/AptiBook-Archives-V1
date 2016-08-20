@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.entities.*;
 import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.entities.services.AssetService;
 import com.aptitekk.aptibook.core.entities.services.FileService;
+import com.aptitekk.aptibook.core.entities.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
@@ -44,9 +45,14 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
     @Inject
     private GroupTreeController groupTreeController;
 
+    @Inject
+    private UserGroupService userGroupService;
+
     private List<AssetCategory> assetCategoryList;
     private HashMap<AssetCategory, List<Asset>> assetMap;
     private Asset selectedAsset;
+
+    private boolean userGroupsEmpty;
 
     @Inject
     private TagController tagController;
@@ -63,6 +69,8 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
         }
 
         refreshAssets();
+
+        this.userGroupsEmpty = userGroupService.getAll().size() <= 1;
     }
 
     void refreshAssets() {
@@ -212,4 +220,7 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
         resetSettings();
     }
 
+    public boolean isUserGroupsEmpty() {
+        return userGroupsEmpty;
+    }
 }
