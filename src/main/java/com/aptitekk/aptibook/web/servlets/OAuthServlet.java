@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Map;
 
 @WebServlet("/oauth")
@@ -28,6 +29,15 @@ public class OAuthServlet extends HttpServlet {
             for (String value : entry.getValue()) {
                 resp.getOutputStream().write(("## " + value + "\n").getBytes());
             }
+        }
+
+        resp.getOutputStream().write("Here are the attributes you sent me:\n".getBytes());
+
+        Enumeration<String> attributeNames = req.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String attributeName = attributeNames.nextElement();
+            resp.getOutputStream().write(("# " + attributeName + "\n").getBytes());
+            resp.getOutputStream().write(("## " + req.getAttribute(attributeName) + "\n").getBytes());
         }
 
         resp.getOutputStream().write("Ok Bye!".getBytes());
