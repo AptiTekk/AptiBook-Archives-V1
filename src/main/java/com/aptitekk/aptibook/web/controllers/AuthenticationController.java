@@ -62,8 +62,8 @@ public class AuthenticationController implements Serializable {
 
     private OAuth20Service getService() {
         ServiceBuilder serviceBuilder = new ServiceBuilder();
-        serviceBuilder.apiKey("852903600-bo6nasudvdvjipljtei4kkhci0d59itu.apps.googleusercontent.com");
-        serviceBuilder.apiSecret("_Fe7hFlIx0kPxCEAKKb6gMMD");
+        serviceBuilder.apiKey("908953557522-o6m9dri19o1bmh0hrtkjgh6n0522n5lj.apps.googleusercontent.com");
+        serviceBuilder.apiSecret("-mXdL_YoL6Q6HrLIF7lUZpAo");
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 
