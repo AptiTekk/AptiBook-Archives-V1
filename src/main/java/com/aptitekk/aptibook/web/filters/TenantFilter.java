@@ -86,7 +86,7 @@ public class TenantFilter implements Filter {
             }
 
             //Servlets
-            if (pathSplit[1].matches("ping|images")) {
+            if (pathSplit[1].matches("ping|images|oauth")) {
                 chain.doFilter(request, response);
                 return;
             }
