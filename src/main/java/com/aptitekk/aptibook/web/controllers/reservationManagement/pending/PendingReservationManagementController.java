@@ -15,6 +15,7 @@ import com.aptitekk.aptibook.core.entities.services.ReservationService;
 import com.aptitekk.aptibook.core.entities.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetails;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetailsController;
 
@@ -40,6 +41,9 @@ public class PendingReservationManagementController implements Serializable {
     private ReservationDetailsController reservationDetailsController;
 
     @Inject
+    private HelpController helpController;
+
+    @Inject
     private ReservationService reservationService;
 
     @Inject
@@ -58,6 +62,8 @@ public class PendingReservationManagementController implements Serializable {
     @PostConstruct
     public void init() {
         buildReservationList();
+
+        helpController.setCurrentTopic(HelpController.Topic.RESERVATION_MANAGEMENT_PENDING);
     }
 
     private void buildReservationList() {

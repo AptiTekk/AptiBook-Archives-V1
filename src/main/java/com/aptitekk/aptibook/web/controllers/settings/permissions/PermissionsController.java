@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.entities.UserGroup;
 import com.aptitekk.aptibook.core.entities.services.PermissionService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -33,6 +34,9 @@ public class PermissionsController implements Serializable {
 
     @Inject
     private AuthenticationController authenticationController;
+
+    @Inject
+    private HelpController helpController;
 
     private List<PermissionDetails> permissionDetailsList;
 
@@ -60,6 +64,8 @@ public class PermissionsController implements Serializable {
         }
 
         buildPermissionDetailsList();
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_PERMISSIONS);
     }
 
     private boolean hasPagePermission() {

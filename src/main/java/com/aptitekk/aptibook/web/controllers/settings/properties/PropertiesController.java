@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.Property;
 import com.aptitekk.aptibook.core.entities.services.PropertiesService;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -33,6 +34,9 @@ public class PropertiesController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
+    @Inject
+    private HelpController helpController;
+
     private List<PropertyInputGroup> propertyInputGroups;
 
     @PostConstruct
@@ -42,6 +46,8 @@ public class PropertiesController implements Serializable {
             return;
         }
         buildPropertyInputGroups();
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_PROPERTIES);
     }
 
     private boolean hasPagePermission() {

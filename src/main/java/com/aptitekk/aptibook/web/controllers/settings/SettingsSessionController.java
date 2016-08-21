@@ -71,9 +71,6 @@ public class SettingsSessionController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    @Inject
-    private HelpController helpController;
-
     private List<SettingsPage> pages;
     private SettingsPage currentPage = null;
 
@@ -115,8 +112,6 @@ public class SettingsSessionController implements Serializable {
 
     void setCurrentPage(SettingsPage page) {
         this.currentPage = page;
-        if (page != null)
-            this.helpController.setCurrentPageId(page.name());
     }
 
 }

@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -37,6 +38,9 @@ public class AssetCategoryEditController implements Serializable {
     private AuthenticationController authenticationController;
 
     @Inject
+    private HelpController helpController;
+
+    @Inject
     private AssetCategoryService assetCategoryService;
 
     @Inject
@@ -60,6 +64,8 @@ public class AssetCategoryEditController implements Serializable {
 
         refreshAssetCategories();
         resetSettings();
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_ASSET_CATEGORIES);
     }
 
     private boolean hasPagePermission() {

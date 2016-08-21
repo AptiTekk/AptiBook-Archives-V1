@@ -6,8 +6,6 @@
 
 package com.aptitekk.aptibook.web.controllers.help;
 
-import com.aptitekk.aptibook.core.util.LogManager;
-
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -19,8 +17,27 @@ import java.util.Set;
 public class HelpController implements Serializable {
 
     public enum Topic {
-        ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "https://support.aptitekk.com/article/add-new-asset-categories/"});
+        FRONT_PAGE(null),
 
+        RESERVATION_MANAGEMENT_PENDING(null),
+        RESERVATION_MANAGEMENT_APPROVED(null),
+        RESERVATION_MANAGEMENT_REJECTED(null),
+
+        USER_SETTINGS(null),
+        USER_MY_RESERVATIONS(null),
+        USER_NOTIFICATIONS(null),
+
+        SETTINGS_ASSETS(null),
+        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "https://support.aptitekk.com/article/add-new-asset-categories/"}),
+        SETTINGS_USER_GROUPS(null),
+        SETTINGS_USERS(null),
+        SETTINGS_PERMISSIONS(null),
+        SETTINGS_PROPERTIES(null);
+
+        /**
+         * An array containing the name and URL of the popular topics, in that order. For example:
+         * ["Name 1", "URL 1", "Name 2", "URL 2", ...]
+         */
         private String[] popularTopics;
 
         Topic(String[] topics) {
@@ -40,29 +57,19 @@ public class HelpController implements Serializable {
     private HashMap<String, String> popularTopics;
 
     /**
-     * Sets the current Page ID. Should be called from the page itself on load.
+     * Sets the current Topic. Should be called from the page's controller.
      *
-     * @param pageId The Page ID. This is the name of the topic enum value. Case-insensitive.
+     * @param topic The Topic.
      */
-    public void setCurrentPageId(String pageId) {
-        if (pageId == null) {
+    public void setCurrentTopic(Topic topic) {
+        if (topic == null || topic.getPopularTopics() == null || topic.getPopularTopics().length % 2 != 0) {
             popularTopics = null;
-        } else {
-            try {
-                Topic topic = Topic.valueOf(pageId.toUpperCase());
+            return;
+        }
 
-                if (topic.getPopularTopics().length % 2 != 0) {
-                    setCurrentPageId(null);
-                } else {
-                    popularTopics = new HashMap<>();
-                    for (int i = 0; i < topic.getPopularTopics().length; i += 2) {
-                        popularTopics.put(topic.getPopularTopics()[i], topic.getPopularTopics()[i + 1]);
-                    }
-                }
-
-            } catch (IllegalArgumentException e) {
-                setCurrentPageId(null);
-            }
+        popularTopics = new HashMap<>();
+        for (int i = 0; i < topic.getPopularTopics().length; i += 2) {
+            popularTopics.put(topic.getPopularTopics()[i], topic.getPopularTopics()[i + 1]);
         }
     }
 
