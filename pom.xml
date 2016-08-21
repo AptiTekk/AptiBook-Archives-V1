@@ -265,9 +265,9 @@
 
         <!-- Google Dependencies -->
         <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-            <version>1.9.42</version>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-apis</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <!-- End Google Dependencies -->
 

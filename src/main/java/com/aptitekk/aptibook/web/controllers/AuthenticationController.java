@@ -14,6 +14,10 @@ import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
+import com.github.scribejava.apis.GoogleApi20;
+import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.oauth.OAuth20Service;
+import io.undertow.servlet.spec.HttpServletRequestImpl;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -21,6 +25,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -41,6 +46,7 @@ public class AuthenticationController implements Serializable {
     private String password;
 
     private User authenticatedUser;
+    private OAuth20Service oAuthService;
 
     @PostConstruct
     public void init() {
@@ -50,6 +56,38 @@ public class AuthenticationController implements Serializable {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
+
+        oAuthService = getService();
+    }
+
+    private OAuth20Service getService() {
+        ServiceBuilder serviceBuilder = new ServiceBuilder();
+        serviceBuilder.apiKey("852903600-bo6nasudvdvjipljtei4kkhci0d59itu.apps.googleusercontent.com");
+        serviceBuilder.apiSecret("_Fe7hFlIx0kPxCEAKKb6gMMD");
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+
+        StringBuilder callbackUrlBuilder = new StringBuilder();
+        String requestUrl = httpServletRequest.getRequestURL().toString();
+
+        callbackUrlBuilder.append(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))));
+        callbackUrlBuilder.append(((HttpServletRequestImpl) httpServletRequest).getOriginalRequestURI());
+
+        serviceBuilder.callback(callbackUrlBuilder.toString());
+        serviceBuilder.scope("email");
+        return serviceBuilder.build(GoogleApi20.instance());
+    }
+
+    public void signInWithGoogle() {
+        if (oAuthService != null)
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl());
+            } catch (IOException e) {
+                FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
+                e.printStackTrace();
+            }
+        else
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
     }
 
     /**

@@ -6,9 +6,6 @@
 
 package com.aptitekk.aptibook.core.google;
 
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
-
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 
