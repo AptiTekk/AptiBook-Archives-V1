@@ -28,15 +28,18 @@ public class HelpController implements Serializable {
         USER_NOTIFICATIONS(null),
 
         SETTINGS_ASSETS(null),
-        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "https://support.aptitekk.com/article/add-new-asset-categories/"}),
+        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "add-new-asset-categories"}),
         SETTINGS_USER_GROUPS(null),
         SETTINGS_USERS(null),
         SETTINGS_PERMISSIONS(null),
         SETTINGS_PROPERTIES(null);
 
         /**
-         * An array containing the name and URL of the popular topics, in that order. For example:
-         * ["Name 1", "URL 1", "Name 2", "URL 2", ...]
+         * An array containing the name and Slug of the popular topics, in that order. For example:
+         * ["Name 1", "Slug 1", "Name 2", "Slug 2", ...]
+         * <p>
+         * The Slug is found in the URL of the article.
+         * For example: https://support.aptitekk.com/article/add-new-asset-categories has a slug of "add-new-asset-categories"
          */
         private String[] popularTopics;
 
@@ -81,7 +84,7 @@ public class HelpController implements Serializable {
 
     public String getPopularTopicURL(String title) {
         if (popularTopics != null)
-            return popularTopics.get(title);
+            return "https://support.aptitekk.com/article/" + popularTopics.get(title);
         return null;
     }
 

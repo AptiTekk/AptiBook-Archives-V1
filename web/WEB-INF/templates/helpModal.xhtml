@@ -15,7 +15,7 @@
         <b:modal styleClass="helpModal" title="Quick Help">
             <ui:fragment rendered="#{not empty helpController.popularTopicTitles}">
                 <h4>Popular Topics</h4>
-                <p>These are the most popular help topics for this page.</p>
+                <p>Listed are some popular help topics for this page. (Links will open in a new tab.)</p>
                 <ul>
                     <ui:repeat value="#{helpController.popularTopicTitles.toArray()}" var="popularTopicTitle">
                         <li>
