@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -18,6 +19,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+
+import static com.aptitekk.aptibook.web.controllers.help.HelpController.Topic.USER_SETTINGS;
 
 @Named
 @ViewScoped
@@ -29,12 +32,17 @@ public class UserSettingsController extends UserFieldSupplier implements Seriali
     @Inject
     private AuthenticationController authenticationController;
 
+    @Inject
+    private HelpController helpController;
+
     private User user;
 
     @PostConstruct
     public void init() {
         this.user = authenticationController.getAuthenticatedUser();
         resetFields();
+
+        helpController.setCurrentTopic(USER_SETTINGS);
     }
 
     public void resetFields() {

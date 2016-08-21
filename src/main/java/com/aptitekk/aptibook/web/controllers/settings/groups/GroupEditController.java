@@ -18,6 +18,7 @@ import com.aptitekk.aptibook.core.entities.services.UserGroupService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -41,6 +42,9 @@ public class GroupEditController implements Serializable {
     private UserService userService;
 
     @Inject
+    private HelpController helpController;
+
+    @Inject
     private AuthenticationController authenticationController;
 
     private UserGroup selectedUserGroup;
@@ -58,6 +62,8 @@ public class GroupEditController implements Serializable {
         }
 
         resetSettings();
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_USER_GROUPS);
     }
 
     private boolean hasPagePermission() {

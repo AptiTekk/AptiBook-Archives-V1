@@ -15,6 +15,7 @@ import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.core.util.time.SegmentedTime;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.primefaces.event.SelectEvent;
@@ -32,6 +33,7 @@ public class MyReservationsController implements Serializable {
 
     @Inject
     private UserService userService;
+
     @Inject
     private ReservationService reservationService;
 
@@ -40,6 +42,9 @@ public class MyReservationsController implements Serializable {
 
     @Inject
     private AuthenticationController authenticationController;
+
+    @Inject
+    private HelpController helpController;
 
     private Map<AssetCategory, List<Reservation>> presentReservations;
 
@@ -67,6 +72,8 @@ public class MyReservationsController implements Serializable {
                 return allBetweenDates;
             }
         };
+
+        helpController.setCurrentTopic(HelpController.Topic.USER_MY_RESERVATIONS);
     }
 
 

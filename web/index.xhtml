@@ -14,11 +14,9 @@
       xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
 <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
-    <ui:define name="pre-body">
-        <f:metadata>
-            <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
-        </f:metadata>
-    </ui:define>
+    <f:metadata>
+        <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
+    </f:metadata>
     <ui:define name="content">
         <div class="texture-bg" style="height: 100%">
             <b:container id="main-login">
