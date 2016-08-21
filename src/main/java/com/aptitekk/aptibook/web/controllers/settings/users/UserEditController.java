@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,9 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
     @Inject
     private AuthenticationController authenticationController;
 
+    @Inject
+    private HelpController helpController;
+
     private User selectedUser;
     private List<User> users;
 
@@ -48,6 +52,8 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
 
         refreshUserList();
         resetFields();
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_USERS);
     }
 
     private boolean hasPagePermission() {

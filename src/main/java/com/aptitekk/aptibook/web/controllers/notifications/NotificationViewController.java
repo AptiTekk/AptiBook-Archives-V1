@@ -7,6 +7,7 @@
 package com.aptitekk.aptibook.web.controllers.notifications;
 
 import com.aptitekk.aptibook.core.entities.Notification;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -22,9 +23,14 @@ public class NotificationViewController implements Serializable {
     @Inject
     private NotificationController notificationController;
 
+    @Inject
+    private HelpController helpController;
+
     @PostConstruct
     private void init() {
         notificationController.markAllAsRead();
+
+        helpController.setCurrentTopic(HelpController.Topic.USER_NOTIFICATIONS);
     }
 
     public List<Notification> getUnreadNotifications() {

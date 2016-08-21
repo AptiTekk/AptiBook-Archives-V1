@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.entities.services.FileService;
 import com.aptitekk.aptibook.core.entities.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
 import com.aptitekk.aptibook.web.controllers.settings.groups.GroupTreeController;
 
@@ -46,6 +47,9 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
     private GroupTreeController groupTreeController;
 
     @Inject
+    private HelpController helpController;
+
+    @Inject
     private UserGroupService userGroupService;
 
     private List<AssetCategory> assetCategoryList;
@@ -71,6 +75,8 @@ public class AssetSettingsController extends AssetFieldSupplier implements Seria
         refreshAssets();
 
         this.userGroupsEmpty = userGroupService.getAll().size() <= 1;
+
+        helpController.setCurrentTopic(HelpController.Topic.SETTINGS_ASSETS);
     }
 
     void refreshAssets() {

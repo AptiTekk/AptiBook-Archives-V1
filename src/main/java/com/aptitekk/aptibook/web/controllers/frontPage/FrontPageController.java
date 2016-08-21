@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.entities.services.ReservationService;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ScheduleModel;
 
@@ -34,6 +35,9 @@ public class FrontPageController implements Serializable {
 
     @Inject
     private AssetCategoryService assetCategoryService;
+
+    @Inject
+    private HelpController helpController;
 
     private ReservationScheduleModel scheduleModel;
 
@@ -62,6 +66,8 @@ public class FrontPageController implements Serializable {
                 return allBetweenDates;
             }
         };
+
+        helpController.setCurrentTopic(HelpController.Topic.FRONT_PAGE);
     }
 
     public ScheduleModel getScheduleModel() {

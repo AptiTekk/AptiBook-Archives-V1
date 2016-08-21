@@ -6,6 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings;
 
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
+
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -19,7 +21,7 @@ import java.util.List;
 public class SettingsViewController implements Serializable {
 
     @Inject
-    SettingsSessionController settingsSessionController;
+    private SettingsSessionController settingsSessionController;
 
     @PostConstruct
     private void init() {
