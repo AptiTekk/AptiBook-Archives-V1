@@ -17,7 +17,6 @@ import com.aptitekk.aptibook.web.filters.TenantFilter;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import io.undertow.servlet.spec.HttpServletRequestImpl;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -28,6 +27,8 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 @Named
 @ViewScoped
@@ -66,14 +67,9 @@ public class AuthenticationController implements Serializable {
         serviceBuilder.apiSecret("-mXdL_YoL6Q6HrLIF7lUZpAo");
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-
-        StringBuilder callbackUrlBuilder = new StringBuilder();
         String requestUrl = httpServletRequest.getRequestURL().toString();
+        serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
 
-        callbackUrlBuilder.append(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))));
-        callbackUrlBuilder.append(((HttpServletRequestImpl) httpServletRequest).getOriginalRequestURI());
-
-        serviceBuilder.callback(callbackUrlBuilder.toString());
         serviceBuilder.scope("email");
         return serviceBuilder.build(GoogleApi20.instance());
     }
@@ -81,7 +77,9 @@ public class AuthenticationController implements Serializable {
     public void signInWithGoogle() {
         if (oAuthService != null)
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl());
+                Map<String, String> parameters = new HashMap<>();
+                parameters.put("tenant", tenantSessionService.getCurrentTenant().getSlug());
+                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl(parameters));
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
                 e.printStackTrace();
