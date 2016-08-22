@@ -71,15 +71,14 @@ public class AuthenticationController implements Serializable {
         serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
 
         serviceBuilder.scope("email");
+        serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
         return serviceBuilder.build(GoogleApi20.instance());
     }
 
     public void signInWithGoogle() {
         if (oAuthService != null)
             try {
-                Map<String, String> parameters = new HashMap<>();
-                parameters.put("tenant", tenantSessionService.getCurrentTenant().getSlug());
-                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl(parameters));
+                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl());
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
                 e.printStackTrace();
