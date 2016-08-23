@@ -11,7 +11,7 @@ import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.UserGroup;
 import com.aptitekk.aptibook.core.entities.services.PermissionService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.model.TreeNode;
 

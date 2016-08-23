@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.web.controllers;
+package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.User;
@@ -15,15 +15,6 @@ import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
-import com.github.scribejava.apis.GoogleApi20;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth20Service;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -31,7 +22,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -52,7 +42,6 @@ public class AuthenticationController implements Serializable {
     private String password;
 
     private User authenticatedUser;
-    private OAuth20Service oAuthService;
 
     @PostConstruct
     public void init() {
@@ -62,62 +51,20 @@ public class AuthenticationController implements Serializable {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
-
-        oAuthService = getService();
-        Object code = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("code");
-        if (code != null && code instanceof String) {
-            try {
-                OAuth2AccessToken accessToken = oAuthService.getAccessToken(code.toString());
-                OAuthRequest request = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo", oAuthService);
-                oAuthService.signRequest(accessToken, request);
-                Response response = request.send();
-                System.out.println(response.getBody());
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-                String userData = response.getBody();
-                login(userData);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
-
-    private OAuth20Service getService() {
-        ServiceBuilder serviceBuilder = new ServiceBuilder();
-        serviceBuilder.apiKey("908953557522-o6m9dri19o1bmh0hrtkjgh6n0522n5lj.apps.googleusercontent.com");
-        serviceBuilder.apiSecret("-mXdL_YoL6Q6HrLIF7lUZpAo");
-
-        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String requestUrl = httpServletRequest.getRequestURL().toString();
-        serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
-
-        serviceBuilder.scope("email");
-        serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
-        return serviceBuilder.build(GoogleApi20.instance());
-    }
-
-    public void signInWithGoogle() {
-        if (oAuthService != null)
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(oAuthService.getAuthorizationUrl());
-            } catch (IOException e) {
-                FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
-                e.printStackTrace();
-            }
-        else
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
-    }
-
 
     /**
-     * Check to see if google user exists, if not creates a new one. Sets authenticated user.
+     * Login with Google
      *
+     * @param googleJSONResponse The User's details from Google.
      * @return The outcome page.
      */
-    public String login(String json) {
-        Gson gson = new GsonBuilder().create();
-        GoogleJSONResponse googleJSONResponse = gson.fromJson(json, GoogleJSONResponse.class);
+    String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
+        if (googleJSONResponse == null)
+            return null;
 
-        if (userService.findByName(googleJSONResponse.getEmail()) == null) {
+        User existingUser = userService.findByName(googleJSONResponse.getEmail());
+        if (existingUser == null) {
             User user = new User();
             user.setFirstName(googleJSONResponse.getGiven_name());
             user.setLastName(googleJSONResponse.getFamily_name());
@@ -125,7 +72,7 @@ public class AuthenticationController implements Serializable {
             try {
                 userService.insert(user);
                 setAuthenticatedUser(user);
-                LogManager.logInfo("Logged in user with Google");
+                LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                 return redirectHome();
             } catch (Exception e) {
@@ -133,28 +80,12 @@ public class AuthenticationController implements Serializable {
             }
             return null;
         } else {
-            User authenticatedUser = userService.findByName(googleJSONResponse.getEmail());
-            setAuthenticatedUser(authenticatedUser);
+            setAuthenticatedUser(existingUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
             return redirectHome();
         }
 
     }
-
-    private String redirectHome() {
-        String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
-        if (originalUrl != null) {
-            FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
-            try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "secure";
-    }
-
 
     /**
      * Attempts to log the authenticatedUser in with the credentials they have input.
@@ -165,8 +96,6 @@ public class AuthenticationController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
         FacesContext context = FacesContext.getCurrentInstance();
-        LogManager.logDebug("Logging In - User: " + username);
-
         User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
 
@@ -188,6 +117,20 @@ public class AuthenticationController implements Serializable {
 
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
+    }
+
+    private String redirectHome() {
+        String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+        if (originalUrl != null) {
+            FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "secure";
     }
 
     public String redirectIfLoggedIn() throws IOException {

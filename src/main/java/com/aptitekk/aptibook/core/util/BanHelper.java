@@ -12,7 +12,7 @@ import javax.servlet.http.Cookie;
  * The BanHelper is meant to be a convenience class for "banning" users from certain parts of the
  * site. It keeps track of the number of failed attempts, and can set cookies to "ban" the user.
  * <p>
- * An example of a use case for this class is banning a user after they try to login with failed
+ * An example of a use case for this class is banning a user after they try to loginWithGoogle with failed
  * credentials too many times.
  * <p>
  * Although the bans can easily be cleared by clearing the browser's cookies, this is enough to stop

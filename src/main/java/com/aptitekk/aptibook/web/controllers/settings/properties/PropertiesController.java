@@ -9,7 +9,7 @@ package com.aptitekk.aptibook.web.controllers.settings.properties;
 import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.Property;
 import com.aptitekk.aptibook.core.entities.services.PropertiesService;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;

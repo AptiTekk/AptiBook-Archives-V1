@@ -13,7 +13,7 @@ import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.services.AssetService;
 import com.aptitekk.aptibook.core.entities.services.FileService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
 import com.aptitekk.aptibook.web.controllers.settings.groups.GroupTreeController;
 

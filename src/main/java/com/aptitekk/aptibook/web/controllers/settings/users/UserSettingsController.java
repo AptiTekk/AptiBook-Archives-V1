@@ -9,7 +9,7 @@ package com.aptitekk.aptibook.web.controllers.settings.users;
 import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;

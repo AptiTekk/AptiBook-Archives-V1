@@ -6,6 +6,8 @@
 
 package com.aptitekk.aptibook.web.servlets;
 
+import com.aptitekk.aptibook.web.controllers.authentication.OAuthController;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +28,7 @@ public class OAuthServlet extends HttpServlet {
             String tenant = state.split("=")[1];
             String code = req.getParameter("code");
             HttpSession session = req.getSession();
-            session.setAttribute("code", code);
+            session.setAttribute(OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
             resp.sendRedirect(tenant + "/index.xhtml");
         }
     }
