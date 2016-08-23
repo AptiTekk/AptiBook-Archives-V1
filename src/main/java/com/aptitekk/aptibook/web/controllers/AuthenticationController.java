@@ -111,6 +111,11 @@ public class AuthenticationController implements Serializable {
     }
 
 
+    /**
+     * Check to see if google user exists, if not creates a new one. Sets authenticated user.
+     *
+     * @return The outcome page.
+     */
     public String login(String json){
         Gson gson = new GsonBuilder().create();
         GoogleJSONResponse googleJSONResponse = gson.fromJson(json, GoogleJSONResponse.class);
