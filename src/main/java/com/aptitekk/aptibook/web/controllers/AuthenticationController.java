@@ -16,7 +16,12 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Response;
+import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import org.primefaces.json.JSONObject;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -59,6 +64,24 @@ public class AuthenticationController implements Serializable {
         }
 
         oAuthService = getService();
+        Object code = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("code");
+        if (code != null && code instanceof String) {
+            try {
+                OAuth2AccessToken accessToken = oAuthService.getAccessToken(code.toString());
+                OAuthRequest request = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo", oAuthService);
+                oAuthService.signRequest(accessToken,request);
+                Response response = request.send();
+                System.out.println(response.getBody());
+                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+                JSONObject userData = new JSONObject(response);
+                String email = userData.getString("email");
+                System.out.println("Email: " + email);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Ain't got no code");
+        }
     }
 
     private OAuth20Service getService() {

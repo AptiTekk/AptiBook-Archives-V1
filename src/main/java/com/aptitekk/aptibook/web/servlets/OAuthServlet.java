@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Map;
@@ -41,6 +42,16 @@ public class OAuthServlet extends HttpServlet {
         }
 
         resp.getOutputStream().write("Ok Bye!".getBytes());
+
+        String tenant = req.getParameter("state");
+        String tenantParam = tenant.substring(tenant.lastIndexOf("=")+ 1);
+        String code = req.getParameter("code");
+        System.out.println(code);
+        System.out.println("Tenanant param: " + tenantParam);
+        HttpSession session = req.getSession();
+        session.setAttribute("code", code);
+        req.setAttribute("code", req.getParameter(code));
+        resp.sendRedirect(tenantParam + "/index.xhtml");
     }
 
     @Override
