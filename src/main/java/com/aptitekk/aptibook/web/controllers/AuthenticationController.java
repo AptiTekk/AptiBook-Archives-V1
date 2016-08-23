@@ -24,7 +24,6 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.primefaces.json.JSONObject;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -35,8 +34,6 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Named
 @ViewScoped
@@ -72,7 +69,7 @@ public class AuthenticationController implements Serializable {
             try {
                 OAuth2AccessToken accessToken = oAuthService.getAccessToken(code.toString());
                 OAuthRequest request = new OAuthRequest(Verb.GET, "https://www.googleapis.com/oauth2/v1/userinfo", oAuthService);
-                oAuthService.signRequest(accessToken,request);
+                oAuthService.signRequest(accessToken, request);
                 Response response = request.send();
                 System.out.println(response.getBody());
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -116,20 +113,26 @@ public class AuthenticationController implements Serializable {
      *
      * @return The outcome page.
      */
-    public String login(String json){
+    public String login(String json) {
         Gson gson = new GsonBuilder().create();
         GoogleJSONResponse googleJSONResponse = gson.fromJson(json, GoogleJSONResponse.class);
 
-        if(userService.findByName(googleJSONResponse.getEmail()) == null){
+        if (userService.findByName(googleJSONResponse.getEmail()) == null) {
             User user = new User();
             user.setFirstName(googleJSONResponse.getGiven_name());
             user.setLastName(googleJSONResponse.getFamily_name());
             user.setUsername(googleJSONResponse.getEmail());
-            setAuthenticatedUser(user);
-            LogManager.logDebug("Logged in user with Google");
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            return redirectHome();
-        }else{
+            try {
+                userService.insert(user);
+                setAuthenticatedUser(user);
+                LogManager.logInfo("Logged in user with Google");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                return redirectHome();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        } else {
             User authenticatedUser = userService.findByName(googleJSONResponse.getEmail());
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
@@ -138,7 +141,7 @@ public class AuthenticationController implements Serializable {
 
     }
 
-    private String redirectHome(){
+    private String redirectHome() {
         String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
         if (originalUrl != null) {
             FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
@@ -151,7 +154,6 @@ public class AuthenticationController implements Serializable {
         }
         return "secure";
     }
-
 
 
     /**

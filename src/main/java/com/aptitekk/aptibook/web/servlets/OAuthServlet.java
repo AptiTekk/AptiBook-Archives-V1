@@ -21,37 +21,14 @@ public class OAuthServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getOutputStream().write("Here are the parameters you sent me:\n".getBytes());
-
-        Map<String, String[]> parameterMap = req.getParameterMap();
-        for (Map.Entry<String, String[]> entry : parameterMap.entrySet()) {
-            resp.getOutputStream().write(("# " + entry.getKey() + "\n").getBytes());
-
-            for (String value : entry.getValue()) {
-                resp.getOutputStream().write(("## " + value + "\n").getBytes());
-            }
+        String state = req.getParameter("state");
+        if (state != null && !state.isEmpty() && state.contains("tenant=")) {
+            String tenant = state.split("=")[1];
+            String code = req.getParameter("code");
+            HttpSession session = req.getSession();
+            session.setAttribute("code", code);
+            resp.sendRedirect(tenant + "/index.xhtml");
         }
-
-        resp.getOutputStream().write("Here are the attributes you sent me:\n".getBytes());
-
-        Enumeration<String> attributeNames = req.getAttributeNames();
-        while (attributeNames.hasMoreElements()) {
-            String attributeName = attributeNames.nextElement();
-            resp.getOutputStream().write(("# " + attributeName + "\n").getBytes());
-            resp.getOutputStream().write(("## " + req.getAttribute(attributeName) + "\n").getBytes());
-        }
-
-        resp.getOutputStream().write("Ok Bye!".getBytes());
-
-        String tenant = req.getParameter("state");
-        String tenantParam = tenant.substring(tenant.lastIndexOf("=")+ 1);
-        String code = req.getParameter("code");
-        System.out.println(code);
-        System.out.println("Tenanant param: " + tenantParam);
-        HttpSession session = req.getSession();
-        session.setAttribute("code", code);
-        req.setAttribute("code", req.getParameter(code));
-        resp.sendRedirect(tenantParam + "/index.xhtml");
     }
 
     @Override
