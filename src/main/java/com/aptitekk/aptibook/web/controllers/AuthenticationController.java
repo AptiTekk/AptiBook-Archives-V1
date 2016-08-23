@@ -81,8 +81,6 @@ public class AuthenticationController implements Serializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else {
-            System.out.println("Ain't got no code");
         }
     }
 
@@ -117,31 +115,37 @@ public class AuthenticationController implements Serializable {
         Gson gson = new GsonBuilder().create();
         GoogleJSONResponse googleJSONResponse = gson.fromJson(json, GoogleJSONResponse.class);
 
-        if(userService.findByName(googleJSONResponse.getEmail()) != null){
+        if(userService.findByName(googleJSONResponse.getEmail()) == null){
             User user = new User();
             user.setFirstName(googleJSONResponse.getGiven_name());
             user.setLastName(googleJSONResponse.getFamily_name());
             user.setUsername(googleJSONResponse.getEmail());
-            System.out.println("user stuff: " + user.getUsername());
-
             setAuthenticatedUser(user);
+            LogManager.logDebug("Logged in user with Google");
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
-            if (originalUrl != null) {
-                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
-                    return null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return "secure";
+            return redirectHome();
+        }else{
+            User authenticatedUser = userService.findByName(googleJSONResponse.getEmail());
+            setAuthenticatedUser(authenticatedUser);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+            return redirectHome();
         }
-        return null;
+
     }
 
-
+    private String redirectHome(){
+        String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+        if (originalUrl != null) {
+            FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "secure";
+    }
 
 
 
@@ -168,18 +172,8 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
-            if (originalUrl != null) {
-                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
-                    return null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            return redirectHome();
         }
-        return "secure";
     }
 
     public String logout() {

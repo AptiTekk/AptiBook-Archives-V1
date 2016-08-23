@@ -87,7 +87,6 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
             selectedUser.setUsername(username);
             selectedUser.setFirstName(firstName);
             selectedUser.setLastName(lastName);
-            selectedUser.setEmail(email);
             selectedUser.setPhoneNumber(phoneNumber);
             selectedUser.setLocation(location);
             selectedUser.setWantsEmailNotifications(wantsEmailNotifications);

@@ -51,7 +51,6 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             newUser.setUsername(username);
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
-            newUser.setEmail(email);
             newUser.setPhoneNumber(phoneNumber);
             newUser.setLocation(location);
             newUser.setPassword(Sha256Helper.rawToSha(password));

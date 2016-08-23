@@ -61,7 +61,6 @@ public class UserSettingsController extends UserFieldSupplier implements Seriali
             user.setUsername(username);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setEmail(email);
             user.setPhoneNumber(phoneNumber);
             user.setLocation(location);
             user.setWantsEmailNotifications(wantsEmailNotifications);
