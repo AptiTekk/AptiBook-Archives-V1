@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.entities.services.PermissionService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
+import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 import com.github.scribejava.apis.GoogleApi20;
@@ -21,6 +22,8 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.primefaces.json.JSONObject;
 
 import javax.annotation.PostConstruct;
@@ -73,9 +76,8 @@ public class AuthenticationController implements Serializable {
                 Response response = request.send();
                 System.out.println(response.getBody());
                 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-                JSONObject userData = new JSONObject(response);
-                String email = userData.getString("email");
-                System.out.println("Email: " + email);
+                String userData = response.getBody();
+                login(userData);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -109,6 +111,39 @@ public class AuthenticationController implements Serializable {
         else
             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
     }
+
+
+    public String login(String json){
+        Gson gson = new GsonBuilder().create();
+        GoogleJSONResponse googleJSONResponse = gson.fromJson(json, GoogleJSONResponse.class);
+
+        if(userService.findByName(googleJSONResponse.getEmail()) != null){
+            User user = new User();
+            user.setFirstName(googleJSONResponse.getGiven_name());
+            user.setLastName(googleJSONResponse.getFamily_name());
+            user.setUsername(googleJSONResponse.getEmail());
+            System.out.println("user stuff: " + user.getUsername());
+
+            setAuthenticatedUser(user);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+            String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+            if (originalUrl != null) {
+                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
+                try {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
+                    return null;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return "secure";
+        }
+        return null;
+    }
+
+
+
+
 
     /**
      * Attempts to log the authenticatedUser in with the credentials they have input.
