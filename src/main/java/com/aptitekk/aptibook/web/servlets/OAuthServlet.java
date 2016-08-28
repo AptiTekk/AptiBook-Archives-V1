@@ -24,13 +24,16 @@ public class OAuthServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String state = req.getParameter("state");
+        System.out.println("Got here!");
         if (state != null && !state.isEmpty() && state.contains("tenant=")) {
+            System.out.println("Inside if");
             String tenant = state.split("=")[1];
             String code = req.getParameter("code");
             HttpSession session = req.getSession();
-            session.setAttribute(OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
+            session.setAttribute("code", code);
             resp.sendRedirect(tenant + "/index.xhtml");
         }
+        System.out.println("After if");
     }
 
     @Override

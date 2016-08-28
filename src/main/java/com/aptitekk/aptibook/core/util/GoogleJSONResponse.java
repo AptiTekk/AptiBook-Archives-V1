@@ -11,8 +11,6 @@ public class GoogleJSONResponse {
 	 private  String family_name;
 	 private  String email;
 	 private  String picture;
-	 
-	 
 	public  String getGiven_name() {
 		return given_name;
 	}

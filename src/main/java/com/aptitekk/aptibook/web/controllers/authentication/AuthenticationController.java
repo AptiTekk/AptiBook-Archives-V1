@@ -41,6 +41,8 @@ public class AuthenticationController implements Serializable {
     private String username;
     private String password;
 
+    private String whitelistDomains = "gmail.com, jordandistrict.crg, AptiTekk.com";
+    private String whitelist[];
     private User authenticatedUser;
 
     @PostConstruct
@@ -51,6 +53,7 @@ public class AuthenticationController implements Serializable {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
+        whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
     }
 
     /**
@@ -62,29 +65,40 @@ public class AuthenticationController implements Serializable {
     String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
         if (googleJSONResponse == null)
             return null;
+        boolean domainCheck = false;
+        for (String domain : whitelist) {
+            if (domain.equals(googleJSONResponse.getEmail().toLowerCase().split("@")[1])) {
+                System.out.println(googleJSONResponse.getEmail().toLowerCase().split("@")[1]);
+                domainCheck = true;
+            }
 
-        User existingUser = userService.findByName(googleJSONResponse.getEmail());
-        if (existingUser == null) {
-            User user = new User();
-            user.setFirstName(googleJSONResponse.getGiven_name());
-            user.setLastName(googleJSONResponse.getFamily_name());
-            user.setUsername(googleJSONResponse.getEmail());
-            try {
-                userService.insert(user);
-                setAuthenticatedUser(user);
-                LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+        }
+        if (domainCheck) {
+            User existingUser = userService.findByName(googleJSONResponse.getEmail());
+            if (existingUser == null) {
+                User user = new User();
+                user.setFirstName(googleJSONResponse.getGiven_name());
+                user.setLastName(googleJSONResponse.getFamily_name());
+                user.setUsername(googleJSONResponse.getEmail());
+                try {
+                    userService.insert(user);
+                    setAuthenticatedUser(user);
+                    LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                    return redirectHome();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            } else {
+                setAuthenticatedUser(existingUser);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                 return redirectHome();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return null;
         } else {
-            setAuthenticatedUser(existingUser);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            return redirectHome();
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unregistered Domain"));
         }
-
+        return null;
     }
 
     /**
@@ -120,6 +134,7 @@ public class AuthenticationController implements Serializable {
     }
 
     private String redirectHome() {
+        System.out.println("Inside redirectHome");
         String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
         if (originalUrl != null) {
             FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
