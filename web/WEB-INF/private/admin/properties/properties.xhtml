@@ -15,7 +15,6 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
 <ui:composition>
-    <f:event type="preRenderView" listener="#{propertiesController.constructProperties()}"/>
     <h:panelGroup layout="block" id="propertiesPage">
         <b:row id="propertiesPageContent">
             <b:column colXs="12">
@@ -23,15 +22,46 @@
                     <c:forEach items="#{propertiesController.propertyInputGroups}" var="inputGroup">
                         <h:panelGroup id="propertyGroup#{inputGroup.propertyGroup.ordinal()}" layout="block"
                                       styleClass="form-group">
-                            <b:message for="propertyGroup#{inputGroup.propertyGroup.ordinal()}" showSummary="false"
+                            <b:message for="@parent" showSummary="false"
                                        showDetail="true"/>
                             <h4>#{inputGroup.propertyGroup.friendlyName}</h4>
                         </h:panelGroup>
                         <c:forEach items="#{inputGroup.propertiesInputMap}" var="propertyInput">
-                            <h:panelGroup layout="block" styleClass="form-group"
-                                          id="formGroup#{propertyInput.key.ordinal()}">
-                                <b:message for="@parent" showSummary="false"
+                            <h:panelGroup layout="block" styleClass="form-group">
+                                <b:message for="@next" showSummary="false"
                                            showDetail="true"/>
+                                <c:choose>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'SingleLineField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:inputText id="propertyField#{propertyInput.key.ordinal()}"
+                                                     label="#{propertyInput.key.propertyType.label}"
+                                                     value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                     maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'MultiLineField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:inputTextarea id="propertyField#{propertyInput.key.ordinal()}"
+                                                         label="#{propertyInput.key.propertyType.label}"
+                                                         value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                         rows="#{propertyInput.key.propertyType.rows}"
+                                                         maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'PasswordField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:inputSecret id="propertyField#{propertyInput.key.ordinal()}"
+                                                       label="#{propertyInput.key.propertyType.label}"
+                                                       value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                       maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'PasswordField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:switch id="propertyField#{propertyInput.key.ordinal()}"
+                                                  label="#{propertyInput.key.propertyType.label}"
+                                                  value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                  onText="#{propertyInput.key.propertyType.yesLabel}"
+                                                  offText="#{propertyInput.key.propertyType.noLabel}"/>
+                                    </c:when>
+                                </c:choose>
                             </h:panelGroup>
                         </c:forEach>
                         <hr/>

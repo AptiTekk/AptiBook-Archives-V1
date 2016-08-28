@@ -41,8 +41,6 @@ public class PropertiesController implements Serializable {
 
     private List<PropertyInputGroup> propertyInputGroups;
 
-    private boolean constructed;
-
     @PostConstruct
     private void init() {
         if (!hasPagePermission()) {
@@ -60,15 +58,6 @@ public class PropertiesController implements Serializable {
 
     private boolean hasModifyPermission() {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.PROPERTIES_MODIFY_ALL);
-    }
-
-    public void constructProperties() {
-        if (!constructed) {
-            for (PropertyInputGroup inputGroup : propertyInputGroups) {
-                inputGroup.constructProperties();
-            }
-            constructed = true;
-        }
     }
 
     private void buildPropertyInputGroups() {

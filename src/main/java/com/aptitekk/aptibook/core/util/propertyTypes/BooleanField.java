@@ -7,9 +7,6 @@
 package com.aptitekk.aptibook.core.util.propertyTypes;
 
 import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.BooleanPropertyType;
-import net.bootsfaces.component.switchComponent.Switch;
-
-import javax.faces.component.html.HtmlPanelGroup;
 
 public class BooleanField extends BooleanPropertyType {
 
@@ -17,9 +14,7 @@ public class BooleanField extends BooleanPropertyType {
     private final String noLabel;
 
     public BooleanField(String label) {
-        super(label);
-        this.yesLabel = null;
-        this.noLabel = null;
+        this(label, null, null);
     }
 
     public BooleanField(String label, String yesLabel, String noLabel) {
@@ -28,22 +23,11 @@ public class BooleanField extends BooleanPropertyType {
         this.noLabel = noLabel;
     }
 
-    @Override
-    public void injectIntoGroup(HtmlPanelGroup formGroup) {
-        Switch switchComponent = new Switch();
-        switchComponent.setId(getId());
-        switchComponent.setLabel(getLabel());
-        switchComponent.setValue(getValue());
-        if (yesLabel != null)
-            switchComponent.setOnText(yesLabel);
-        else
-            switchComponent.setOnText("Yes");
+    public String getYesLabel() {
+        return yesLabel != null ? yesLabel : "Yes";
+    }
 
-        if (noLabel != null)
-            switchComponent.setOffText(noLabel);
-        else
-            switchComponent.setOffText("No");
-
-        formGroup.getChildren().add(switchComponent);
+    public String getNoLabel() {
+        return noLabel != null ? noLabel : "No";
     }
 }

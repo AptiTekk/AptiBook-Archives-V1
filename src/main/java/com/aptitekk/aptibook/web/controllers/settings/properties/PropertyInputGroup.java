@@ -8,9 +8,6 @@ package com.aptitekk.aptibook.web.controllers.settings.properties;
 
 import com.aptitekk.aptibook.core.entities.Property;
 
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlPanelGroup;
-import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -50,15 +47,5 @@ public class PropertyInputGroup {
         return propertyEntityList;
     }
 
-    void constructProperties() {
-        for (Property.Key key : propertiesInputMap.keySet()) {
-            UIComponent component = FacesContext.getCurrentInstance().getViewRoot().findComponent(":propertiesEditForm:propertyGroup" + key.ordinal());
-            if (component != null && component instanceof HtmlPanelGroup) {
-                key.getPropertyType().setId("propertyField" + key.ordinal());
-                key.getPropertyType().setValue(propertiesInputMap.get(key));
-                key.getPropertyType().injectIntoGroup((HtmlPanelGroup) component);
-            }
-        }
-    }
 }
 

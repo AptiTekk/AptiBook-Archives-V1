@@ -9,7 +9,8 @@ package com.aptitekk.aptibook.core.util.propertyTypes;
 import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.RegexPropertyType;
 import net.bootsfaces.component.inputText.InputText;
 
-import javax.faces.component.html.HtmlPanelGroup;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 
 public class SingleLineField extends RegexPropertyType {
 
@@ -17,13 +18,4 @@ public class SingleLineField extends RegexPropertyType {
         super(label, maxLength, pattern, validationMessage);
     }
 
-    @Override
-    public void injectIntoGroup(HtmlPanelGroup formGroup) {
-        InputText inputText = new InputText();
-        inputText.setId(getId());
-        inputText.setLabel(getLabel());
-        inputText.setMaxlength(getMaxLength());
-        inputText.setValue(getValue());
-        formGroup.getChildren().add(inputText);
-    }
 }
