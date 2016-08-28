@@ -47,13 +47,14 @@
                                     <f:ajax render=":loginForm" execute="@form" onevent="loading"/>
                                 </h:commandButton>
                             </div>
-                            <div class="form-group">
+                            <h:panelGroup layout="block" styleClass="form-group"
+                                          rendered="#{oAuthController.googleSignInEnabled}">
                                 <b:commandButton value="Sign In with Google" style="width:100%" look="danger"
                                                  iconAwesome="google"
                                                  ajax="true"
                                                  action="#{oAuthController.signInWithGoogle}"
                                                  update="@form"/>
-                            </div>
+                            </h:panelGroup>
                         </h:form>
                     </b:row>
                 </b:column>

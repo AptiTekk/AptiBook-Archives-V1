@@ -7,8 +7,10 @@
 package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.entities.Permission;
+import com.aptitekk.aptibook.core.entities.Property;
 import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.PermissionService;
+import com.aptitekk.aptibook.core.entities.services.PropertiesService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
@@ -38,6 +40,9 @@ public class AuthenticationController implements Serializable {
     @Inject
     private TenantSessionService tenantSessionService;
 
+    @Inject
+    private PropertiesService propertiesService;
+
     private String username;
     private String password;
 
@@ -64,8 +69,8 @@ public class AuthenticationController implements Serializable {
             return null;
 
         //TODO: Get from properties
-        String whitelistDomains = "gmail.com, jordandistrict.org, AptiTekk.com";
-        String[] whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
+        String whitelistedDomains = propertiesService.getPropertyByKey(Property.Key.GOOGLE_SIGN_IN_WHITELIST).getPropertyValue();
+        String[] whitelist = whitelistedDomains.replaceAll("\\s+", "").toLowerCase().split(",");
 
         boolean domainIsWhitelisted = false;
         for (String domain : whitelist) {

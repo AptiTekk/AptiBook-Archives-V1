@@ -6,6 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
+import com.aptitekk.aptibook.core.entities.Property;
+import com.aptitekk.aptibook.core.entities.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
 import com.github.scribejava.apis.GoogleApi20;
@@ -38,20 +40,43 @@ public class OAuthController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    public static final String GOOGLE_CODE_ATTRIBUTE = "checkGoogleCode";
+    @Inject
+    private PropertiesService propertiesService;
 
+    private boolean googleSignInEnabled;
+    public static final String GOOGLE_CODE_ATTRIBUTE = "checkGoogleCode";
     private static final String GOOGLE_API_KEY = "908953557522-o6m9dri19o1bmh0hrtkjgh6n0522n5lj.apps.googleusercontent.com";
     private static final String GOOGLE_API_SECRET = "-mXdL_YoL6Q6HrLIF7lUZpAo";
     private static final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
+
 
     private OAuth20Service googleOAuthService;
 
     @PostConstruct
     private void init() {
-        googleOAuthService = buildGoogleOAuthService();
+        googleSignInEnabled = Boolean.valueOf(propertiesService.getPropertyByKey(Property.Key.GOOGLE_SIGN_IN_ENABLED).getPropertyValue());
+        if (googleSignInEnabled)
+            googleOAuthService = buildGoogleOAuthService();
+    }
+
+    private OAuth20Service buildGoogleOAuthService() {
+        ServiceBuilder serviceBuilder = new ServiceBuilder();
+        serviceBuilder.apiKey(GOOGLE_API_KEY);
+        serviceBuilder.apiSecret(GOOGLE_API_SECRET);
+
+        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        String requestUrl = httpServletRequest.getRequestURL().toString();
+        serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
+
+        serviceBuilder.scope("email");
+        serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
+        return serviceBuilder.build(GoogleApi20.instance());
     }
 
     public void checkGoogleCode() {
+        if (!googleSignInEnabled)
+            return;
+
         Object googleCode = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(GOOGLE_CODE_ATTRIBUTE);
         if (googleCode != null && googleCode instanceof String) {
             try {
@@ -71,21 +96,10 @@ public class OAuthController implements Serializable {
         }
     }
 
-    private OAuth20Service buildGoogleOAuthService() {
-        ServiceBuilder serviceBuilder = new ServiceBuilder();
-        serviceBuilder.apiKey(GOOGLE_API_KEY);
-        serviceBuilder.apiSecret(GOOGLE_API_SECRET);
-
-        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String requestUrl = httpServletRequest.getRequestURL().toString();
-        serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
-
-        serviceBuilder.scope("email");
-        serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
-        return serviceBuilder.build(GoogleApi20.instance());
-    }
-
     public void signInWithGoogle() {
+        if (!googleSignInEnabled)
+            return;
+
         if (googleOAuthService != null)
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl());
@@ -97,4 +111,7 @@ public class OAuthController implements Serializable {
             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
     }
 
+    public boolean isGoogleSignInEnabled() {
+        return googleSignInEnabled;
+    }
 }
