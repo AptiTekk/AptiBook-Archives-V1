@@ -64,7 +64,7 @@ public class AuthenticationController implements Serializable {
             return null;
 
         //TODO: Get from properties
-        String whitelistDomains = "gmail.com, jordandistrict.crg, AptiTekk.com";
+        String whitelistDomains = "gmail.com, jordandistrict.org, AptiTekk.com";
         String[] whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
 
         boolean domainIsWhitelisted = false;
@@ -98,7 +98,7 @@ public class AuthenticationController implements Serializable {
                 return redirectHome();
             }
         } else {
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unregistered Domain"));
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleJSONResponse.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
         }
         return null;
     }
