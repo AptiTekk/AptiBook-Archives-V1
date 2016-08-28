@@ -41,8 +41,6 @@ public class AuthenticationController implements Serializable {
     private String username;
     private String password;
 
-    private String whitelistDomains = "gmail.com, jordandistrict.crg, AptiTekk.com";
-    private String whitelist[];
     private User authenticatedUser;
 
     @PostConstruct
@@ -53,7 +51,6 @@ public class AuthenticationController implements Serializable {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
         }
-        whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
     }
 
     /**
@@ -65,15 +62,19 @@ public class AuthenticationController implements Serializable {
     String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
         if (googleJSONResponse == null)
             return null;
-        boolean domainCheck = false;
+
+        //TODO: Get from properties
+        String whitelistDomains = "gmail.com, jordandistrict.crg, AptiTekk.com";
+        String[] whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
+
+        boolean domainIsWhitelisted = false;
         for (String domain : whitelist) {
             if (domain.equals(googleJSONResponse.getEmail().toLowerCase().split("@")[1])) {
-                System.out.println(googleJSONResponse.getEmail().toLowerCase().split("@")[1]);
-                domainCheck = true;
+                domainIsWhitelisted = true;
             }
-
         }
-        if (domainCheck) {
+
+        if (domainIsWhitelisted) {
             User existingUser = userService.findByName(googleJSONResponse.getEmail());
             if (existingUser == null) {
                 User user = new User();
@@ -92,6 +93,7 @@ public class AuthenticationController implements Serializable {
                 return null;
             } else {
                 setAuthenticatedUser(existingUser);
+                LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                 return redirectHome();
             }
@@ -134,7 +136,6 @@ public class AuthenticationController implements Serializable {
     }
 
     private String redirectHome() {
-        System.out.println("Inside redirectHome");
         String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
         if (originalUrl != null) {
             FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);

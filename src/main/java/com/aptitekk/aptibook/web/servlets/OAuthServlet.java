@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Map;
 
 @WebServlet("/oauth")
 public class OAuthServlet extends HttpServlet {
@@ -24,16 +22,13 @@ public class OAuthServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String state = req.getParameter("state");
-        System.out.println("Got here!");
         if (state != null && !state.isEmpty() && state.contains("tenant=")) {
-            System.out.println("Inside if");
             String tenant = state.split("=")[1];
             String code = req.getParameter("code");
             HttpSession session = req.getSession();
-            session.setAttribute("code", code);
+            session.setAttribute(OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
             resp.sendRedirect(tenant + "/index.xhtml");
         }
-        System.out.println("After if");
     }
 
     @Override

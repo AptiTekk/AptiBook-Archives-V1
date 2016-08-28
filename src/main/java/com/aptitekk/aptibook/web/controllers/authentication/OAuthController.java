@@ -20,7 +20,6 @@ import com.google.gson.GsonBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -30,7 +29,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 @Named("oAuthController")
-@RequestScoped
+@ViewScoped
 public class OAuthController implements Serializable {
 
     @Inject
@@ -39,7 +38,7 @@ public class OAuthController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    public static final String GOOGLE_CODE_ATTRIBUTE = null;
+    public static final String GOOGLE_CODE_ATTRIBUTE = "checkGoogleCode";
 
     private static final String GOOGLE_API_KEY = "908953557522-o6m9dri19o1bmh0hrtkjgh6n0522n5lj.apps.googleusercontent.com";
     private static final String GOOGLE_API_SECRET = "-mXdL_YoL6Q6HrLIF7lUZpAo";
@@ -51,8 +50,9 @@ public class OAuthController implements Serializable {
     private void init() {
         googleOAuthService = buildGoogleOAuthService();
     }
-    public void googleCode(){
-        Object googleCode = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("code");
+
+    public void checkGoogleCode() {
+        Object googleCode = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(GOOGLE_CODE_ATTRIBUTE);
         if (googleCode != null && googleCode instanceof String) {
             try {
                 OAuth2AccessToken accessToken = googleOAuthService.getAccessToken(googleCode.toString());
@@ -63,13 +63,14 @@ public class OAuthController implements Serializable {
                 Gson gson = new GsonBuilder().create();
                 GoogleJSONResponse googleJSONResponse = gson.fromJson(response.getBody(), GoogleJSONResponse.class);
 
-                // FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(GOOGLE_CODE_ATTRIBUTE);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(GOOGLE_CODE_ATTRIBUTE);
                 authenticationController.loginWithGoogle(googleJSONResponse);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
     private OAuth20Service buildGoogleOAuthService() {
         ServiceBuilder serviceBuilder = new ServiceBuilder();
         serviceBuilder.apiKey(GOOGLE_API_KEY);
