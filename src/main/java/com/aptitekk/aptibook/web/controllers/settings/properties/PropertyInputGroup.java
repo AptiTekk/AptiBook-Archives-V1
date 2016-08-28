@@ -16,7 +16,7 @@ import java.util.Map;
 public class PropertyInputGroup {
 
     private Property.Group propertyGroup;
-    private Map<Property.Key, String> propertiesInputMap = new LinkedHashMap<>();
+    private Map<Property.Key, Object> propertiesInputMap = new LinkedHashMap<>();
 
     private List<Property> propertyEntityList = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class PropertyInputGroup {
         return propertyGroup;
     }
 
-    public Map<Property.Key, String> getPropertiesInputMap() {
+    public Map<Property.Key, Object> getPropertiesInputMap() {
         return propertiesInputMap;
     }
 
