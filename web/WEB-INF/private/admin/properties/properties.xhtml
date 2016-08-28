@@ -53,7 +53,7 @@
                                                        value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
                                                        maxlength="#{propertyInput.key.propertyType.maxLength}"/>
                                     </c:when>
-                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'PasswordField'}">
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'BooleanField'}">
                                         <!--suppress ELValidationInJSP -->
                                         <b:switch id="propertyField#{propertyInput.key.ordinal()}"
                                                   label="#{propertyInput.key.propertyType.label}"
