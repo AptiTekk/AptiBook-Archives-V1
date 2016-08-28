@@ -30,7 +30,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private String lastName;
 
-    private String email;
+
 
     private String phoneNumber;
 
@@ -82,14 +82,6 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhoneNumber() {
@@ -186,7 +178,6 @@ public class User extends MultiTenantEntity implements Serializable {
         return EqualsHelper.areEquals(getUsername(), other.getUsername())
                 && EqualsHelper.areEquals(getFirstName(), other.getFirstName())
                 && EqualsHelper.areEquals(getLastName(), other.getLastName())
-                && EqualsHelper.areEquals(getEmail(), other.getEmail())
                 && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
                 && EqualsHelper.areEquals(getLocation(), other.getLocation())
                 && EqualsHelper.areEquals(getPassword(), other.getPassword());
@@ -194,7 +185,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getEmail(), getPhoneNumber(), getLocation(), getPassword());
+        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword());
     }
 
     public boolean getWantsEmailNotifications() {

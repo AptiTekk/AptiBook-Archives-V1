@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.SettingsSessionController;
 
 import javax.enterprise.context.SessionScoped;

@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.web.controllers;
+package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.User;
@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.entities.services.PermissionService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
+import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 
@@ -53,6 +54,56 @@ public class AuthenticationController implements Serializable {
     }
 
     /**
+     * Login with Google
+     *
+     * @param googleJSONResponse The User's details from Google.
+     * @return The outcome page.
+     */
+    String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
+        if (googleJSONResponse == null)
+            return null;
+
+        //TODO: Get from properties
+        String whitelistDomains = "gmail.com, jordandistrict.org, AptiTekk.com";
+        String[] whitelist = whitelistDomains.replaceAll("\\s+", "").toLowerCase().split(",");
+
+        boolean domainIsWhitelisted = false;
+        for (String domain : whitelist) {
+            if (domain.equals(googleJSONResponse.getEmail().toLowerCase().split("@")[1])) {
+                domainIsWhitelisted = true;
+            }
+        }
+
+        if (domainIsWhitelisted) {
+            User existingUser = userService.findByName(googleJSONResponse.getEmail());
+            if (existingUser == null) {
+                User user = new User();
+                user.setFirstName(googleJSONResponse.getGiven_name());
+                user.setLastName(googleJSONResponse.getFamily_name());
+                user.setUsername(googleJSONResponse.getEmail());
+                try {
+                    userService.insert(user);
+                    setAuthenticatedUser(user);
+                    LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                    return redirectHome();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            } else {
+                setAuthenticatedUser(existingUser);
+                LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                return redirectHome();
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleJSONResponse.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
+        }
+        return null;
+    }
+
+    /**
      * Attempts to log the authenticatedUser in with the credentials they have input.
      *
      * @return The outcome page.
@@ -61,8 +112,6 @@ public class AuthenticationController implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 
         FacesContext context = FacesContext.getCurrentInstance();
-        LogManager.logDebug("Logging In - User: " + username);
-
         User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
 
@@ -75,18 +124,8 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
-            if (originalUrl != null) {
-                FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
-                try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
-                    return null;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            return redirectHome();
         }
-        return "secure";
     }
 
     public String logout() {
@@ -94,6 +133,20 @@ public class AuthenticationController implements Serializable {
 
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
+    }
+
+    private String redirectHome() {
+        String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+        if (originalUrl != null) {
+            FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "secure";
     }
 
     public String redirectIfLoggedIn() throws IOException {

@@ -10,7 +10,7 @@ import com.aptitekk.aptibook.core.entities.*;
 import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;

@@ -8,7 +8,7 @@ package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
 import com.aptitekk.aptibook.core.entities.*;
 import com.aptitekk.aptibook.core.entities.services.UserGroupService;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;

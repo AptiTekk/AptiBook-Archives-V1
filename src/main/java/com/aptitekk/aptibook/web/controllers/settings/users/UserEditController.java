@@ -12,7 +12,7 @@ import com.aptitekk.aptibook.core.entities.UserGroup;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.model.TreeNode;
 
@@ -87,7 +87,6 @@ public class UserEditController extends UserFieldSupplier implements Serializabl
             selectedUser.setUsername(username);
             selectedUser.setFirstName(firstName);
             selectedUser.setLastName(lastName);
-            selectedUser.setEmail(email);
             selectedUser.setPhoneNumber(phoneNumber);
             selectedUser.setLocation(location);
             selectedUser.setWantsEmailNotifications(wantsEmailNotifications);

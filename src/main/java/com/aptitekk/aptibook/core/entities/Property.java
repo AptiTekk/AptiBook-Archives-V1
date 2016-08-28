@@ -10,6 +10,8 @@ package com.aptitekk.aptibook.core.entities;
 import com.aptitekk.aptibook.core.entities.util.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.core.util.propertyTypes.MultiLineField;
+import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.PropertyType;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.UnsatisfiedResolutionException;
@@ -74,32 +76,16 @@ public class Property extends MultiTenantEntity implements Serializable {
 
     public enum Key {
 
-        POLICY_BOX("Policy Box Content",
-                "Default Policies Message.",
-                Group.FRONT_PAGE, 3, false, 256, null, null);
+        POLICY_BOX("Default Policies Message.", Group.FRONT_PAGE, new MultiLineField("Policy Box Content", 3, 256));
 
-        private final String friendlyName;
         private final String defaultValue;
         private final Group group;
-        private int rows;
-        private boolean secret;
-        private final int maxLength;
-        private final String regex;
-        private final String regexMessage;
+        private PropertyType propertyType;
 
-        Key(String friendlyName, String defaultValue, Group group, int rows, boolean secret, int maxLength, String regex, String regexMessage) {
-            this.friendlyName = friendlyName;
+        Key(String defaultValue, Group group, PropertyType propertyType) {
             this.defaultValue = defaultValue;
             this.group = group;
-            this.rows = rows;
-            this.secret = secret;
-            this.maxLength = maxLength;
-            this.regex = regex;
-            this.regexMessage = regexMessage;
-        }
-
-        public String getFriendlyName() {
-            return friendlyName;
+            this.propertyType = propertyType;
         }
 
         public String getDefaultValue() {
@@ -110,24 +96,8 @@ public class Property extends MultiTenantEntity implements Serializable {
             return group;
         }
 
-        public int getRows() {
-            return rows;
-        }
-
-        public boolean isSecret() {
-            return secret;
-        }
-
-        public int getMaxLength() {
-            return maxLength;
-        }
-
-        public String getRegex() {
-            return regex;
-        }
-
-        public String getRegexMessage() {
-            return regexMessage;
+        public PropertyType getPropertyType() {
+            return propertyType;
         }
     }
 

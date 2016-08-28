@@ -7,8 +7,7 @@
 package com.aptitekk.aptibook.web.controllers.settings;
 
 import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
-import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;

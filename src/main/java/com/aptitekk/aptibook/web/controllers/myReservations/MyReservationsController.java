@@ -14,7 +14,7 @@ import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.core.util.time.SegmentedTime;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;

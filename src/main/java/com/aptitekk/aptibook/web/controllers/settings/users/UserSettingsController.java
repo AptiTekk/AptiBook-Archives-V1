@@ -9,7 +9,7 @@ package com.aptitekk.aptibook.web.controllers.settings.users;
 import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;
@@ -61,7 +61,6 @@ public class UserSettingsController extends UserFieldSupplier implements Seriali
             user.setUsername(username);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setEmail(email);
             user.setPhoneNumber(phoneNumber);
             user.setLocation(location);
             user.setWantsEmailNotifications(wantsEmailNotifications);

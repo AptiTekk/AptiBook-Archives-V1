@@ -48,14 +48,14 @@ public class EmailService implements Serializable {
 
 
     public void sendEmailNotification(Notification notification) throws SparkPostException {
-        if (notification.getUser() == null || notification.getUser().getEmail() == null || notification.getUser().getEmail().isEmpty() || !notification.getUser().getWantsEmailNotifications())
+        if (notification.getUser() == null || notification.getUser().getUsername() == null || notification.getUser().getUsername().isEmpty() || !notification.getUser().getWantsEmailNotifications())
             return;
 
         Map<String, Object> substitutionData = new HashMap<>();
         substitutionData.put("subject", notification.getSubject());
         substitutionData.put("body", notification.getBody());
 
-        sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getEmail()));
+        sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
     }
 
     /**

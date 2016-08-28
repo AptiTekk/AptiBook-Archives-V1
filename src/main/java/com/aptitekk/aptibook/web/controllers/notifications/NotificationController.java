@@ -10,7 +10,7 @@ import com.aptitekk.aptibook.core.entities.Notification;
 import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.NotificationService;
 import com.aptitekk.aptibook.core.entities.services.UserService;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;

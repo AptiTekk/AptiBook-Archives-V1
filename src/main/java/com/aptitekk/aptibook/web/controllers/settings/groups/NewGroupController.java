@@ -10,7 +10,7 @@ import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.UserGroup;
 import com.aptitekk.aptibook.core.entities.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
