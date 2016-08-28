@@ -84,17 +84,17 @@ public class PropertiesController implements Serializable {
         for (PropertyInputGroup propertyInputGroup : propertyInputGroups) {
             String groupClientId = "propertiesEditForm:propertyGroup" + propertyInputGroup.getPropertyGroup().ordinal();
 
-            Map<Property.Key, String> propertiesInputMap = propertyInputGroup.getPropertiesInputMap();
+            Map<Property.Key, Object> propertiesInputMap = propertyInputGroup.getPropertiesInputMap();
             List<Property> propertyEntityList = propertyInputGroup.getPropertyEntityList();
 
             //Validate each property.
             boolean validationFailed = false;
-            for (Map.Entry<Property.Key, String> entry : propertiesInputMap.entrySet()) {
+            for (Map.Entry<Property.Key, Object> entry : propertiesInputMap.entrySet()) {
                 String propertyClientId = "propertiesEditForm:propertyField" + entry.getKey().ordinal();
 
                 if (entry.getKey().getPropertyType() instanceof TextPropertyType) {
                     TextPropertyType textPropertyType = (TextPropertyType) entry.getKey().getPropertyType();
-                    if (entry.getValue() != null && entry.getValue().length() > textPropertyType.getMaxLength()) {
+                    if (entry.getValue() != null && entry.getValue().toString().length() > textPropertyType.getMaxLength()) {
                         FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This may not be longer than " + textPropertyType.getMaxLength() + " characters."));
                         validationFailed = true;
                     }
@@ -103,7 +103,7 @@ public class PropertiesController implements Serializable {
                 if (entry.getKey().getPropertyType() instanceof RegexPropertyType) {
                     RegexPropertyType regexPropertyType = (RegexPropertyType) entry.getKey().getPropertyType();
                     if (regexPropertyType.getPattern() != null) {
-                        if (entry.getValue() == null || !entry.getValue().matches(regexPropertyType.getPattern())) {
+                        if (entry.getValue() == null || !entry.getValue().toString().matches(regexPropertyType.getPattern())) {
                             FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, regexPropertyType.getValidationMessage()));
                             validationFailed = true;
                         }
@@ -117,11 +117,11 @@ public class PropertiesController implements Serializable {
                 for (Property property : propertyEntityList) {
 
                     //No change to property; We can skip it. No need to make a query to change nothing.
-                    if (propertiesInputMap.get(property.getPropertyKey()).equals(property.getPropertyValue()))
+                    if (propertiesInputMap.get(property.getPropertyKey()).toString().equals(property.getPropertyValue()))
                         continue;
 
                     changesMade = true;
-                    property.setPropertyValue(propertiesInputMap.get(property.getPropertyKey()));
+                    property.setPropertyValue(propertiesInputMap.get(property.getPropertyKey()).toString());
                     try {
                         propertiesService.merge(property);
                     } catch (Exception e) {

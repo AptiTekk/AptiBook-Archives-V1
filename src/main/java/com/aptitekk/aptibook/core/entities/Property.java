@@ -10,7 +10,8 @@ package com.aptitekk.aptibook.core.entities;
 import com.aptitekk.aptibook.core.entities.util.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.propertyTypes.MultiLineField;
+import com.aptitekk.aptibook.core.util.propertyTypes.BooleanField;
+import com.aptitekk.aptibook.core.util.propertyTypes.SingleLineField;
 import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.PropertyType;
 
 import javax.enterprise.context.spi.CreationalContext;
@@ -27,7 +28,7 @@ public class Property extends MultiTenantEntity implements Serializable {
 
     public enum Group {
 
-        FRONT_PAGE("Front Page", null);
+        GOOGLE_SIGN_IN("Google Sign In", null);
 
         private String friendlyName;
         private Class<? extends ChangeListener> propertyGroupChangeListenerClass;
@@ -76,7 +77,8 @@ public class Property extends MultiTenantEntity implements Serializable {
 
     public enum Key {
 
-        POLICY_BOX("Default Policies Message.", Group.FRONT_PAGE, new MultiLineField("Policy Box Content", 3, 256));
+        GOOGLE_SIGN_IN_ENABLED("false", Group.GOOGLE_SIGN_IN, new BooleanField("Enable Google Sign In")),
+        GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Whitelisted Domain Names (Comma separated)", 256));
 
         private final String defaultValue;
         private final Group group;

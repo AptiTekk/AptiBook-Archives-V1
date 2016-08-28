@@ -4,17 +4,17 @@
   ~ Proprietary and confidential.
   -->
 
-<!-- Created 8/13/2016-->
+<!-- Created 8/28/2016-->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <!-- Removes Email Field from User Entity -->
-    <changeSet id="9" author="MitchTalmadge">
-        <addColumn tableName="user">
-            <column name="googleuser" type="BOOLEAN" defaultValueBoolean="false"/>
-        </addColumn>
-</changeSet>
+    <!-- Removes the POLCY_BOX property key. -->
+    <changeSet id="10" author="MitchTalmadge">
+        <delete tableName="property">
+            <where>propertykey = 'POLICY_BOX'</where>
+        </delete>
+    </changeSet>
 
 </databaseChangeLog>
