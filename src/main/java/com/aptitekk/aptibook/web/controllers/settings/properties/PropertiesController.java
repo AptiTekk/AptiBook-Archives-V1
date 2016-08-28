@@ -9,6 +9,8 @@ package com.aptitekk.aptibook.web.controllers.settings.properties;
 import com.aptitekk.aptibook.core.entities.Permission;
 import com.aptitekk.aptibook.core.entities.Property;
 import com.aptitekk.aptibook.core.entities.services.PropertiesService;
+import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.RegexPropertyType;
+import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.TextPropertyType;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
@@ -90,15 +92,21 @@ public class PropertiesController implements Serializable {
             for (Map.Entry<Property.Key, String> entry : propertiesInputMap.entrySet()) {
                 String propertyClientId = "propertiesEditForm:propertyField" + entry.getKey().ordinal();
 
-                if (entry.getValue() != null && entry.getValue().length() > entry.getKey().getMaxLength()) {
-                    FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This may not be longer than " + entry.getKey().getMaxLength() + " characters."));
-                    validationFailed = true;
+                if (entry.getKey().getPropertyType() instanceof TextPropertyType) {
+                    TextPropertyType textPropertyType = (TextPropertyType) entry.getKey().getPropertyType();
+                    if (entry.getValue() != null && entry.getValue().length() > textPropertyType.getMaxLength()) {
+                        FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This may not be longer than " + textPropertyType.getMaxLength() + " characters."));
+                        validationFailed = true;
+                    }
                 }
 
-                if (entry.getKey().getRegex() != null) {
-                    if (entry.getValue() == null || !entry.getValue().matches(entry.getKey().getRegex())) {
-                        FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, entry.getKey().getRegexMessage()));
-                        validationFailed = true;
+                if (entry.getKey().getPropertyType() instanceof RegexPropertyType) {
+                    RegexPropertyType regexPropertyType = (RegexPropertyType) entry.getKey().getPropertyType();
+                    if (regexPropertyType.getPattern() != null) {
+                        if (entry.getValue() == null || !entry.getValue().matches(regexPropertyType.getPattern())) {
+                            FacesContext.getCurrentInstance().addMessage(propertyClientId, new FacesMessage(FacesMessage.SEVERITY_ERROR, null, regexPropertyType.getValidationMessage()));
+                            validationFailed = true;
+                        }
                     }
                 }
             }
