@@ -19,7 +19,7 @@
         <b:row id="propertiesPageContent">
             <b:column colXs="12">
                 <h:form id="propertiesEditForm">
-                    <c:forEach items="#{propertiesController.propertyInputGroups}" var="inputGroup">
+                    <c:forEach items="#{editPropertyController.propertyInputGroups}" var="inputGroup">
                         <h:panelGroup id="propertyGroup#{inputGroup.propertyGroup.ordinal()}" layout="block"
                                       styleClass="form-group">
                             <b:message for="@parent" showSummary="false"
@@ -70,12 +70,12 @@
                         <div class="btn-toolbar pull-right">
                             <h:commandButton styleClass="btn btn-primary"
                                              value="Save Changes"
-                                             action="#{propertiesController.saveProperties}">
+                                             action="#{editPropertyController.saveProperties}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>
                             <h:commandButton styleClass="btn btn-default"
                                              value="Reset Fields"
-                                             action="#{propertiesController.resetFields}">
+                                             action="#{editPropertyController.resetFields}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>
                         </div>

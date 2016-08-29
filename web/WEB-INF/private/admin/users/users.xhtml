@@ -26,7 +26,7 @@
             <b:column colXs="12" colLg="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{userEditController.users}" var="authenticatedUser"
+                        <b:dataTable value="#{editUserController.users}" var="authenticatedUser"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      fixedHeader="false" responsive="true" widgetVar="dataTable">
                             <h:column>
@@ -34,11 +34,11 @@
                                     <h:outputText value="Username"/>
                                 </f:facet>
                                 <b:navCommandLink value="#{authenticatedUser.username}"
-                                                  action="#{userEditController.setSelectedUser(authenticatedUser)}"
+                                                  action="#{editUserController.setSelectedUser(authenticatedUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
                                                   update=":usersPage"
-                                                  style="cursor: pointer; font-weight: #{userEditController.selectedUser == authenticatedUser ? 'bold' : 'normal'}"/>
+                                                  style="cursor: pointer; font-weight: #{editUserController.selectedUser == authenticatedUser ? 'bold' : 'normal'}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
@@ -60,7 +60,7 @@
             <b:column colXs="12" colLg="6" offsetLg="1">
                 <h:form id="userEditForm">
                     <c:choose>
-                        <c:when test="#{userEditController.selectedUser == null}">
+                        <c:when test="#{editUserController.selectedUser == null}">
                             <b:column colXs="12">
                                 <h4>Please select a User.</h4>
                                 <b:message for="userEditForm" showSummary="false" showDetail="true"/>
@@ -74,9 +74,9 @@
                             </div>
 
                             <c:choose>
-                                <c:when test="#{userEditController.selectedUser.admin}">
+                                <c:when test="#{editUserController.selectedUser.admin}">
                                     <b:inputText label="Username:"
-                                                 value="#{userEditController.username}"
+                                                 value="#{editUserController.username}"
                                                  required="true" requiredMessage="This is required."
                                                  readonly="true"/>
                                 </c:when>
@@ -84,7 +84,7 @@
                                     <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
                                     <b:inputText id="usernameEdit"
                                                  label="Username:"
-                                                 value="#{userEditController.username}"
+                                                 value="#{editUserController.username}"
                                                  required="true" requiredMessage="This is required."
                                                  maxlength="32"/>
                                 </c:otherwise>
@@ -92,15 +92,15 @@
 
                             <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
                             <b:inputText id="firstNameEdit" label="First Name:"
-                                         value="#{userEditController.firstName}" maxlength="32"/>
+                                         value="#{editUserController.firstName}" maxlength="32"/>
 
                             <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
                             <b:inputText id="lastNameEdit" label="Last Name:"
-                                         value="#{userEditController.lastName}" maxlength="32"/>
+                                         value="#{editUserController.lastName}" maxlength="32"/>
 
                             <b:message for="phoneEdit" showSummary="false" showDetail="true"/>
                             <b:inputText id="phoneEdit" label="Phone Number:"
-                                         value="#{userEditController.phoneNumber}"
+                                         value="#{editUserController.phoneNumber}"
                                          maxlength="32">
                                 <f:facet name="prepend">
                                     <span class="glyphicon glyphicon-earphone"/>
@@ -109,7 +109,7 @@
 
                             <b:message for="locationEdit" showSummary="false" showDetail="true"/>
                             <b:inputText id="locationEdit" label="Location:"
-                                         value="#{userEditController.location}"
+                                         value="#{editUserController.location}"
                                          maxlength="256">
                                 <f:facet name="prepend">
                                     <span class="glyphicon glyphicon-map-marker"/>
@@ -122,7 +122,7 @@
                             </div>
 
                             <b:inputSecret id="passwordEdit" label="New Password:"
-                                           value="#{userEditController.password}"
+                                           value="#{editUserController.password}"
                                            maxlength="32">
                                 <f:facet name="prepend">
                                     <span class="glyphicon glyphicon-asterisk"/>
@@ -130,7 +130,7 @@
                             </b:inputSecret>
 
                             <b:inputSecret label="Confirm New Password:"
-                                           value="#{userEditController.confirmPassword}"
+                                           value="#{editUserController.confirmPassword}"
                                            maxlength="32">
                                 <f:facet name="prepend">
                                     <span class="glyphicon glyphicon-asterisk"/>
@@ -138,19 +138,19 @@
                             </b:inputSecret>
 
                             <b:switch label="Recieve Email Notifications:" onText="Yes" offText="No"
-                                      value="#{userEditController.wantsEmailNotifications}"/>
+                                      value="#{editUserController.wantsEmailNotifications}"/>
 
                             <div class="form-group">
                                 <h4>Assigned User Groups:</h4>
                             </div>
 
                             <c:choose>
-                                <c:when test="#{userEditController.selectedUser.admin}">
+                                <c:when test="#{editUserController.selectedUser.admin}">
                                     <div class="form-group">
                                         Administrators are automatically granted full permissions. No User Groups need be assigned.
                                     </div>
                                 </c:when>
-                                <c:when test="#{empty groupTreeController.getMultipleSelectedTree(userEditController.selectedUser.userGroups, null, false, false).children}">
+                                <c:when test="#{empty groupTreeController.getMultipleSelectedTree(editUserController.selectedUser.userGroups, null, false, false).children}">
                                     <div class="form-group">
                                         There are no User Groups. You may create them on the User Groups page.
                                     </div>
@@ -165,10 +165,10 @@
                                             Toggle the selection of User Groups by clicking on them.
 
                                             <pf:tree id="memberGroups"
-                                                     value="#{groupTreeController.getMultipleSelectedTree(userEditController.selectedUser.userGroups, null, false, false)}"
+                                                     value="#{groupTreeController.getMultipleSelectedTree(editUserController.selectedUser.userGroups, null, false, false)}"
                                                      var="node" selectionMode="checkbox"
                                                      showUnselectableCheckbox="true"
-                                                     selection="#{userEditController.userGroupNodes}"
+                                                     selection="#{editUserController.userGroupNodes}"
                                                      propagateSelectionDown="false" propagateSelectionUp="false">
                                                 <pf:treeNode>
                                                     <h:outputText value="#{node.name}"/>
@@ -185,16 +185,16 @@
                                               value="Delete User"
                                               p:data-toggle="modal"
                                               p:data-target="#deletionConfirmModal"
-                                              disabled="#{userEditController.selectedUser.admin}"/>
+                                              disabled="#{editUserController.selectedUser.admin}"/>
                                     <div class="btn-toolbar pull-right">
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes"
-                                                         action="#{userEditController.updateSettings()}">
+                                                         action="#{editUserController.updateSettings()}">
                                             <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Form"
-                                                         action="#{userEditController.resetFields()}">
+                                                         action="#{editUserController.resetFields()}">
                                             <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
                                         </h:commandButton>
                                     </div>

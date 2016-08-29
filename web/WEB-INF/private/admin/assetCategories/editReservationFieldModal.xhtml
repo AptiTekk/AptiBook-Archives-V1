@@ -17,7 +17,7 @@
 <ui:composition>
     <h:form id="editReservationFieldModalForm">
         <b:modal styleClass="editReservationFieldModal"
-                 title="Editing Reservation Field '#{editReservationFieldController.reservationField.title}' for '#{assetCategoryEditController.selectedAssetCategory.name}'">
+                 title="Editing Reservation Field '#{editReservationFieldController.reservationField.title}' for '#{editAssetCategoryController.selectedAssetCategory.name}'">
             <h:panelGroup id="editReservationFieldFields">
                 <b:row>
                     <b:column colXs="12">
@@ -34,7 +34,7 @@
                             <f:validator binding="#{uniqueReservationFieldValidator}"/>
                             <f:attribute name="exception" value="#{editReservationFieldController.reservationField}"/>
                             <f:attribute name="assetCategory"
-                                         value="#{assetCategoryEditController.selectedAssetCategory}"/>
+                                         value="#{editAssetCategoryController.selectedAssetCategory}"/>
                         </b:inputText>
                     </b:column>
                 </b:row>

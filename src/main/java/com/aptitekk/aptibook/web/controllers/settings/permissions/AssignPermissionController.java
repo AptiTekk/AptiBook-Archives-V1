@@ -24,7 +24,7 @@ import java.util.*;
 
 @Named
 @ViewScoped
-public class PermissionsController implements Serializable {
+public class AssignPermissionController implements Serializable {
 
     @Inject
     private PermissionService permissionService;

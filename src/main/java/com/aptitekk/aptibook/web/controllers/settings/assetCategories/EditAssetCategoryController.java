@@ -29,7 +29,7 @@ import java.util.Queue;
 
 @Named
 @ViewScoped
-public class AssetCategoryEditController implements Serializable {
+public class EditAssetCategoryController implements Serializable {
 
     @Inject
     private TagController tagController;

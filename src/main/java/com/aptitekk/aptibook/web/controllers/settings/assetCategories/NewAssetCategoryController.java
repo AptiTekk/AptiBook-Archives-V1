@@ -31,7 +31,7 @@ public class NewAssetCategoryController implements Serializable {
     private String name;
 
     @Inject
-    private AssetCategoryEditController assetCategoryEditController;
+    private EditAssetCategoryController editAssetCategoryController;
 
     public void addAssetCategory() throws Exception {
         AssetCategory assetCategory = new AssetCategory();
@@ -41,9 +41,9 @@ public class NewAssetCategoryController implements Serializable {
 
         assetCategory = assetCategoryService.get(assetCategory.getId());
 
-        if (assetCategoryEditController != null) {
-            assetCategoryEditController.refreshAssetCategories();
-            assetCategoryEditController.setSelectedAssetCategory(assetCategory);
+        if (editAssetCategoryController != null) {
+            editAssetCategoryController.refreshAssetCategories();
+            editAssetCategoryController.setSelectedAssetCategory(assetCategory);
         }
 
         FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category '" + assetCategory.getName() + "' Added!"));

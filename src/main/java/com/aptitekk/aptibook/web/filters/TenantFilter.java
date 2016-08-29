@@ -101,6 +101,7 @@ public class TenantFilter implements Filter {
 
     private void redirectUnauthorized(ServletRequest request, ServletResponse response) throws IOException {
         String parameters = "?";
+        //noinspection RedundantCast
         for (Map.Entry<String, String[]> entry : ((Map<String, String[]>) request.getParameterMap()).entrySet()) {
             String key = entry.getKey();
             String[] value = entry.getValue();
@@ -115,7 +116,7 @@ public class TenantFilter implements Filter {
         String attemptedAccessPath = ((HttpServletRequest) request).getRequestURI();
 
         LogManager.logInfo("Unauthorized access request to " + attemptedAccessPath + parameters);
-        ((HttpServletRequest) request).getSession(true).setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
+        ((HttpServletRequest) request).getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
         ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 

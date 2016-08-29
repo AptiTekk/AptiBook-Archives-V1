@@ -29,7 +29,7 @@ import java.util.*;
 
 @Named
 @ViewScoped
-public class AssetSettingsController extends AssetFieldSupplier implements Serializable {
+public class EditAssetController extends AssetFieldSupplier implements Serializable {
 
     @Inject
     private AssetService assetService;

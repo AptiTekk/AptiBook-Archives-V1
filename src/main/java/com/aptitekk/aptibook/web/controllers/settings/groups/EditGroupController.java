@@ -33,7 +33,7 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class GroupEditController implements Serializable {
+public class EditGroupController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;

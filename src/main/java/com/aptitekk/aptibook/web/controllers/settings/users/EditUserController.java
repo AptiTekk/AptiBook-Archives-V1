@@ -29,7 +29,7 @@ import java.util.List;
 
 @Named
 @ViewScoped
-public class UserEditController extends UserFieldSupplier implements Serializable {
+public class EditUserController extends UserFieldSupplier implements Serializable {
 
     @Inject
     private UserService userService;

@@ -28,7 +28,7 @@ import java.util.Map;
 
 @Named
 @ViewScoped
-public class PropertiesController implements Serializable {
+public class EditPropertyController implements Serializable {
 
     @Inject
     private PropertiesService propertiesService;

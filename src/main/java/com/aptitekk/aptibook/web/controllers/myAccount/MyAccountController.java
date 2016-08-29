@@ -4,13 +4,14 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.web.controllers.settings.users;
+package com.aptitekk.aptibook.web.controllers.myAccount;
 
 import com.aptitekk.aptibook.core.entities.User;
 import com.aptitekk.aptibook.core.entities.services.UserService;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -24,7 +25,7 @@ import static com.aptitekk.aptibook.web.controllers.help.HelpController.Topic.US
 
 @Named
 @ViewScoped
-public class UserSettingsController extends UserFieldSupplier implements Serializable {
+public class MyAccountController extends UserFieldSupplier implements Serializable {
 
     @Inject
     private UserService userService;

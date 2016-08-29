@@ -38,8 +38,8 @@
         <display-name>*</display-name>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-outcome>userSettings</from-outcome>
-            <to-view-id>/secure/userSettings.xhtml</to-view-id>
+            <from-outcome>myAccount</from-outcome>
+            <to-view-id>/secure/myAccount.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
     </navigation-rule>

@@ -46,7 +46,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
     private TagController tagController;
 
     @Inject
-    private AssetSettingsController assetSettingsController;
+    private EditAssetController editAssetController;
 
     private AssetCategory assetCategory;
 
@@ -89,7 +89,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                     asset.setOwner(assetOwnerGroup);
                     asset.setAssetCategory(assetCategory);
                     assetService.insert(asset);
-                    assetSettingsController.refreshAssets();
+                    editAssetController.refreshAssets();
                     LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + asset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
                 }

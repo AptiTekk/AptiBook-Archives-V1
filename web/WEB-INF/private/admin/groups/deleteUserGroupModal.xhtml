@@ -15,11 +15,11 @@
 <ui:composition>
     <h:form id="deletionConfirmModalForm">
         <b:modal class="deletionConfirmModal" title="User Group Deletion Confirmation">
-            Are you sure you want to delete the User Group '#{groupEditController.selectedUserGroup.name}'?
+            Are you sure you want to delete the User Group '#{editGroupController.selectedUserGroup.name}'?
             (No Users will be deleted.)
             <f:facet name="footer">
                 <b:commandButton look="danger" value="Delete" ajax="true"
-                                 action="#{groupEditController.deleteSelectedGroup}"
+                                 action="#{editGroupController.deleteSelectedGroup}"
                                  update=":groupsPageContent" oncomplete="$('.deletionConfirmModal').modal('hide')"/>
                 <b:button look="default" value="Cancel" onclick="$('.deletionConfirmModal').modal('hide')"/>
             </f:facet>

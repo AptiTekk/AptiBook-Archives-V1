@@ -18,7 +18,7 @@
 <ui:composition>
     <h:form id="newReservationFieldModalForm">
         <b:modal styleClass="newReservationFieldModal"
-                 title="New Reservation Field for '#{assetCategoryEditController.selectedAssetCategory.name}'">
+                 title="New Reservation Field for '#{editAssetCategoryController.selectedAssetCategory.name}'">
             <h:panelGroup id="newReservationFieldFields">
                 <b:row>
                     <b:column colXs="12">
@@ -34,7 +34,7 @@
                                      requiredMessage="This is required." maxlength="64">
                             <f:validator binding="#{uniqueReservationFieldValidator}"/>
                             <f:attribute name="assetCategory"
-                                         value="#{assetCategoryEditController.selectedAssetCategory}"/>
+                                         value="#{editAssetCategoryController.selectedAssetCategory}"/>
                         </b:inputText>
                     </b:column>
                 </b:row>
