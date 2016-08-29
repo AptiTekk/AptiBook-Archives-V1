@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.myAccount;
 
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;

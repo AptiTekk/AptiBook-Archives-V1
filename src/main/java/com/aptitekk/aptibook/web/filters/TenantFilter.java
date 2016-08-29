@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.filters;
 
-import com.aptitekk.aptibook.core.entities.Tenant;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.TenantService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.TenantService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
 

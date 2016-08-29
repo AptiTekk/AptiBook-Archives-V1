@@ -11,11 +11,11 @@
  */
 package com.aptitekk.aptibook.web.controllers.settings.groups;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.UserGroup;
-import com.aptitekk.aptibook.core.entities.services.UserGroupService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;

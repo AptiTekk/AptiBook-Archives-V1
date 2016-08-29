@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;

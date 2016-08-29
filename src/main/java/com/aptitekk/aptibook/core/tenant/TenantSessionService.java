@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.core.tenant;
 
-import com.aptitekk.aptibook.core.entities.Tenant;
-import com.aptitekk.aptibook.core.entities.services.TenantService;
+import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.domain.services.TenantService;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;

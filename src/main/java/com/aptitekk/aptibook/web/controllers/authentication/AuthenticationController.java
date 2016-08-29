@@ -6,12 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.Property;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.PermissionService;
-import com.aptitekk.aptibook.core.entities.services.PropertiesService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.PermissionService;
+import com.aptitekk.aptibook.core.domain.services.PropertiesService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;

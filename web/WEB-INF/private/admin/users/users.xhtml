@@ -86,7 +86,10 @@
                                                  label="Username:"
                                                  value="#{editUserController.username}"
                                                  required="true" requiredMessage="This is required."
-                                                 maxlength="32"/>
+                                                 maxlength="32">
+                                        <f:validator binding="#{uniqueUserValidator}"/>
+                                        <f:attribute name="exception" value="#{editUserController.selectedUser}"/>
+                                    </b:inputText>
                                 </c:otherwise>
                             </c:choose>
 

@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.entities.Property;
-import com.aptitekk.aptibook.core.entities.services.PropertiesService;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
 import com.github.scribejava.apis.GoogleApi20;

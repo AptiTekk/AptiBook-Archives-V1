@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.converters;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Tag;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.entities.services.TagService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Tag;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.TagService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;

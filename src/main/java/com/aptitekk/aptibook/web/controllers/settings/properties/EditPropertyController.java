@@ -6,11 +6,11 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.properties;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.Property;
-import com.aptitekk.aptibook.core.entities.services.PropertiesService;
-import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.RegexPropertyType;
-import com.aptitekk.aptibook.core.util.propertyTypes.abstractTypes.TextPropertyType;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.services.PropertiesService;
+import com.aptitekk.aptibook.web.propertyTypes.abstractTypes.RegexPropertyType;
+import com.aptitekk.aptibook.web.propertyTypes.abstractTypes.TextPropertyType;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 

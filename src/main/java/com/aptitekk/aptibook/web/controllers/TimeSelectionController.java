@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers;
 
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.util.time.CalendarRange;
 import com.aptitekk.aptibook.core.util.time.SegmentedTime;
 import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;

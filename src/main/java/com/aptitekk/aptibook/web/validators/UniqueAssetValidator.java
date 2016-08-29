@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.validators;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;

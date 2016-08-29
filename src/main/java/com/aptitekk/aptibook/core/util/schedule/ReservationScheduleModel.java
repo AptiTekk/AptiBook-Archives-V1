@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.core.util.schedule;
 
-import com.aptitekk.aptibook.core.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import org.primefaces.model.LazyScheduleModel;
 
 import java.util.Calendar;

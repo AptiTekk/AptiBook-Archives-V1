@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;

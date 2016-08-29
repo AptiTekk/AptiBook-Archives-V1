@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.notifications;
 
-import com.aptitekk.aptibook.core.entities.Notification;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.NotificationService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.annotation.PostConstruct;

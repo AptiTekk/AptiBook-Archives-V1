@@ -74,7 +74,10 @@
                             <b:inputText id="groupNameEdit" label="Name:"
                                          value="#{editGroupController.editableGroupName}"
                                          required="true"
-                                         requiredMessage="This is required." maxlength="32"/>
+                                         requiredMessage="This is required." maxlength="32">
+                                <f:validator binding="#{uniqueUserGroupValidator}"/>
+                                <f:attribute name="exception" value="#{editGroupController.selectedUserGroup}"/>
+                            </b:inputText>
 
                             <div class="btn-toolbar">
                                 <b:commandButton look="danger" value="Delete User Group" ajax="true"

@@ -70,7 +70,11 @@
                                              value="#{editAssetCategoryController.editableAssetCategoryName}"
                                              required="true"
                                              disabled="#{!editAssetCategoryController.hasModifyPermission()}"
-                                             requiredMessage="This is required." maxlength="32"/>
+                                             requiredMessage="This is required." maxlength="32">
+                                    <f:validator binding="#{uniqueAssetCategoryValidator}"/>
+                                    <f:attribute name="exception"
+                                                 value="#{editAssetCategoryController.selectedAssetCategory}"/>
+                                </b:inputText>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="Asset Tags:"/>

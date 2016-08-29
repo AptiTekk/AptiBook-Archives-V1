@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.User;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
