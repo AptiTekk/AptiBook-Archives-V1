@@ -48,92 +48,77 @@
                                 </c:otherwise>
                             </c:choose>
                         </b:panel>
-                        <div class="form-group" style="padding-top:20px">
-                            <b:commandButton look="primary"
-                                             value="Add New User Group"
-                                             ajax="true"
-                                             update=":newUserGroupModalForm"
-                                             oncomplete="$('.newUserGroupModal').modal()"/>
-                        </div>
+                        <b:commandButton look="primary"
+                                         value="Add New User Group"
+                                         ajax="true"
+                                         update=":newUserGroupModalForm"
+                                         oncomplete="$('.newUserGroupModal').modal()"/>
                     </div>
                 </h:form>
             </b:column>
-            <b:column colXs="12" colLg="7">
-                <h:form styleClass="form-horizontal" id="groupEditForm">
+            <b:column colXs="12" colLg="6" offsetLg="1">
+                <h:form id="groupEditForm">
                     <c:choose>
                         <c:when test="#{editGroupController.selectedUserGroup == null}">
-                            <b:column colXs="9" offsetXs="3">
-                                <h4>Please select a User Group.</h4>
-                                <b:message for="groupEditForm" showSummary="false" showDetail="true"/>
-                            </b:column>
+                            <h4>Please select a User Group.</h4>
+                            <b:message for="groupEditForm" showSummary="false" showDetail="true"/>
                         </c:when>
                         <c:otherwise>
                             <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>User Group Settings</h4>
-                                    * = Required. Name must be unique.
-                                    <b:message for="groupEditForm" showSummary="false"/>
-                                </b:column>
+                                <h4>User Group Settings</h4>
+                                * = Required. Name must be unique.
+                                <b:message for="groupEditForm" showSummary="false"/>
                             </div>
 
-                            <div class="form-group">
-                                <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="groupNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="groupNameEdit" styleClass="form-control"
-                                                 value="#{editGroupController.editableGroupName}"
-                                                 required="true"
-                                                 requiredMessage="This is required." maxlength="32"/>
-                                </b:column>
-                            </div>
+                            <b:message for="groupNameEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="groupNameEdit" label="Name:"
+                                         value="#{editGroupController.editableGroupName}"
+                                         required="true"
+                                         requiredMessage="This is required." maxlength="32"/>
 
-                            <div class="form-group">
-                                <div class="col-xs-offset-3 col-xs-9">
-                                    <div class="btn-toolbar">
-                                        <b:commandButton look="danger" value="Delete User Group" ajax="true"
-                                                         update=":deletionConfirmModalForm"
-                                                         oncomplete="$('.deletionConfirmModal').modal()"/>
-                                        <div class="btn-toolbar pull-right">
-                                            <h:commandButton styleClass="btn btn-primary"
-                                                             value="Save Changes"
-                                                             action="#{editGroupController.updateSettings()}">
-                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                            </h:commandButton>
-                                            <h:commandButton styleClass="btn btn-default"
-                                                             value="Reset Form"
-                                                             action="#{editGroupController.resetSettings()}">
-                                                <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                            </h:commandButton>
-                                        </div>
-                                    </div>
+                            <div class="btn-toolbar">
+                                <b:commandButton look="danger" value="Delete User Group" ajax="true"
+                                                 update=":deletionConfirmModalForm"
+                                                 oncomplete="$('.deletionConfirmModal').modal()"/>
+                                <div class="btn-toolbar pull-right">
+                                    <h:commandButton styleClass="btn btn-primary"
+                                                     value="Save Changes"
+                                                     action="#{editGroupController.updateSettings()}">
+                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                    </h:commandButton>
+                                    <h:commandButton styleClass="btn btn-default"
+                                                     value="Reset Form"
+                                                     action="#{editGroupController.resetSettings()}">
+                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                    </h:commandButton>
                                 </div>
                             </div>
 
+                            <hr/>
+
                             <div class="form-group">
-                                <h:outputLabel value="Users:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="usersTable" showSummary="false" showDetail="true"/>
-                                    <b:dataTable searching="true" paginated="true"
-                                                 value="#{editGroupController.selectedUserGroup.users}" var="user"
-                                                 id="usersTable">
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Username"/>
-                                            </f:facet>
-                                            <b:navCommandLink
-                                                    action="#{editGroupController.removeUserFromSelectedGroup(user)}"
-                                                    ajax="true" update="@parent:@parent:@parent:@parent"
-                                                    iconAwesome="minus-circle"
-                                                    value="#{user.username}" style="cursor: pointer;"/>
-                                        </h:column>
-                                        <h:column>
-                                            <f:facet name="header">
-                                                <h:outputText value="Full Name"/>
-                                            </f:facet>
-                                            <h:outputText value="#{user.fullname}"/>
-                                        </h:column>
-                                    </b:dataTable>
-                                </b:column>
+                                <h:outputLabel value="Users:" for="usersTable"/>
+                                <b:message for="usersTable" showSummary="false" showDetail="true"/>
+                                <b:dataTable searching="true" paginated="true"
+                                             value="#{editGroupController.selectedUserGroup.users}" var="user"
+                                             id="usersTable">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Username"/>
+                                        </f:facet>
+                                        <b:navCommandLink
+                                                action="#{editGroupController.removeUserFromSelectedGroup(user)}"
+                                                ajax="true" update="@parent:@parent:@parent:@parent"
+                                                iconAwesome="minus-circle"
+                                                value="#{user.username}" style="cursor: pointer;"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Full Name"/>
+                                        </f:facet>
+                                        <h:outputText value="#{user.fullname}"/>
+                                    </h:column>
+                                </b:dataTable>
                             </div>
                         </c:otherwise>
                     </c:choose>

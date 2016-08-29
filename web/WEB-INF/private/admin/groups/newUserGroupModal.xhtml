@@ -12,56 +12,46 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough" xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
       xmlns:pf="http://primefaces.org/ui">
 
 <ui:composition>
-    <h:form id="newUserGroupModalForm" styleClass="form-horizontal">
+    <h:form id="newUserGroupModalForm">
         <b:modal styleClass="newUserGroupModal" title="New User Group">
             <h:panelGroup id="newUserGroupFields">
                 <div class="form-group">
-                    <b:column colXs="9" offsetXs="3">
-                        * = Required. Name must be unique.
-                    </b:column>
+                    * = Required. Name must be unique.
                 </div>
-                <div class="form-group">
-                    <h:outputLabel value="Name: *" styleClass="col-xs-3 control-label"/>
-                    <b:column colXs="9">
-                        <b:message for="newGroupName" showSummary="false" showDetail="true"/>
-                        <h:inputText id="newGroupName" styleClass="form-control"
-                                     value="#{newGroupController.name}"
-                                     required="true"
-                                     requiredMessage="This is required." maxlength="32">
-                            <f:validator binding="#{uniqueUserGroupValidator}"/>
-                        </h:inputText>
-                    </b:column>
-                </div>
+
+                <b:message for="newGroupName" showSummary="false" showDetail="true"/>
+                <b:inputText id="newGroupName" label="Name:"
+                             value="#{newGroupController.name}"
+                             required="true"
+                             requiredMessage="This is required." maxlength="32">
+                    <f:validator binding="#{uniqueUserGroupValidator}"/>
+                </b:inputText>
+
                 <c:if test="#{not empty groupTreeController.getTree(editGroupController.selectedUserGroup, null, false, false).children}">
                     <div class="form-group">
-                        <h:outputLabel value="Parent: *"
-                                       styleClass="col-xs-3 control-label"/>
-                        <b:column colXs="9">
-                            <b:message for="newGroupParent"
-                                       showSummary="false" showDetail="true"/>
-                            <pf:tree id="newGroupParent"
-                                     value="#{groupTreeController.getTree(newGroupController.parentGroup, null, true, false)}"
-                                     var="node" selectionMode="single">
-                                <pf:ajax event="select" onstart="loading_start()"
-                                         oncomplete="loading_complete()"
-                                         listener="#{newGroupController.onParentGroupSelected}"/>
-                                <pf:treeNode>
-                                    <h:outputText value="#{node.name}"/>
-                                </pf:treeNode>
-                            </pf:tree>
-                        </b:column>
+                        <h:outputLabel value="Parent: *" for="newGroupParent"/>
+                        <b:message for="newGroupParent"
+                                   showSummary="false" showDetail="true"/>
+                        <pf:tree id="newGroupParent"
+                                 value="#{groupTreeController.getTree(newGroupController.parentGroup, null, true, false)}"
+                                 var="node" selectionMode="single">
+                            <pf:ajax event="select" onstart="loading_start()"
+                                     oncomplete="loading_complete()"
+                                     listener="#{newGroupController.onParentGroupSelected}"/>
+                            <pf:treeNode>
+                                <h:outputText value="#{node.name}"/>
+                            </pf:treeNode>
+                        </pf:tree>
                     </div>
                 </c:if>
                 <b:fetchBeanInfos/>
             </h:panelGroup>
             <f:facet name="footer">
-
-                <b:button styleClass="btn btn-default"
-                          p:data-dismiss="modal" value="Cancel"/>
+                <b:button look="default" value="Cancel" onclick="$('.newUserGroupModal').modal('hide')"/>
                 <b:commandButton value="Add" look="primary" ajax="true"
                                  update="newUserGroupFields :groupsPageContent"
                                  oncomplete="if(!validationFailed) $('.newUserGroupModal').modal('hide')"
