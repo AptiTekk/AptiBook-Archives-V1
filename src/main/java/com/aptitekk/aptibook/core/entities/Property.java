@@ -78,7 +78,7 @@ public class Property extends MultiTenantEntity implements Serializable {
     public enum Key {
 
         GOOGLE_SIGN_IN_ENABLED("false", Group.GOOGLE_SIGN_IN, new BooleanField("Enable Google Sign In")),
-        GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Whitelisted Domain Names (Comma separated)", 256));
+        GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Allowed Domain Names (Comma separated)", 256));
 
         private final String defaultValue;
         private final Group group;
