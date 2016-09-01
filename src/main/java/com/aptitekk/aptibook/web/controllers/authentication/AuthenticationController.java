@@ -43,6 +43,9 @@ public class AuthenticationController implements Serializable {
     @Inject
     private PropertiesService propertiesService;
 
+    @Inject
+    private OAuthController oAuthController;
+
     private String username;
     private String password;
 
@@ -83,8 +86,8 @@ public class AuthenticationController implements Serializable {
             User existingUser = userService.findByName(googleJSONResponse.getEmail());
             if (existingUser == null) {
                 User user = new User();
-                user.setFirstName(googleJSONResponse.getGiven_name());
-                user.setLastName(googleJSONResponse.getFamily_name());
+                user.setFirstName(googleJSONResponse.getGivenName());
+                user.setLastName(googleJSONResponse.getFamilyName());
                 user.setUsername(googleJSONResponse.getEmail());
                 try {
                     userService.insert(user);
@@ -136,6 +139,7 @@ public class AuthenticationController implements Serializable {
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
+        oAuthController.clearTokens();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
@@ -198,5 +202,4 @@ public class AuthenticationController implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

@@ -12,11 +12,11 @@ public class GoogleJSONResponse {
     private String email;
     private String picture;
 
-    public String getGiven_name() {
+    public String getGivenName() {
         return given_name;
     }
 
-    public String getFamily_name() {
+    public String getFamilyName() {
         return family_name;
     }
 
