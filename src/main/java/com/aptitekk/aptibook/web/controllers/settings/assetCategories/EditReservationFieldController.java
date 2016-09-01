@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.faces.application.FacesMessage;
@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class EditReservationFieldController extends ReservationFieldFieldSupplier implements Serializable {
 
     @Inject
-    private AssetCategoryEditController assetCategoryEditController;
+    private EditAssetCategoryController editAssetCategoryController;
 
     @Inject
     private ReservationFieldService reservationFieldService;
@@ -37,11 +37,11 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
             reservationField.setRequired(required);
             try {
                 reservationFieldService.merge(reservationField);
-                assetCategoryEditController.refreshAssetCategories();
+                editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Updated!"));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while updating Field."));
-                LogManager.logError("Error while updating Reservation Field " + reservationField.getTitle() + " of " + assetCategoryEditController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
+                LogManager.logError("Error while updating Reservation Field " + reservationField.getTitle() + " of " + editAssetCategoryController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
             }
 
             reservationField = null;
@@ -53,11 +53,11 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
             try {
                 String reservationTitle = reservationField.getTitle();
                 reservationFieldService.delete(reservationField.getId());
-                assetCategoryEditController.refreshAssetCategories();
+                editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationTitle + "' Deleted!"));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while deleting Field."));
-                LogManager.logError("Error while deleting Reservation Field " + reservationField.getTitle() + " of " + assetCategoryEditController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
+                LogManager.logError("Error while deleting Reservation Field " + reservationField.getTitle() + " of " + editAssetCategoryController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
             }
         }
     }

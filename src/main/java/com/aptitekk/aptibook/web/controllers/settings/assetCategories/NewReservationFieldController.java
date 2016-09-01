@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;
@@ -22,15 +22,15 @@ import java.io.Serializable;
 public class NewReservationFieldController extends ReservationFieldFieldSupplier implements Serializable {
 
     @Inject
-    private AssetCategoryEditController assetCategoryEditController;
+    private EditAssetCategoryController editAssetCategoryController;
 
     @Inject
     private ReservationFieldService reservationFieldService;
 
     public void createReservationField() {
-        if (assetCategoryEditController.getSelectedAssetCategory() != null) {
+        if (editAssetCategoryController.getSelectedAssetCategory() != null) {
             ReservationField reservationField = new ReservationField();
-            reservationField.setAssetCategory(assetCategoryEditController.getSelectedAssetCategory());
+            reservationField.setAssetCategory(editAssetCategoryController.getSelectedAssetCategory());
             reservationField.setTitle(title);
             reservationField.setDescription(description);
             reservationField.setRequired(required);
@@ -40,11 +40,11 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
                 reservationFieldService.insert(reservationField);
                 LogManager.logInfo("New Reservation Field persisted. Id and Title: " + reservationField.getId() + ", " + reservationField.getTitle());
 
-                assetCategoryEditController.refreshAssetCategories();
+                editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
-                LogManager.logError("Error while adding new Reservation Field to " + assetCategoryEditController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
+                LogManager.logError("Error while adding new Reservation Field to " + editAssetCategoryController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
             }
         }
     }

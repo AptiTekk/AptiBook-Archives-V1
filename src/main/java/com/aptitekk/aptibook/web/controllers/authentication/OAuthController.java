@@ -6,10 +6,11 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.entities.Property;
-import com.aptitekk.aptibook.core.entities.services.PropertiesService;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
+import com.aptitekk.aptibook.core.util.LogManager;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -44,11 +45,12 @@ public class OAuthController implements Serializable {
     private PropertiesService propertiesService;
 
     private boolean googleSignInEnabled;
-    public static final String GOOGLE_CODE_ATTRIBUTE = "checkGoogleCode";
+    public static final String GOOGLE_CODE_ATTRIBUTE = "googleCode";
+    private static final String GOOGLE_ACCESS_TOKEN_ATTRIBUTE = "googleAccessToken";
     private static final String GOOGLE_API_KEY = "908953557522-o6m9dri19o1bmh0hrtkjgh6n0522n5lj.apps.googleusercontent.com";
     private static final String GOOGLE_API_SECRET = "-mXdL_YoL6Q6HrLIF7lUZpAo";
-    private static final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo";
-
+    private static final String GOOGLE_USER_INFO_URL = "https://www.googleapis.com/oauth2/v2/userinfo";
+    private static final String GOOGLE_REVOKE_URL = "https://accounts.google.com/o/oauth2/revoke";
 
     private OAuth20Service googleOAuthService;
 
@@ -84,11 +86,11 @@ public class OAuthController implements Serializable {
                 OAuthRequest request = new OAuthRequest(Verb.GET, GOOGLE_USER_INFO_URL, googleOAuthService);
                 googleOAuthService.signRequest(accessToken, request);
                 Response response = request.send();
-                FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
                 Gson gson = new GsonBuilder().create();
                 GoogleJSONResponse googleJSONResponse = gson.fromJson(response.getBody(), GoogleJSONResponse.class);
 
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(GOOGLE_CODE_ATTRIBUTE);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
                 authenticationController.loginWithGoogle(googleJSONResponse);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -109,6 +111,18 @@ public class OAuthController implements Serializable {
             }
         else
             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
+    }
+
+    void clearTokens() {
+        Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(GOOGLE_ACCESS_TOKEN_ATTRIBUTE);
+        if (attribute != null && attribute instanceof OAuth2AccessToken) {
+            OAuth2AccessToken accessToken = (OAuth2AccessToken) attribute;
+            OAuthRequest request = new OAuthRequest(Verb.GET, GOOGLE_REVOKE_URL, googleOAuthService);
+            request.addQuerystringParameter("token", accessToken.getAccessToken());
+            Response response = request.send();
+            if (!response.isSuccessful())
+                LogManager.logError("Could not revoke token on sign out: " + response.getMessage());
+        }
     }
 
     public boolean isGoogleSignInEnabled() {

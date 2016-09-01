@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.servlets;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;

@@ -18,12 +18,12 @@
     <h:form id="assetCategoryDeletionConfirmModalForm">
         <b:modal class="assetCategoryDeletionConfirmModal" title="Asset Category
                          Deletion Confirmation">
-            Are you sure you want to delete the Asset Category '#{assetCategoryEditController.selectedAssetCategory.name}'?
+            Are you sure you want to delete the Asset Category '#{editAssetCategoryController.selectedAssetCategory.name}'?
             <br/>
             <p style="text-decoration: underline">All associated Assets and Reservations will be deleted as well!</p>
             <f:facet name="footer">
                 <b:commandButton look="danger" value="Delete" ajax="true"
-                                 action="#{assetCategoryEditController.deleteSelectedAssetCategory}"
+                                 action="#{editAssetCategoryController.deleteSelectedAssetCategory}"
                                  update=":assetCategoriesPageContent"
                                  oncomplete="$('.assetCategoryDeletionConfirmModal').modal('hide')"/>
                 <b:button styleClass="btn btn-default"

@@ -6,13 +6,13 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.results;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Tag;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.NotificationService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
-import com.aptitekk.aptibook.core.entities.services.UserGroupService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Tag;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.frontPage.reserve.RequestReservationViewController;
 

@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;
@@ -31,7 +31,7 @@ public class NewAssetCategoryController implements Serializable {
     private String name;
 
     @Inject
-    private AssetCategoryEditController assetCategoryEditController;
+    private EditAssetCategoryController editAssetCategoryController;
 
     public void addAssetCategory() throws Exception {
         AssetCategory assetCategory = new AssetCategory();
@@ -41,9 +41,9 @@ public class NewAssetCategoryController implements Serializable {
 
         assetCategory = assetCategoryService.get(assetCategory.getId());
 
-        if (assetCategoryEditController != null) {
-            assetCategoryEditController.refreshAssetCategories();
-            assetCategoryEditController.setSelectedAssetCategory(assetCategory);
+        if (editAssetCategoryController != null) {
+            editAssetCategoryController.refreshAssetCategories();
+            editAssetCategoryController.setSelectedAssetCategory(assetCategory);
         }
 
         FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category '" + assetCategory.getName() + "' Added!"));

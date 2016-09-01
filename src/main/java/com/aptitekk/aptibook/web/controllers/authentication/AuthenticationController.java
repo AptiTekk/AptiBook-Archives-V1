@@ -6,12 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.Property;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.PermissionService;
-import com.aptitekk.aptibook.core.entities.services.PropertiesService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.PermissionService;
+import com.aptitekk.aptibook.core.domain.services.PropertiesService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
@@ -42,6 +42,9 @@ public class AuthenticationController implements Serializable {
 
     @Inject
     private PropertiesService propertiesService;
+
+    @Inject
+    private OAuthController oAuthController;
 
     private String username;
     private String password;
@@ -83,8 +86,8 @@ public class AuthenticationController implements Serializable {
             User existingUser = userService.findByName(googleJSONResponse.getEmail());
             if (existingUser == null) {
                 User user = new User();
-                user.setFirstName(googleJSONResponse.getGiven_name());
-                user.setLastName(googleJSONResponse.getFamily_name());
+                user.setFirstName(googleJSONResponse.getGivenName());
+                user.setLastName(googleJSONResponse.getFamilyName());
                 user.setUsername(googleJSONResponse.getEmail());
                 try {
                     userService.insert(user);
@@ -136,6 +139,7 @@ public class AuthenticationController implements Serializable {
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
 
+        oAuthController.clearTokens();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
@@ -198,5 +202,4 @@ public class AuthenticationController implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }

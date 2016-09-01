@@ -7,12 +7,12 @@
 package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Tag;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.TagService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Tag;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.TagService;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

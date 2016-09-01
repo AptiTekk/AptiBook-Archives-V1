@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.notifications;
 
-import com.aptitekk.aptibook.core.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 
 import javax.annotation.PostConstruct;

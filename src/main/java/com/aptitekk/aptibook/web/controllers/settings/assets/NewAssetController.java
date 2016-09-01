@@ -6,12 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assets;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.File;
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.FileService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.File;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.FileService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
@@ -46,7 +46,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
     private TagController tagController;
 
     @Inject
-    private AssetSettingsController assetSettingsController;
+    private EditAssetController editAssetController;
 
     private AssetCategory assetCategory;
 
@@ -89,7 +89,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                     asset.setOwner(assetOwnerGroup);
                     asset.setAssetCategory(assetCategory);
                     assetService.insert(asset);
-                    assetSettingsController.refreshAssets();
+                    editAssetController.refreshAssets();
                     LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + asset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
                 }

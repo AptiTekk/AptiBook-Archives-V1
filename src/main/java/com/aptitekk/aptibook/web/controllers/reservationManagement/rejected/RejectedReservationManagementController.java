@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement.rejected;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.services.UserGroupService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetails;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetailsController;

@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.validators;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -28,12 +28,12 @@ public class UniqueAssetCategoryValidator implements Validator, Serializable {
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
-        Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
+        Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
         if (inputText != null && inputText instanceof String && assetCategoryService != null) {
             AssetCategory otherAssetCategory = assetCategoryService.findByName((String) inputText);
             if (otherAssetCategory != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof AssetCategory && otherAssetCategory.equals(exemptionAttribute))
+                if (exceptionAttribute != null && exceptionAttribute instanceof AssetCategory && otherAssetCategory.equals(exceptionAttribute))
                     return;
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Asset Category with this name already exists."));
             }

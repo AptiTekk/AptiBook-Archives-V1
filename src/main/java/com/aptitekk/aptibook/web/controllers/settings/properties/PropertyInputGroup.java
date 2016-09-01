@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.properties;
 
-import com.aptitekk.aptibook.core.entities.Property;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

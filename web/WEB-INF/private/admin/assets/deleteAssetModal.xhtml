@@ -18,12 +18,12 @@
     <h:form id="deleteAssetModalForm">
         <b:modal styleClass="deleteAssetModal" title="Asset
                          Deletion Confirmation">
-            Are you sure you want to delete the Asset '#{assetSettingsController.selectedAsset.name}'?
+            Are you sure you want to delete the Asset '#{editAssetController.selectedAsset.name}'?
             <br/>
             <p style="text-decoration: underline">All associated Reservations will be deleted as well!</p>
             <f:facet name="footer">
                 <b:commandButton look="danger" value="Delete" ajax="true"
-                                 action="#{assetSettingsController.deleteSelectedAsset}" update=":assetsPageContent"
+                                 action="#{editAssetController.deleteSelectedAsset}" update=":assetsPageContent"
                                  oncomplete="$('.deleteAssetModal').modal('hide')"/>
                 <b:button look="default" value="Cancel"
                           onclick="$('.deleteAssetModal').modal('hide');$('.editAssetModal').modal();"/>

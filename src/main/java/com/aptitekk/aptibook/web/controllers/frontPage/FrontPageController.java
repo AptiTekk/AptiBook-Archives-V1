@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;

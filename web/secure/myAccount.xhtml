@@ -1,0 +1,141 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition template="/WEB-INF/templates/default_header.xhtml">
+    <ui:define name="content">
+        <b:container id="userEditPage">
+            <ol class="breadcrumb" style="margin-top: 20px">
+                <li><h:link outcome="index" value="Home"/></li>
+                <li class="active">My Account</li>
+            </ol>
+
+            <ui:fragment rendered="#{myAccountController.user != null}">
+                <div class="page-header">
+                    <h2>Account Settings for #{myAccountController.user.username}</h2>
+                </div>
+
+                <b:row>
+                    <b:column colXs="12" colMd="6">
+                        <h:form id="userEditForm">
+                            <div class="form-group">
+                                <h4>Personal Information:</h4>
+                                <b:message for="userEditForm" showSummary="false" showDetail="true"/>
+                            </div>
+
+                            <b:inputText label="Username:"
+                                         value="#{myAccountController.user.username}"
+                                         readonly="true"/>
+
+                            <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="firstNameEdit" label="First Name:"
+                                         value="#{myAccountController.firstName}" maxlength="32"/>
+
+                            <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="lastNameEdit" label="Last Name:"
+                                         value="#{myAccountController.lastName}" maxlength="32"/>
+
+                            <b:message for="phoneEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="phoneEdit" label="Phone Number:"
+                                         value="#{myAccountController.phoneNumber}" maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-earphone"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <b:message for="locationEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="locationEdit" label="Location:"
+                                         value="#{myAccountController.location}" maxlength="256">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-map-marker"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <div class="form-group">
+                                <h4>Change Password:</h4>
+                                <b:message for="userEditForm:passwordEdit" showSummary="false" showDetail="true"/>
+                            </div>
+
+                            <b:inputSecret id="passwordEdit" label="New Password:"
+                                           value="#{myAccountController.password}" maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-asterisk"/>
+                                </f:facet>
+                            </b:inputSecret>
+
+                            <b:inputSecret label="Confirm New Password:"
+                                           value="#{myAccountController.confirmPassword}"
+                                           maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-asterisk"/>
+                                </f:facet>
+                            </b:inputSecret>
+
+                            <b:switch label="Recieve Email Notifications:"
+                                      value="#{myAccountController.wantsEmailNotifications}"
+                                      styleClass="form-control"/>
+
+                            <div class="btn-toolbar">
+                                <h:commandButton styleClass="btn btn-primary"
+                                                 value="Save Changes" style="display: inline-block"
+                                                 action="#{myAccountController.updateSettings()}">
+                                    <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
+                                </h:commandButton>
+                                <h:commandButton styleClass="btn btn-default"
+                                                 value="Reset Fields" style="display: inline-block"
+                                                 action="#{myAccountController.resetFields()}">
+                                    <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
+                                </h:commandButton>
+                            </div>
+                        </h:form>
+                    </b:column>
+                    <c:if test="#{not empty myAccountController.user.userGroups}">
+                        <b:column colXs="12" colMd="4">
+                            <div class="form-group">
+                                <h4>Assigned User Groups:</h4>
+                            </div>
+
+                            <c:choose>
+                                <c:when test="#{myAccountController.user.admin}">
+                                    Administrators are automatically granted full permissions. No User Groups need be assigned.
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="form-group">
+                                        <b:panel title="Member Of" collapsible="false">
+                                            <pf:tree id="memberGroups"
+                                                     value="#{groupTreeController.getMultipleSelectedTree(myAccountController.user.userGroups, null, false, true)}"
+                                                     var="node"
+                                                     selection="#{myAccountController.userGroupNodes}">
+                                                <pf:treeNode>
+                                                    <h:outputText value="#{node.name}"/>
+                                                </pf:treeNode>
+                                            </pf:tree>
+                                        </b:panel>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </b:column>
+                    </c:if>
+                </b:row>
+            </ui:fragment>
+
+            <ui:fragment rendered="#{myAccountController.user == null}">
+                <h2>Not Logged In!</h2>
+            </ui:fragment>
+        </b:container>
+    </ui:define>
+</ui:composition>
+
+</html>

@@ -23,7 +23,7 @@
             <b:column colXs="12" colLg="5">
                 <h:form>
                     <div class="form-group">
-                        <b:dataTable value="#{assetCategoryEditController.assetCategories}" var="assetCategory"
+                        <b:dataTable value="#{editAssetCategoryController.assetCategories}" var="assetCategory"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      responsive="true">
                             <h:column>
@@ -33,14 +33,14 @@
                                 <b:navCommandLink value="#{assetCategory.name}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
-                                                  action="#{assetCategoryEditController.setSelectedAssetCategory(assetCategory)}"
+                                                  action="#{editAssetCategoryController.setSelectedAssetCategory(assetCategory)}"
                                                   update=":assetCategoriesPage"
-                                                  style="cursor: pointer; font-weight: #{assetCategoryEditController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
+                                                  style="cursor: pointer; font-weight: #{editAssetCategoryController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
                             </h:column>
                         </b:dataTable>
                     </div>
                     <h:panelGroup layout="block" styleClass="btn-toolbar"
-                                  rendered="#{assetCategoryEditController.hasModifyPermission()}">
+                                  rendered="#{editAssetCategoryController.hasModifyPermission()}">
                         <b:commandButton look="primary" value="Add New Asset Category" ajax="true"
                                          update=":newAssetCategoryModalForm"
                                          oncomplete="$('.newAssetCategoryModal').modal()"/>
@@ -51,7 +51,7 @@
             <!-- Asset Category Edit Fields -->
             <b:column colXs="12" colLg="6" offsetLg="1">
                 <c:choose>
-                    <c:when test="#{assetCategoryEditController.selectedAssetCategory == null}">
+                    <c:when test="#{editAssetCategoryController.selectedAssetCategory == null}">
                         <h4>Please select an Asset Category.</h4>
                         <b:messages showSummary="false" showDetail="true"/>
                     </c:when>
@@ -67,10 +67,14 @@
                             <div class="form-group">
                                 <b:message for="assetCategoryNameEdit" showSummary="false" showDetail="true"/>
                                 <b:inputText id="assetCategoryNameEdit" label="Name:"
-                                             value="#{assetCategoryEditController.editableAssetCategoryName}"
+                                             value="#{editAssetCategoryController.editableAssetCategoryName}"
                                              required="true"
-                                             disabled="#{!assetCategoryEditController.hasModifyPermission()}"
-                                             requiredMessage="This is required." maxlength="32"/>
+                                             disabled="#{!editAssetCategoryController.hasModifyPermission()}"
+                                             requiredMessage="This is required." maxlength="32">
+                                    <f:validator binding="#{uniqueAssetCategoryValidator}"/>
+                                    <f:attribute name="exception"
+                                                 value="#{editAssetCategoryController.selectedAssetCategory}"/>
+                                </b:inputText>
                             </div>
                             <div class="form-group">
                                 <h:outputLabel value="Asset Tags:"/>
@@ -79,7 +83,7 @@
                                                  value="#{tagController.selectedAssetCategoryTagNames}"
                                                  completeMethod="#{tagController.getAssetCategoryTagSuggestions}"
                                                  var="tag" itemLabel="#{tag}" itemValue="#{tag}"
-                                                 disabled="#{!assetCategoryEditController.hasModifyPermission()}"
+                                                 disabled="#{!editAssetCategoryController.hasModifyPermission()}"
                                                  onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
                                     <pf:ajax event="keyup" process="@this" update="@this"/>
                                 </pf:autoComplete>
@@ -89,18 +93,18 @@
                                     <b:commandButton look="danger" value="Delete Asset Category" ajax="true"
                                                      update=":assetCategoryDeletionConfirmModalForm"
                                                      oncomplete="$('.assetCategoryDeletionConfirmModal').modal()"
-                                                     disabled="#{!assetCategoryEditController.hasModifyPermission()}"/>
+                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
                                     <div class="pull-right btn-toolbar">
                                         <h:commandButton styleClass="btn btn-default"
                                                          value="Reset Form"
-                                                         action="#{assetCategoryEditController.resetSettings()}"
-                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
+                                                         action="#{editAssetCategoryController.resetSettings()}"
+                                                         disabled="#{!editAssetCategoryController.hasModifyPermission()}">
                                             <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
                                         <h:commandButton styleClass="btn btn-primary"
                                                          value="Save Changes"
-                                                         action="#{assetCategoryEditController.updateSettings()}"
-                                                         disabled="#{!assetCategoryEditController.hasModifyPermission()}">
+                                                         action="#{editAssetCategoryController.updateSettings()}"
+                                                         disabled="#{!editAssetCategoryController.hasModifyPermission()}">
                                             <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
                                         </h:commandButton>
                                     </div>
@@ -115,7 +119,7 @@
                                            showDetail="true"/>
                             </div>
                             <div class="form-group">
-                                <b:dataTable value="#{assetCategoryEditController.reservationFields}"
+                                <b:dataTable value="#{editAssetCategoryController.reservationFields}"
                                              var="reservationField" searching="false" paginated="false">
                                     <h:column>
                                         <f:facet name="header">

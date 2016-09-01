@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.viewHandlers;
 
-import com.aptitekk.aptibook.core.entities.Tenant;
+import com.aptitekk.aptibook.core.domain.entities.Tenant;
 
 import javax.faces.application.ViewHandler;
 import javax.faces.application.ViewHandlerWrapper;

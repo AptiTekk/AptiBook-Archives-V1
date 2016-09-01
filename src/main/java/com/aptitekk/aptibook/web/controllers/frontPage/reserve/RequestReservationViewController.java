@@ -6,14 +6,14 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.reserve;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.ReservationFieldEntry;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.NotificationService;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldEntryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;

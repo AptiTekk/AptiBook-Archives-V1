@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.assets;
 
-import com.aptitekk.aptibook.core.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.TreeNode;
 

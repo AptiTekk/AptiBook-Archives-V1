@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.UserGroup;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
@@ -36,7 +36,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
     private AuthenticationController authenticationController;
 
     @Inject
-    private UserEditController userEditController;
+    private EditUserController editUserController;
 
     private boolean hasModifyPermission() {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
@@ -83,9 +83,9 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             LogManager.logInfo("New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
-                if (userEditController != null) {
-                    userEditController.refreshUserList();
-                    userEditController.setSelectedUser(newUser);
+                if (editUserController != null) {
+                    editUserController.refreshUserList();
+                    editUserController.setSelectedUser(newUser);
                 }
             } else {
                 throw new Exception("User not found!");
