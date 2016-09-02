@@ -41,6 +41,8 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private boolean wantsEmailNotifications;
 
+    private boolean googleUser;
+
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
 
@@ -195,5 +197,13 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
         this.wantsEmailNotifications = wantsEmailNotifications;
+    }
+
+    public boolean isGoogleUser() {
+        return googleUser;
+    }
+
+    public void setGoogleUser(boolean googleUser) {
+        this.googleUser = googleUser;
     }
 }

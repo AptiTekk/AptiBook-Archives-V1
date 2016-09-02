@@ -89,6 +89,7 @@ public class AuthenticationController implements Serializable {
                 user.setFirstName(googleJSONResponse.getGivenName());
                 user.setLastName(googleJSONResponse.getFamilyName());
                 user.setUsername(googleJSONResponse.getEmail());
+                user.setGoogleUser(true);
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);

@@ -42,7 +42,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
     private User selectedUser;
     private List<User> users;
-
+    private List<User> googleUsers;
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
@@ -67,6 +67,8 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
     void refreshUserList() {
         users = userService.getAll();
     }
+
+    void refreshGoogleUserList(){googleUsers = userService.getAll();}
 
     public void resetFields() {
         resetFields(selectedUser);
@@ -153,6 +155,8 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         }
     }
 
+
+
     public void deleteSelectedUser() {
         if (!hasModifyPermission())
             return;
@@ -193,5 +197,11 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
     }
 
 
+    public List<User> getGoogleUsers() {
+        return googleUsers;
+    }
 
+    public void setGoogleUsers(List<User> googleUsers) {
+        this.googleUsers = googleUsers;
+    }
 }
