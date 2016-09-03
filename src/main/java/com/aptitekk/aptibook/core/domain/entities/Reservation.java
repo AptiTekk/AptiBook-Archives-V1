@@ -6,9 +6,8 @@
 
 package com.aptitekk.aptibook.core.domain.entities;
 
-import com.aptitekk.aptibook.core.domain.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
+import com.aptitekk.aptibook.core.time.SegmentedTime;
 
 import javax.persistence.*;
 import java.io.Serializable;

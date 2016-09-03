@@ -6,7 +6,6 @@
 
 package com.aptitekk.aptibook.core.domain.entities;
 
-import com.aptitekk.aptibook.core.domain.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 
 import javax.persistence.*;

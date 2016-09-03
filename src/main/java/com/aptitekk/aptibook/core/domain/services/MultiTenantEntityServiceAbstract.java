@@ -7,7 +7,7 @@
 package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
-import com.aptitekk.aptibook.core.domain.MultiTenantEntity;
+import com.aptitekk.aptibook.core.domain.entities.MultiTenantEntity;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;

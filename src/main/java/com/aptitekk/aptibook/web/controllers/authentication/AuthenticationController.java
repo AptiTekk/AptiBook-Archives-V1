@@ -14,7 +14,7 @@ import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
-import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
+import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 
@@ -64,11 +64,11 @@ public class AuthenticationController implements Serializable {
     /**
      * Login with Google
      *
-     * @param googleJSONResponse The User's details from Google.
+     * @param googleUserInfoModel The User's details from Google.
      * @return The outcome page.
      */
-    String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
-        if (googleJSONResponse == null)
+    String loginWithGoogle(GoogleUserInfoModel googleUserInfoModel) {
+        if (googleUserInfoModel == null)
             return null;
 
         //TODO: Get from properties
@@ -77,18 +77,18 @@ public class AuthenticationController implements Serializable {
 
         boolean domainIsWhitelisted = false;
         for (String domain : whitelist) {
-            if (domain.equals(googleJSONResponse.getEmail().toLowerCase().split("@")[1])) {
+            if (domain.equals(googleUserInfoModel.getEmail().toLowerCase().split("@")[1])) {
                 domainIsWhitelisted = true;
             }
         }
 
         if (domainIsWhitelisted) {
-            User existingUser = userService.findByName(googleJSONResponse.getEmail());
+            User existingUser = userService.findByName(googleUserInfoModel.getEmail());
             if (existingUser == null) {
                 User user = new User();
-                user.setFirstName(googleJSONResponse.getGivenName());
-                user.setLastName(googleJSONResponse.getFamilyName());
-                user.setUsername(googleJSONResponse.getEmail());
+                user.setFirstName(googleUserInfoModel.getGivenName());
+                user.setLastName(googleUserInfoModel.getFamilyName());
+                user.setUsername(googleUserInfoModel.getEmail());
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
@@ -106,7 +106,7 @@ public class AuthenticationController implements Serializable {
                 return redirectHome();
             }
         } else {
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleJSONResponse.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleUserInfoModel.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
         }
         return null;
     }

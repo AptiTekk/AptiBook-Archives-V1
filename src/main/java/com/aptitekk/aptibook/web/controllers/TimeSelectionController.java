@@ -7,9 +7,9 @@
 package com.aptitekk.aptibook.web.controllers;
 
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
-import com.aptitekk.aptibook.core.util.time.CalendarRange;
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.time.CalendarRange;
+import com.aptitekk.aptibook.core.time.SegmentedTime;
+import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
