@@ -58,6 +58,8 @@ hr {
 
 .navbar-nav > li > .dropdown-menu {
     width: 100%;
+    border: none;
+    border-top: 4px solid #4272b7;
 }
 
 .navbar-nav > li > .dropdown-menu > li > a {
