@@ -46,6 +46,17 @@
                                 </f:facet>
                                 <h:outputText value="#{authenticatedUser.fullname}"/>
                             </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Login Method"/>
+                                </f:facet>
+                                <h:panelGroup rendered="#{authenticatedUser.googleUser}">
+                                    <b:label text="Google" severity="success"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!authenticatedUser.googleUser}">
+                                    <b:label text="Default" severity="default"/>
+                                </h:panelGroup>
+                            </h:column>
                         </b:dataTable>
                     </div>
                     <div class="form-group">

@@ -68,7 +68,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         users = userService.getAll();
     }
 
-    void refreshGoogleUserList(){googleUsers = userService.getAll();}
 
     public void resetFields() {
         resetFields(selectedUser);

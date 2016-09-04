@@ -72,9 +72,6 @@ public abstract class MultiTenantEntityServiceAbstract<T extends MultiTenantEnti
         return query.getResultList();
     }
 
-    public List<T> getAllGoogleUsers(Tenant tenant){
-        TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e WHERE e.tenant = :tenant", entityType)
-    }
     @Override
     public void delete(int id) throws Exception {
         T entity = entityManager.getReference(entityType, id);
