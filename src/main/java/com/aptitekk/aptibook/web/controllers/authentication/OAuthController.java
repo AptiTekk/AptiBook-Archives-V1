@@ -9,7 +9,7 @@ package com.aptitekk.aptibook.web.controllers.authentication;
 import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
+import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -87,11 +87,11 @@ public class OAuthController implements Serializable {
                 googleOAuthService.signRequest(accessToken, request);
                 Response response = request.send();
                 Gson gson = new GsonBuilder().create();
-                GoogleJSONResponse googleJSONResponse = gson.fromJson(response.getBody(), GoogleJSONResponse.class);
+                GoogleUserInfoModel googleUserInfoModel = gson.fromJson(response.getBody(), GoogleUserInfoModel.class);
 
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(GOOGLE_CODE_ATTRIBUTE);
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
-                authenticationController.loginWithGoogle(googleJSONResponse);
+                authenticationController.loginWithGoogle(googleUserInfoModel);
             } catch (IOException e) {
                 e.printStackTrace();
             }

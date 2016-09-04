@@ -1,0 +1,57 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="#{resource['images/favicons/apple-touch-icon.png']}"/>
+    <link rel="icon" type="image/png" href="#{resource['images/favicons/favicon-32x32.png']}" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="#{resource['images/favicons/android-chrome-192x192.png']}" sizes="192x192"/>
+    <link rel="icon" type="image/png" href="#{resource['images/favicons/favicon-16x16.png']}" sizes="16x16"/>
+    <link rel="manifest" href="#{resource['images/favicons/manifest.json']}"/>
+    <link rel="mask-icon" href="#{resource['images/favicons/safari-pinned-tab.svg']}"/>
+    <link rel="shortcut icon" href="#{resource['images/favicons/favicon.ico']}"/>
+    <meta name="msapplication-config" content="#{resource['images/favicons/browserconfig.xml']}"/>
+    <meta name="theme-color" content="#ffffff"/>
+
+    <title>AptiBook</title>
+
+    <h:outputStylesheet library="css" name="style.css"/>
+    <ui:insert name="css"/>
+
+</h:head>
+<h:body>
+    <div id="loading"></div>
+    <ui:insert name="default"/>
+    <script type="text/javascript">
+        function loading(data) {
+            if (data.status === "begin") {
+                loading_start();
+            } else if (data.status === "success") {
+                loading_complete();
+            }
+        }
+        function loading_start() {
+            var loading = document.getElementById("loading");
+            loading.style.opacity = "1";
+        }
+        function loading_complete() {
+            var loading = document.getElementById("loading");
+            loading.style.opacity = "0";
+        }
+    </script>
+
+    <h:outputScript library="js" name="fix_double_click.js"/>
+    <ui:insert name="js"/>
+</h:body>
+</html>

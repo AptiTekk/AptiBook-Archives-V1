@@ -13,7 +13,7 @@ import com.aptitekk.aptibook.core.domain.services.AssetService;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.frontPage.reserve.RequestReservationViewController;
 
 import javax.faces.view.ViewScoped;

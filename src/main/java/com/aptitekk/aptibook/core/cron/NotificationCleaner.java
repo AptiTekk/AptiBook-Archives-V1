@@ -29,10 +29,10 @@ public class NotificationCleaner {
     private NotificationService notificationService;
 
     /**
-     * Cleans up Notifications every 12 hours.
+     * Cleans up Notifications every hour.
      * If the Notification is >= 3 days old and has been read, it will be removed.
      */
-    @Schedule(hour = "*/12")
+    @Schedule(hour = "*")
     private void cleanReadNotifications() {
         LogManager.logInfo("Cleaning Notifications...");
         Date now = new Date();

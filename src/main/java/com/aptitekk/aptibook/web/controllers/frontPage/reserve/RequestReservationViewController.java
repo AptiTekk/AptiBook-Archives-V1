@@ -15,7 +15,7 @@ import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.faces.view.ViewScoped;

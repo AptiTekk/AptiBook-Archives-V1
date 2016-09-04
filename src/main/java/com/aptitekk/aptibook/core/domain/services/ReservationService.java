@@ -11,7 +11,7 @@ import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;

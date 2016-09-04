@@ -8,8 +8,8 @@ package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
 import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.time.SegmentedTime;
+import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.TimeSelectionController;
 
 import javax.annotation.PostConstruct;

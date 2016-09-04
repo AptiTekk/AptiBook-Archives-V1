@@ -39,12 +39,9 @@ hr {
 }
 
 .navbar {
-    background-color: white;
-    box-shadow: black 0 -5px 20px 1px;
-}
-
-.navbar-fixed-top {
-    border: none !important;
+    background-color: #fff !important;
+    box-shadow: #aaa 0 -5px 20px 1px;
+    border-bottom: 4px solid #4272b7 !important;
 }
 
 .navbar-toggle .icon-bar {
@@ -61,6 +58,8 @@ hr {
 
 .navbar-nav > li > .dropdown-menu {
     width: 100%;
+    border: none;
+    border-top: 4px solid #4272b7;
 }
 
 .navbar-nav > li > .dropdown-menu > li > a {
@@ -85,13 +84,14 @@ hr {
     position: fixed;
     bottom: 0;
     z-index: 999;
-    background-color: #f5f5f5;
+    background-color: #4272b7;
     padding-top: 8px;
-    box-shadow: 0 10px 25px 0;
+    box-shadow: #aaa 0 10px 25px 0;
 }
 
 .footer p {
     margin-top: 8px;
+    color: #fff;
 }
 
 #main-login {
