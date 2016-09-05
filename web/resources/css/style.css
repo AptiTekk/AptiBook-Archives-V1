@@ -30,7 +30,8 @@
 }
 
 .texture-bg {
-    background-image: url("#{resource['images:background.png']}");
+    background: #eee url("#{resource['images:background.png']}");
+    background-blend-mode: multiply;
 }
 
 hr {

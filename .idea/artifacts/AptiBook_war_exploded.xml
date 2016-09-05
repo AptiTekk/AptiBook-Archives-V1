@@ -163,6 +163,16 @@
           <element id="library" level="project" name="Maven: com.google.appengine:appengine-api-1.0-sdk:1.9.42" />
           <element id="library" level="project" name="Maven: com.github.scribejava:scribejava-apis:3.0.0" />
           <element id="library" level="project" name="Maven: com.github.scribejava:scribejava-core:3.0.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.4" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.5.4" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.5.4" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.5.4" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.5.4" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.5.4" />
+          <element id="library" level="project" name="Maven: org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec:1.0.0.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs-api:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs-modules:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs:1.0.2.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
