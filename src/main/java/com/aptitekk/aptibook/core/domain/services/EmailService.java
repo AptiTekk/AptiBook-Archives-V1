@@ -54,7 +54,7 @@ public class EmailService implements Serializable {
         substitutionData.put("subject", notification.getSubject());
         substitutionData.put("body", notification.getBody());
 
-        sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
+        sendEmail("notification", substitutionData, null, null, java.net.IDN.toASCII(notification.getUser().getUsername()));
     }
 
     /**
@@ -65,7 +65,7 @@ public class EmailService implements Serializable {
      * @param recipients       The recipients to send the email to. More than one may be specified.
      * @throws SparkPostException If a problem occurs while sending the emails.
      */
-    private void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) throws SparkPostException {
+    public void sendEmail(String templateId, Map<String, Object> substitutionData, String email, String subject, String... recipients) throws SparkPostException {
         if (client == null)
             return;
 
@@ -91,6 +91,16 @@ public class EmailService implements Serializable {
             recipientArray.add(recipientAttribs);
         }
         transmission.setRecipientArray(recipientArray);
+
+        // Populate Email Body
+        if(subject != null && email != null) {
+            TemplateContentAttributes contentAttributes = new TemplateContentAttributes();
+            contentAttributes.setFrom(new AddressAttributes("noreply@aptitekk.com"));
+            contentAttributes.setSubject(subject);
+            contentAttributes.setText(email);
+            contentAttributes.setHtml(email);
+            transmission.setContentAttributes(contentAttributes);
+        }
 
         // Send the Email
         RestConnection connection = new RestConnection(client, API_URL);

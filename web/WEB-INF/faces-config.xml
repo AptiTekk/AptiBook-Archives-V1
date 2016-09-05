@@ -20,6 +20,15 @@
         <display-name>*</display-name>
         <from-view-id>*</from-view-id>
         <navigation-case>
+            <from-outcome>register</from-outcome>
+            <to-view-id>/register.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <display-name>*</display-name>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
             <from-outcome>index</from-outcome>
             <to-view-id>/index.xhtml</to-view-id>
             <redirect/>

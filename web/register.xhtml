@@ -15,9 +15,6 @@
 
 <ui:composition template="/WEB-INF/templates/default_noheader.xhtml">
     <f:metadata>
-        <f:viewAction action="#{oAuthController.checkGoogleCode()}"/>
-        <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
-
     </f:metadata>
     <ui:define name="content">
         <div class="texture-bg" style="height: 100%">
@@ -28,35 +25,33 @@
                                         style="width:100%;"/>
                     </b:row>
                     <b:row style="margin-top: 15px">
-                        <h:form id="loginForm">
-                            <b:messages for="loginForm" showSummary="false" showDetail="true"/>
+                        <h:form id="registerForm">
+                            <b:messages for="registerForm" showSummary="false" showDetail="true"/>
                             <div class="form-group">
-                                <label for="usernameInput">Username</label>
+                                <label for="usernameInput">Username:</label>
                                 <h:inputText id="usernameInput" styleClass="form-control"
-                                             autocomplete="off" value="#{authenticationController.username}"
+                                             autocomplete="off" value="#{registrationController.username}"
+                                             p:autofocus="true"/>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="passwordInput">Password:</label>
+                                <h:inputSecret id="passwordInput" styleClass="form-control"
+                                             autocomplete="off" value="#{registrationController.password}"
                                              p:autofocus="true"/>
                             </div>
                             <div class="form-group">
-                                <label for="passwordInput">Password</label>
-                                <h:inputSecret id="passwordInput" styleClass="form-control"
-                                               autocomplete="off" value="#{authenticationController.password}"/>
+                                <label for="confirmPassword">Confirm Password:</label>
+                                <h:inputSecret id="confirmPassword" styleClass="form-control"
+                                             autocomplete="off" value="#{registrationController.confirmPassword}"
+                                             p:autofocus="true"/>
                             </div>
                             <div class="form-group">
                                 <h:commandButton styleClass="btn btn-primary btn-block btn-large"
-                                                 value="Sign In" action="#{authenticationController.login}">
-                                    <f:ajax render=":loginForm" execute="@form" onevent="loading"/>
+                                                 value="Register" action="#{registrationController.register}">
+                                    <f:ajax render=":registerForm" execute="@form" onevent="loading"/>
                                 </h:commandButton>
                             </div>
-                            <h:panelGroup layout="block" styleClass="form-group"
-                                          rendered="#{oAuthController.googleSignInEnabled}">
-                                <b:commandButton value="Sign In with Google" style="width:100%" look="danger"
-                                                 iconAwesome="google"
-                                                 ajax="true"
-                                                 action="#{oAuthController.signInWithGoogle}"
-                                                 update="@form"/>
-                            </h:panelGroup>
-                            <b:navLink value="Register" outcome="register"/>
-
                         </h:form>
                     </b:row>
                 </b:column>
