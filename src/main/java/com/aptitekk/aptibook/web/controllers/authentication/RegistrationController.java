@@ -6,22 +6,19 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.io.SyncFailedException;
 
 @Named
 @ViewScoped
 public class RegistrationController implements Serializable {
-
 
     @Inject
     private PropertiesService propertiesService;
@@ -33,9 +30,8 @@ public class RegistrationController implements Serializable {
     private String password;
     private String confirmPassword;
 
-
     public void register() {
-        if (username == null|| password == null || confirmPassword == null) {
+        if (username == null || password == null || confirmPassword == null) {
             System.out.println(username + password + confirmPassword);
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Complete all forms"));
             return;
