@@ -1,0 +1,33 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+
+<ui:composition template="/WEB-INF/templates/base.xhtml">
+    <ui:define name="default">
+
+        <div style="height:50px">
+            <ui:include src="/WEB-INF/templates/includes/header.xhtml"/>
+        </div>
+
+        <div style="min-height: calc(100vh - 60px - 50px);padding-bottom:60px;">
+            <ui:insert name="content"/>
+
+        </div>
+
+        <div class="footer">
+            <ui:include src="/WEB-INF/templates/includes/footer.xhtml"/>
+        </div>
+
+        <ui:include src="../includes/helpModal.xhtml"/>
+    </ui:define>
+
+</ui:composition>
+</html>

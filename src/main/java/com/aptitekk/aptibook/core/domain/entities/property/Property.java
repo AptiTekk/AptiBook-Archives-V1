@@ -7,12 +7,12 @@
 package com.aptitekk.aptibook.core.domain.entities.property;
 
 
-import com.aptitekk.aptibook.core.domain.MultiTenantEntity;
+import com.aptitekk.aptibook.core.domain.entities.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.web.propertyTypes.BooleanField;
-import com.aptitekk.aptibook.web.propertyTypes.SingleLineField;
-import com.aptitekk.aptibook.web.propertyTypes.abstractTypes.PropertyType;
+import com.aptitekk.aptibook.web.components.propertyTypes.BooleanField;
+import com.aptitekk.aptibook.web.components.propertyTypes.SingleLineField;
+import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.PropertyType;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.UnsatisfiedResolutionException;

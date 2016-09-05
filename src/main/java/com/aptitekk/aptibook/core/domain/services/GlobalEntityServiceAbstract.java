@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
-import com.aptitekk.aptibook.core.domain.GlobalEntity;
+import com.aptitekk.aptibook.core.domain.entities.GlobalEntity;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;

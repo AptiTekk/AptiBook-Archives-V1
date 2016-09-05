@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.converters;
 
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
+import com.aptitekk.aptibook.core.time.SegmentedTime;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.bean.ManagedBean;

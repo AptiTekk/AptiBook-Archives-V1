@@ -9,16 +9,14 @@ package com.aptitekk.aptibook.web.controllers.authentication;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
-import com.aptitekk.aptibook.core.util.GoogleJSONResponse;
+import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
-import com.sparkpost.exception.SparkPostException;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -32,8 +30,6 @@ import java.io.Serializable;
 @Named
 @ViewScoped
 public class AuthenticationController implements Serializable {
-    @Inject
-    private EmailService emailService;
 
     @Inject
     private UserService userService;
@@ -52,8 +48,6 @@ public class AuthenticationController implements Serializable {
 
     private String username;
     private String password;
-    private String tenant;
-
 
     private User authenticatedUser;
 
@@ -70,11 +64,11 @@ public class AuthenticationController implements Serializable {
     /**
      * Login with Google
      *
-     * @param googleJSONResponse The User's details from Google.
+     * @param googleUserInfoModel The User's details from Google.
      * @return The outcome page.
      */
-    String loginWithGoogle(GoogleJSONResponse googleJSONResponse) {
-        if (googleJSONResponse == null)
+    String loginWithGoogle(GoogleUserInfoModel googleUserInfoModel) {
+        if (googleUserInfoModel == null)
             return null;
 
         //TODO: Get from properties
@@ -83,18 +77,18 @@ public class AuthenticationController implements Serializable {
 
         boolean domainIsWhitelisted = false;
         for (String domain : whitelist) {
-            if (domain.equals(googleJSONResponse.getEmail().toLowerCase().split("@")[1])) {
+            if (domain.equals(googleUserInfoModel.getEmail().toLowerCase().split("@")[1])) {
                 domainIsWhitelisted = true;
             }
         }
 
         if (domainIsWhitelisted) {
-            User existingUser = userService.findByName(googleJSONResponse.getEmail());
+            User existingUser = userService.findByName(googleUserInfoModel.getEmail());
             if (existingUser == null) {
                 User user = new User();
-                user.setFirstName(googleJSONResponse.getGivenName());
-                user.setLastName(googleJSONResponse.getFamilyName());
-                user.setUsername(googleJSONResponse.getEmail());
+                user.setFirstName(googleUserInfoModel.getGivenName());
+                user.setLastName(googleUserInfoModel.getFamilyName());
+                user.setUsername(googleUserInfoModel.getEmail());
                 user.setGoogleUser(true);
                 try {
                     userService.insert(user);
@@ -113,11 +107,10 @@ public class AuthenticationController implements Serializable {
                 return redirectHome();
             }
         } else {
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleJSONResponse.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleUserInfoModel.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
         }
         return null;
     }
-
 
     /**
      * Attempts to log the authenticatedUser in with the credentials they have input.
@@ -135,13 +128,13 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo("Login attempt for '" + username + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
             return null;
-        }
+        } else {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
             return redirectHome();
         }
-
+    }
 
     public String logout() {
         LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
@@ -208,12 +201,5 @@ public class AuthenticationController implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    public String getTenant() {
-        System.out.println(tenantSessionService.getCurrentTenant().getSlug());
-        return tenantSessionService.getCurrentTenant().getSlug();
-    }
-    public String registerRedirect(){
-        return "register";
     }
 }
