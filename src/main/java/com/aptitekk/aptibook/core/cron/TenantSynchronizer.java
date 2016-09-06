@@ -7,22 +7,23 @@
 package com.aptitekk.aptibook.core.cron;
 
 import com.aptitekk.aptibook.core.domain.services.TenantService;
+import com.aptitekk.aptibook.core.domain.woocommerce.restapi.SubscriptionService;
+import com.aptitekk.aptibook.core.domain.woocommerce.restapi.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.jboss.resteasy.client.jaxrs.engines.URLConnectionEngine;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 @Singleton
 public class TenantSynchronizer {
 
-    private final static String SUBSCRIPTIONS_INFO_URL = "http://aptitekk.com/wc-api/v3/subscriptions";
+    private final static String SUBSCRIPTIONS_INFO_URL = "https://aptitekk.com/wc-api/v3/";
     private final static String WOOCOMMERCE_CK = System.getenv("WOOCOMMERCE_CK");
     private final static String WOOCOMMERCE_CS = System.getenv("WOOCOMMERCE_CS");
 
@@ -34,11 +35,18 @@ public class TenantSynchronizer {
 
     @Schedule(second = "*/10", minute = "*", hour = "*")
     private void synchronizeTenants() {
-        Client client = ClientBuilder.newClient();
-        WebTarget webTarget = client.target(SUBSCRIPTIONS_INFO_URL);
-        Response response = webTarget.request(MediaType.APPLICATION_JSON_TYPE).get();
-        LogManager.logInfo("Response: " + response.getStatus());
-        client.close();
+        URLConnectionEngine urlConnectionEngine = new URLConnectionEngine();
+
+        ResteasyClientBuilder builder = new ResteasyClientBuilder();
+        builder.register(new WooCommerceSecurityFilter(
+                WOOCOMMERCE_CK,
+                WOOCOMMERCE_CS));
+        builder.httpEngine(urlConnectionEngine);
+        ResteasyClient webClient = builder.build();
+        ResteasyWebTarget webTarget = webClient.target(SUBSCRIPTIONS_INFO_URL);
+        SubscriptionService service = webTarget.proxy(SubscriptionService.class);
+
+        LogManager.logInfo("Result: "+service.getAll().getSubscriptions().get(0).getLineItems().get(0).getMeta().get(0));
     }
 
 }

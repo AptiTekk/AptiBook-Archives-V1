@@ -6,6 +6,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="AptiBook" />
           <element id="jpa-descriptors" facet="AptiBook/jpa/JPA" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-core/2.8.2/jackson-core-2.8.2.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.8.2/jackson-databind-2.8.2.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/jaxrs/jackson-jaxrs-base/2.8.2/jackson-jaxrs-base-2.8.2.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider/2.8.2/jackson-jaxrs-json-provider-2.8.2.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.8.2/jackson-module-jaxb-annotations-2.8.2.jar" path-in-jar="/" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.wildfly.swarm:logging:1.0.2.Final" />
@@ -173,6 +178,11 @@
           <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs-api:1.0.2.Final" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs-modules:1.0.2.Final" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:jaxrs:1.0.2.Final" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.8.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.2" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
