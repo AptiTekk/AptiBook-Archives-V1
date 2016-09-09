@@ -75,16 +75,7 @@ public class TenantSynchronizer {
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
-                                    currentTenant = new Tenant();
-                                    currentTenant.setActive(true);
-                                    currentTenant.setSlug(slug);
-                                    currentTenant.setSubscriptionId(subscription.getId());
-
-                                    try {
-                                        tenantService.insert(currentTenant);
-                                    } catch (Exception e) {
-                                        LogManager.logError("Could not create Tenant for Subscription ID " + subscription.getId() + ": " + e.getMessage());
-                                    }
+                                    createNewTenant(subscription.getId(), slug);
                                 }
                             } else {
                                 if (status != Status.ACTIVE) {
@@ -103,6 +94,7 @@ public class TenantSynchronizer {
             }
         }
 
+        tenantManagementService.refreshTenants();
         LogManager.logInfo("Synchronization Complete.");
     }
 
@@ -163,7 +155,7 @@ public class TenantSynchronizer {
             tenant.setSlug(newSlug);
             try {
                 tenant = tenantService.merge(tenant);
-                LogManager.logInfo("Updated Slug For Tenant ID " + tenant + ". Previously: " + previousSlug + "; Now: " + newSlug);
+                LogManager.logInfo("Updated Slug For Tenant ID " + tenant.getId() + ". Previously: " + previousSlug + "; Now: " + newSlug);
             } catch (Exception e) {
                 LogManager.logError("Could not update slug for Tenant ID " + tenant.getId() + ": " + e.getMessage());
             }
@@ -185,9 +177,40 @@ public class TenantSynchronizer {
         tenant.setActive(active);
         try {
             tenant = tenantService.merge(tenant);
-            LogManager.logInfo("Set Tenant ID " + tenant + (active ? " Active." : " Inactive."));
+            LogManager.logInfo("Set Tenant ID " + tenant.getId() + (active ? " Active." : " Inactive."));
         } catch (Exception e) {
             LogManager.logError("Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive") + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Creates a new tenant using the specified subscription ID and slug.
+     *
+     * @param subscriptionId The ID of the tenant's subscription (from WooCommerce)
+     * @param slug           The slug of the tenant.
+     * @return The newly created tenant, unless one already existed with the specified parameters, or the slug was null.
+     */
+    private Tenant createNewTenant(int subscriptionId, String slug) {
+        if (slug == null || slug.isEmpty())
+            return null;
+
+        if (tenantService.getTenantBySlug(slug) != null)
+            return null;
+        if (tenantService.getTenantBySubscriptionId(subscriptionId) != null)
+            return null;
+
+        Tenant tenant = new Tenant();
+        tenant.setActive(true);
+        tenant.setSlug(slug);
+        tenant.setSubscriptionId(subscriptionId);
+
+        try {
+            tenantService.insert(tenant);
+            LogManager.logInfo("Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", and Slug " + tenant.getSlug());
+            return tenant;
+        } catch (Exception e) {
+            LogManager.logError("Could not create Tenant for Subscription ID " + tenant.getSubscriptionId() + ": " + e.getMessage());
+            return null;
         }
     }
 
