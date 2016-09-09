@@ -9,7 +9,6 @@ package com.aptitekk.aptibook.core.domain.services;
 import com.aptitekk.aptibook.core.domain.entities.*;
 import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
-import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.annotation.PostConstruct;
@@ -25,31 +24,30 @@ import java.util.List;
 @ApplicationScoped
 public class StartupService implements Serializable {
 
-    @Inject
-    private UserGroupService userGroupService;
+    private final UserGroupService userGroupService;
+
+    private final UserService userService;
+
+    private final AssetCategoryService assetCategoryService;
+
+    private final PropertiesService propertiesService;
+
+    private final PermissionService permissionService;
+
+    private final TenantService tenantService;
 
     @Inject
-    private UserService userService;
-
-    @Inject
-    private AssetCategoryService assetCategoryService;
-
-    @Inject
-    private PropertiesService propertiesService;
-
-    @Inject
-    private PermissionService permissionService;
-
-    @Inject
-    private TenantService tenantService;
-
-    @Inject
-    private TenantManagementService tenantManagementService;
+    public StartupService(UserGroupService userGroupService, UserService userService, AssetCategoryService assetCategoryService, PropertiesService propertiesService, PermissionService permissionService, TenantService tenantService, TenantManagementService tenantManagementService) {
+        this.userGroupService = userGroupService;
+        this.userService = userService;
+        this.assetCategoryService = assetCategoryService;
+        this.propertiesService = propertiesService;
+        this.permissionService = permissionService;
+        this.tenantService = tenantService;
+    }
 
     @PostConstruct
     public void init() {
-        loadDefaultTenants();
-
         for (Tenant tenant : tenantService.getAll()) {
             checkForRootGroup(tenant);
             checkForAdminUser(tenant);
@@ -59,7 +57,7 @@ public class StartupService implements Serializable {
         }
     }
 
-    public void checkForRootGroup(Tenant tenant) {
+    private void checkForRootGroup(Tenant tenant) {
         if (userGroupService.getRootGroup(tenant) == null) {
             UserGroup rootGroup = new UserGroup(UserGroupService.ROOT_GROUP_NAME);
             try {
@@ -70,7 +68,7 @@ public class StartupService implements Serializable {
         }
     }
 
-    public void checkForAdminUser(Tenant tenant) {
+    private void checkForAdminUser(Tenant tenant) {
         User adminUser = userService.findByName(UserService.ADMIN_USERNAME, tenant);
         if (adminUser == null) {
 
@@ -103,7 +101,7 @@ public class StartupService implements Serializable {
         }
     }
 
-    public void checkForAssetCategories(Tenant tenant) {
+    private void checkForAssetCategories(Tenant tenant) {
         //TODO: Do this when tenant is created; not on every startup.
         if (assetCategoryService.getAll(tenant).isEmpty()) {
             try {
@@ -115,7 +113,7 @@ public class StartupService implements Serializable {
         }
     }
 
-    public void writeDefaultProperties(Tenant tenant) {
+    private void writeDefaultProperties(Tenant tenant) {
         List<Property> currentProperties = propertiesService.getAll(tenant);
 
         for (Property.Key key : Property.Key.values()) {
@@ -139,7 +137,7 @@ public class StartupService implements Serializable {
         }
     }
 
-    public void writeDefaultPermissions(Tenant tenant) {
+    private void writeDefaultPermissions(Tenant tenant) {
         List<Permission> currentPermissions = permissionService.getAll(tenant);
 
         for (Permission.Descriptor descriptor : Permission.Descriptor.values()) {
@@ -162,24 +160,5 @@ public class StartupService implements Serializable {
                 }
             }
         }
-    }
-
-    public void loadDefaultTenants() {
-        for (int i = 0; i < 3; i++) {
-            if (tenantService.getTenantBySubscriptionId(i) == null) {
-                Tenant tenant = new Tenant();
-                tenant.setActive(true);
-                tenant.setSubscriptionId(i);
-                tenant.setSlug("tenant" + i);
-                try {
-                    tenantService.insert(tenant);
-                } catch (Exception e) {
-                    LogManager.logError("Couldn't persist Tenant with subscription id " + i);
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        tenantManagementService.refreshTenants();
     }
 }

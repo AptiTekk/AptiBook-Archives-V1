@@ -25,6 +25,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
@@ -50,8 +51,13 @@ public class TenantSynchronizer {
         List<Subscription> subscriptions = getSubscriptions();
         if (subscriptions != null) {
 
-            for (Subscription subscription : subscriptions) {
+            /*
+              Contains a list of the encountered subscriptions containing AptiBook, by ID.
+              Used for disabling tenants which have had their subscription removed from WooCommerce.
+             */
+            List<Integer> subscriptionIdsEncountered = new ArrayList<>();
 
+            for (Subscription subscription : subscriptions) {
                 //Check for all the AptiBook instances within this subscription
                 List<LineItem> lineItems = subscription.getLineItems();
                 if (lineItems != null && !lineItems.isEmpty()) {
@@ -59,6 +65,8 @@ public class TenantSynchronizer {
 
                         //Check that the line item is AptiBook
                         if (lineItem.getProductId().equals(APTIBOOK_PRODUCT_ID)) {
+                            subscriptionIdsEncountered.add(subscription.getId());
+
                             Tenant currentTenant = tenantService.getTenantBySubscriptionId(subscription.getId());
 
                             String slug = getSlugFromLineItem(lineItem);
@@ -91,6 +99,13 @@ public class TenantSynchronizer {
                         }
                     }
                 }
+            }
+
+            for (Tenant tenant : tenantService.getAll()) {
+                if (subscriptionIdsEncountered.contains(tenant.getSubscriptionId()))
+                    continue;
+
+                changeTenantActive(tenant, false);
             }
         }
 
