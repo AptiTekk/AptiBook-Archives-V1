@@ -7,33 +7,29 @@
 
 package com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects;
 
+import com.fasterxml.jackson.annotation.*;
+
+import javax.annotation.Generated;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Generated;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Generated("org.jsonschema2pojo")
 @JsonPropertyOrder({
-    "id",
-    "subtotal",
-    "subtotal_tax",
-    "total",
-    "total_tax",
-    "price",
-    "quantity",
-    "tax_class",
-    "name",
-    "product_id",
-    "sku",
-    "meta"
+        "id",
+        "subtotal",
+        "subtotal_tax",
+        "total",
+        "total_tax",
+        "price",
+        "quantity",
+        "tax_class",
+        "name",
+        "product_id",
+        "sku",
+        "meta"
 })
 public class LineItem {
 
@@ -60,14 +56,12 @@ public class LineItem {
     @JsonProperty("sku")
     private String sku;
     @JsonProperty("meta")
-    private List<Object> meta = new ArrayList<Object>();
+    private List<MetaItem> meta = new ArrayList<>();
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
-     * 
-     * @return
-     *     The id
+     * @return The id
      */
     @JsonProperty("id")
     public Integer getId() {
@@ -75,9 +69,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param id
-     *     The id
+     * @param id The id
      */
     @JsonProperty("id")
     public void setId(Integer id) {
@@ -85,9 +77,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The subtotal
+     * @return The subtotal
      */
     @JsonProperty("subtotal")
     public String getSubtotal() {
@@ -95,9 +85,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param subtotal
-     *     The subtotal
+     * @param subtotal The subtotal
      */
     @JsonProperty("subtotal")
     public void setSubtotal(String subtotal) {
@@ -105,9 +93,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The subtotalTax
+     * @return The subtotalTax
      */
     @JsonProperty("subtotal_tax")
     public String getSubtotalTax() {
@@ -115,9 +101,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param subtotalTax
-     *     The subtotal_tax
+     * @param subtotalTax The subtotal_tax
      */
     @JsonProperty("subtotal_tax")
     public void setSubtotalTax(String subtotalTax) {
@@ -125,9 +109,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The total
+     * @return The total
      */
     @JsonProperty("total")
     public String getTotal() {
@@ -135,9 +117,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param total
-     *     The total
+     * @param total The total
      */
     @JsonProperty("total")
     public void setTotal(String total) {
@@ -145,9 +125,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The totalTax
+     * @return The totalTax
      */
     @JsonProperty("total_tax")
     public String getTotalTax() {
@@ -155,9 +133,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param totalTax
-     *     The total_tax
+     * @param totalTax The total_tax
      */
     @JsonProperty("total_tax")
     public void setTotalTax(String totalTax) {
@@ -165,9 +141,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The price
+     * @return The price
      */
     @JsonProperty("price")
     public String getPrice() {
@@ -175,9 +149,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param price
-     *     The price
+     * @param price The price
      */
     @JsonProperty("price")
     public void setPrice(String price) {
@@ -185,9 +157,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The quantity
+     * @return The quantity
      */
     @JsonProperty("quantity")
     public Integer getQuantity() {
@@ -195,9 +165,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param quantity
-     *     The quantity
+     * @param quantity The quantity
      */
     @JsonProperty("quantity")
     public void setQuantity(Integer quantity) {
@@ -205,9 +173,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The taxClass
+     * @return The taxClass
      */
     @JsonProperty("tax_class")
     public Object getTaxClass() {
@@ -215,9 +181,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param taxClass
-     *     The tax_class
+     * @param taxClass The tax_class
      */
     @JsonProperty("tax_class")
     public void setTaxClass(Object taxClass) {
@@ -225,9 +189,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The name
+     * @return The name
      */
     @JsonProperty("name")
     public String getName() {
@@ -235,9 +197,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param name
-     *     The name
+     * @param name The name
      */
     @JsonProperty("name")
     public void setName(String name) {
@@ -245,9 +205,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The productId
+     * @return The productId
      */
     @JsonProperty("product_id")
     public Integer getProductId() {
@@ -255,9 +213,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param productId
-     *     The product_id
+     * @param productId The product_id
      */
     @JsonProperty("product_id")
     public void setProductId(Integer productId) {
@@ -265,9 +221,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The sku
+     * @return The sku
      */
     @JsonProperty("sku")
     public String getSku() {
@@ -275,9 +229,7 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @param sku
-     *     The sku
+     * @param sku The sku
      */
     @JsonProperty("sku")
     public void setSku(String sku) {
@@ -285,22 +237,18 @@ public class LineItem {
     }
 
     /**
-     * 
-     * @return
-     *     The meta
+     * @return The meta
      */
     @JsonProperty("meta")
-    public List<Object> getMeta() {
+    public List<MetaItem> getMeta() {
         return meta;
     }
 
     /**
-     * 
-     * @param meta
-     *     The meta
+     * @param meta The meta
      */
     @JsonProperty("meta")
-    public void setMeta(List<Object> meta) {
+    public void setMeta(List<MetaItem> meta) {
         this.meta = meta;
     }
 

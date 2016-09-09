@@ -69,7 +69,7 @@ public class Subscription {
     @JsonProperty("updated_at")
     private String updatedAt;
     @JsonProperty("status")
-    private String status;
+    private Status status;
     @JsonProperty("currency")
     private String currency;
     @JsonProperty("total")
@@ -233,7 +233,7 @@ public class Subscription {
      *     The status
      */
     @JsonProperty("status")
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -243,7 +243,7 @@ public class Subscription {
      *     The status
      */
     @JsonProperty("status")
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
