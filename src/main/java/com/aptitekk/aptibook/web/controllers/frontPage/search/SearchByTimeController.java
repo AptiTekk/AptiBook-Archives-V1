@@ -48,8 +48,8 @@ public class SearchByTimeController implements Serializable {
      */
     private int lastTimeRangeHashcode;
 
-    private SegmentedTime startTime;
-    private SegmentedTime endTime;
+    private Date startTime;
+    private Date endTime;
 
     @PostConstruct
     private void init() {
@@ -95,20 +95,20 @@ public class SearchByTimeController implements Serializable {
         this.endTime = null;
     }
 
-    public SegmentedTime getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(SegmentedTime startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
         this.endTime = null;
     }
 
-    public SegmentedTime getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(SegmentedTime endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 
@@ -121,7 +121,7 @@ public class SearchByTimeController implements Serializable {
             calendarDate.setTime(date);
 
             lastTimeRangeHashcode = hashcode;
-            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, startTime, endTime);
+            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, new SegmentedTime(startTime), new SegmentedTime(endTime));
         }
     }
 }

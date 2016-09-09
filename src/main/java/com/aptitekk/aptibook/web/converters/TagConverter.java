@@ -12,15 +12,16 @@ import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.domain.services.TagService;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "TagConverter")
+@Named
 @RequestScoped
-public class TagConverter implements Converter {
+public class TagConverter implements Converter, Serializable {
 
     @Inject
     private AssetCategoryService assetCategoryService;

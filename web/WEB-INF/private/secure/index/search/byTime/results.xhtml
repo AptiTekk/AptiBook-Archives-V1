@@ -52,7 +52,7 @@
                     <div class="form-group">
                         from
                         <h:selectOneMenu value="#{searchByTimeController.startTime}"
-                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
+                                         styleClass="form-control" converter="#{segmentedTimeConverter}"
                                          disabled="#{searchByTimeController.assetCategory == null}">
                             <f:selectItems
                                     value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
@@ -63,7 +63,7 @@
                     <div class="form-group">
                         to
                         <h:selectOneMenu value="#{searchByTimeController.endTime}"
-                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
+                                         styleClass="form-control" converter="#{segmentedTimeConverter}"
                                          disabled="#{searchByTimeController.startTime == null}">
                             <f:selectItems
                                     value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
@@ -85,7 +85,7 @@
                 <h:form>
                     <b:panel look="default" title="Filters">
                         <h:selectManyCheckbox value="#{availableAssetsController.selectedFilterTags}"
-                                              converter="#{TagConverter}" layout="pageDirection">
+                                              converter="#{tagConverter}" layout="pageDirection">
                             <f:ajax render=":availableAssetsList"/>
                             <f:selectItems value="#{availableAssetsController.filterTags}" var="tag" itemValue="#{tag}"
                                            itemLabel="#{tag.name}"/>

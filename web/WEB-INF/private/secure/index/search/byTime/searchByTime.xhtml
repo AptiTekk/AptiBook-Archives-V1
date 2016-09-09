@@ -93,25 +93,15 @@
 
             <b:row>
                 <b:column colXs="12">
-                    <h:outputText value="Start Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{searchByTimeController.startTime}"
-                                     styleClass="big-select" converter="#{SegmentedTimeConverter}">
-                        <f:selectItem itemValue="#{null}"
-                                      itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                        <f:selectItems
-                                value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
-                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
+                    <b:dateTimePicker label="Start Time:" value="#{searchByTimeController.startTime}" showDate="false"
+                                      showTime="true" format="hh:mm A"
+                                      iconAwesome="clock-o">
                         <f:ajax render=":searchByTimeForm"/>
-                    </h:selectOneMenu>
-                    <h:outputText value="End Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{searchByTimeController.endTime}"
-                                     styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                     disabled="#{searchByTimeController.startTime == null}">
-                        <f:selectItems
-                                value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
-                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                        <f:ajax render=":searchByTimeForm"/>
-                    </h:selectOneMenu>
+                    </b:dateTimePicker>
+
+                    <b:dateTimePicker label="End Time:" value="#{searchByTimeController.endTime}" showDate="false"
+                                      showTime="true" format="hh:mm A"
+                                      iconAwesome="clock-o"/>
                 </b:column>
             </b:row>
 

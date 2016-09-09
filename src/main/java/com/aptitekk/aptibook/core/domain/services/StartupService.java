@@ -168,6 +168,7 @@ public class StartupService implements Serializable {
         for (int i = 0; i < 3; i++) {
             if (tenantService.getTenantBySubscriptionId(i) == null) {
                 Tenant tenant = new Tenant();
+                tenant.setActive(true);
                 tenant.setSubscriptionId(i);
                 tenant.setSlug("tenant" + i);
                 try {

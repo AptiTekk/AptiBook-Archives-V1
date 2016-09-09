@@ -11,6 +11,7 @@
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/jaxrs/jackson-jaxrs-base/2.8.2/jackson-jaxrs-base-2.8.2.jar" path-in-jar="/" />
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider/2.8.2/jackson-jaxrs-json-provider-2.8.2.jar" path-in-jar="/" />
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.8.2/jackson-module-jaxb-annotations-2.8.2.jar" path-in-jar="/" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/bootsfaces/bootsfaces/0.9.2-SNAPSHOT/bootsfaces-0.9.2-20160814.214155-4.jar" path-in-jar="/" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.wildfly.swarm:logging:1.0.2.Final" />
@@ -183,6 +184,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.8.2" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.2" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.8.2" />
+          <element id="library" level="project" name="Maven: net.bootsfaces:bootsfaces:0.9.2-SNAPSHOT" />
         </element>
       </element>
       <element id="directory" name="META-INF">

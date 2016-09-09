@@ -29,7 +29,8 @@ public class TenantManagementService {
         allowedTenants = new HashMap<>();
 
         for (Tenant tenant : tenantService.getAll()) {
-            allowedTenants.put(tenant.getSlug(), tenant);
+            if (tenant.isActive())
+                allowedTenants.put(tenant.getSlug(), tenant);
         }
     }
 

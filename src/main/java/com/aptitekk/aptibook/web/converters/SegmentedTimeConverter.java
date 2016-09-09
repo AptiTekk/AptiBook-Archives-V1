@@ -9,14 +9,15 @@ package com.aptitekk.aptibook.web.converters;
 import com.aptitekk.aptibook.core.time.SegmentedTime;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.bean.ManagedBean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.inject.Named;
+import java.io.Serializable;
 
-@ManagedBean(name = "SegmentedTimeConverter")
+@Named
 @RequestScoped
-public class SegmentedTimeConverter implements Converter {
+public class SegmentedTimeConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String timeString) {

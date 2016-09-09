@@ -20,4 +20,5 @@
     <include file="changeSets/8__Remove_Email_Enum_Properties.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/9__Google_User_Support.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/10__Remove_Policy_Box_Property.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/11__Add_Tenant_Active_Column.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -17,6 +17,8 @@ public class Tenant extends GlobalEntity {
     @GeneratedValue
     private int id;
 
+    private boolean active;
+
     @Column(nullable = false, unique = true)
     private int subscriptionId;
 
@@ -25,6 +27,15 @@ public class Tenant extends GlobalEntity {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        //TODO: Update date when set inactive.
+        this.active = active;
     }
 
     public int getSubscriptionId() {
@@ -53,12 +64,12 @@ public class Tenant extends GlobalEntity {
 
         Tenant other = (Tenant) o;
 
-        return EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
+        return EqualsHelper.areEquals(isActive(), other.isActive()) && EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
                 && EqualsHelper.areEquals(getSlug(), other.getSlug());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getSubscriptionId(), getSlug());
+        return EqualsHelper.calculateHashCode(isActive(), getSubscriptionId(), getSlug());
     }
 }

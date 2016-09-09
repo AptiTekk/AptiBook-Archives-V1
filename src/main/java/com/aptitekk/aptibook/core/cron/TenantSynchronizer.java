@@ -64,36 +64,33 @@ public class TenantSynchronizer {
                             String slug = getSlugFromLineItem(lineItem);
                             if (slug == null || slug.isEmpty()) {
                                 if (currentTenant != null) {
-                                    //TODO: Disable Tenant
+                                    changeTenantActive(currentTenant, false);
                                 }
                             } else if (currentTenant != null) {
                                 if (!currentTenant.getSlug().equalsIgnoreCase(slug)) {
-                                    String previousSlug = currentTenant.getSlug();
-                                    if (tenantService.getTenantBySlug(slug) == null) {
-
-                                        currentTenant.setSlug(slug);
-                                        try {
-                                            currentTenant = tenantService.merge(currentTenant);
-                                            LogManager.logInfo("Updated Slug For Tenant ID " + currentTenant + ". Previously: " + previousSlug + "; Now: " + slug);
-                                        } catch (Exception e) {
-                                            LogManager.logError("Could not update slug for Tenant ID " + currentTenant.getId() + ": " + e.getMessage());
-                                        }
-                                    } else {
-                                        LogManager.logError("Could not update slug for Tenant ID " + currentTenant.getId() + ": A Tenant with this slug already exists.");
-                                    }
+                                    changeTenantSlug(currentTenant, slug);
                                 }
                             }
 
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
-                                    LogManager.logInfo("Create Tenant with Slug " + slug + " and ID " + subscription.getId());
-                                    //TODO: Create Tenant
+                                    currentTenant = new Tenant();
+                                    currentTenant.setActive(true);
+                                    currentTenant.setSlug(slug);
+                                    currentTenant.setSubscriptionId(subscription.getId());
+
+                                    try {
+                                        tenantService.insert(currentTenant);
+                                    } catch (Exception e) {
+                                        LogManager.logError("Could not create Tenant for Subscription ID " + subscription.getId() + ": " + e.getMessage());
+                                    }
                                 }
                             } else {
                                 if (status != Status.ACTIVE) {
-                                    LogManager.logInfo("Disable Tenant with Slug " + slug + " and ID " + subscription.getId());
-                                    //TODO: Disable Tenant
+                                    changeTenantActive(currentTenant, false);
+                                } else {
+                                    changeTenantActive(currentTenant, true);
                                 }
                             }
 
@@ -149,6 +146,49 @@ public class TenantSynchronizer {
             }
         }
         return null;
+    }
+
+    /**
+     * Changes the provided tenant's slug to the specified slug, unless another tenant with that slug exists.
+     *
+     * @param tenant  The tenant whose slug should be changed.
+     * @param newSlug The new slug.
+     */
+    private void changeTenantSlug(Tenant tenant, String newSlug) {
+        if (tenant.getSlug().equalsIgnoreCase(newSlug))
+            return;
+
+        String previousSlug = tenant.getSlug();
+        if (tenantService.getTenantBySlug(newSlug) == null) {
+            tenant.setSlug(newSlug);
+            try {
+                tenant = tenantService.merge(tenant);
+                LogManager.logInfo("Updated Slug For Tenant ID " + tenant + ". Previously: " + previousSlug + "; Now: " + newSlug);
+            } catch (Exception e) {
+                LogManager.logError("Could not update slug for Tenant ID " + tenant.getId() + ": " + e.getMessage());
+            }
+        } else {
+            LogManager.logError("Could not update slug for Tenant ID " + tenant.getId() + ": A Tenant with this slug already exists.");
+        }
+    }
+
+    /**
+     * Changes whether the provided tenant is active or not.
+     *
+     * @param tenant The tenant to make active/inactive.
+     * @param active Whether the tenant should be active.
+     */
+    private void changeTenantActive(Tenant tenant, boolean active) {
+        if (tenant.isActive() == active)
+            return;
+
+        tenant.setActive(active);
+        try {
+            tenant = tenantService.merge(tenant);
+            LogManager.logInfo("Set Tenant ID " + tenant + (active ? " Active." : " Inactive."));
+        } catch (Exception e) {
+            LogManager.logError("Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive") + ": " + e.getMessage());
+        }
     }
 
 }

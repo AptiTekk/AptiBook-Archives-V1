@@ -11,13 +11,10 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 
-/**
- * Created by kevint on 9/5/2016.
- */
 public class WooCommerceSecurityFilter implements ClientRequestFilter {
 
-    public static final String CONSUMER_KEY_PARAM = "consumer_key";
-    public static final String CONSUMER_SECRET_PARAM = "consumer_secret";
+    private static final String CONSUMER_KEY_PARAM = "consumer_key";
+    private static final String CONSUMER_SECRET_PARAM = "consumer_secret";
 
     private String consumerKey;
     private String consumerSecret;
@@ -28,6 +25,9 @@ public class WooCommerceSecurityFilter implements ClientRequestFilter {
     }
 
     public void filter(ClientRequestContext requestContext) throws IOException {
+        if (consumerKey == null || consumerSecret == null)
+            return;
+
         requestContext.setUri(
                 UriBuilder.fromUri(
                         requestContext.getUri())
