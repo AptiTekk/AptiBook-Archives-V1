@@ -17,7 +17,6 @@ import org.joda.time.Interval;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -35,7 +34,7 @@ public class NotificationCleaner {
      */
     @Schedule(hour = "*")
     private void cleanReadNotifications() {
-        LogManager.logInfo("Cleaning Notifications...");
+        LogManager.logDebug("[NotificationCleaner] Cleaning Notifications...");
 
         int numNotificationsRemoved = 0;
         List<Tenant> tenants = tenantService.getAll();
@@ -47,13 +46,13 @@ public class NotificationCleaner {
                         notificationService.delete(notification.getId());
                         numNotificationsRemoved++;
                     } catch (Exception e) {
-                        LogManager.logError("Could not delete Notification on cleanup: " + e.getMessage());
+                        LogManager.logError("[NotificationCleaner] Could not delete Notification on cleanup: " + e.getMessage());
                     }
                 }
             }
         }
 
-        LogManager.logInfo("Removed " + numNotificationsRemoved + " old Notifications. Cleaning complete.");
+        LogManager.logDebug("[NotificationCleaner] Removed " + numNotificationsRemoved + " old Notifications. Cleaning complete.");
     }
 
 }
