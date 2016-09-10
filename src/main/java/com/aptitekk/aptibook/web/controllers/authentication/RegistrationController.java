@@ -6,8 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
+import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.sparkpost.exception.SparkPostException;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -26,6 +30,9 @@ public class RegistrationController implements Serializable {
     @Inject
     private TenantSessionService tenantSessionService;
 
+    @Inject
+    private EmailService emailService;
+
     private String username;
     private String password;
     private String confirmPassword;
@@ -38,6 +45,21 @@ public class RegistrationController implements Serializable {
         }
         if (password.equals(confirmPassword)) {
             //send link
+            byte[] passwordByte = password.getBytes();
+            User user = new User();
+            user.setUsername(this.username);
+            user.setPassword(passwordByte);
+            Notification notification = new Notification();
+            notification.setSubject("Registration Confirmation");
+            notification.setBody("<a:href=http://localhost:8080/aptibook/tenant0/index.xhtml");
+            notification.setUser(user);
+            try {
+                emailService.sendEmailNotification(notification);
+                System.out.println("Sent email");
+            } catch (SparkPostException e) {
+                e.printStackTrace();
+            }
+
             System.out.println("Got to password equals");
 
         }
