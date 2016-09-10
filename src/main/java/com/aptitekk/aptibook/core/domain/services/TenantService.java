@@ -7,7 +7,7 @@
 package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.domain.entities.*;
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.ejb.Stateless;

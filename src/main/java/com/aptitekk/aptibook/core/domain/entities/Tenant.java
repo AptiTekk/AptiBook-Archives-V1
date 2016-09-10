@@ -7,8 +7,15 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
 
 @Entity
 public class Tenant extends GlobalEntity {
@@ -19,11 +26,54 @@ public class Tenant extends GlobalEntity {
 
     private boolean active;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar timeSetInactive;
+
     @Column(nullable = false, unique = true)
     private int subscriptionId;
 
     @Column(nullable = false, unique = true, length = 32)
     private String slug;
+
+    // ----------------------------------------------------------- Tenant Dependent Entities
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<Asset> assets;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<AssetCategory> assetCategories;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<File> files;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<Permission> permissions;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<Property> properties;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<Reservation> reservations;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<ReservationDecision> reservationDecisions;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<ReservationField> reservationFields;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<ReservationFieldEntry> reservationFieldEntries;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<Tag> tags;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<User> users;
+
+    @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
+    private List<UserGroup> userGroups;
+
+    // ----------------------------------------------------------- End Tenant Dependent Entities
 
     public int getId() {
         return id;
@@ -34,8 +84,20 @@ public class Tenant extends GlobalEntity {
     }
 
     public void setActive(boolean active) {
-        //TODO: Update date when set inactive.
         this.active = active;
+        if (active)
+            timeSetInactive = null;
+        else
+            timeSetInactive = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    }
+
+    /**
+     * This is the time when the Tenant active value was set to false. (In UTC).
+     *
+     * @return The time when the Tenant was set inactive if it is inactive, or null if it was active. The time will be in UTC.
+     */
+    public Calendar getTimeSetInactive() {
+        return timeSetInactive;
     }
 
     public int getSubscriptionId() {
@@ -64,12 +126,12 @@ public class Tenant extends GlobalEntity {
 
         Tenant other = (Tenant) o;
 
-        return EqualsHelper.areEquals(isActive(), other.isActive()) && EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
+        return EqualsHelper.areEquals(isActive(), other.isActive()) && EqualsHelper.areEquals(getTimeSetInactive(), other.getTimeSetInactive()) && EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
                 && EqualsHelper.areEquals(getSlug(), other.getSlug());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(isActive(), getSubscriptionId(), getSlug());
+        return EqualsHelper.calculateHashCode(isActive(), getTimeSetInactive(), getSubscriptionId(), getSlug());
     }
 }

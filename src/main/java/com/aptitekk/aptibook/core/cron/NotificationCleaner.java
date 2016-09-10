@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
 import javax.ejb.Schedule;
@@ -35,14 +36,13 @@ public class NotificationCleaner {
     @Schedule(hour = "*")
     private void cleanReadNotifications() {
         LogManager.logInfo("Cleaning Notifications...");
-        Date now = new Date();
 
         int numNotificationsRemoved = 0;
         List<Tenant> tenants = tenantService.getAll();
         for (Tenant tenant : tenants) {
             List<Notification> notifications = notificationService.getAll(tenant);
             for (Notification notification : notifications) {
-                if (notification.getRead() && new Interval(notification.getCreation().getTime(), now.getTime()).toDuration().getStandardDays() >= 3) {
+                if (notification.getRead() && new Interval(new DateTime(notification.getCreation()), new DateTime()).toDuration().getStandardDays() >= 3) {
                     try {
                         notificationService.delete(notification.getId());
                         numNotificationsRemoved++;

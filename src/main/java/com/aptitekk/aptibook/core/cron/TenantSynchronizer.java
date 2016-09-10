@@ -8,11 +8,7 @@ package com.aptitekk.aptibook.core.cron;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
-import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.SubscriptionService;
-import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.LineItem;
-import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.MetaItem;
-import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.Status;
-import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.Subscription;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.*;
 import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -20,13 +16,19 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.client.jaxrs.engines.URLConnectionEngine;
+import org.joda.time.Chronology;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Interval;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 @Singleton
 public class TenantSynchronizer {
@@ -44,7 +46,7 @@ public class TenantSynchronizer {
     @Inject
     private TenantManagementService tenantManagementService;
 
-    @Schedule(minute = "*/5", hour = "*")
+    @Schedule(minute = "*", hour = "*")
     private void synchronizeTenants() {
         LogManager.logInfo("Synchronizing Tenants...");
 
@@ -93,7 +95,19 @@ public class TenantSynchronizer {
                                 }
                             }
 
-                            //TODO: Check when tenant was disabled (if they were) and delete if after 30 days.
+                            if (currentTenant != null && !currentTenant.isActive()) {
+                                Calendar timeSetInactive = currentTenant.getTimeSetInactive();
+                                if (timeSetInactive != null) {
+                                    if (new Interval(new DateTime(timeSetInactive.getTime()), new DateTime(DateTimeZone.UTC)).toDuration().getStandardDays() >= 30)
+                                        try {
+                                            int tenantId = currentTenant.getId();
+                                            tenantService.delete(currentTenant.getId());
+                                            LogManager.logInfo("Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
+                                        } catch (Exception e) {
+                                            LogManager.logError("Could not delete Tenant with ID " + currentTenant.getId() + ": " + e.getMessage());
+                                        }
+                                }
+                            }
 
                             break;
                         }
