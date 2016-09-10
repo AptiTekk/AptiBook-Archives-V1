@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.woocommerce.restapi.util;
+package com.aptitekk.aptibook.core.rest.woocommerce.util;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;

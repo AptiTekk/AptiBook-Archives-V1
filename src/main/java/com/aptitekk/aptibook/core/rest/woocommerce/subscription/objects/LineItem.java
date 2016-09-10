@@ -5,7 +5,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects;
+package com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects;
 
 import com.fasterxml.jackson.annotation.*;
 

@@ -8,12 +8,12 @@ package com.aptitekk.aptibook.core.cron;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.SubscriptionService;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.LineItem;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.MetaItem;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.Status;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.Subscription;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.util.WooCommerceSecurityFilter;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.SubscriptionService;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.LineItem;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.MetaItem;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.Status;
+import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.Subscription;
+import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -133,6 +133,9 @@ public class TenantSynchronizer {
             return service.getAll().getSubscriptions();
         } catch (ClientErrorException e) {
             LogManager.logError("Could not Synchronize Tenants due to Client Error: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            LogManager.logError("Could not Synchronize Tenants due to Unknown Error: " + e.getClass().getName() + " - " + e.getMessage());
             return null;
         }
     }

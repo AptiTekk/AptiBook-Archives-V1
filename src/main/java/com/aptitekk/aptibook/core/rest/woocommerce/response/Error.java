@@ -4,18 +4,15 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.woocommerce.restapi.response;
+package com.aptitekk.aptibook.core.rest.woocommerce.response;
 
-/**
- * Created by kevint on 9/5/2016.
- */
 public class Error {
 
-    String code;
+    private String code;
 
-    String message;
+    private String message;
 
-    ErrorData data;
+    private ErrorData data;
 
     public Error() {
     }

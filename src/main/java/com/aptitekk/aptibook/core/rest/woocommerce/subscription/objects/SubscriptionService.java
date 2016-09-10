@@ -4,15 +4,11 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.woocommerce.restapi;
+package com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects;
 
-
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.Subscription;
-import com.aptitekk.aptibook.core.domain.woocommerce.restapi.objects.Subscriptions;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Map;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -22,10 +18,6 @@ public interface SubscriptionService {
     @GET
     @Path("/count")
     int count() throws WebApplicationException;
-
-    @GET
-    @Path("/statuses")
-    Map<String, String> getStatuses() throws WebApplicationException;
 
     @GET
     Subscriptions getAll() throws WebApplicationException;

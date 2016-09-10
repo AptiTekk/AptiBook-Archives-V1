@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.oAuthModels;
+package com.aptitekk.aptibook.core.rest.oAuthModels;
 
 public class GoogleUserInfoModel {
     private String given_name;
