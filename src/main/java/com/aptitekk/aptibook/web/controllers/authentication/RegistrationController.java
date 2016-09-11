@@ -12,8 +12,10 @@ import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.core.util.LogManager;
 import com.sparkpost.exception.SparkPostException;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.logging.Log;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -45,14 +47,13 @@ public class RegistrationController implements Serializable {
     private String lastName;
 
 
-    public void register() {
+    public void register() throws Exception {
         if (username == null || password == null || confirmPassword == null || firstName == null || lastName == null) {
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Complete all required forms"));
             return;
         }
         if (password.equals(confirmPassword)) {
-            //send link
-            if(passwordRegex(password)) {
+            if (passwordRegex(password)) {
                 byte[] passwordByte = password.getBytes();
                 User user = new User();
                 user.setUsername(username);
@@ -60,23 +61,27 @@ public class RegistrationController implements Serializable {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setWantsEmailNotifications(true);
-                user.setVerified(false);
+                String verificationCode = RandomStringUtils.randomAlphanumeric(5);
+                while (userService.findByCode(verificationCode) != null) {
+                    verificationCode = RandomStringUtils.randomAlphanumeric(5);
+                }
                 user.setVerificationcode(RandomStringUtils.randomAlphanumeric(5));
-                try {
-                    //search if exists first
-                    if (userService.findByName(username) == null) {
-                        userService.insert(user);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                if (userService.findByName(username) == null) {
+                    userService.insert(user);
+                    LogManager.logInfo("New user has been created. User: " + user.getUsername());
+                } else {
+                    FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An account for that email has already been made."));
+                    LogManager.logInfo("User already exists. User: " + user.getUsername());
+                    return;
                 }
                 Notification notification = new Notification();
                 notification.setSubject("Registration Confirmation");
-                notification.setBody("<a href='http://localhost:8080/aptibook/tenant0/index.xhtml?" + "id=" + user.getVerificationcode() + "'" + "> Yo </a>");
+                notification.setBody("<a href='http://localhost:8080/aptibook/tenant0/index.xhtml?" + "id=" + user.getVerificationcode() + "'" + ">Confirm AptiBook Registration</a>");
                 notification.setUser(user);
                 try {
                     emailService.sendEmailNotification(notification);
                     FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An email confirmation has been sent"));
+                    LogManager.logInfo("Email Confirmation has been sent to: " + notification.getUser().getUsername());
                 } catch (SparkPostException e) {
                     e.printStackTrace();
                 }
@@ -85,10 +90,11 @@ public class RegistrationController implements Serializable {
         }
     }
 
-    public boolean passwordRegex(String password){
-        if(password.length() > 6 && password.length() < 20){
+    public boolean passwordRegex(String password) {
+        if (password.length() > 6 && password.length() < 20) {
+            //Nest if here if more regex conditions are needed
             return true;
-        }else{
+        } else {
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Password must be between 6 - 20 characters long"));
         }
         return false;

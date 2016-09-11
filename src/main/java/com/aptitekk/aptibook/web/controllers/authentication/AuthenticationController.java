@@ -61,12 +61,23 @@ public class AuthenticationController implements Serializable {
             if (attribute != null && attribute instanceof User) {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
-        }
-        String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(REGISTRATIONCODE);
-        if(id != null) {
-            User user = userService.findByCode(id);
-            user.setVerified(true);
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! Please wait for the admin to approve you."));
+            String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(REGISTRATIONCODE);
+            if (id != null) {
+                User user = userService.findByCode(id);
+                if (user != null) {
+                    if (!user.isVerified()) {
+                        user.setVerified(true);
+                        try {
+                            userService.merge(user);
+                            LogManager.logInfo("User is now verified and merged. User: " + user.getUsername());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! Please wait for the admin to approve you."));
+                    }
+
+                }
+            }
         }
     }
 
@@ -126,6 +137,7 @@ public class AuthenticationController implements Serializable {
      *
      * @return The outcome page.
      */
+
     public String login() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         FacesContext context = FacesContext.getCurrentInstance();

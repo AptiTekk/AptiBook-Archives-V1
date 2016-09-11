@@ -31,10 +31,10 @@ import java.util.Map;
 public class EmailService implements Serializable {
 
     //private static final String API_KEY = System.getenv("SPARKPOST_API_KEY");
-   // private static final String API_URL = System.getenv("SPARKPOST_API_URL");
+    // private static final String API_URL = System.getenv("SPARKPOST_API_URL");
 
 
-    private static final String API_KEY ="0bdd338ba5de5083cef4c6908eb6719e0c20caae";
+    private static final String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
     private static final String API_URL = "https://api.sparkpost.com/api/v1";
     private Client client;
 
@@ -50,16 +50,11 @@ public class EmailService implements Serializable {
 
 
     public void sendEmailNotification(Notification notification) throws SparkPostException {
-        System.out.println(notification.getUser().getUsername());
         if (notification.getUser() == null || notification.getUser().getUsername() == null || notification.getUser().getUsername().isEmpty() || !notification.getUser().getWantsEmailNotifications())
             return;
-
-        System.out.println("In first method");
         Map<String, Object> substitutionData = new HashMap<>();
         substitutionData.put("subject", notification.getSubject());
-        System.out.println(notification.getSubject());
         substitutionData.put("body", notification.getBody());
-
         sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
     }
 
@@ -72,13 +67,11 @@ public class EmailService implements Serializable {
      * @throws SparkPostException If a problem occurs while sending the emails.
      */
     public void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) throws SparkPostException {
-        System.out.println("Got here");
         if (client == null)
             return;
 
         if (templateId == null || templateId.isEmpty() || recipients == null)
             return;
-        System.out.println("Got here 2");
         TransmissionWithRecipientArray transmission = new TransmissionWithRecipientArray();
 
         // Set Template ID
@@ -96,7 +89,6 @@ public class EmailService implements Serializable {
             RecipientAttributes recipientAttribs = new RecipientAttributes();
             recipientAttribs.setAddress(new AddressAttributes(recipient));
             recipientArray.add(recipientAttribs);
-            System.out.println(recipient);
             String email = recipient;
         }
         transmission.setRecipientArray(recipientArray);
