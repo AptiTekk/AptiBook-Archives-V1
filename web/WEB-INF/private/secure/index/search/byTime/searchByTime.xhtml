@@ -9,7 +9,6 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
 
@@ -62,11 +61,13 @@
             <b:row>
                 <b:column colXs="12">
                     <h:outputText value="Select a Date" styleClass="lead"/>
-                    <p:calendar value="#{searchByTimeController.date}"
+                    <b:dateTimePicker value="#{searchByTimeController.date}" style="width: 100%"
+                                      mode="inline" showDate="true" showTime="false"/>
+                    <!--<p:calendar value="#{searchByTimeController.date}"
                                 mindate="#{timeSelectionController.minDate}"
                                 mode="inline" styleClass="datepicker-fullwidth">
                         <f:ajax event="dateSelect" render=":searchByTimeForm"/>
-                    </p:calendar>
+                    </p:calendar>-->
                 </b:column>
             </b:row>
 
@@ -81,7 +82,7 @@
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true"
-                                         action="#{searchByTimeController.nextStep}" update="@form"
+                                         action="#{searchByTimeController.nextStep}" update="@form" process="@form"
                                          disabled="#{searchByTimeController.date == null}"/>
                     </b:buttonGroup>
                 </b:column>
@@ -92,16 +93,15 @@
         <ui:fragment rendered="#{searchByTimeController.currentStep == 2}">
 
             <b:row>
-                <b:column colXs="12">
-                    <b:dateTimePicker label="Start Time:" value="#{searchByTimeController.startTime}" showDate="false"
-                                      showTime="true" format="hh:mm A"
-                                      iconAwesome="clock-o">
-                        <f:ajax render=":searchByTimeForm"/>
-                    </b:dateTimePicker>
-
-                    <b:dateTimePicker label="End Time:" value="#{searchByTimeController.endTime}" showDate="false"
-                                      showTime="true" format="hh:mm A"
-                                      iconAwesome="clock-o"/>
+                <b:column colXs="6">
+                    <b:dateTimePicker label="Start Time:" value="#{searchByTimeController.startTime}"
+                                      mode="inline"
+                                      format="hh:mm A" iconAwesome="clock-o"/>
+                </b:column>
+                <b:column colXs="6">
+                    <b:dateTimePicker label="End Time:" value="#{searchByTimeController.endTime}"
+                                      mode="inline"
+                                      format="hh:mm A" iconAwesome="clock-o"/>
                 </b:column>
             </b:row>
 
