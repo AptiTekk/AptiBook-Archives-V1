@@ -6,19 +6,33 @@
 
 package com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum Status {
 
-    @SerializedName("active")
     ACTIVE,
-    @SerializedName("pending-cancel")
     PENDING_CANCEL,
-    @SerializedName("on-hold")
     ON_HOLD,
-    @SerializedName("expired")
     EXPIRED,
-    @SerializedName("cancelled")
     CANCELLED;
+
+    @JsonCreator
+    public static Status create(String value) {
+        switch (value.toLowerCase()) {
+            case "active":
+                return ACTIVE;
+            case "pending-cancel":
+                return PENDING_CANCEL;
+            case "on-hold":
+                return ON_HOLD;
+            case "expired":
+                return EXPIRED;
+            case "cancelled":
+                return CANCELLED;
+            default:
+                System.out.println("Unknown Status: " + value);
+                return null;
+        }
+    }
 
 }
