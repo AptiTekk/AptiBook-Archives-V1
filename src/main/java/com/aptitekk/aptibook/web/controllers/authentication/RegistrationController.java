@@ -76,6 +76,7 @@ public class RegistrationController implements Serializable {
                 notification.setUser(user);
                 try {
                     emailService.sendEmailNotification(notification);
+                    FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An email confirmation has been sent"));
                 } catch (SparkPostException e) {
                     e.printStackTrace();
                 }
