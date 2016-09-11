@@ -58,7 +58,6 @@ public abstract class UserFieldSupplier {
             username = user.getUsername();
             firstName = user.getFirstName();
             lastName = user.getLastName();
-            //email = user.getEmail();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             wantsEmailNotifications = user.getWantsEmailNotifications();
@@ -66,7 +65,6 @@ public abstract class UserFieldSupplier {
             username = null;
             firstName = null;
             lastName = null;
-           // email = null;
             phoneNumber = null;
             location = null;
             wantsEmailNotifications = true;

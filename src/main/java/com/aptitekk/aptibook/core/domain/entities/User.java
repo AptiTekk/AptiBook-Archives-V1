@@ -42,6 +42,10 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private boolean googleUser;
 
+    private String verificationcode;
+
+    private boolean verified;
+
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
 
@@ -204,5 +208,21 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setGoogleUser(boolean googleUser) {
         this.googleUser = googleUser;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getVerificationcode() {
+        return verificationcode;
+    }
+
+    public void setVerificationcode(String verficationCode) {
+        this.verificationcode = verficationCode;
     }
 }

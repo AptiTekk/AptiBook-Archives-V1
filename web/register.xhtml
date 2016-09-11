@@ -36,8 +36,9 @@
                                               style="background-color: #fff; padding: 15px 30px; border-radius: 10px; box-shadow: #aaa 0 0 10px 0">
                                         <h:form id="registerForm">
                                             <b:messages for="registerForm" showSummary="false" showDetail="true"/>
+                                            <label>* = required</label>
                                             <div class="form-group">
-                                                <label for="usernameInput">Username:</label>
+                                                <label for="usernameInput">*Username:</label>
                                                 <h:inputText id="usernameInput" styleClass="form-control"
                                                              autocomplete="off"
                                                              value="#{registrationController.username}"
@@ -45,17 +46,32 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label for="passwordInput">Password:</label>
-                                                <h:inputSecret id="passwordInput" styleClass="form-control"
+                                                <label for="passwordInput">*Password:</label>
+                                                <h:inputSecret id="passwordInput" styleClass="form-control" size="20"
                                                                autocomplete="off"
                                                                value="#{registrationController.password}"
                                                                p:autofocus="true"/>
+
                                             </div>
                                             <div class="form-group">
-                                                <label for="confirmPassword">Confirm Password:</label>
-                                                <h:inputSecret id="confirmPassword" styleClass="form-control"
+                                                <label for="confirmPassword">*Confirm Password:</label>
+                                                <h:inputSecret id="confirmPassword" styleClass="form-control" size="20"
                                                                autocomplete="off"
                                                                value="#{registrationController.confirmPassword}"
+                                                               p:autofocus="true"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="firstName">*First Name:</label>
+                                                <h:inputSecret id="firstName" styleClass="form-control"
+                                                               autocomplete="off"
+                                                               value="#{registrationController.firstName}"
+                                                               p:autofocus="true"/>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="lastName">*Last Name:</label>
+                                                <h:inputSecret id="lastName" styleClass="form-control"
+                                                               autocomplete="off"
+                                                               value="#{registrationController.lastName}"
                                                                p:autofocus="true"/>
                                             </div>
                                             <div class="form-group">
