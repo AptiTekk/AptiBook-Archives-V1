@@ -6,51 +6,37 @@
 
 package com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.google.gson.annotations.SerializedName;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({
-        "key",
-        "label",
-        "value"
-})
 public class MetaItem {
 
-    @JsonProperty("key")
+    @SerializedName("key")
     private String key;
-    @JsonProperty("label")
+    @SerializedName("label")
     private String label;
-    @JsonProperty("value")
+    @SerializedName("value")
     private String value;
 
-    @JsonProperty("key")
     public String getKey() {
         return key;
     }
 
-    @JsonProperty("key")
     public void setKey(String key) {
         this.key = key;
     }
 
-    @JsonProperty("label")
     public String getLabel() {
         return label;
     }
 
-    @JsonProperty("label")
     public void setLabel(String label) {
         this.label = label;
     }
 
-    @JsonProperty("value")
     public String getValue() {
         return value;
     }
 
-    @JsonProperty("value")
     public void setValue(String value) {
         this.value = value;
     }

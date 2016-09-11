@@ -9,13 +9,13 @@ package com.aptitekk.aptibook.core.cron;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.*;
-import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.jboss.resteasy.client.jaxrs.engines.URLConnectionEngine;
+import com.google.gson.Gson;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.Interval;
@@ -24,6 +24,11 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -31,7 +36,7 @@ import java.util.List;
 @Singleton
 public class TenantSynchronizer {
 
-    private static final String SUBSCRIPTIONS_INFO_URL = "https://aptitekk.com/wc-api/v3/";
+    private static final String SUBSCRIPTIONS_INFO_URL = "https://aptitekk.com/wc-api/v3/subscriptions/";
     private static final String WOOCOMMERCE_CK = System.getenv("WOOCOMMERCE_CK");
     private static final String WOOCOMMERCE_CS = System.getenv("WOOCOMMERCE_CS");
 
@@ -44,7 +49,7 @@ public class TenantSynchronizer {
     @Inject
     private TenantManagementService tenantManagementService;
 
-    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    @Schedule(minute = "*", hour = "*", persistent = false)
     private void synchronizeTenants() {
         LogManager.logDebug("[TenantSynchronizer] Synchronizing Tenants...");
 
@@ -128,22 +133,42 @@ public class TenantSynchronizer {
      * @return The list of Subscriptions.
      */
     private List<Subscription> getSubscriptions() {
-        URLConnectionEngine urlConnectionEngine = new URLConnectionEngine();
-
-        ResteasyClientBuilder builder = new ResteasyClientBuilder();
-        builder.register(new WooCommerceSecurityFilter(
-                WOOCOMMERCE_CK,
-                WOOCOMMERCE_CS));
-        builder.httpEngine(urlConnectionEngine);
-        ResteasyClient webClient = builder.build();
-        ResteasyWebTarget webTarget = webClient.target(SUBSCRIPTIONS_INFO_URL);
-        SubscriptionService service = webTarget.proxy(SubscriptionService.class);
-        try {
-            return service.getAll().getSubscriptions();
-        } catch (ClientErrorException e) {
-            LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Client Error: " + e.getMessage());
+        if (WOOCOMMERCE_CK == null || WOOCOMMERCE_CS == null || WOOCOMMERCE_CK.isEmpty() || WOOCOMMERCE_CS.isEmpty()) {
+            LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to missing WooCommerce Key and/or Secret");
             return null;
-        } catch (Exception e) {
+        }
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet httpGet = new HttpGet();
+        httpGet.setURI(URI.create(SUBSCRIPTIONS_INFO_URL + "?consumer_key=" + WOOCOMMERCE_CK + "&consumer_secret=" + WOOCOMMERCE_CS));
+        try {
+            HttpResponse response = httpClient.execute(httpGet);
+            if (response.getStatusLine().getStatusCode() != 200) {
+                LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to non-okay status: " + response.getStatusLine().getStatusCode());
+                return null;
+            }
+
+            StringBuilder jsonBuilder = new StringBuilder();
+            InputStream inputStream = response.getEntity().getContent();
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(inputStream));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+            }
+            inputStream.close();
+
+            Gson gson = new Gson();
+            Subscriptions subscriptions = gson.fromJson(jsonBuilder.toString(), Subscriptions.class);
+            try {
+                return subscriptions.getSubscriptions();
+            } catch (ClientErrorException e) {
+                LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Client Error: " + e.getMessage());
+                return null;
+            } catch (Exception e) {
+                LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Unknown Error: " + e.getClass().getName() + " - " + e.getMessage());
+                return null;
+            }
+        } catch (IOException e) {
             LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Unknown Error: " + e.getClass().getName() + " - " + e.getMessage());
             return null;
         }

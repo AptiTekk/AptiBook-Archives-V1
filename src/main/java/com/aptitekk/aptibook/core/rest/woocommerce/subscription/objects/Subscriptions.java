@@ -6,13 +6,13 @@
 
 package com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 public class Subscriptions {
 
-    @JsonProperty("subscriptions")
+    @SerializedName("subscriptions")
     private List<Subscription> subscriptions;
 
     public List<Subscription> getSubscriptions() {
