@@ -20,6 +20,8 @@ import com.sparkpost.transport.RestConnection;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +38,7 @@ public class EmailService implements Serializable {
 
     private static final String API_KEY = "0bdd338ba5de5083cef4c6908eb6719e0c20caae";
     private static final String API_URL = "https://api.sparkpost.com/api/v1";
+
     private Client client;
 
     @PostConstruct
@@ -66,7 +69,7 @@ public class EmailService implements Serializable {
      * @param recipients       The recipients to send the email to. More than one may be specified.
      * @throws SparkPostException If a problem occurs while sending the emails.
      */
-    public void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) throws SparkPostException {
+    private void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) {
         if (client == null)
             return;
 
@@ -93,19 +96,16 @@ public class EmailService implements Serializable {
         }
         transmission.setRecipientArray(recipientArray);
 
-        // Populate Email Body
-       /* if(subject != null && email != null) {
-            TemplateContentAttributes contentAttributes = new TemplateContentAttributes();
-            contentAttributes.setFrom(new AddressAttributes("noreply@aptitekk.com"));
-            contentAttributes.setSubject(subject);
-            contentAttributes.setText(email);
-            contentAttributes.setHtml(email);
-            transmission.setContentAttributes(contentAttributes);
-        }*/
-
         // Send the Email
-        RestConnection connection = new RestConnection(client, API_URL);
-        ResourceTransmissions.create(connection, 0, transmission);
+        RestConnection connection = null;
+        try {
+            connection = new RestConnection(client, API_URL);
+            ResourceTransmissions.create(connection, 0, transmission);
+        } catch (SparkPostException e) {
+            LogManager.logError("Error sending email");
+            e.printStackTrace();
+        }
+
     }
 
 }

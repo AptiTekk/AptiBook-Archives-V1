@@ -46,13 +46,6 @@ public abstract class GlobalEntityServiceAbstract<T extends GlobalEntity> implem
         TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e", entityType);
         return query.getResultList();
     }
-/*
-    @Override
-    public List<T> getAllGoogleUsers() {
-        TypedQuery<T> query = this.entityManager.createQuery("SELECT e FROM " + this.entityType.getSimpleName() + " e", entityType);
-        return query.getResultList();
-    }
-*/
 
     @Override
     public void delete(int id) throws Exception {
