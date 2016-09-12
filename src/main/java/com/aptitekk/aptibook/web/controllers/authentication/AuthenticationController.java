@@ -7,14 +7,14 @@
 package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.domain.entities.Permission;
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
-import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 
@@ -58,6 +58,24 @@ public class AuthenticationController implements Serializable {
             if (attribute != null && attribute instanceof User) {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
+            String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(RegistrationController.REGISTRATION_VERIFICATION_PARAMETER);
+            if (id != null) {
+                User user = userService.findByCode(id);
+                if (user != null) {
+                    if (!user.isVerified()) {
+                        user.setVerificationCode(null);
+                        user.setVerified(true);
+                        try {
+                            userService.merge(user);
+                            LogManager.logInfo("User " + user.getUsername() + " has been verified.");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
+                    }
+
+                }
+            }
         }
     }
 
@@ -89,6 +107,8 @@ public class AuthenticationController implements Serializable {
                 user.setFirstName(googleUserInfoModel.getGivenName());
                 user.setLastName(googleUserInfoModel.getFamilyName());
                 user.setUsername(googleUserInfoModel.getEmail());
+                user.setVerified(true);
+
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
@@ -116,9 +136,9 @@ public class AuthenticationController implements Serializable {
      *
      * @return The outcome page.
      */
+
     public String login() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-
         FacesContext context = FacesContext.getCurrentInstance();
         User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
@@ -127,6 +147,10 @@ public class AuthenticationController implements Serializable {
         {
             LogManager.logInfo("Login attempt for '" + username + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
+            return null;
+        } else if (!authenticatedUser.isVerified() && !authenticatedUser.isAdmin()) {
+            LogManager.logInfo("Login attempt for '" + username + "' has failed due to being unverified.");
+            context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified."));
             return null;
         } else {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");

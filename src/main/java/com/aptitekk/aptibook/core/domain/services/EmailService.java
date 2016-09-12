@@ -46,32 +46,30 @@ public class EmailService implements Serializable {
     }
 
 
-    public void sendEmailNotification(Notification notification) throws SparkPostException {
+    public boolean sendEmailNotification(Notification notification) {
         if (notification.getUser() == null || notification.getUser().getUsername() == null || notification.getUser().getUsername().isEmpty() || !notification.getUser().getWantsEmailNotifications())
-            return;
+            return false;
 
         Map<String, Object> substitutionData = new HashMap<>();
         substitutionData.put("subject", notification.getSubject());
         substitutionData.put("body", notification.getBody());
-
-        sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
+        return sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
     }
 
     /**
-     * Sends an email to the specified recipients with SparkPost using the specified template ID, substitution data.
+     * Sends an email to the specified recipients with SparkPost using the specified template ID, substitution data, and recipients.
      *
      * @param templateId       The ID of the template from which the email will derive. Can be found in the SparkPost control panel.
      * @param substitutionData The substitution data, as required by the template.
-     * @param recipients       The recipients to send the email to. More than one may be specified.
-     * @throws SparkPostException If a problem occurs while sending the emails.
+     * @param recipients       The recipients (email addresses) to send the email to. More than one may be specified.
+     * @return true if the email was sent, false otherwise.
      */
-    private void sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) throws SparkPostException {
+    private boolean sendEmail(String templateId, Map<String, Object> substitutionData, String... recipients) {
         if (client == null)
-            return;
+            return false;
 
         if (templateId == null || templateId.isEmpty() || recipients == null)
-            return;
-
+            return false;
         TransmissionWithRecipientArray transmission = new TransmissionWithRecipientArray();
 
         // Set Template ID
@@ -93,8 +91,16 @@ public class EmailService implements Serializable {
         transmission.setRecipientArray(recipientArray);
 
         // Send the Email
-        RestConnection connection = new RestConnection(client, API_URL);
-        ResourceTransmissions.create(connection, 0, transmission);
+        RestConnection connection;
+        try {
+            connection = new RestConnection(client, API_URL);
+            ResourceTransmissions.create(connection, 0, transmission);
+            return true;
+        } catch (SparkPostException e) {
+            LogManager.logError("Error sending email: " + e.getMessage());
+            return false;
+        }
+
     }
 
 }

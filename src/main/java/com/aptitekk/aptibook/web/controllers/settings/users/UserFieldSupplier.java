@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 public abstract class UserFieldSupplier {
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     protected String username;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -25,10 +25,6 @@ public abstract class UserFieldSupplier {
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     protected String lastName;
-
-    @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    protected String email;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
@@ -58,7 +54,6 @@ public abstract class UserFieldSupplier {
             username = user.getUsername();
             firstName = user.getFirstName();
             lastName = user.getLastName();
-            //email = user.getEmail();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             wantsEmailNotifications = user.getWantsEmailNotifications();
@@ -66,7 +61,6 @@ public abstract class UserFieldSupplier {
             username = null;
             firstName = null;
             lastName = null;
-           // email = null;
             phoneNumber = null;
             location = null;
             wantsEmailNotifications = true;
@@ -98,14 +92,6 @@ public abstract class UserFieldSupplier {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhoneNumber() {

@@ -20,6 +20,39 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
     public static final String ADMIN_USERNAME = "admin";
     static final String DEFAULT_ADMIN_PASSWORD = "admin";
 
+
+    /**
+     * Finds User Entity by its username, within the current Tenant.
+     *
+     * @param verificationCode The verification code of the User to search for.
+     * @return A User Entity with the specified registration code, or null if one does not exist.
+     */
+    public User findByCode(String verificationCode) {
+        return findByCode(verificationCode, getTenant());
+    }
+
+    /**
+     * Finds User Entity by its username, within the current Tenant.
+     *
+     * @param verificationCode The verification code of the User to search for.
+     * @param tenant           The Tenant of the User to search for.
+     * @return A User Entity with the specified registration code, or null if one does not exist.
+     */
+    public User findByCode(String verificationCode, Tenant tenant) {
+        if (verificationCode == null || tenant == null) {
+            return null;
+        }
+        try {
+            return entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.verificationCode = :verificationCode AND u.tenant = :tenant", User.class)
+                    .setParameter("verificationCode", verificationCode)
+                    .setParameter("tenant", tenant)
+                    .getSingleResult();
+        } catch (PersistenceException e) {
+            return null;
+        }
+    }
+
     /**
      * Finds User Entity by its username, within the current Tenant.
      *
@@ -41,7 +74,6 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         if (username == null || tenant == null) {
             return null;
         }
-
         try {
             return entityManager
                     .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
