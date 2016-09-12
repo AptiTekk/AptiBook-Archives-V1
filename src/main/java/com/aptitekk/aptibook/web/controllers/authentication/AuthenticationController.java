@@ -7,20 +7,19 @@
 package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.domain.entities.Permission;
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
-import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -51,8 +50,6 @@ public class AuthenticationController implements Serializable {
     private String password;
 
     private User authenticatedUser;
-    public static final String REGISTRATIONCODE = "id";
-
 
     @PostConstruct
     public void init() {
@@ -61,7 +58,7 @@ public class AuthenticationController implements Serializable {
             if (attribute != null && attribute instanceof User) {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
-            String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(REGISTRATIONCODE);
+            String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(RegistrationController.REGISTRATION_VERIFICATION_PARAMETER);
             if (id != null) {
                 User user = userService.findByCode(id);
                 if (user != null) {
@@ -69,11 +66,11 @@ public class AuthenticationController implements Serializable {
                         user.setVerified(true);
                         try {
                             userService.merge(user);
-                            LogManager.logInfo("User is now verified and merged. User: " + user.getUsername());
+                            LogManager.logInfo("User " + user.getUsername() + " has been verified.");
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! Please wait for the admin to approve you."));
+                        FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                     }
 
                 }
@@ -144,10 +141,14 @@ public class AuthenticationController implements Serializable {
         User authenticatedUser = userService.getUserWithCredentials(username, password);
         password = null;
 
-        if (authenticatedUser == null && authenticatedUser.isVerified()) // Invalid Credentials
+        if (authenticatedUser == null) // Invalid Credentials
         {
             LogManager.logInfo("Login attempt for '" + username + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
+            return null;
+        } else if (!authenticatedUser.isVerified()) {
+            LogManager.logInfo("Login attempt for '" + username + "' has failed due to being unverified.");
+            context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified."));
             return null;
         } else {
             LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
