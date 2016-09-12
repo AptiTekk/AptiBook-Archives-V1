@@ -101,8 +101,10 @@ public class EmailService implements Serializable {
         try {
             connection = new RestConnection(client, API_URL);
             ResourceTransmissions.create(connection, 0, transmission);
+            FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An email confirmation has been sent"));
         } catch (SparkPostException e) {
             LogManager.logError("Error sending email");
+            FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error sending email. Please enter a valid email address."));
             e.printStackTrace();
         }
 

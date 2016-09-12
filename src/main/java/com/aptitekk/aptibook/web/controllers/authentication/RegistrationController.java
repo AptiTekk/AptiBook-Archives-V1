@@ -7,9 +7,11 @@
 package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
+import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -22,7 +24,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.net.URL;
 
 @Named
 @ViewScoped
@@ -32,13 +36,13 @@ public class RegistrationController implements Serializable {
     private PropertiesService propertiesService;
 
     @Inject
-    private TenantSessionService tenantSessionService;
-
-    @Inject
     private EmailService emailService;
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private TenantSessionService tenantSessionService;
 
     private String username;
     private String password;
@@ -76,11 +80,21 @@ public class RegistrationController implements Serializable {
                 }
                 Notification notification = new Notification();
                 notification.setSubject("Registration Confirmation");
-                notification.setBody("<a href='http://localhost:8080/aptibook/tenant0/index.xhtml?" + "id=" + user.getVerificationcode() + "'" + ">Confirm AptiBook Registration</a>");
+                HttpServletRequest origRequest = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+                String file = origRequest.getContextPath()+ "/"+ tenantSessionService.getCurrentTenant().getSlug() + origRequest.getServletPath();
+                //I dont think we will ever need this:
+              /*  if (origRequest.getQueryString() != null) {
+                    file += '?' + origRequest.getQueryString();
+                }*/
+                URL reconstructedURL = new URL(origRequest.getScheme(),
+                        origRequest.getServerName(),
+                        origRequest.getServerPort(),
+                        file);
+                System.out.println(reconstructedURL.toString());
+                notification.setBody("<a href='" + reconstructedURL.toString() + "?" + "id=" + user.getVerificationcode() + "'" + ">Confirm AptiBook Registration</a>");
                 notification.setUser(user);
                 try {
                     emailService.sendEmailNotification(notification);
-                    FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An email confirmation has been sent"));
                     LogManager.logInfo("Email Confirmation has been sent to: " + notification.getUser().getUsername());
                 } catch (SparkPostException e) {
                     e.printStackTrace();
