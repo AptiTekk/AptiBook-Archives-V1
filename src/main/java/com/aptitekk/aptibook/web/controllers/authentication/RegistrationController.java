@@ -55,7 +55,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         user.setVerified(false);
 
         //Generate verification code
-        user.setVerificationcode(generateVerificationCode());
+        user.setVerificationCode(generateVerificationCode());
 
         //Create Registration Notification
         Notification notification = buildRegistrationNotification(user);
@@ -103,7 +103,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
             notification.setBody("<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
                     "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
                     "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
-                    "<a href='" + reconstructedURL.toString() + "?" + REGISTRATION_VERIFICATION_PARAMETER + "=" + user.getVerificationcode() + "'" + ">Verify Account</a>");
+                    "<a href='" + reconstructedURL.toString() + "?" + REGISTRATION_VERIFICATION_PARAMETER + "=" + user.getVerificationCode() + "'" + ">Verify Account</a>");
             notification.setUser(user);
             return notification;
         } catch (MalformedURLException e) {

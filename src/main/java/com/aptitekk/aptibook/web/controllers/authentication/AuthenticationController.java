@@ -63,6 +63,7 @@ public class AuthenticationController implements Serializable {
                 User user = userService.findByCode(id);
                 if (user != null) {
                     if (!user.isVerified()) {
+                        user.setVerificationCode(null);
                         user.setVerified(true);
                         try {
                             userService.merge(user);

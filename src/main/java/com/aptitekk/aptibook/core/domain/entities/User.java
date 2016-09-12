@@ -31,7 +31,6 @@ public class User extends MultiTenantEntity implements Serializable {
     private String lastName;
 
 
-
     private String phoneNumber;
 
     private String location;
@@ -42,7 +41,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private boolean googleUser;
 
-    private String verificationcode;
+    private String verificationCode;
 
     private boolean verified;
 
@@ -114,6 +113,30 @@ public class User extends MultiTenantEntity implements Serializable {
         this.password = password;
     }
 
+    public boolean isGoogleUser() {
+        return googleUser;
+    }
+
+    public void setGoogleUser(boolean googleUser) {
+        this.googleUser = googleUser;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verficationCode) {
+        this.verificationCode = verficationCode;
+    }
+
     public List<UserGroup> getUserGroups() {
         return userGroups;
     }
@@ -148,6 +171,14 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    public boolean getWantsEmailNotifications() {
+        return wantsEmailNotifications;
+    }
+
+    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
+        this.wantsEmailNotifications = wantsEmailNotifications;
     }
 
     /**
@@ -186,43 +217,14 @@ public class User extends MultiTenantEntity implements Serializable {
                 && EqualsHelper.areEquals(getLastName(), other.getLastName())
                 && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
                 && EqualsHelper.areEquals(getLocation(), other.getLocation())
-                && EqualsHelper.areEquals(getPassword(), other.getPassword());
+                && EqualsHelper.areEquals(getPassword(), other.getPassword())
+                && EqualsHelper.areEquals(getVerificationCode(), other.getVerificationCode())
+                && EqualsHelper.areEquals(isVerified(), other.isVerified());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword());
+        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword(), getVerificationCode(), isVerified());
     }
 
-    public boolean getWantsEmailNotifications() {
-        return wantsEmailNotifications;
-    }
-
-    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
-        this.wantsEmailNotifications = wantsEmailNotifications;
-    }
-
-    public boolean isGoogleUser() {
-        return googleUser;
-    }
-
-    public void setGoogleUser(boolean googleUser) {
-        this.googleUser = googleUser;
-    }
-
-    public boolean isVerified() {
-        return verified;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
-    }
-
-    public String getVerificationcode() {
-        return verificationcode;
-    }
-
-    public void setVerificationcode(String verficationCode) {
-        this.verificationcode = verficationCode;
-    }
 }

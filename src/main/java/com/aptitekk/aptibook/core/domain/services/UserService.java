@@ -44,7 +44,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         }
         try {
             return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.verificationcode = :verificationCode AND u.tenant = :tenant", User.class)
+                    .createQuery("SELECT u FROM User u WHERE u.verificationCode = :verificationCode AND u.tenant = :tenant", User.class)
                     .setParameter("verificationCode", verificationCode)
                     .setParameter("tenant", tenant)
                     .getSingleResult();
