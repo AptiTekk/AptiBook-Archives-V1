@@ -30,7 +30,6 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private String lastName;
 
-
     private String phoneNumber;
 
     private String location;
@@ -38,8 +37,6 @@ public class User extends MultiTenantEntity implements Serializable {
     private byte[] password;
 
     private boolean wantsEmailNotifications;
-
-    private boolean googleUser;
 
     private String verificationCode;
 
@@ -111,14 +108,6 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setPassword(byte[] password) {
         this.password = password;
-    }
-
-    public boolean isGoogleUser() {
-        return googleUser;
-    }
-
-    public void setGoogleUser(boolean googleUser) {
-        this.googleUser = googleUser;
     }
 
     public boolean isVerified() {

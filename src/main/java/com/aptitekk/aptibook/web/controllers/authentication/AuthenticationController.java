@@ -107,7 +107,8 @@ public class AuthenticationController implements Serializable {
                 user.setFirstName(googleUserInfoModel.getGivenName());
                 user.setLastName(googleUserInfoModel.getFamilyName());
                 user.setUsername(googleUserInfoModel.getEmail());
-                user.setGoogleUser(true);
+                user.setVerified(true);
+
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
@@ -147,7 +148,7 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo("Login attempt for '" + username + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
             return null;
-        } else if (!authenticatedUser.isVerified()) {
+        } else if (!authenticatedUser.isVerified() && !authenticatedUser.isAdmin()) {
             LogManager.logInfo("Login attempt for '" + username + "' has failed due to being unverified.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified."));
             return null;
