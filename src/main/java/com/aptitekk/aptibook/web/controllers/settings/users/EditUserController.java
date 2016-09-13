@@ -42,7 +42,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
     private User selectedUser;
     private List<User> users;
-
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
@@ -191,7 +190,5 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
     public List<User> getUsers() {
         return users;
     }
-
-
 
 }

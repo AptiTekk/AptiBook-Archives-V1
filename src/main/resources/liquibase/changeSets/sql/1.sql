@@ -54,6 +54,8 @@ CREATE TABLE assetcategory (
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: -
 --
 
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+
 CREATE SEQUENCE hibernate_sequence
     START WITH 1
     INCREMENT BY 1
