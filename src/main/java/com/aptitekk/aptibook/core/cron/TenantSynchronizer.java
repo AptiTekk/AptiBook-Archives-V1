@@ -182,7 +182,7 @@ public class TenantSynchronizer {
             tenant.setSlug(newSlug);
             try {
                 tenant = tenantService.merge(tenant);
-                LogManager.logDebug("[TenantSynchronizer] Updated Slug For Tenant ID " + tenant.getId() + ". Previously: " + previousSlug + "; Now: " + newSlug);
+                LogManager.logInfo("[TenantSynchronizer] Updated Slug For Tenant ID " + tenant.getId() + ". Previously: " + previousSlug + "; Now: " + newSlug);
             } catch (Exception e) {
                 LogManager.logError("[TenantSynchronizer] Could not update slug for Tenant ID " + tenant.getId() + ": " + e.getMessage());
             }
@@ -204,7 +204,7 @@ public class TenantSynchronizer {
         tenant.setActive(active);
         try {
             tenant = tenantService.merge(tenant);
-            LogManager.logDebug("[TenantSynchronizer] Set Tenant ID " + tenant.getId() + (active ? " Active." : " Inactive."));
+            LogManager.logInfo("[TenantSynchronizer] Set Tenant ID " + tenant.getId() + (active ? " Active." : " Inactive."));
         } catch (Exception e) {
             LogManager.logError("[TenantSynchronizer] Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive") + ": " + e.getMessage());
         }
@@ -233,7 +233,7 @@ public class TenantSynchronizer {
 
         try {
             tenantService.insert(tenant);
-            LogManager.logDebug("[TenantSynchronizer] Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", and Slug " + tenant.getSlug());
+            LogManager.logInfo("[TenantSynchronizer] Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", and Slug " + tenant.getSlug());
             return tenant;
         } catch (Exception e) {
             LogManager.logError("[TenantSynchronizer] Could not create Tenant for Subscription ID " + tenant.getSubscriptionId() + ": " + e.getMessage());
@@ -250,7 +250,7 @@ public class TenantSynchronizer {
         try {
             int tenantId = tenant.getId();
             tenantService.delete(tenant.getId());
-            LogManager.logDebug("[TenantSynchronizer] Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
+            LogManager.logInfo("[TenantSynchronizer] Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
         } catch (Exception e) {
             LogManager.logError("[TenantSynchronizer] Could not delete Tenant with ID " + tenant.getId() + ": " + e.getMessage());
         }
