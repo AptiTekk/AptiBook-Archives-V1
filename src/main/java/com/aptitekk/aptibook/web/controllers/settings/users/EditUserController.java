@@ -14,7 +14,6 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
-import org.primefaces.component.log.Log;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -41,11 +40,9 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
     @Inject
     private HelpController helpController;
 
-    private User selectedUser;
-    private List<User> users;
-
     private ArrayList<User> pendingUsers = new ArrayList<>();
     private ArrayList<User> approvedUsers = new ArrayList<>();
+    private User selectedUser;
 
     @PostConstruct
     public void init() {
@@ -53,33 +50,20 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             authenticationController.forceUserRedirect();
             return;
         }
-        refreshUserList();
+        refreshUserLists();
         resetFields();
-        prune();
         helpController.setCurrentTopic(HelpController.Topic.SETTINGS_USERS);
     }
 
-    private void prune() {
-        pendingUsers.clear();
-        approvedUsers.clear();
-
-        for (User user : users) {
-            if (user.getUserState() == User.Key.PENDING) {
-                pendingUsers.add(user);
-            }
-            if (user.getUserState() == User.Key.APPROVED) {
-                approvedUsers.add(user);
-            }
-        }
-    }
-
-    public void userState(boolean state, User user) {
-        if (state) {
-            user.setUserState(User.Key.APPROVED);
+    public void decideUserApproval(boolean approved, User user) {
+        if (approved) {
+            user.setUserState(User.State.APPROVED);
             try {
                 userService.merge(user);
                 LogManager.logInfo("User approved and merged, User: " + user.getUsername());
-                prune();
+                FacesContext.getCurrentInstance().addMessage("userTablesForm",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Approved."));
+                refreshUserLists();
             } catch (Exception e) {
                 LogManager.logError("Error approving user. User: " + user.getUsername());
                 e.printStackTrace();
@@ -88,7 +72,9 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             try {
                 userService.delete(user.getId());
                 LogManager.logInfo("User deleted, User: " + user.getUsername());
-                prune();
+                FacesContext.getCurrentInstance().addMessage("userTablesForm",
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Rejected."));
+                refreshUserLists();
             } catch (Exception e) {
                 LogManager.logError("Error deleting user, User: " + user.getUsername());
                 e.printStackTrace();
@@ -104,8 +90,19 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
     }
 
-    void refreshUserList() {
-        users = userService.getAll();
+    void refreshUserLists() {
+        List<User> users = userService.getAll();
+        pendingUsers.clear();
+        approvedUsers.clear();
+
+        for (User user : users) {
+            if (user.getUserState() == User.State.PENDING) {
+                pendingUsers.add(user);
+            }
+            if (user.getUserState() == User.State.APPROVED) {
+                approvedUsers.add(user);
+            }
+        }
     }
 
     public void resetFields() {
@@ -182,7 +179,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             try {
                 selectedUser = userService.merge(selectedUser);
                 LogManager.logInfo("User updated, user Id and Name: " + selectedUser.getId() + ", " + selectedUser.getFullname());
-                refreshUserList();
+                refreshUserLists();
             } catch (Exception e) {
                 e.printStackTrace();
                 LogManager.logError("Error while updating User Settings for " + selectedUser.getUsername() + ": " + e.getMessage());
@@ -213,7 +210,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
         }
 
-        refreshUserList();
+        refreshUserLists();
     }
 
     public User getSelectedUser() {
@@ -226,10 +223,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
         this.selectedUser = selectedUser;
         resetFields();
-    }
-
-    public List<User> getUsers() {
-        return users;
     }
 
     public ArrayList<User> getApprovedUsers() {

@@ -16,7 +16,6 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -54,7 +53,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         user.setPassword(Sha256Helper.rawToSha(password));
         user.setWantsEmailNotifications(true);
         user.setVerified(false);
-        user.setUserState(User.Key.PENDING);
+        user.setUserState(User.State.PENDING);
 
         //Generate verification code
         user.setVerificationCode(generateVerificationCode());
@@ -101,7 +100,6 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
                     origRequest.getServerName(),
                     origRequest.getServerPort(),
                     file);
-            System.out.println(reconstructedURL.toString());
             notification.setBody("<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
                     "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
                     "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
