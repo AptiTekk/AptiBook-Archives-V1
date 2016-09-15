@@ -24,9 +24,12 @@
 
         <b:row id="usersPageContent">
             <b:column colXs="12" colLg="5">
-                <h:form>
+                <h:form id="userTablesForm">
                     <div class="form-group">
-                        <b:dataTable value="#{editUserController.users}" var="authenticatedUser"
+                        <b:message for="userTablesForm" showSummary="false" showDetail="true"/>
+                    </div>
+                    <div class="form-group">
+                        <b:dataTable value="#{editUserController.approvedUsers}" var="authenticatedUser"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      fixedHeader="false" responsive="true" widgetVar="dataTable">
 
@@ -55,6 +58,45 @@
                                   p:data-toggle="modal"
                                   p:data-target=".newUserModal"/>
                     </div>
+                    <hr/>
+                    <h:panelGroup layout="block" styleClass="form-group">
+                        <h4>Users Pending Registration Approval:</h4>
+                        <b:dataTable value="#{editUserController.pendingUsers}" var="pendingUser"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     fixedHeader="false" responsive="true" widgetVar="dataTable">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Username"/>
+                                </f:facet>
+                                <b:navCommandLink value="#{pendingUser.username}"
+                                                  action="#{editUserController.setSelectedUser(pendingUser)}"
+                                                  iconAwesome="pencil-square-o"
+                                                  ajax="true"
+                                                  update=":usersPage"
+                                                  style="cursor: pointer; font-weight: #{editUserController.selectedUser == pendingUser ? 'bold' : 'normal'}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Full Name"/>
+                                </f:facet>
+                                <h:outputText value="#{pendingUser.fullname}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Approve / Reject"/>
+                                </f:facet>
+                                <b:buttonGroup>
+                                    <b:commandButton value="Approve" look="primary"
+                                                     action="#{editUserController.decideUserApproval(true,pendingUser)}"
+                                                     ajax="true" update=":usersPage"/>
+                                    <b:commandButton value="Reject" look="default"
+                                                     action="#{editUserController.decideUserApproval(false,pendingUser)}"
+                                                     ajax="true" update=":usersPage"/>
+                                </b:buttonGroup>
+                            </h:column>
+
+                        </b:dataTable>
+                    </h:panelGroup>
                 </h:form>
             </b:column>
 
