@@ -42,6 +42,15 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private boolean verified;
 
+    @Enumerated(EnumType.STRING)
+    private State userState;
+
+    public enum State {
+        APPROVED,
+        PENDING;
+    }
+
+
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
 
@@ -164,6 +173,14 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public boolean getWantsEmailNotifications() {
         return wantsEmailNotifications;
+    }
+
+    public State getUserState() {
+        return userState;
+    }
+
+    public void setUserState(State userState) {
+        this.userState = userState;
     }
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) {

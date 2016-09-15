@@ -84,7 +84,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
                 if (editUserController != null) {
-                    editUserController.refreshUserList();
+                    editUserController.refreshUserLists();
                     editUserController.setSelectedUser(newUser);
                 }
             } else {
