@@ -77,6 +77,7 @@ public class StartupService implements Serializable {
             adminUser = new User();
             adminUser.setUsername(UserService.ADMIN_USERNAME);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
+            adminUser.setUserState(User.Key.APPROVED);
             try {
                 userService.insert(adminUser, tenant);
             } catch (Exception e) {

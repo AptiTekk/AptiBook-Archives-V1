@@ -14,6 +14,7 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import org.primefaces.component.log.Log;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -42,17 +43,57 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
     private User selectedUser;
     private List<User> users;
+
+    private ArrayList<User> pendingUsers = new ArrayList<>();
+    private ArrayList<User> approvedUsers = new ArrayList<>();
+
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
             authenticationController.forceUserRedirect();
             return;
         }
-
         refreshUserList();
         resetFields();
-
+        prune();
         helpController.setCurrentTopic(HelpController.Topic.SETTINGS_USERS);
+    }
+
+    private void prune() {
+        pendingUsers.clear();
+        approvedUsers.clear();
+
+        for (User user : users) {
+            if (user.getUserState() == User.Key.PENDING) {
+                pendingUsers.add(user);
+            }
+            if (user.getUserState() == User.Key.APPROVED) {
+                approvedUsers.add(user);
+            }
+        }
+    }
+
+    public void userState(boolean state, User user) {
+        if (state) {
+            user.setUserState(User.Key.APPROVED);
+            try {
+                userService.merge(user);
+                LogManager.logInfo("User approved and merged, User: " + user.getUsername());
+                prune();
+            } catch (Exception e) {
+                LogManager.logError("Error approving user. User: " + user.getUsername());
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                userService.delete(user.getId());
+                LogManager.logInfo("User deleted, User: " + user.getUsername());
+                prune();
+            } catch (Exception e) {
+                LogManager.logError("Error deleting user, User: " + user.getUsername());
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean hasPagePermission() {
@@ -191,4 +232,19 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         return users;
     }
 
+    public ArrayList<User> getApprovedUsers() {
+        return approvedUsers;
+    }
+
+    public void setApprovedUsers(ArrayList<User> approvedUsers) {
+        this.approvedUsers = approvedUsers;
+    }
+
+    public ArrayList<User> getPendingUsers() {
+        return pendingUsers;
+    }
+
+    public void setPendingUsers(ArrayList<User> pendingUsers) {
+        this.pendingUsers = pendingUsers;
+    }
 }

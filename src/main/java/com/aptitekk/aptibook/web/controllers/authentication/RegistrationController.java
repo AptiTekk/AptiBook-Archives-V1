@@ -16,6 +16,7 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -53,6 +54,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         user.setPassword(Sha256Helper.rawToSha(password));
         user.setWantsEmailNotifications(true);
         user.setVerified(false);
+        user.setUserState(User.Key.PENDING);
 
         //Generate verification code
         user.setVerificationCode(generateVerificationCode());

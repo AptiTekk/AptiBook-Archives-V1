@@ -108,7 +108,7 @@ public class AuthenticationController implements Serializable {
                 user.setLastName(googleUserInfoModel.getFamilyName());
                 user.setUsername(googleUserInfoModel.getEmail());
                 user.setVerified(true);
-
+                user.setUserState(User.Key.APPROVED);
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
@@ -120,6 +120,7 @@ public class AuthenticationController implements Serializable {
                 }
                 return null;
             } else {
+
                 setAuthenticatedUser(existingUser);
                 LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);

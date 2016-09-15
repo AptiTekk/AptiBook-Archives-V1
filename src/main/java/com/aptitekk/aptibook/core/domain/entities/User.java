@@ -6,6 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.entities;
 
+import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 
@@ -41,6 +42,15 @@ public class User extends MultiTenantEntity implements Serializable {
     private String verificationCode;
 
     private boolean verified;
+
+    @Enumerated(EnumType.STRING)
+    private User.Key userState;
+
+    public enum Key {
+        APPROVED,
+        PENDING;
+    }
+
 
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
@@ -164,6 +174,14 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public boolean getWantsEmailNotifications() {
         return wantsEmailNotifications;
+    }
+
+    public Key getUserState() {
+        return userState;
+    }
+
+    public void setUserState(Key userState) {
+        this.userState = userState;
     }
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
