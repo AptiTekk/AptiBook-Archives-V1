@@ -7,7 +7,6 @@
 package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.domain.entities.*;
-import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.ejb.Stateless;
@@ -93,6 +92,8 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
             adminUser = new User();
             adminUser.setUsername(UserService.ADMIN_USERNAME);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
+            adminUser.setVerified(true);
+            adminUser.setUserState(User.State.APPROVED);
             try {
                 userService.insert(adminUser, tenant);
             } catch (Exception e) {
