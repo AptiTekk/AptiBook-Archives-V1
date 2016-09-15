@@ -21,9 +21,9 @@ import java.util.Date;
 public class CalendarRange {
 
     public final static SimpleDateFormat FORMAT_TIME_ONLY = new SimpleDateFormat("h:mm a");
-    public final static SimpleDateFormat FORMAT_DATE_ONLY = new SimpleDateFormat("dd/MM/yyyy");
+    public final static SimpleDateFormat FORMAT_DATE_ONLY = new SimpleDateFormat("MM/dd/yyyy");
     public final static SimpleDateFormat FORMAT_DATE_FRIENDLY = new SimpleDateFormat("EEEE, dd MMMM, yyyy");
-    public final static SimpleDateFormat FORMAT_DATE_TIME = new SimpleDateFormat("dd/MM/yyyy h:mm a");
+    public final static SimpleDateFormat FORMAT_DATE_TIME = new SimpleDateFormat("MM/dd/yyyy h:mm a");
 
     private Calendar startTime;
     private Calendar endTime;

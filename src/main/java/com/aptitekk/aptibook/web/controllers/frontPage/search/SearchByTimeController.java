@@ -36,8 +36,6 @@ public class SearchByTimeController implements Serializable {
     private List<AssetCategory> assetCategories;
     private AssetCategory assetCategory;
 
-    private Date date = Calendar.getInstance().getTime();
-
     /**
      * The SegmentedTimeRange for the selected date, start-time, and end-time.
      */
@@ -53,7 +51,7 @@ public class SearchByTimeController implements Serializable {
 
     @PostConstruct
     private void init() {
-        date = timeSelectionController.getMinDate();
+        startTime = new Date();
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -85,16 +83,6 @@ public class SearchByTimeController implements Serializable {
         this.assetCategory = assetCategory;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-        this.startTime = null;
-        this.endTime = null;
-    }
-
     public Date getStartTime() {
         return startTime;
     }
@@ -113,12 +101,12 @@ public class SearchByTimeController implements Serializable {
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {
-        int hashcode = date.hashCode() + startTime.hashCode() + endTime.hashCode();
+        int hashcode = startTime.hashCode() + endTime.hashCode();
         if (lastTimeRangeHashcode == hashcode && segmentedTimeRange != null)
             return segmentedTimeRange;
         else {
             Calendar calendarDate = Calendar.getInstance();
-            calendarDate.setTime(date);
+            calendarDate.setTime(startTime);
 
             lastTimeRangeHashcode = hashcode;
             return segmentedTimeRange = new SegmentedTimeRange(calendarDate, new SegmentedTime(startTime), new SegmentedTime(endTime));

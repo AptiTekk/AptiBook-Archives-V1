@@ -10,7 +10,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
 
 <ui:composition>
     <h:form id="searchByTimeForm">
@@ -55,19 +56,15 @@
             </b:row>
         </ui:fragment>
 
-        <!-- Step 1: Select a Date -->
+        <!-- Step 1: Select Start TIme -->
         <ui:fragment rendered="#{searchByTimeController.currentStep == 1}">
 
             <b:row>
                 <b:column colXs="12">
-                    <h:outputText value="Select a Date" styleClass="lead"/>
-                    <b:dateTimePicker value="#{searchByTimeController.date}" style="width: 100%"
-                                      mode="inline" showDate="true" showTime="false"/>
-                    <!--<p:calendar value="#{searchByTimeController.date}"
-                                mindate="#{timeSelectionController.minDate}"
-                                mode="inline" styleClass="datepicker-fullwidth">
-                        <f:ajax event="dateSelect" render=":searchByTimeForm"/>
-                    </p:calendar>-->
+                    <h:outputText value="Select a Start Time" styleClass="lead"/>
+                    <p:calendar mode="inline" pattern="#{timeSelectionController.normalDatePattern}" title="Start Time"
+                                mindate="#{timeSelectionController.minDateString}"
+                                value="#{searchByTimeController.startTime}" styleClass="datepicker-fullwidth"/>
                 </b:column>
             </b:row>
 
@@ -83,7 +80,7 @@
                                          style="width: 50%;"
                                          ajax="true"
                                          action="#{searchByTimeController.nextStep}" update="@form" process="@form"
-                                         disabled="#{searchByTimeController.date == null}"/>
+                                         disabled="#{searchByTimeController.startTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>
@@ -93,15 +90,8 @@
         <ui:fragment rendered="#{searchByTimeController.currentStep == 2}">
 
             <b:row>
-                <b:column colXs="6">
-                    <b:dateTimePicker label="Start Time:" value="#{searchByTimeController.startTime}"
-                                      mode="inline"
-                                      format="hh:mm A" iconAwesome="clock-o"/>
-                </b:column>
-                <b:column colXs="6">
-                    <b:dateTimePicker label="End Time:" value="#{searchByTimeController.endTime}"
-                                      mode="inline"
-                                      format="hh:mm A" iconAwesome="clock-o"/>
+                <b:column colXs="12">
+                    <p:calendar mode="inline" pattern="MM/dd/yyyy hh:mm aa" style="width: 100%" title="End Time"/>
                 </b:column>
             </b:row>
 

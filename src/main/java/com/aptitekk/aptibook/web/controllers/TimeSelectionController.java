@@ -16,6 +16,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -98,6 +99,10 @@ public class TimeSelectionController implements Serializable {
         endTimes = allowedTimeSegments.subList(selectedTimeIndex + 1, allowedTimeSegments.size());
     }
 
+    public String getNormalDatePattern() {
+        return CalendarRange.FORMAT_DATE_TIME.toPattern();
+    }
+
     public String getFriendlyDatePattern() {
         return CalendarRange.FORMAT_DATE_FRIENDLY.toPattern();
     }
@@ -108,6 +113,10 @@ public class TimeSelectionController implements Serializable {
             minDate.add(Calendar.DAY_OF_YEAR, 1); //Go to next day.
 
         return minDate.getTime();
+    }
+
+    public String getMinDateString() {
+        return new SimpleDateFormat("MM/dd/yyyy HH:mm").format(getMinDate());
     }
 
     public boolean isToday(Date date) {
