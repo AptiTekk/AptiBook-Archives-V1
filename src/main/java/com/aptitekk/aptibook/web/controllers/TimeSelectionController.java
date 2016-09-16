@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.time.CalendarRange;
 import com.aptitekk.aptibook.core.time.SegmentedTime;
 import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
+import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -107,16 +108,8 @@ public class TimeSelectionController implements Serializable {
         return CalendarRange.FORMAT_DATE_FRIENDLY.toPattern();
     }
 
-    public Date getMinDate() {
-        Calendar minDate = Calendar.getInstance();
-        if (prunedTimes.isEmpty()) //We've passed all the available times today.
-            minDate.add(Calendar.DAY_OF_YEAR, 1); //Go to next day.
-
-        return minDate.getTime();
-    }
-
-    public String getMinDateString() {
-        return new SimpleDateFormat("MM/dd/yyyy HH:mm").format(getMinDate());
+    public DateTime getMinDateTime() {
+        return new DateTime();
     }
 
     public boolean isToday(Date date) {

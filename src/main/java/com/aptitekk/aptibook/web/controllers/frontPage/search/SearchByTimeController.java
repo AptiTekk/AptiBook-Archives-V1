@@ -51,7 +51,6 @@ public class SearchByTimeController implements Serializable {
 
     @PostConstruct
     private void init() {
-        startTime = new Date();
         assetCategories = assetCategoryService.getAll();
     }
 
