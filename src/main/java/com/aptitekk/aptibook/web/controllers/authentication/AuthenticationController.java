@@ -120,7 +120,7 @@ public class AuthenticationController implements Serializable {
                 user.setWantsEmailNotifications(true);
                 try {
                     userService.insert(user);
-                    notificationService.buildNotification("Aptibook Registration", "You have successfully registered for AptiBook!", user);
+                    notificationService.buildNotification("AptiBook Registration", "You have successfully registered for AptiBook!", user);
                     setAuthenticatedUser(user);
                     LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
