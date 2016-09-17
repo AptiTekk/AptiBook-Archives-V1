@@ -49,7 +49,6 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
-
             if(user.getWantsEmailNotifications()) {
                     emailService.sendEmailNotification(notification);
             }

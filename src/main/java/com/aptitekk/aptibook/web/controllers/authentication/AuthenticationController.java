@@ -6,10 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.property.Property;
 import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
@@ -45,6 +47,9 @@ public class AuthenticationController implements Serializable {
 
     @Inject
     private OAuthController oAuthController;
+
+    @Inject
+    private NotificationService notificationService;
 
     private String username;
     private String password;
@@ -112,8 +117,10 @@ public class AuthenticationController implements Serializable {
                 user.setUsername(googleUserInfoModel.getEmail());
                 user.setVerified(true);
                 user.setUserState(User.State.APPROVED);
+                user.setWantsEmailNotifications(true);
                 try {
                     userService.insert(user);
+                    notificationService.buildNotification("Aptibook Registration", "You have successfully registered for AptiBook!", user);
                     setAuthenticatedUser(user);
                     LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
