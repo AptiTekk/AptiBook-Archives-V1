@@ -6,14 +6,18 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import org.apache.http.client.utils.URIBuilder;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -22,9 +26,12 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Named
@@ -39,6 +46,12 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
     @Inject
     private HelpController helpController;
+
+    @Inject
+    private EmailService emailService;
+
+    @Inject
+    private TenantSessionService tenantSessionService;
 
     private ArrayList<User> pendingUsers = new ArrayList<>();
     private ArrayList<User> approvedUsers = new ArrayList<>();
@@ -64,6 +77,9 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Approved."));
                 refreshUserLists();
+                Notification notification = new Notification(user, "AptiBook Registration Approved", "<p>Congrats! You have been Approved to use AptiBook!</p>"
+                        + "<a href='" + tenantSessionService.buildURI("index.xhtml", null) + "'" + ">Login</a>");
+                emailService.sendEmailNotification(notification);
             } catch (Exception e) {
                 LogManager.logError("Error approving user. User: " + user.getUsername());
                 e.printStackTrace();
@@ -75,6 +91,14 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Rejected."));
                 refreshUserLists();
+                HashMap<String,String> queryParams = new HashMap<>();
+                queryParams.put("action", "register");
+                tenantSessionService.buildURI("index.xhtml", queryParams);
+                Notification notification = new Notification(user, "AptiBook Registration Rejected", "<p>Your registration request for AptiBook has been denied. "
+                        + "If you believe this is a mistake, please contact your System Administrator. "
+                        + "You may submit another registration request here: </p>"
+                        + "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams) + "'" + ">Register</a>");
+                emailService.sendEmailNotification(notification);
             } catch (Exception e) {
                 LogManager.logError("Error deleting user, User: " + user.getUsername());
                 e.printStackTrace();

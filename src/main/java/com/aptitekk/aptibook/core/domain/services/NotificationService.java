@@ -53,7 +53,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     emailService.sendEmailNotification(notification);
             }
         } catch (Exception e) {
-            LogManager.logError("Error in building Notification, or sending Email notification. Notfication id: " + notification.getId() );
+            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId() );
             e.printStackTrace();
         }
     }

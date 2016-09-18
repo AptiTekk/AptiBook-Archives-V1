@@ -22,10 +22,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.HashMap;
 
 @Named
 @ViewScoped
@@ -93,20 +91,16 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
     private Notification buildRegistrationNotification(User user) {
         Notification notification = new Notification();
         notification.setSubject("Registration Verification");
-        HttpServletRequest origRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String file = origRequest.getContextPath() + "/" + tenantSessionService.getCurrentTenant().getSlug() + origRequest.getServletPath();
         try {
-            URL reconstructedURL = new URL(origRequest.getScheme(),
-                    origRequest.getServerName(),
-                    origRequest.getServerPort(),
-                    file);
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
             notification.setBody("<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
                     "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
                     "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
-                    "<a href='" + reconstructedURL.toString() + "?" + REGISTRATION_VERIFICATION_PARAMETER + "=" + user.getVerificationCode() + "'" + ">Verify Account</a>");
+                    "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams)+ "'" + ">Verify Account</a>");
             notification.setUser(user);
             return notification;
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             return null;
         }
     }
