@@ -62,16 +62,20 @@
             <b:row>
                 <b:column colXs="12">
                     <h:outputText value="Select a Start Time" styleClass="lead"/>
-                    <b:dateTimePicker showDate="true" showTime="true" format="MM/DD/YYYY h:mm a"
+                    <b:dateTimePicker id="startTimePicker" format="MM/DD/YYYY h:mm a"
                                       minDate="#{timeSelectionController.minDateTime.toDate()}"
-                                      value="#{searchByTimeController.startTime}"/>
-                </b:column>
-                <!--<b:column colXs="12">
-                    <h:outputText value="Select an End Time" styleClass="lead"/>
-                    <b:dateTimePicker id="endTime" showDate="true" showTime="true" format="MM/DD/YYYY h:mm a"
+                                      value="#{searchByTimeController.startTime}" ajax="true"
+                                      useCurrent="false"
+                                      update="endTimePicker searchButton" process="@this" mode="inline" ondtchange="ajax:true" />
 
-                                      value="#{searchByTimeController.endTime}"/>
-                </b:column>-->
+                    <h:outputText value="Select an End Time" styleClass="lead"/>
+                    <b:dateTimePicker id="endTimePicker" format="MM/DD/YYYY h:mm a"
+                                      minDate="#{searchByTimeController.startTime}"
+                                      value="#{searchByTimeController.endTime}"
+                                      useCurrent="false"
+                                      disabled="#{searchByTimeController.startTime == null}" ajax="true"
+                                      update="searchButton" process="@this" mode="inline" ondtchange="ajax:true"/>
+                </b:column>
             </b:row>
 
             <b:row style="margin-top: 20px;">
@@ -81,13 +85,13 @@
                                          style="width: 50%;"
                                          ajax="true"
                                          action="#{searchByTimeController.previousStep}" update="@form"/>
-                        <b:commandButton look="primary" value="Begin Search" iconAwesome="search"
+                        <b:commandButton id="searchButton" look="primary" value="Begin Search" iconAwesome="search"
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
                                          action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
                                          update=":includeGroup"
-                                         disabled="#{searchByTimeController.startTime == null}"/>
+                                         disabled="#{searchByTimeController.endTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>

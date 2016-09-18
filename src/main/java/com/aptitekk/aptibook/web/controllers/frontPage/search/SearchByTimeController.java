@@ -51,6 +51,7 @@ public class SearchByTimeController implements Serializable {
 
     @PostConstruct
     private void init() {
+        startTime = new Date();
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -88,7 +89,9 @@ public class SearchByTimeController implements Serializable {
 
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
-        this.endTime = null;
+        System.out.println("Start Time: " + startTime);
+        if (endTime == null || endTime.before(startTime))
+            endTime = startTime;
     }
 
     public Date getEndTime() {
@@ -97,6 +100,7 @@ public class SearchByTimeController implements Serializable {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+        System.out.println("End Time: " + endTime);
     }
 
     public SegmentedTimeRange getSegmentedTimeRange() {

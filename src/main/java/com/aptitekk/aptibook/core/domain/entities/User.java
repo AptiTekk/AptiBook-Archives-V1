@@ -76,6 +76,8 @@ public class User extends MultiTenantEntity implements Serializable {
     }
 
     public void setUsername(String username) {
+        if(username != null)
+            username = username.toLowerCase();
         this.username = username;
     }
 

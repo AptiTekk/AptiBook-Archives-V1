@@ -77,7 +77,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         try {
             return entityManager
                     .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
-                    .setParameter("username", username)
+                    .setParameter("username", username.toLowerCase())
                     .setParameter("tenant", tenant)
                     .getSingleResult();
         } catch (PersistenceException e) {
@@ -104,7 +104,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         try {
             return entityManager
                     .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.tenant = :tenant", User.class)
-                    .setParameter("username", username)
+                    .setParameter("username", username.toLowerCase())
                     .setParameter("password", hashedPassword)
                     .setParameter("tenant", getTenant())
                     .getSingleResult();
