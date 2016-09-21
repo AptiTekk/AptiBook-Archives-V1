@@ -50,10 +50,17 @@ public class EmailService implements Serializable {
         if (notification.getUser() == null || notification.getUser().getUsername() == null || notification.getUser().getUsername().isEmpty() || !notification.getUser().getWantsEmailNotifications())
             return false;
 
+        return sendEmailNotification(notification.getUser().getUsername(), notification.getSubject(), notification.getBody());
+    }
+
+    public boolean sendEmailNotification(String emailAddress, String subject, String body) {
+        if (emailAddress == null || subject == null || body == null || emailAddress.isEmpty() || subject.isEmpty() || body.isEmpty())
+            return false;
+
         Map<String, Object> substitutionData = new HashMap<>();
-        substitutionData.put("subject", notification.getSubject());
-        substitutionData.put("body", notification.getBody());
-        return sendEmail("notification", substitutionData, java.net.IDN.toASCII(notification.getUser().getUsername()));
+        substitutionData.put("subject", subject);
+        substitutionData.put("body", body);
+        return sendEmail("notification", substitutionData, java.net.IDN.toASCII(emailAddress));
     }
 
     /**

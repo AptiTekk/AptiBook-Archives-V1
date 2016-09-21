@@ -49,12 +49,11 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
-
             if(user.getWantsEmailNotifications()) {
                     emailService.sendEmailNotification(notification);
             }
         } catch (Exception e) {
-            LogManager.logError("Error in building Notification, or sending Email notification. Notfication id: " + notification.getId() );
+            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId() );
             e.printStackTrace();
         }
     }
