@@ -6,7 +6,6 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
@@ -57,9 +56,15 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         user.setVerificationCode(generateVerificationCode());
 
         //Create Registration Notification
-        Notification notification = buildRegistrationNotification(user);
+        HashMap<String, String> queryParams = new HashMap<>();
+        queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
+        boolean emailSent = emailService.sendEmailNotification(user.getUsername(), "Registration Verification",
+                "<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
+                        "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
+                        "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
+                        "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams) + "'" + ">Verify Account</a>");
 
-        if (!emailService.sendEmailNotification(notification)) {
+        if (!emailSent) {
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We could not send an email to the Email Address provided. Please enter a valid Email Address!"));
             return null;
         } else {
@@ -86,23 +91,6 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
             verificationCode = RandomStringUtils.randomAlphanumeric(5);
         } while (userService.findByCode(verificationCode) != null);
         return verificationCode;
-    }
-
-    private Notification buildRegistrationNotification(User user) {
-        Notification notification = new Notification();
-        notification.setSubject("Registration Verification");
-        try {
-            HashMap<String, String> queryParams = new HashMap<>();
-            queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
-            notification.setBody("<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
-                    "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
-                    "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
-                    "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams)+ "'" + ">Verify Account</a>");
-            notification.setUser(user);
-            return notification;
-        } catch (Exception e) {
-            return null;
-        }
     }
 
 }
