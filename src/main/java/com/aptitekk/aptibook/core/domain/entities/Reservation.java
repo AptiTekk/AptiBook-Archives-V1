@@ -12,7 +12,6 @@ import org.joda.time.DateTime;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -30,8 +29,8 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar dateCreated = Calendar.getInstance();
+    @Column(columnDefinition = "TIMESTAMP")
+    private DateTime dateCreated = new DateTime();
 
     @Column(length = 32)
     private String title;
@@ -61,12 +60,8 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         return id;
     }
 
-    public Calendar getDateCreated() {
+    public DateTime getDateCreated() {
         return dateCreated;
-    }
-
-    public String getFormattedDateCreated() {
-        return new SimpleDateFormat("EEEE, dd MMMM, yyyy").format(dateCreated.getTime());
     }
 
     public String getTitle() {

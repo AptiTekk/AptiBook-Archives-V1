@@ -10,7 +10,6 @@ import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import org.joda.time.DateTime;
 import org.primefaces.model.LazyScheduleModel;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 

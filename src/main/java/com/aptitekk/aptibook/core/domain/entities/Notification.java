@@ -12,11 +12,11 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
+import org.joda.time.DateTime;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 
 @Entity
@@ -34,8 +34,8 @@ public class Notification extends MultiTenantEntity implements Serializable {
     @Column(length = 2048)
     private String body;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date creation = new Date();
+    @Column(columnDefinition = "TIMESTAMP")
+    private DateTime creation = new DateTime();
 
     private Boolean notif_read = false;
 
@@ -51,7 +51,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
     public String getTimeAgo() {
         PrettyTime prettyTime = new PrettyTime();
-        return prettyTime.format(creation);
+        return prettyTime.format(creation.toDate());
     }
 
     public int getId() {
@@ -86,11 +86,11 @@ public class Notification extends MultiTenantEntity implements Serializable {
         this.body = body;
     }
 
-    public Date getCreation() {
+    public DateTime getCreation() {
         return creation;
     }
 
-    public void setCreation(Date creation) {
+    public void setCreation(DateTime creation) {
         this.creation = creation;
     }
 

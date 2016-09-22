@@ -25,7 +25,6 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Singleton
@@ -103,9 +102,9 @@ public class TenantSynchronizer {
 
                             //Delete tenant if it has been inactive for 30 or more days.
                             if (currentTenant != null && !currentTenant.isActive()) {
-                                Calendar timeSetInactive = currentTenant.getTimeSetInactive();
+                                DateTime timeSetInactive = currentTenant.getTimeSetInactive();
                                 if (timeSetInactive != null) {
-                                    if (new Interval(new DateTime(timeSetInactive.getTime()), new DateTime(DateTimeZone.UTC)).toDuration().getStandardDays() >= 30)
+                                    if (new Interval(timeSetInactive, new DateTime(DateTimeZone.UTC)).toDuration().getStandardDays() >= 30)
                                         deleteTenant(currentTenant);
                                 }
                             }

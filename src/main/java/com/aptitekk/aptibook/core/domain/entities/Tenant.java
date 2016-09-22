@@ -7,15 +7,11 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.CascadeType;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 
 @Entity
 public class Tenant extends GlobalEntity {
@@ -26,8 +22,8 @@ public class Tenant extends GlobalEntity {
 
     private boolean active;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar timeSetInactive;
+    @Column(columnDefinition = "TIMESTAMP")
+    private DateTime timeSetInactive;
 
     @Column(nullable = false, unique = true)
     private int subscriptionId;
@@ -88,7 +84,7 @@ public class Tenant extends GlobalEntity {
         if (active)
             timeSetInactive = null;
         else
-            timeSetInactive = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            timeSetInactive = new DateTime(DateTimeZone.UTC);
     }
 
     /**
@@ -96,7 +92,7 @@ public class Tenant extends GlobalEntity {
      *
      * @return The time when the Tenant was set inactive if it is inactive, or null if it was active. The time will be in UTC.
      */
-    public Calendar getTimeSetInactive() {
+    public DateTime getTimeSetInactive() {
         return timeSetInactive;
     }
 

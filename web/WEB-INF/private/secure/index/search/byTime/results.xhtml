@@ -43,7 +43,6 @@
                     <div class="form-group">
                         from
                         <b:dateTimePicker format="MM/DD/YYYY h:mm a"
-                                          minDate="#{timeSelectionController.minDateTime.toDate()}"
                                           value="#{searchByTimeController.pickerStartTime}" ajax="true"
                                           update="endTimePicker" process="@this" ondtchange="ajax:true"/>
                     </div>

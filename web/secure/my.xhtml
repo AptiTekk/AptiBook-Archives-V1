@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Requested On:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.formattedDateCreated}"
+                                                                        value="#{reservation.dateCreated.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>

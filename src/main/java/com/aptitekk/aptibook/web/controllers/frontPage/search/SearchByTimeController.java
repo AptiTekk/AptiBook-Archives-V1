@@ -8,7 +8,6 @@ package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
 import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
-import com.aptitekk.aptibook.web.controllers.TimeSelectionController;
 import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
@@ -25,9 +24,6 @@ public class SearchByTimeController implements Serializable {
 
     @Inject
     private AssetCategoryService assetCategoryService;
-
-    @Inject
-    private TimeSelectionController timeSelectionController;
 
     private int currentStep = 0;
 
