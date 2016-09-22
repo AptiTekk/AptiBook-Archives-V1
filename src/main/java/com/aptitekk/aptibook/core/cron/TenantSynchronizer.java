@@ -31,11 +31,11 @@ import java.util.List;
 @Singleton
 public class TenantSynchronizer {
 
-    private static final String SUBSCRIPTIONS_INFO_URL = "https://aptitekk.com/wc-api/v3/";
+    private static final String WOOCOMMERCE_URL = System.getenv("WOOCOMMERCE_URL");
     private static final String WOOCOMMERCE_CK = System.getenv("WOOCOMMERCE_CK");
     private static final String WOOCOMMERCE_CS = System.getenv("WOOCOMMERCE_CS");
 
-    private static final int APTIBOOK_PRODUCT_ID = 132;
+    private static final int APTIBOOK_SKU = 1;
     private static final String URL_SLUG_META_KEY = "URL Slug";
 
     @Inject
@@ -47,6 +47,12 @@ public class TenantSynchronizer {
     @Schedule(minute = "*", hour = "*", persistent = false)
     private void synchronizeTenants() {
         LogManager.logDebug("[TenantSynchronizer] Synchronizing Tenants...");
+
+        if(WOOCOMMERCE_URL == null || WOOCOMMERCE_CK == null || WOOCOMMERCE_CS == null)
+        {
+            LogManager.logError("[TenantSynchronizer] Failed to Synchronize due to missing environment variable(s).");
+            return;
+        }
 
         List<Subscription> subscriptions = getSubscriptions();
         if (subscriptions != null) {
@@ -64,7 +70,7 @@ public class TenantSynchronizer {
                     for (LineItem lineItem : lineItems) {
 
                         //Check that the line item is AptiBook
-                        if (lineItem.getProductId().equals(APTIBOOK_PRODUCT_ID)) {
+                        if (lineItem.getSku() == APTIBOOK_SKU) {
                             subscriptionIdsEncountered.add(subscription.getId());
 
                             Tenant currentTenant = tenantService.getTenantBySubscriptionId(subscription.getId());
@@ -136,7 +142,7 @@ public class TenantSynchronizer {
                 WOOCOMMERCE_CS));
         builder.httpEngine(urlConnectionEngine);
         ResteasyClient webClient = builder.build();
-        ResteasyWebTarget webTarget = webClient.target(SUBSCRIPTIONS_INFO_URL);
+        ResteasyWebTarget webTarget = webClient.target(WOOCOMMERCE_URL);
         SubscriptionService service = webTarget.proxy(SubscriptionService.class);
         try {
             return service.getAll().getSubscriptions();
