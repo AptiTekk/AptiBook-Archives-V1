@@ -37,10 +37,10 @@
                     <b:panel title="Reservation Requested" look="success">
                         <h4>Success!</h4>
                         <h:outputText
-                                value="Your reservation for  #{requestReservationViewController.successfulReservation.title} has been requested"
+                                value="Your reservation for #{requestReservationViewController.successfulReservation.title} has been requested."
                                 rendered="#{not empty requestReservationViewController.successfulReservation.title}"/>
                         <h:outputText
-                                value="Your reservation for  #{requestReservationViewController.asset.name} has been requested"
+                                value="Your reservation for #{requestReservationViewController.asset.name} has been requested."
                                 rendered="#{empty requestReservationViewController.successfulReservation.title}"/>
                     </b:panel>
                 </b:column>
@@ -52,10 +52,10 @@
                     <b:panel title="Reservation Reserved" look="success">
                         <h4>Success!</h4>
                         <h:outputText
-                                value="Your reservation for  #{requestReservationViewController.reservationTitle} has been requested and automatically approved"
+                                value="Your reservation for #{requestReservationViewController.reservationTitle} has been approved."
                                 rendered="#{not empty requestReservationViewController.reservationTitle}"/>
                         <h:outputText
-                                value="Your reservation for  #{requestReservationViewController.asset.name} has been requested and automatically approved"
+                                value="Your reservation for #{requestReservationViewController.asset.name} has been approved."
                                 rendered="#{empty requestReservationViewController.reservationTitle}"/>
                     </b:panel>
                 </b:column>

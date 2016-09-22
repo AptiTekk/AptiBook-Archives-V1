@@ -7,7 +7,7 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import com.aptitekk.aptibook.core.time.SegmentedTime;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -39,14 +39,11 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    @Column(columnDefinition = "time")
-    private SegmentedTime timeStart;
+    @Column(columnDefinition = "TIMESTAMP")
+    private DateTime startTime;
 
-    @Column(columnDefinition = "time")
-    private SegmentedTime timeEnd;
-
-    @Temporal(TemporalType.DATE)
-    private Calendar date;
+    @Column(columnDefinition = "TIMESTAMP")
+    private DateTime endTime;
 
     @ManyToOne
     private Asset asset;
@@ -100,32 +97,20 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         this.status = status;
     }
 
-    public SegmentedTime getTimeStart() {
-        return timeStart;
+    public DateTime getStartTime() {
+        return startTime;
     }
 
-    public void setTimeStart(SegmentedTime timeStart) {
-        this.timeStart = timeStart;
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
     }
 
-    public SegmentedTime getTimeEnd() {
-        return timeEnd;
+    public DateTime getEndTime() {
+        return endTime;
     }
 
-    public void setTimeEnd(SegmentedTime timeEnd) {
-        this.timeEnd = timeEnd;
-    }
-
-    public Calendar getDate() {
-        return date;
-    }
-
-    public String getFormattedDate() {
-        return new SimpleDateFormat("EEEE, dd MMMM, yyyy").format(date.getTime());
-    }
-
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
     }
 
     public Asset getAsset() {
@@ -173,12 +158,12 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         return EqualsHelper.areEquals(getTitle(), other.getTitle())
                 && EqualsHelper.areEquals(getDateCreated(), other.getDateCreated())
                 && EqualsHelper.areEquals(getStatus(), other.getStatus())
-                && EqualsHelper.areEquals(getTimeStart(), other.getTimeStart())
-                && EqualsHelper.areEquals(getTimeEnd(), other.getTimeEnd());
+                && EqualsHelper.areEquals(getStartTime(), other.getStartTime())
+                && EqualsHelper.areEquals(getEndTime(), other.getEndTime());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getTitle(), getDateCreated(), getStatus(), getTimeStart(), getTimeEnd());
+        return EqualsHelper.calculateHashCode(getTitle(), getDateCreated(), getStatus(), getStartTime(), getEndTime());
     }
 }

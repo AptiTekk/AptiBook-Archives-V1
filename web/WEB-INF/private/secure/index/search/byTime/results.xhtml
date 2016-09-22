@@ -44,21 +44,21 @@
                         from
                         <b:dateTimePicker format="MM/DD/YYYY h:mm a"
                                           minDate="#{timeSelectionController.minDateTime.toDate()}"
-                                          value="#{searchByTimeController.startTime}" ajax="true"
+                                          value="#{searchByTimeController.pickerStartTime}" ajax="true"
                                           update="endTimePicker" process="@this" ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
                         to
                         <b:dateTimePicker id="endTimePicker" format="MM/DD/YYYY h:mm a"
-                                          minDate="#{searchByTimeController.startTime}"
-                                          value="#{searchByTimeController.endTime}"
-                                          disabled="#{searchByTimeController.startTime == null}"
+                                          minDate="#{searchByTimeController.pickerStartTime}"
+                                          value="#{searchByTimeController.pickerEndTime}"
+                                          disabled="#{searchByTimeController.pickerStartTime == null}"
                                           ajax="true"
                                           update="searchButton" process="@this" ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
                         <b:commandButton id="searchButton" look="primary" value="Search Again"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          ajax="true" update=":includeGroup"/>
                     </div>
                 </h:form>
@@ -98,7 +98,7 @@
                                     </h:panelGroup>
                                     <div class="form-group">
                                         <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.segmentedTimeRange)}">
+                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}">
                                             <f:ajax render=":includeGroup"/>
                                         </h:commandButton>
                                     </div>

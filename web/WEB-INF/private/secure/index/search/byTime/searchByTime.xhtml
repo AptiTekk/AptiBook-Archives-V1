@@ -64,16 +64,16 @@
                     <h:outputText value="Select a Start Time" styleClass="lead"/>
                     <b:dateTimePicker id="startTimePicker" format="MM/DD/YYYY h:mm a"
                                       minDate="#{timeSelectionController.minDateTime.toDate()}"
-                                      value="#{searchByTimeController.startTime}" ajax="true"
+                                      value="#{searchByTimeController.pickerStartTime}" ajax="true"
                                       useCurrent="false"
                                       update="endTimePicker searchButton" process="@this" mode="inline" ondtchange="ajax:true" />
 
                     <h:outputText value="Select an End Time" styleClass="lead"/>
                     <b:dateTimePicker id="endTimePicker" format="MM/DD/YYYY h:mm a"
-                                      minDate="#{searchByTimeController.startTime}"
-                                      value="#{searchByTimeController.endTime}"
+                                      minDate="#{searchByTimeController.pickerStartTime}"
+                                      value="#{searchByTimeController.pickerEndTime}"
                                       useCurrent="false"
-                                      disabled="#{searchByTimeController.startTime == null}" ajax="true"
+                                      disabled="#{searchByTimeController.pickerStartTime == null}" ajax="true"
                                       update="searchButton" process="@this" mode="inline" ondtchange="ajax:true"/>
                 </b:column>
             </b:row>
@@ -89,9 +89,9 @@
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          update=":includeGroup"
-                                         disabled="#{searchByTimeController.endTime == null}"/>
+                                         disabled="#{searchByTimeController.pickerEndTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>

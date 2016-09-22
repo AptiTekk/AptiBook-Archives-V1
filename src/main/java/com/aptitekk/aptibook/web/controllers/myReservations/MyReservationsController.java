@@ -13,11 +13,9 @@ import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
-import com.aptitekk.aptibook.core.time.SegmentedTime;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -60,7 +58,7 @@ public class MyReservationsController implements Serializable {
         AssetCategory[] assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
         assetCategories.toArray(assetCategoriesDisplayed);
         eventModel = new ReservationScheduleModel() {
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
                 List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();
@@ -84,13 +82,8 @@ public class MyReservationsController implements Serializable {
 
             for (Reservation reservation : authenticationController.getAuthenticatedUser().getReservations()) {
 
-                //Make sure that the reservation is after right now.
-                LocalDate reservationDate = new DateTime(reservation.getDate()).toLocalDate();
-                LocalDate nowDate = new DateTime().toLocalDate();
-
-                if (reservationDate.isBefore(nowDate))
-                    continue;
-                if (reservationDate.isEqual(nowDate) && reservation.getTimeEnd().compareTo(new SegmentedTime()) <= 0)
+                //Ignore reservations that have ended.
+                if(reservation.getEndTime().isBeforeNow())
                     continue;
 
                 presentReservations.putIfAbsent(reservation.getAsset().getAssetCategory(), new ArrayList<>());

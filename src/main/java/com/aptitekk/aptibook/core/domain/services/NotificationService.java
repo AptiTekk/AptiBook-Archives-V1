@@ -95,24 +95,20 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
             buildNotification(
                     "Reservation Approved",
                     "Your Reservation for " + reservation.getAsset().getName()
-                            + " on "
-                            + reservation.getFormattedDate()
                             + " from "
-                            + reservation.getTimeStart().getTimeString()
+                            + reservation.getStartTime().toString("MM/dd/yyyy hh:mm aa")
                             + " to "
-                            + reservation.getTimeEnd().getTimeString()
+                            + reservation.getEndTime().toString("MM/dd/yyyy hh:mm aa")
                             + " has been <i>Approved!</i>",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
             buildNotification(
                     "Reservation Rejected",
                     "Your Reservation for " + reservation.getAsset().getName()
-                            + " on "
-                            + reservation.getFormattedDate()
                             + " from "
-                            + reservation.getTimeStart().getTimeString()
+                            + reservation.getStartTime().toString("MM/dd/yyyy hh:mm aa")
                             + " to "
-                            + reservation.getTimeEnd().getTimeString()
+                            + reservation.getEndTime().toString("MM/dd/yyyy hh:mm aa")
                             + " has been <i>Rejected.<i>",
                     reservation.getUser());
         }

@@ -8,16 +8,14 @@ package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
 import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.time.SegmentedTime;
-import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.TimeSelectionController;
+import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,22 +34,12 @@ public class SearchByTimeController implements Serializable {
     private List<AssetCategory> assetCategories;
     private AssetCategory assetCategory;
 
-    /**
-     * The SegmentedTimeRange for the selected date, start-time, and end-time.
-     */
-    private SegmentedTimeRange segmentedTimeRange;
-
-    /**
-     * Used in getSegmentedTimeRange to ensure that only one SegmentedTimeRange is generated for the selected date, start-time, and end-time.
-     */
-    private int lastTimeRangeHashcode;
-
-    private Date startTime;
-    private Date endTime;
+    private DateTime startTime;
+    private DateTime endTime;
 
     @PostConstruct
     private void init() {
-        startTime = new Date();
+        startTime = new DateTime();
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -83,36 +71,30 @@ public class SearchByTimeController implements Serializable {
         this.assetCategory = assetCategory;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getPickerStartTime() {
+        return startTime != null ? startTime.toDate() : null;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-        System.out.println("Start Time: " + startTime);
-        if (endTime == null || endTime.before(startTime))
+    public void setPickerStartTime(Date pickerStartTime) {
+        startTime = new DateTime(pickerStartTime);
+        if (endTime == null || endTime.isBefore(startTime))
             endTime = startTime;
     }
 
-    public Date getEndTime() {
+    public Date getPickerEndTime() {
+        return endTime != null ? endTime.toDate() : null;
+    }
+
+    public void setPickerEndTime(Date pickerEndTime) {
+        if (pickerEndTime != null)
+            endTime = new DateTime(pickerEndTime);
+    }
+
+    public DateTime getStartTime() {
+        return startTime;
+    }
+
+    public DateTime getEndTime() {
         return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-        System.out.println("End Time: " + endTime);
-    }
-
-    public SegmentedTimeRange getSegmentedTimeRange() {
-        int hashcode = startTime.hashCode() + endTime.hashCode();
-        if (lastTimeRangeHashcode == hashcode && segmentedTimeRange != null)
-            return segmentedTimeRange;
-        else {
-            Calendar calendarDate = Calendar.getInstance();
-            calendarDate.setTime(startTime);
-
-            lastTimeRangeHashcode = hashcode;
-            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, new SegmentedTime(startTime), new SegmentedTime(endTime));
-        }
     }
 }

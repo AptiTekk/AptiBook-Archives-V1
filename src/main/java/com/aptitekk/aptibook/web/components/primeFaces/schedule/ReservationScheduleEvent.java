@@ -7,7 +7,6 @@
 package com.aptitekk.aptibook.web.components.primeFaces.schedule;
 
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import org.primefaces.model.DefaultScheduleEvent;
 
 public class ReservationScheduleEvent extends DefaultScheduleEvent {
@@ -23,9 +22,8 @@ public class ReservationScheduleEvent extends DefaultScheduleEvent {
         setTitle(reservation.getAsset().getName() + " - " + (reservation.getTitle() != null ? reservation.getTitle() : "No Title."));
 
         //Set Time
-        SegmentedTimeRange timeRange = new SegmentedTimeRange(reservation.getDate(), reservation.getTimeStart(), reservation.getTimeEnd());
-        setStartDate(timeRange.getDateWithStartTime().getTime());
-        setEndDate(timeRange.getDateWithEndTime().getTime());
+        setStartDate(reservation.getStartTime().toDate());
+        setEndDate(reservation.getEndTime().toDate());
     }
 
     public Reservation getReservation() {

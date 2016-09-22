@@ -75,24 +75,18 @@
                             </b:row>
                             <!-- Non-editable fields:-->
                             <b:row>
-                                <b:column colXs="12" colMd="6">
+                                <b:column colXs="12">
                                     <b:inputText
-                                            value="#{requestReservationViewController.segmentedTimeRange.startTime.timeString}"
-                                            styleClass="form-control" label="Start Time:" disabled="true"/>
-                                </b:column>
-                                <b:column colXs="12" colMd="6">
-                                    <b:inputText
-                                            value="#{requestReservationViewController.segmentedTimeRange.endTime.timeString}"
-                                            styleClass="form-control" label="End Time:" disabled="true"/>
+                                            value="#{requestReservationViewController.startTime.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
+                                            styleClass="form-control" label="Start Time:" readonly="true"
+                                            disabled="true"/>
                                 </b:column>
                             </b:row>
                             <b:row>
                                 <b:column colXs="12">
                                     <b:inputText
-                                            value="#{requestReservationViewController.segmentedTimeRange.date.time}"
-                                            styleClass="form-control" disabled="true" label="Date:">
-                                        <f:convertDateTime type="both" pattern="EEEE, dd MMMM, yyyy"/>
-                                    </b:inputText>
+                                            value="#{requestReservationViewController.endTime.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
+                                            styleClass="form-control" label="End Time:" disabled="true"/>
                                 </b:column>
                             </b:row>
                         </b:column>
