@@ -55,7 +55,7 @@
                                     </b:column>
                                     <b:column colXs="12" colSm="10">
                                         <b:row>
-                                            <b:column colXs="12" colSm="6">
+                                            <b:column colXs="12" colSm="5">
                                                 <div class="form-group">
                                                     <h:outputLabel value="Reservation Title:"/>
                                                     <b:inputText
@@ -71,11 +71,11 @@
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>
-                                            <b:column colXs="12" colSm="3">
+                                            <b:column colXs="12" colSm="4">
                                                 <div class="form-group">
                                                     <h:outputLabel value="Requested On:"/>
                                                     <b:inputText
-                                                            value="#{reservationDetails.reservation.dateCreated.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
+                                                            value="#{reservationDetails.reservation.dateCreated.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>
@@ -85,7 +85,7 @@
                                                 <div class="form-group">
                                                     <h:outputLabel value="Reservation Start Time:"/>
                                                     <b:inputText
-                                                            value="#{reservationDetails.reservation.startTime.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
+                                                            value="#{reservationDetails.reservation.startTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>
@@ -93,7 +93,7 @@
                                                 <div class="form-group">
                                                     <h:outputLabel value="Reservation End Time:"/>
                                                     <b:inputText
-                                                            value="#{reservationDetails.reservation.endTime.toString('EEEE, dd MMMM, yyyy hh:mm aa')}"
+                                                            value="#{reservationDetails.reservation.endTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>

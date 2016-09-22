@@ -13,6 +13,7 @@ package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.persistence.*;
@@ -35,7 +36,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
     private String body;
 
     @Column(columnDefinition = "TIMESTAMP")
-    private DateTime creation = new DateTime();
+    private DateTime creation = new DateTime(DateTimeZone.UTC);
 
     private Boolean notif_read = false;
 

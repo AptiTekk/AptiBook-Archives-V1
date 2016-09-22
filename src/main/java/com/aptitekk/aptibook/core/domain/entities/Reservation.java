@@ -8,10 +8,10 @@ package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -30,7 +30,7 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     private int id;
 
     @Column(columnDefinition = "TIMESTAMP")
-    private DateTime dateCreated = new DateTime();
+    private DateTime dateCreated = new DateTime(DateTimeZone.UTC);
 
     @Column(length = 32)
     private String title;
