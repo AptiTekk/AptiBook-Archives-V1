@@ -15,8 +15,8 @@ import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.time.SegmentedTimeRange;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import org.joda.time.DateTime;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -50,9 +50,14 @@ public class RequestReservationViewController implements Serializable {
     private Asset asset;
 
     /**
-     * The Segmented Time Range of the reservation request.
+     * The reservation start time
      */
-    private SegmentedTimeRange segmentedTimeRange;
+    private DateTime startTime;
+
+    /**
+     * The reservation end time
+     */
+    private DateTime endTime;
 
     /**
      * The Title for reservation being edited.
@@ -73,13 +78,12 @@ public class RequestReservationViewController implements Serializable {
         //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
         asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
 
-        if (reservationService.isAssetAvailableForReservation(asset, segmentedTimeRange)) {
+        if (reservationService.isAssetAvailableForReservation(asset, startTime, endTime)) {
             Reservation reservation = new Reservation();
             reservation.setUser(authenticationController.getAuthenticatedUser());
             reservation.setAsset(asset);
-            reservation.setDate(segmentedTimeRange.getDate());
-            reservation.setTimeStart(segmentedTimeRange.getStartTime());
-            reservation.setTimeEnd(segmentedTimeRange.getEndTime());
+            reservation.setStartTime(startTime);
+            reservation.setEndTime(endTime);
             reservation.setTitle(reservationTitle);
 
             if (!asset.getNeedsApproval())
@@ -120,7 +124,8 @@ public class RequestReservationViewController implements Serializable {
      */
     public void cancel() {
         this.asset = null;
-        this.segmentedTimeRange = null;
+        this.startTime = null;
+        this.endTime = null;
     }
 
     public Asset getAsset() {
@@ -131,12 +136,20 @@ public class RequestReservationViewController implements Serializable {
         this.asset = asset;
     }
 
-    public SegmentedTimeRange getSegmentedTimeRange() {
-        return segmentedTimeRange;
+    public DateTime getStartTime() {
+        return startTime;
     }
 
-    public void setSegmentedTimeRange(SegmentedTimeRange segmentedTimeRange) {
-        this.segmentedTimeRange = segmentedTimeRange;
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public DateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getReservationTitle() {

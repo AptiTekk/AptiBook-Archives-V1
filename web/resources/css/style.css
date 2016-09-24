@@ -30,7 +30,7 @@
 }
 
 .texture-bg {
-    background-image: url("#{resource['images:background.png']}");
+    background: url("#{resource['images:background.png']}");
 }
 
 hr {

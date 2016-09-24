@@ -4,10 +4,9 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.domain.entities.property;
+package com.aptitekk.aptibook.core.domain.entities;
 
 
-import com.aptitekk.aptibook.core.domain.entities.MultiTenantEntity;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.components.propertyTypes.BooleanField;

@@ -46,7 +46,7 @@
                                      completeMethod="#{tagController.getAssetTagSuggestions}"
                                      var="tag" itemLabel="#{tag.name}"
                                      itemValue="#{tag}"
-                                     converter="#{TagConverter}"
+                                     converter="#{tagConverter}"
                                      queryDelay="100" styleClass="dropdown">
                         <pf:ajax event="itemSelect" process="@this"/>
                         <pf:ajax event="itemUnselect" process="@this"/>

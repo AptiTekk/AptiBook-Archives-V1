@@ -35,7 +35,7 @@
                                                   ajax="true"
                                                   action="#{editAssetCategoryController.setSelectedAssetCategory(assetCategory)}"
                                                   update=":assetCategoriesPage"
-                                                  style="cursor: pointer; font-weight: #{editAssetCategoryController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
+                                                  style="font-weight: #{editAssetCategoryController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
                             </h:column>
                         </b:dataTable>
                     </div>
@@ -131,8 +131,7 @@
                                                 ajax="true"
                                                 action="#{editReservationFieldController.setReservationField(reservationField)}"
                                                 update=":editReservationFieldModalForm"
-                                                oncomplete="$('.editReservationFieldModal').modal()"
-                                                style="cursor: pointer;"/>
+                                                oncomplete="$('.editReservationFieldModal').modal()" />
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">

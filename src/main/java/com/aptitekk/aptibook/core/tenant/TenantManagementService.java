@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.core.tenant;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
@@ -25,11 +26,18 @@ public class TenantManagementService {
 
     private Map<String, Tenant> allowedTenants;
 
+    @PostConstruct
+    private void init()
+    {
+        buildAllowedTenants();
+    }
+
     private void buildAllowedTenants() {
         allowedTenants = new HashMap<>();
 
         for (Tenant tenant : tenantService.getAll()) {
-            allowedTenants.put(tenant.getSlug(), tenant);
+            if (tenant.isActive())
+                allowedTenants.put(tenant.getSlug(), tenant);
         }
     }
 

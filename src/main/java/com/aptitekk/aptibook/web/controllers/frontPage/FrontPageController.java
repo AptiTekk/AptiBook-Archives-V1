@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import org.joda.time.DateTime;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ScheduleModel;
 
@@ -21,7 +22,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
@@ -54,7 +54,7 @@ public class FrontPageController implements Serializable {
         assetCategories.toArray(assetCategoriesDisplayed);
         scheduleModel = new ReservationScheduleModel() {
             @Override
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
                 List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();

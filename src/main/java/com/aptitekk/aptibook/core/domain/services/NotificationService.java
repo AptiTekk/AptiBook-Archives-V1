@@ -65,9 +65,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         if (reservation.getAsset().getNeedsApproval()) {
             buildNotification(
                     "New Reservation Request",
-                    "A new Reservation for "
+                    "A new Reservation for <b>"
                             + reservation.getAsset().getName()
-                            + " has been <i>requested</i> by "
+                            + "</b> has been requested by "
                             + "<b>"
                             + reservation.getUser().getFullname()
                             + "</b>"
@@ -76,9 +76,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         } else {
             buildNotification(
                     "New Reservation Approved",
-                    "A new Reservation for "
+                    "A new Reservation for <b>"
                             + reservation.getAsset().getName()
-                            + " has been automatically <i>approved</i> for "
+                            + "</b> has been automatically <i>approved</i> for "
                             + "<b>"
                             +reservation.getUser().getFullname()
                             + "</b>"
@@ -94,26 +94,22 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         if (reservation.getStatus() == Reservation.Status.APPROVED) {
             buildNotification(
                     "Reservation Approved",
-                    "Your Reservation for " + reservation.getAsset().getName()
-                            + " on "
-                            + reservation.getFormattedDate()
-                            + " from "
-                            + reservation.getTimeStart().getTimeString()
-                            + " to "
-                            + reservation.getTimeEnd().getTimeString()
-                            + " has been <i>Approved!</i>",
+                    "Your Reservation for <b>" + reservation.getAsset().getName()
+                            + "</b> from <b>"
+                            + reservation.getStartTime().toString("MM/dd/yyyy hh:mm aa")
+                            + "</b> to <b>"
+                            + reservation.getEndTime().toString("MM/dd/yyyy hh:mm aa")
+                            + "</b> has been Approved!",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
             buildNotification(
                     "Reservation Rejected",
-                    "Your Reservation for " + reservation.getAsset().getName()
-                            + " on "
-                            + reservation.getFormattedDate()
-                            + " from "
-                            + reservation.getTimeStart().getTimeString()
-                            + " to "
-                            + reservation.getTimeEnd().getTimeString()
-                            + " has been <i>Rejected.<i>",
+                    "Your Reservation for <b>" + reservation.getAsset().getName()
+                            + "</b> from <b>"
+                            + reservation.getStartTime().toString("MM/dd/yyyy hh:mm aa")
+                            + "</b> to <b>"
+                            + reservation.getEndTime().toString("MM/dd/yyyy hh:mm aa")
+                            + "</b> has been Rejected.",
                     reservation.getUser());
         }
     }

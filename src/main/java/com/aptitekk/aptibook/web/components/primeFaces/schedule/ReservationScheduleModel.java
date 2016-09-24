@@ -7,9 +7,9 @@
 package com.aptitekk.aptibook.web.components.primeFaces.schedule;
 
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import org.joda.time.DateTime;
 import org.primefaces.model.LazyScheduleModel;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -19,13 +19,7 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
     public void loadEvents(Date start, Date end) {
         //TODO: Create an expanding cache
 
-        Calendar startCalendar = Calendar.getInstance();
-        startCalendar.setTime(start);
-
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTime(end);
-
-        List<Reservation> reservationList = getReservationsBetweenDates(startCalendar, endCalendar);
+        List<Reservation> reservationList = getReservationsBetweenDates(new DateTime(start), new DateTime(end));
         if (reservationList != null) {
             for (Reservation reservation : reservationList) {
                 ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
@@ -36,6 +30,6 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
         }
     }
 
-    public abstract List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end);
+    public abstract List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end);
 
 }

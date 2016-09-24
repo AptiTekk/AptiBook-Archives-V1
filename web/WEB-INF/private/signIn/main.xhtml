@@ -9,26 +9,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
 
 <ui:composition>
     <h:form id="loginForm">
         <b:messages for="loginForm" showSummary="false" showDetail="true"/>
-        <div class="form-group">
-            <label for="usernameInput">Email Address:</label>
-            <h:inputText id="usernameInput" styleClass="form-control"
-                         autocomplete="off"
-                         value="#{authenticationController.username}"
-                         p:autofocus="true"/>
-        </div>
-        <div class="form-group">
-            <label for="passwordInput">Password:</label>
-            <h:inputSecret id="passwordInput" styleClass="form-control"
-                           autocomplete="off"
-                           value="#{authenticationController.password}"/>
-        </div>
+        <b:inputText id="usernameInput" label="Email Address:" value="#{authenticationController.username}">
+            <b:focus/>
+        </b:inputText>
+
+        <b:inputSecret id="passwordInput" label="Password:" value="#{authenticationController.password}"/>
 
         <b:commandButton value="Sign In" look="primary" styleClass="btn-large" size="block"
                          action="#{authenticationController.login}"

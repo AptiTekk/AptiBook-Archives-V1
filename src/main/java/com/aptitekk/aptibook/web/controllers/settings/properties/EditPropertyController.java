@@ -7,7 +7,7 @@
 package com.aptitekk.aptibook.web.controllers.settings.properties;
 
 import com.aptitekk.aptibook.core.domain.entities.Permission;
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.RegexPropertyType;
 import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.TextPropertyType;

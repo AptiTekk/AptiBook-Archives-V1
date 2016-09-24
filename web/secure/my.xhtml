@@ -89,39 +89,31 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Requested On:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.formattedDateCreated}"
+                                                                        value="#{reservation.dateCreated.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
                                                     </b:row>
                                                     <b:row>
-                                                        <b:column colXs="12" colSm="4">
-                                                            <div class="form-group">
-                                                                <h:outputLabel value="Reservation Date:"/>
-                                                                <b:inputText
-                                                                        value="#{reservation.formattedDate}"
-                                                                        readonly="true"/>
-                                                            </div>
-                                                        </b:column>
-                                                        <b:column colXs="12" colSm="4">
+                                                        <b:column colXs="12" colSm="6">
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation Start Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.timeStart.timeString}"
+                                                                        value="#{reservation.startTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
-                                                        <b:column colXs="12" colSm="4">
+                                                        <b:column colXs="12" colSm="6">
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation End Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.timeEnd.timeString}"
+                                                                        value="#{reservation.endTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
                                                     </b:row>
                                                     <b:row>
-                                                        <b:column colXs="12">
+                                                        <b:column colXs="12" rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
                                                             <b:panel title="Field Entries" look="default"
                                                                      collapsible="true"
                                                                      collapsed="true">

@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
-import com.aptitekk.aptibook.core.domain.entities.property.Property;
+import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.core.domain.oAuthModels.GoogleUserInfoModel;
+import com.aptitekk.aptibook.core.rest.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;

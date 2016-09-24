@@ -9,9 +9,9 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui"
+>
 
 <ui:composition>
     <h:form id="searchByTimeForm">
@@ -56,17 +56,24 @@
             </b:row>
         </ui:fragment>
 
-        <!-- Step 1: Select a Date -->
+        <!-- Step 1: Select Times -->
         <ui:fragment rendered="#{searchByTimeController.currentStep == 1}">
 
             <b:row>
                 <b:column colXs="12">
-                    <h:outputText value="Select a Date" styleClass="lead"/>
-                    <p:calendar value="#{searchByTimeController.date}"
-                                mindate="#{timeSelectionController.minDate}"
-                                mode="inline" styleClass="datepicker-fullwidth">
-                        <f:ajax event="dateSelect" render=":searchByTimeForm"/>
-                    </p:calendar>
+                    <h:outputText value="Select a Start Time" styleClass="lead"/>
+                    <b:dateTimePicker id="startTimePicker" format="MM/DD/YYYY h:mm a"
+                                      value="#{searchByTimeController.pickerStartTime}" ajax="true"
+                                      useCurrent="false"
+                                      update="endTimePicker searchButton" process="@this" mode="inline" ondtchange="ajax:true" />
+
+                    <h:outputText value="Select an End Time" styleClass="lead"/>
+                    <b:dateTimePicker id="endTimePicker" format="MM/DD/YYYY h:mm a"
+                                      minDate="#{searchByTimeController.pickerStartTime}"
+                                      value="#{searchByTimeController.pickerEndTime}"
+                                      useCurrent="false"
+                                      disabled="#{searchByTimeController.pickerStartTime == null}" ajax="true"
+                                      update="searchButton" process="@this" mode="inline" ondtchange="ajax:true"/>
                 </b:column>
             </b:row>
 
@@ -77,58 +84,13 @@
                                          style="width: 50%;"
                                          ajax="true"
                                          action="#{searchByTimeController.previousStep}" update="@form"/>
-                        <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right"
-                                         iconAlign="right"
-                                         style="width: 50%;"
-                                         ajax="true"
-                                         action="#{searchByTimeController.nextStep}" update="@form"
-                                         disabled="#{searchByTimeController.date == null}"/>
-                    </b:buttonGroup>
-                </b:column>
-            </b:row>
-        </ui:fragment>
-
-        <!-- Step 2: Select a Time -->
-        <ui:fragment rendered="#{searchByTimeController.currentStep == 2}">
-
-            <b:row>
-                <b:column colXs="12">
-                    <h:outputText value="Start Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{searchByTimeController.startTime}"
-                                     styleClass="big-select" converter="#{SegmentedTimeConverter}">
-                        <f:selectItem itemValue="#{null}"
-                                      itemLabel="--- Select a Time ---" noSelectionOption="true"/>
-                        <f:selectItems
-                                value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
-                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                        <f:ajax render=":searchByTimeForm"/>
-                    </h:selectOneMenu>
-                    <h:outputText value="End Time" styleClass="lead"/>
-                    <h:selectOneMenu value="#{searchByTimeController.endTime}"
-                                     styleClass="big-select" converter="#{SegmentedTimeConverter}"
-                                     disabled="#{searchByTimeController.startTime == null}">
-                        <f:selectItems
-                                value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
-                                var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                        <f:ajax render=":searchByTimeForm"/>
-                    </h:selectOneMenu>
-                </b:column>
-            </b:row>
-
-            <b:row style="margin-top: 20px;">
-                <b:column colXs="12">
-                    <b:buttonGroup style="width: 100%;">
-                        <b:commandButton look="default" value="Previous Step" iconAwesome="arrow-left"
-                                         style="width: 50%;"
-                                         ajax="true"
-                                         action="#{searchByTimeController.previousStep}" update="@form"/>
-                        <b:commandButton look="primary" value="Begin Search" iconAwesome="search"
+                        <b:commandButton id="searchButton" look="primary" value="Begin Search" iconAwesome="search"
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}"
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          update=":includeGroup"
-                                         disabled="#{searchByTimeController.startTime == null}"/>
+                                         disabled="#{searchByTimeController.pickerEndTime == null}"/>
                     </b:buttonGroup>
                 </b:column>
             </b:row>
