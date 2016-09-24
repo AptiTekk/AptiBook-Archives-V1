@@ -22,7 +22,6 @@ public class Tenant extends GlobalEntity {
 
     private boolean active;
 
-    @Column(columnDefinition = "TIMESTAMP")
     private DateTime timeSetInactive;
 
     @Column(nullable = false, unique = true)

@@ -32,10 +32,8 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
     private String subject;
 
-    @Column(length = 2048)
     private String body;
 
-    @Column(columnDefinition = "TIMESTAMP")
     private DateTime creation = new DateTime(DateTimeZone.UTC);
 
     private Boolean notif_read = false;

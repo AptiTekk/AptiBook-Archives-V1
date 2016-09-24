@@ -24,19 +24,17 @@
         <b:commandButton value="Sign In" look="primary" styleClass="btn-large" size="block"
                          action="#{authenticationController.login}"
                          ajax="true" update="@form"/>
+
+        <b:commandButton look="default" size="block" ajax="true"
+                         action="#{oAuthController.signInWithGoogle}" update="@form" rendered="#{oAuthController.googleSignInEnabled}">
+                <b:image library="images" name="google-sign-in.svg" height="18px" />
+        </b:commandButton>
+
         <hr/>
 
-        <b:row>
-            <b:column colXs="12" colMd="#{oAuthController.googleSignInEnabled ? '6' : '12'}">
-                <b:button value="Register" outcome="index" look="default" size="block" includeViewParams="true">
-                    <f:param name="action" value="register"/>
-                </b:button>
-            </b:column>
-            <b:column colXs="12" colMd="6" rendered="#{oAuthController.googleSignInEnabled}">
-                <b:commandButton value="Sign In with Google" look="danger" size="block" iconAwesome="google" ajax="true"
-                                 action="#{oAuthController.signInWithGoogle}" update="@form"/>
-            </b:column>
-        </b:row>
+        <b:button value="Register" outcome="index" look="default" size="block" includeViewParams="true">
+            <f:param name="action" value="register"/>
+        </b:button>
     </h:form>
 </ui:composition>
 </html>
