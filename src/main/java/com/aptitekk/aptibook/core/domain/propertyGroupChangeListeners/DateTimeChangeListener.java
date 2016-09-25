@@ -7,11 +7,18 @@
 package com.aptitekk.aptibook.core.domain.propertyGroupChangeListeners;
 
 import com.aptitekk.aptibook.core.domain.entities.Property;
+import com.aptitekk.aptibook.core.tenant.TenantManagementService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+
+import javax.inject.Inject;
 
 public class DateTimeChangeListener implements Property.Group.ChangeListener {
 
+    @Inject
+    private TenantManagementService tenantManagementService;
+
     @Override
     public void onPropertiesChanged(Property.Group propertyGroup) {
-        //TODO: Set Timezone somewhere
+        tenantManagementService.refreshDateTimeZones();
     }
 }

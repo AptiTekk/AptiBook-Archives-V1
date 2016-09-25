@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
@@ -24,7 +25,6 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 @Named
 @ViewScoped
@@ -72,10 +72,6 @@ public class FrontPageController implements Serializable {
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
     }
 
     public void onEventSelect(SelectEvent selectEvent) {

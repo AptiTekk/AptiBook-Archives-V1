@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.core.tenant;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
 import org.apache.http.client.utils.URIBuilder;
+import org.joda.time.DateTimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
@@ -51,6 +52,14 @@ public class TenantSessionService implements Serializable {
         }
 
         return null;
+    }
+
+    public DateTimeZone getCurrentTenantTimezone() {
+        Tenant tenant = getCurrentTenant();
+        if(tenant != null) {
+            return tenantManagementService.getDateTimeZone(tenant);
+        }
+        return DateTimeZone.UTC;
     }
 
     /**
