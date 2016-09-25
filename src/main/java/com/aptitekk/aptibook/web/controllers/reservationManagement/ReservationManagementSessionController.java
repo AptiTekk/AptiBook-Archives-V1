@@ -26,7 +26,8 @@ public class ReservationManagementSessionController implements Serializable {
     public enum ManagementPage {
         PENDING("Pending", "pending", "hourglass-half", null),
         APPROVED("Approved", "approved", "calendar-check-o", null),
-        REJECTED("Rejected", "rejected", "calendar-times-o", null);
+        REJECTED("Rejected", "rejected", "calendar-times-o", null),
+        CALENDAR("My Asset Calendar", "calendar", "calendar", null);
 
         private String name;
         private String fileName;
