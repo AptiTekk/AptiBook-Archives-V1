@@ -13,7 +13,9 @@ import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Stateful
 public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup> implements Serializable {
@@ -64,6 +66,25 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
      */
     public UserGroup getRootGroup(Tenant tenant) {
         return findByName(ROOT_GROUP_NAME, tenant);
+    }
+
+    /**
+     *
+     * @param userGroup User Group to get all children for.
+     * @return A list of all children of passed in User Group.
+     */
+    public List<UserGroup> getUserGroupChildren(UserGroup userGroup){
+        Queue<UserGroup> queue = new LinkedList<>();
+        queue.add(userGroup);
+        UserGroup currEntry;
+        List<UserGroup> groups = new ArrayList<>();
+        while ((currEntry = queue.poll()) != null){
+            groups.add(currEntry);
+            for(UserGroup child : currEntry.getChildren()){
+                queue.add(child);
+            }
+        }
+        return groups;
     }
 
     public List<UserGroup> getHierarchyUp(UserGroup origin) {

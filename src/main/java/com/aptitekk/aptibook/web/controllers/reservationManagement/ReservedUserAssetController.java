@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
 import com.aptitekk.aptibook.core.domain.entities.*;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
@@ -42,6 +43,9 @@ public class ReservedUserAssetController implements Serializable {
 
     @Inject
     UserService userService;
+
+    @Inject
+    UserGroupService userGroupService;
 
     @Inject
     AuthenticationController authenticationController;
@@ -117,7 +121,7 @@ public class ReservedUserAssetController implements Serializable {
         User user = authenticationController.getAuthenticatedUser();
         List<Asset> userGroupAssets = new ArrayList<>();
         for(UserGroup userGroup : user.getUserGroups()){
-            for(UserGroup children : getUserGroupChildren(userGroup)){
+            for(UserGroup children : userGroupService.getUserGroupChildren(userGroup)){
                 for(Asset asset : children.getAssets()) {
                     userGroupAssets.add(asset);
                 }
@@ -126,18 +130,6 @@ public class ReservedUserAssetController implements Serializable {
         return userGroupAssets;
     }
 
-    public List<UserGroup> getUserGroupChildren(UserGroup userGroup){
-        Queue<UserGroup> queue = new LinkedList<>();
-        queue.add(userGroup);
-        UserGroup currEntry;
-        List<UserGroup> groups = new ArrayList<>();
-        while ((currEntry = queue.poll()) != null){
-            groups.add(currEntry);
-            for(UserGroup child : currEntry.getChildren()){
-                queue.add(child);
-            }
-        }
-        return groups;
-    }
+
 
 }
