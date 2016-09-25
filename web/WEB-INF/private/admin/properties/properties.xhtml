@@ -36,7 +36,7 @@
                                         <b:inputText id="propertyField#{propertyInput.key.ordinal()}"
                                                      label="#{propertyInput.key.propertyType.label}"
                                                      value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
-                                                     maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                                     maxlength="#{propertyInput.key.propertyType.maxLength}" />
                                     </c:when>
                                     <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'MultiLineField'}">
                                         <!--suppress ELValidationInJSP -->
