@@ -7,6 +7,7 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 
+import com.aptitekk.aptibook.core.domain.propertyGroupChangeListeners.DateTimeChangeListener;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.components.propertyTypes.BooleanField;
@@ -31,7 +32,7 @@ public class Property extends MultiTenantEntity implements Serializable {
     public enum Group {
 
         GOOGLE_SIGN_IN("Google Sign In", null),
-        DATE_TIME("Date And Time", null);
+        DATE_TIME("Date And Time", DateTimeChangeListener.class);
 
         private String friendlyName;
         private Class<? extends ChangeListener> propertyGroupChangeListenerClass;
