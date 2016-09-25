@@ -27,7 +27,7 @@ public class Tenant extends GlobalEntity {
     @Column(nullable = false, unique = true)
     private int subscriptionId;
 
-    @Column(nullable = false, unique = true, length = 32)
+    @Column(nullable = false, unique = true)
     private String slug;
 
     // ----------------------------------------------------------- Tenant Dependent Entities

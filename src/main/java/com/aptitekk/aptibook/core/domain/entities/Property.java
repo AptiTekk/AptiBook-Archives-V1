@@ -27,7 +27,8 @@ public class Property extends MultiTenantEntity implements Serializable {
 
     public enum Group {
 
-        GOOGLE_SIGN_IN("Google Sign In", null);
+        GOOGLE_SIGN_IN("Google Sign In", null),
+        DATE_TIME("Date And Time", null);
 
         private String friendlyName;
         private Class<? extends ChangeListener> propertyGroupChangeListenerClass;
@@ -77,7 +78,9 @@ public class Property extends MultiTenantEntity implements Serializable {
     public enum Key {
 
         GOOGLE_SIGN_IN_ENABLED("false", Group.GOOGLE_SIGN_IN, new BooleanField("Enable Google Sign In")),
-        GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Allowed Domain Names (Comma separated)", 256));
+        GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Allowed Domain Names (Comma separated)", 256)),
+
+        DATE_TIME_TIMEZONE("UTC", Group.DATE_TIME, new SingleLineField("Timezone", 4));
 
         private final String defaultValue;
         private final Group group;
@@ -112,14 +115,6 @@ public class Property extends MultiTenantEntity implements Serializable {
     private String propertyValue;
 
     private static final long serialVersionUID = 1L;
-
-    public Property() {
-    }
-
-    public Property(Key propertyKey, String propertyValue) {
-        setPropertyKey(propertyKey);
-        setPropertyValue(propertyValue);
-    }
 
     public Key getPropertyKey() {
         return this.propertyKey;
