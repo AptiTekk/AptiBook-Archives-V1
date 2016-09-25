@@ -22,6 +22,7 @@ public class HelpController implements Serializable {
         RESERVATION_MANAGEMENT_PENDING(null),
         RESERVATION_MANAGEMENT_APPROVED(null),
         RESERVATION_MANAGEMENT_REJECTED(null),
+        RESERVATION_MANAGEMENT_CALENDAR(null),
 
         USER_SETTINGS(null),
         USER_MY_RESERVATIONS(null),

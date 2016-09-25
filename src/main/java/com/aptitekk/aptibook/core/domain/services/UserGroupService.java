@@ -6,6 +6,8 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
@@ -36,7 +38,7 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
      * Finds Group Entity by its name, within the specified Tenant.
      *
      * @param userGroupName The name of the group to search for.
-     * @param tenant    The Tenant of the User Group to search for.
+     * @param tenant        The Tenant of the User Group to search for.
      * @return A User Group with the specified name, or null if one does not exist.
      */
     public UserGroup findByName(String userGroupName, Tenant tenant) {
@@ -69,24 +71,11 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
     }
 
     /**
+     * Returns a list containing all usergroups above and including the usergroup passed in.
+     * The list is in no specific order.
      *
-     * @param userGroup User Group to get all children for.
-     * @return A list of all children of passed in User Group.
+     * @param origin The origin usergroup, from which the tree shall be traversed up.
      */
-    public List<UserGroup> getUserGroupChildren(UserGroup userGroup){
-        Queue<UserGroup> queue = new LinkedList<>();
-        queue.add(userGroup);
-        UserGroup currEntry;
-        List<UserGroup> groups = new ArrayList<>();
-        while ((currEntry = queue.poll()) != null){
-            groups.add(currEntry);
-            for(UserGroup child : currEntry.getChildren()){
-                queue.add(child);
-            }
-        }
-        return groups;
-    }
-
     public List<UserGroup> getHierarchyUp(UserGroup origin) {
         List<UserGroup> hierarchy = new ArrayList<>();
         hierarchy.add(origin);
@@ -101,5 +90,53 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
         return hierarchy;
     }
 
+    /**
+     * Returns a list containing all usergroups below and including the usergroup passed in.
+     * The list is in no specific order.
+     *
+     * @param origin The origin usergroup, from which the tree shall be traversed down.
+     */
+    public List<UserGroup> getHierarchyDown(UserGroup origin) {
+        Queue<UserGroup> queue = new LinkedList<>();
+        queue.add(origin);
+        UserGroup currEntry;
+        List<UserGroup> groups = new ArrayList<>();
+        while ((currEntry = queue.poll()) != null) {
+            groups.add(currEntry);
+            for (UserGroup child : currEntry.getChildren()) {
+                queue.add(child);
+            }
+        }
+        return groups;
+    }
+
+    /**
+     * Returns a list containing all assets below and including those belonging to the usergroup passed in.
+     * The list is in no specific order.
+     *
+     * @param origin The origin usergroup, from which the tree shall be traversed down.
+     */
+    public List<Asset> getHierarchyDownAssets(UserGroup origin) {
+        List<UserGroup> userGroups = getHierarchyDown(origin);
+        List<Asset> userGroupAssets = new ArrayList<>();
+        for (UserGroup userGroup : userGroups) {
+            userGroupAssets.addAll(userGroup.getAssets());
+        }
+        return userGroupAssets;
+    }
+
+    /**
+     * Returns a list containing all reservations below and including those belonging to the assets of the usergroup passed in.
+     * The list is in no specific order.
+     *
+     * @param origin The origin usergroup, from which the tree shall be traversed down.
+     */
+    public List<Reservation> getHierarchyDownReservations(UserGroup origin) {
+        List<Reservation> assetReservations = new ArrayList<>();
+        for (Asset asset : getHierarchyDownAssets(origin)) {
+            assetReservations.addAll(asset.getReservations());
+        }
+        return assetReservations;
+    }
 
 }

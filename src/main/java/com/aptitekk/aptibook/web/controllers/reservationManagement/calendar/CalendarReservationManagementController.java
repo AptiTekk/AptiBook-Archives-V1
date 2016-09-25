@@ -4,7 +4,7 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.web.controllers.reservationManagement;
+package com.aptitekk.aptibook.web.controllers.reservationManagement.calendar;
 
 
 import com.aptitekk.aptibook.core.domain.entities.*;
@@ -31,15 +31,7 @@ import java.util.*;
 
 @Named
 @ViewScoped
-public class ReservedUserAssetController implements Serializable {
-
-    private ReservationScheduleModel scheduleModel;
-
-    private ReservationScheduleEvent selectedEvent;
-
-    private List<AssetCategory> assetCategories;
-
-    private AssetCategory[] assetCategoriesDisplayed;
+public class CalendarReservationManagementController implements Serializable {
 
     @Inject
     UserService userService;
@@ -56,27 +48,37 @@ public class ReservedUserAssetController implements Serializable {
     @Inject
     HelpController helpController;
 
+    private ReservationScheduleModel scheduleModel;
+
+    private ReservationScheduleEvent selectedEvent;
+
+    private List<Reservation> reservations;
 
     @PostConstruct
     private void init() {
-        assetCategories = assetCategoryService.getAll();
-        assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
-        assetCategories.toArray(assetCategoriesDisplayed);
+        reservations = new ArrayList<>();
+        for(UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
+            reservations.addAll(userGroupService.getHierarchyDownReservations(userGroup));
+        }
+
         scheduleModel = new ReservationScheduleModel() {
             @Override
             public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
-                List<Reservation> userGroupReservations = getAssetOwnerReservations();
-                Iterator<Reservation> iterator = userGroupReservations.iterator();
+                ArrayList<Reservation> prunedReservations = new ArrayList<>(reservations);
+                Iterator<Reservation> iterator = prunedReservations.iterator();
                 while (iterator.hasNext()) {
-                    if (iterator.next().getStatus() == Reservation.Status.REJECTED)
+                    Reservation next = iterator.next();
+                    if (next.getStatus() == Reservation.Status.REJECTED)
+                        iterator.remove();
+                    else if(next.getEndTime().isBefore(start) || next.getStartTime().isAfter(end))
                         iterator.remove();
                 }
 
-                return userGroupReservations;
+                return prunedReservations;
             }
         };
 
-        helpController.setCurrentTopic(HelpController.Topic.FRONT_PAGE);
+        helpController.setCurrentTopic(HelpController.Topic.RESERVATION_MANAGEMENT_CALENDAR);
     }
 
     public ScheduleModel getScheduleModel() {
@@ -94,42 +96,5 @@ public class ReservedUserAssetController implements Serializable {
     public ReservationScheduleEvent getSelectedEvent() {
         return selectedEvent;
     }
-
-    public List<AssetCategory> getAssetCategories() {
-        return assetCategories;
-    }
-
-    public AssetCategory[] getAssetCategoriesDisplayed() {
-        return assetCategoriesDisplayed;
-    }
-
-    public void setAssetCategoriesDisplayed(AssetCategory[] assetCategoriesDisplayed) {
-        this.assetCategoriesDisplayed = assetCategoriesDisplayed;
-    }
-
-    public List<Reservation> getAssetOwnerReservations(){
-        List<Reservation> assetReservations = new ArrayList<>();
-        for(Asset asset : getUserGroupAssets()){
-            for(Reservation reservation : asset.getReservations()){
-                assetReservations.add(reservation);
-            }
-        }
-        return assetReservations;
-    }
-
-    public List<Asset> getUserGroupAssets(){
-        User user = authenticationController.getAuthenticatedUser();
-        List<Asset> userGroupAssets = new ArrayList<>();
-        for(UserGroup userGroup : user.getUserGroups()){
-            for(UserGroup children : userGroupService.getUserGroupChildren(userGroup)){
-                for(Asset asset : children.getAssets()) {
-                    userGroupAssets.add(asset);
-                }
-            }
-        }
-        return userGroupAssets;
-    }
-
-
 
 }
