@@ -28,11 +28,11 @@ public class HelpController implements Serializable {
         USER_NOTIFICATIONS(null),
 
         SETTINGS_ASSETS(null),
-        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "add-new-asset-categories"}),
+        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "ab-add-new-asset-categories"}),
         SETTINGS_USER_GROUPS(null),
         SETTINGS_USERS(null),
         SETTINGS_PERMISSIONS(null),
-        SETTINGS_PROPERTIES(null);
+        SETTINGS_PROPERTIES(new String[]{"How To Change The Timezone", "ab-how-to-change-timezone"});
 
         /**
          * An array containing the name and Slug of the popular topics, in that order. For example:

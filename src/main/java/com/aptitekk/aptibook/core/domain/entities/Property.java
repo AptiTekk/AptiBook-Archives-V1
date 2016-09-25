@@ -84,7 +84,7 @@ public class Property extends MultiTenantEntity implements Serializable {
         GOOGLE_SIGN_IN_ENABLED("false", Group.GOOGLE_SIGN_IN, new BooleanField("Enable Google Sign In")),
         GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Allowed Domain Names (Comma separated)", 256)),
 
-        DATE_TIME_TIMEZONE("UTC", Group.DATE_TIME, new SingleLineField("Timezone", 4), (key, submittedValue) -> {
+        DATE_TIME_TIMEZONE("UTC", Group.DATE_TIME, new SingleLineField("Timezone", 32), (key, submittedValue) -> {
             try {
                 DateTimeZone dateTimeZone = DateTimeZone.forID(submittedValue);
                 if (dateTimeZone == null)
