@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Requested On:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.dateCreated.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.applyTimeZone(reservation.dateCreated).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
@@ -99,7 +99,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation Start Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.startTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.applyTimeZone(reservation.startTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
@@ -107,7 +107,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation End Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.endTime.toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.applyTimeZone(reservation.endTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>

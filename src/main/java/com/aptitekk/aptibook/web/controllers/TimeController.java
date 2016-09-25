@@ -7,6 +7,7 @@
 package com.aptitekk.aptibook.web.controllers;
 
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import org.joda.time.DateTime;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -20,6 +21,10 @@ public class TimeController implements Serializable {
 
     @Inject
     private TenantSessionService tenantSessionService;
+
+    public DateTime applyTimeZone(DateTime dateTime) {
+        return dateTime.withZone(tenantSessionService.getCurrentTenantTimezone());
+    }
 
     public TimeZone getCurrentTimeZone() {
         return tenantSessionService.getCurrentTenantTimezone().toTimeZone();
