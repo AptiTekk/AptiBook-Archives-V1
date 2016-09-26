@@ -134,7 +134,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
             }
 
             if (!foundProperty) {
-                Property property = new Property(key, key.getDefaultValue());
+                Property property = new Property();
+                property.setPropertyKey(key);
+                property.setPropertyValue(key.getDefaultValue());
                 try {
                     propertiesService.insert(property, tenant);
                 } catch (Exception e) {

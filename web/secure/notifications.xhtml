@@ -68,7 +68,7 @@
                     &mdash;
                     <h:outputText value="#{notification.body}" escape="false"/>
                     <br/>
-                    <h:outputText value="#{notification.timeAgo}" style="color:#808080"/>
+                    <h:outputText value="#{notificationViewController.formatNotificationTimeAgo(notification)}" style="color:#808080"/>
                     <hr/>
                 </h:panelGroup>
             </ui:repeat>
