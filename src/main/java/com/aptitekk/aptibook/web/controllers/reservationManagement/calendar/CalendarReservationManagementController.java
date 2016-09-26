@@ -85,10 +85,6 @@ public class CalendarReservationManagementController implements Serializable {
         return scheduleModel;
     }
 
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
-    }
-
     public void onEventSelect(SelectEvent selectEvent) {
         selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
     }
