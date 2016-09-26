@@ -83,7 +83,7 @@ public class MyReservationsController implements Serializable {
             for (Reservation reservation : authenticationController.getAuthenticatedUser().getReservations()) {
 
                 //Ignore reservations that have ended.
-                if(reservation.getEndTime().isBeforeNow())
+                if (reservation.getEndTime().isBeforeNow())
                     continue;
 
                 presentReservations.putIfAbsent(reservation.getAsset().getAssetCategory(), new ArrayList<>());
@@ -110,10 +110,6 @@ public class MyReservationsController implements Serializable {
 
     public void setEventModel(ReservationScheduleModel eventModel) {
         this.eventModel = eventModel;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
     }
 
 }

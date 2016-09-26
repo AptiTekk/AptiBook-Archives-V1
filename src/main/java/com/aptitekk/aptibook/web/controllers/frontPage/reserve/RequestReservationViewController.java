@@ -14,9 +14,11 @@ import com.aptitekk.aptibook.core.domain.services.AssetService;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -43,6 +45,9 @@ public class RequestReservationViewController implements Serializable {
 
     @Inject
     private ReservationFieldEntryService reservationFieldEntryService;
+
+    @Inject
+    private TenantSessionService tenantSessionService;
 
     /**
      * The asset that is being requested for reservation.
@@ -82,8 +87,11 @@ public class RequestReservationViewController implements Serializable {
             Reservation reservation = new Reservation();
             reservation.setUser(authenticationController.getAuthenticatedUser());
             reservation.setAsset(asset);
-            reservation.setStartTime(startTime);
-            reservation.setEndTime(endTime);
+
+            DateTimeZone currentTenantTimezone = tenantSessionService.getCurrentTenantTimezone();
+            reservation.setStartTime(startTime.withZoneRetainFields(currentTenantTimezone));
+            reservation.setEndTime(endTime.withZoneRetainFields(currentTenantTimezone));
+
             reservation.setTitle(reservationTitle);
 
             if (!asset.getNeedsApproval())

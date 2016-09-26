@@ -6,6 +6,8 @@
 
 package com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes;
 
+import javax.faces.validator.Validator;
+
 public abstract class PropertyType {
 
     private String label;
@@ -17,4 +19,5 @@ public abstract class PropertyType {
     public String getLabel() {
         return label;
     }
+
 }

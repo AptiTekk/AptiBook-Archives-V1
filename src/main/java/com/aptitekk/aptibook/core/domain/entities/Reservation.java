@@ -29,19 +29,15 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    @Column(columnDefinition = "TIMESTAMP")
     private DateTime dateCreated = new DateTime(DateTimeZone.UTC);
 
-    @Column(length = 32)
     private String title;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    @Column(columnDefinition = "TIMESTAMP")
     private DateTime startTime;
 
-    @Column(columnDefinition = "TIMESTAMP")
     private DateTime endTime;
 
     @ManyToOne

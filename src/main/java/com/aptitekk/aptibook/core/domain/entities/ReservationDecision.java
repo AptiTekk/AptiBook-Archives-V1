@@ -29,7 +29,6 @@ public class ReservationDecision extends MultiTenantEntity implements Serializab
 
     private boolean approved;
 
-    @Column(length = 512)
     private String comment;
 
     public int getId() {
