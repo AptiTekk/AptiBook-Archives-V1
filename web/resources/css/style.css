@@ -356,6 +356,10 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     background-color: #4272b7 !important;
 }
 
+.interactive-events .fc .fc-event {
+    cursor: pointer;
+}
+
 td.fc-day.fc-today {
     background-color: #e3efff !important
 }

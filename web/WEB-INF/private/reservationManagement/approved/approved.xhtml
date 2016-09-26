@@ -75,7 +75,7 @@
                                                 <div class="form-group">
                                                     <h:outputLabel value="Requested On:"/>
                                                     <b:inputText
-                                                            value="#{timeController.applyTimeZone(reservationDetails.reservation.dateCreated).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                            value="#{timeController.formatFriendly(timeController.applyTimeZone(reservationDetails.reservation.dateCreated))}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>
@@ -85,7 +85,7 @@
                                                 <div class="form-group">
                                                     <h:outputLabel value="Reservation Start Time:"/>
                                                     <b:inputText
-                                                            value="#{timeController.applyTimeZone(reservationDetails.reservation.startTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                            value="#{timeController.formatFriendly(timeController.applyTimeZone(reservationDetails.reservation.startTime))}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>
@@ -93,7 +93,7 @@
                                                 <div class="form-group">
                                                     <h:outputLabel value="Reservation End Time:"/>
                                                     <b:inputText
-                                                            value="#{timeController.applyTimeZone(reservationDetails.reservation.endTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                            value="#{timeController.formatFriendly(timeController.applyTimeZone(reservationDetails.reservation.endTime))}"
                                                             readonly="true"/>
                                                 </div>
                                             </b:column>

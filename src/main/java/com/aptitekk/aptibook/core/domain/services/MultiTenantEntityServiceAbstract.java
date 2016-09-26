@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.entities.MultiTenantEntity;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Local;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

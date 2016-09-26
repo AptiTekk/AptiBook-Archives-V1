@@ -48,8 +48,6 @@ public class MyReservationsController implements Serializable {
 
     private ReservationScheduleModel eventModel;
 
-    private ReservationScheduleEvent selectedEvent;
-
     @PostConstruct
     private void init() {
         buildPresentReservationList();
@@ -90,10 +88,6 @@ public class MyReservationsController implements Serializable {
                 presentReservations.get(reservation.getAsset().getAssetCategory()).add(reservation);
             }
         }
-    }
-
-    public void onEventSelect(SelectEvent selectEvent) {
-        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
     }
 
     public Set<AssetCategory> getAssetCategories() {

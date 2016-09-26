@@ -7,27 +7,25 @@
 package com.aptitekk.aptibook.web.controllers.reservationManagement.calendar;
 
 
-import com.aptitekk.aptibook.core.domain.entities.*;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
-import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
-import org.apache.http.auth.AUTH;
 import org.joda.time.DateTime;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.swing.tree.TreeNode;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Named
 @ViewScoped
@@ -50,14 +48,12 @@ public class CalendarReservationManagementController implements Serializable {
 
     private ReservationScheduleModel scheduleModel;
 
-    private ReservationScheduleEvent selectedEvent;
-
     private List<Reservation> reservations;
 
     @PostConstruct
     private void init() {
         reservations = new ArrayList<>();
-        for(UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
+        for (UserGroup userGroup : authenticationController.getAuthenticatedUser().getUserGroups()) {
             reservations.addAll(userGroupService.getHierarchyDownReservations(userGroup));
         }
 
@@ -70,7 +66,7 @@ public class CalendarReservationManagementController implements Serializable {
                     Reservation next = iterator.next();
                     if (next.getStatus() == Reservation.Status.REJECTED)
                         iterator.remove();
-                    else if(next.getEndTime().isBefore(start) || next.getStartTime().isAfter(end))
+                    else if (next.getEndTime().isBefore(start) || next.getStartTime().isAfter(end))
                         iterator.remove();
                 }
 
@@ -83,14 +79,6 @@ public class CalendarReservationManagementController implements Serializable {
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
-    }
-
-    public void onEventSelect(SelectEvent selectEvent) {
-        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
-    }
-
-    public ReservationScheduleEvent getSelectedEvent() {
-        return selectedEvent;
     }
 
 }

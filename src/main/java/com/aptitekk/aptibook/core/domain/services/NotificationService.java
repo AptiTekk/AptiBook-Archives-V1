@@ -16,6 +16,7 @@ import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.controllers.TimeController;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -96,9 +97,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "Reservation Approved",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString("MM/dd/yyyy h:mm aa")
+                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString("MM/dd/yyyy h:mm aa")
+                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
                             + "</b> has been Approved!",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
@@ -106,9 +107,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "Reservation Rejected",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString("MM/dd/yyyy h:mm aa")
+                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString("MM/dd/yyyy h:mm aa")
+                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
                             + "</b> has been Rejected.",
                     reservation.getUser());
         }

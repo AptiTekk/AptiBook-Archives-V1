@@ -16,9 +16,15 @@
 <ui:composition>
     <h:form id="viewEventModalForm">
         <b:modal styleClass="viewEventModal"
-                 title="Viewing Reservation '#{frontPageController.selectedEvent.title}'">
+                 title="Viewing Reservation '#{viewEventModalController.selectedEvent.title}'">
             <h:panelGroup id="viewEventModalFields">
-                <b:inputText label="Reservation Title:" value="#{frontPageController.selectedEvent.reservation.title}"
+                <b:inputText label="Reservation Title:" value="#{viewEventModalController.selectedEvent.reservation.title}"
+                             readonly="true"/>
+                <b:inputText label="Reserved By:" value="#{viewEventModalController.selectedEvent.reservation.user.fullname}"
+                             readonly="true"/>
+                <b:inputText label="Start Time:" value="#{timeController.formatFriendly(viewEventModalController.selectedEvent.reservation.startTime)}"
+                             readonly="true"/>
+                <b:inputText label="End Time:" value="#{timeController.formatFriendly(viewEventModalController.selectedEvent.reservation.endTime)}"
                              readonly="true"/>
             </h:panelGroup>
             <f:facet name="footer">
