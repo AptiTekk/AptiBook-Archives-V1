@@ -14,27 +14,10 @@
 
 <ui:composition>
     <b:container>
-        <b:row>
-            <b:column colXs="12">
-                <ol class="breadcrumb" style="margin-top: 20px">
-                    <li><h:link outcome="index" value="Home"/></li>
-                    <li>
-                        <b:navCommandLink value="Search" ajax="true" style="cursor:pointer"
-                                          action="#{requestReservationViewController.cancel}"
-                                          update=":includeGroup"/>
-                    </li>
-                    <li><b:navCommandLink value="Request Reservation" ajax="true" style="cursor:pointer"
-                                          update=":includeGroup"/></li>
-                    <li class="active">Success</li>
-                </ol>
-            </b:column>
-        </b:row>
-        <b:row>
-        </b:row>
-        <ui:fragment rendered="#{requestReservationViewController.asset.needsApproval}">
-            <b:row>
+        <b:row style="margin-top: 20px">
+            <ui:fragment rendered="#{requestReservationViewController.asset.needsApproval}">
                 <b:column colXs="12">
-                    <b:panel title="Reservation Requested" look="success">
+                    <b:panel title="Reservation Requested" look="success" collapsible="false">
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for #{requestReservationViewController.successfulReservation.title} has been requested."
@@ -44,12 +27,10 @@
                                 rendered="#{empty requestReservationViewController.successfulReservation.title}"/>
                     </b:panel>
                 </b:column>
-            </b:row>
-        </ui:fragment>
-        <ui:fragment rendered="#{!requestReservationViewController.asset.needsApproval}">
-            <b:row>
+            </ui:fragment>
+            <ui:fragment rendered="#{!requestReservationViewController.asset.needsApproval}">
                 <b:column colXs="12">
-                    <b:panel title="Reservation Reserved" look="success">
+                    <b:panel title="Reservation Reserved" look="success" collapsible="false">
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for #{requestReservationViewController.reservationTitle} has been approved."
@@ -59,8 +40,8 @@
                                 rendered="#{empty requestReservationViewController.reservationTitle}"/>
                     </b:panel>
                 </b:column>
-            </b:row>
-        </ui:fragment>
+            </ui:fragment>
+        </b:row>
         <b:row>
             <b:column colXs="12">
                 <b:button outcome="index" value="Home"/>

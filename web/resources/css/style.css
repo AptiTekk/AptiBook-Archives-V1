@@ -180,6 +180,9 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     box-shadow: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
+
+    background-color: #4272b7;
+    color: white;
 }
 
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
@@ -349,16 +352,32 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 /* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
 
 .fc-event {
-    border-color: #0081c2 !important;
-    background-color: #0081c2 !important;
+    border: none !important;
+    background-color: #4272b7 !important;
+}
+
+.interactive-events .fc .fc-event {
+    cursor: pointer;
 }
 
 td.fc-day.fc-today {
-    background-color: #effaff !important;
+    background-color: #e3efff !important
 }
 
 td.fc-day-number.fc-today {
     color: inherit;
+}
+
+.fc button {
+    border: none;
+}
+
+.fc .fc-button-group button {
+    margin-right: 5px;
+}
+
+.fc .fc-button-group button:last-child {
+    margin-right: 0;
 }
 
 /* ---------------------------------- END SCHEDULE ---------------------------------- */

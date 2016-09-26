@@ -12,6 +12,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.joda.time.DateTimeZone;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Stateful;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;

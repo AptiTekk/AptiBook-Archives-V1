@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.core.domain.services;
 import com.aptitekk.aptibook.core.domain.entities.GlobalEntity;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Local;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

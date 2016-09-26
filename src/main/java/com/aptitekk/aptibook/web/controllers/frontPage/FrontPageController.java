@@ -41,8 +41,6 @@ public class FrontPageController implements Serializable {
 
     private ReservationScheduleModel scheduleModel;
 
-    private ReservationScheduleEvent selectedEvent;
-
     private List<AssetCategory> assetCategories;
 
     private AssetCategory[] assetCategoriesDisplayed;
@@ -72,14 +70,6 @@ public class FrontPageController implements Serializable {
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
-    }
-
-    public void onEventSelect(SelectEvent selectEvent) {
-        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
-    }
-
-    public ReservationScheduleEvent getSelectedEvent() {
-        return selectedEvent;
     }
 
     public List<AssetCategory> getAssetCategories() {

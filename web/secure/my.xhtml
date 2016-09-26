@@ -30,8 +30,8 @@
                         <b:column colXs="12">
                             <p:schedule widgetVar="calendar" value="#{myReservationsController.eventModel}"
                                         timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6"
-                                        allDaySlot="false">
-                                <p:ajax event="eventSelect" listener="#{myReservationsController.onEventSelect}"
+                                        allDaySlot="false" styleClass="interactive-events">
+                                <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"
                                         update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                             </p:schedule>
                         </b:column>
@@ -89,7 +89,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Requested On:"/>
                                                                 <b:inputText
-                                                                        value="#{timeController.applyTimeZone(reservation.dateCreated).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.dateCreated))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
@@ -99,7 +99,7 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation Start Time:"/>
                                                                 <b:inputText
-                                                                        value="#{timeController.applyTimeZone(reservation.startTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.startTime))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
@@ -107,13 +107,14 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation End Time:"/>
                                                                 <b:inputText
-                                                                        value="#{timeController.applyTimeZone(reservation.endTime).toString('EEEE, dd MMMM, yyyy, h:mm aa')}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.endTime))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
                                                     </b:row>
                                                     <b:row>
-                                                        <b:column colXs="12" rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
+                                                        <b:column colXs="12"
+                                                                  rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
                                                             <b:panel title="Field Entries" look="default"
                                                                      collapsible="true"
                                                                      collapsed="true">
