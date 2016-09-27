@@ -16,7 +16,7 @@
 
 <ui:composition>
     <h:form id="editAssetModalForm" enctype="multipart/form-data">
-        <b:modal styleClass="editAssetModal" title="Edit Asset '#{assetSettingsController.selectedAsset.name}'">
+        <b:modal styleClass="editAssetModal" title="Edit Asset '#{editAssetController.selectedAsset.name}'">
             <h:panelGroup id="editAssetModalContent">
                 <div class="form-group">
                     * = Required. Name must be unique.
@@ -29,25 +29,25 @@
                     <b:message for="name" showSummary="false"
                                showDetail="true"/>
                     <h:inputText id="name" styleClass="form-control"
-                                 value="#{assetSettingsController.assetName}"
+                                 value="#{editAssetController.assetName}"
                                  required="true"
                                  requiredMessage="This is required."
                                  maxlength="32">
                         <f:validator binding="#{uniqueAssetValidator}"/>
                         <f:attribute name="assetCategory"
-                                     value="#{assetSettingsController.selectedAsset.assetCategory}"/>
-                        <f:attribute name="exception" value="#{assetSettingsController.selectedAsset}"/>
+                                     value="#{editAssetController.selectedAsset.assetCategory}"/>
+                        <f:attribute name="exception" value="#{editAssetController.selectedAsset}"/>
                     </h:inputText>
                 </div>
                 <div class="form-group">
                     <h:outputLabel value="Tags:"/>
-                    <!--@elvariable id="tag" type="com.aptitekk.aptibook.core.entities.Tag"-->
+                    <!--@elvariable id="tag" type="com.aptitekk.aptibook.core.domain.entities.Tag"-->
                     <pf:autoComplete multiple="true" dropdown="true"
                                      value="#{tagController.selectedAssetTags}"
                                      completeMethod="#{tagController.getAssetTagSuggestions}"
                                      var="tag" itemLabel="#{tag.name}"
                                      itemValue="#{tag}"
-                                     converter="#{TagConverter}"
+                                     converter="#{tagConverter}"
                                      queryDelay="100" styleClass="dropdown">
                         <pf:ajax event="itemSelect" process="@this"/>
                         <pf:ajax event="itemUnselect" process="@this"/>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <h:outputLabel value="Requires Approval:"/>
                     <h:selectBooleanCheckbox id="approvalCheck"
-                                             value="#{assetSettingsController.assetApprovalRequired}"/>
+                                             value="#{editAssetController.assetApprovalRequired}"/>
                 </div>
 
                 <div class="form-group">
@@ -66,10 +66,10 @@
                     <b:message for="ownerGroup"
                                showSummary="false" showDetail="true"/>
                     <pf:tree id="ownerGroup"
-                             value="#{assetSettingsController.tree}"
+                             value="#{editAssetController.tree}"
                              var="node" dynamic="true"
                              selectionMode="single">
-                        <pf:ajax event="select" listener="#{assetSettingsController.onOwnerSelected}"/>
+                        <pf:ajax event="select" listener="#{editAssetController.onOwnerSelected}"/>
                         <pf:treeNode>
                             <h:outputText value="#{node.name}"/>
                         </pf:treeNode>
@@ -85,18 +85,18 @@
                             <div class="btn btn-primary">
                                 <span>Browse...</span>
                                 <h:inputFile id="imageUpload"
-                                             value="#{assetSettingsController.image}"
+                                             value="#{editAssetController.image}"
                                              class="_hiddenUplFile"
                                              validator="#{imageUploadValidator.validate}">
                                     <f:ajax render="imageUploadMessage fileUploadNameField"
-                                            listener="#{assetSettingsController.onFileChosen}"/>
+                                            listener="#{editAssetController.onFileChosen}"/>
                                 </h:inputFile>
                             </div>
                         </div>
                         <h:panelGroup id="fileName">
                             <span class="form-control">
                                 <h:outputText
-                                        value="#{assetSettingsController.fileName}"
+                                        value="#{editAssetController.fileName}"
                                         id="fileUploadNameField"/>
                             </span>
                         </h:panelGroup>
@@ -110,7 +110,7 @@
                                  ajax="true" update=":deleteAssetModalForm"
                                  oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
                 <h:commandButton styleClass="btn btn-primary" value="Save Changes"
-                                 action="#{assetSettingsController.updateSettings()}"
+                                 action="#{editAssetController.updateSettings()}"
                                  actionListener="#{groupTreeController.invalidateTrees}">
                     <f:ajax execute="@form"
                             render="editAssetModalContent :assetsPageContent"

@@ -40,13 +40,13 @@
                 </div>
                 <div class="form-group">
                     <h:outputLabel value="Tags:"/>
-                    <!--@elvariable id="tag" type="com.aptitekk.aptibook.core.entities.Tag"-->
+                    <!--@elvariable id="tag" type="com.aptitekk.aptibook.core.domain.entities.Tag"-->
                     <pf:autoComplete multiple="true" dropdown="true"
                                      value="#{tagController.selectedAssetTags}"
                                      completeMethod="#{tagController.getAssetTagSuggestions}"
                                      var="tag" itemLabel="#{tag.name}"
                                      itemValue="#{tag}"
-                                     converter="#{TagConverter}"
+                                     converter="#{tagConverter}"
                                      queryDelay="100" styleClass="dropdown">
                         <pf:ajax event="itemSelect" process="@this"/>
                         <pf:ajax event="itemUnselect" process="@this"/>

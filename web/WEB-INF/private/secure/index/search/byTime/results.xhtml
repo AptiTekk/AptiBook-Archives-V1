@@ -21,7 +21,7 @@
             <b:column colXs="12">
                 <ol class="breadcrumb" style="margin-top: 20px">
                     <li><h:link outcome="index" value="Home"/></li>
-                    <li class="active">Search</li>
+                    <li class="active">Search By Time</li>
                 </ol>
             </b:column>
         </b:row>
@@ -41,51 +41,35 @@
                         </h:selectOneMenu>
                     </div>
                     <div class="form-group">
-                        on
-                        <p:calendar mode="popup" value="#{searchByTimeController.date}"
-                                    mindate="#{timeSelectionController.minDate}"
-                                    pattern="#{timeSelectionController.friendlyDatePattern}"
-                                    styleClass="inline-calendar-form-control">
-                            <f:ajax event="dateSelect" render="@form"/>
-                        </p:calendar>
-                    </div>
-                    <div class="form-group">
                         from
-                        <h:selectOneMenu value="#{searchByTimeController.startTime}"
-                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
-                                         disabled="#{searchByTimeController.assetCategory == null}">
-                            <f:selectItems
-                                    value="#{timeSelectionController.getStartTimes(timeSelectionController.isToday(searchByTimeController.date))}"
-                                    var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                            <f:ajax render="@form"/>
-                        </h:selectOneMenu>
+                        <b:dateTimePicker format="MM/DD/YYYY h:mm a"
+                                          value="#{searchByTimeController.pickerStartTime}" ajax="true"
+                                          update="endTimePicker" process="@this" ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
                         to
-                        <h:selectOneMenu value="#{searchByTimeController.endTime}"
-                                         styleClass="form-control" converter="#{SegmentedTimeConverter}"
-                                         disabled="#{searchByTimeController.startTime == null}">
-                            <f:selectItems
-                                    value="#{timeSelectionController.getEndTimes(searchByTimeController.startTime)}"
-                                    var="time" itemValue="#{time}" itemLabel="#{time.timeString}"/>
-                            <f:ajax render="@form"/>
-                        </h:selectOneMenu>
+                        <b:dateTimePicker id="endTimePicker" format="MM/DD/YYYY h:mm a"
+                                          minDate="#{searchByTimeController.pickerStartTime}"
+                                          value="#{searchByTimeController.pickerEndTime}"
+                                          disabled="#{searchByTimeController.pickerStartTime == null}"
+                                          ajax="true"
+                                          update="searchButton" process="@this" ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
-                        <h:commandButton styleClass="btn btn-primary" value="Update Time"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.segmentedTimeRange)}">
-                            <f:ajax render=":includeGroup" execute="@form" onevent="loading"/>
-                        </h:commandButton>
+                        <b:commandButton id="searchButton" look="primary" value="Search Again"
+                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
+                                         ajax="true" update=":includeGroup"/>
                     </div>
                 </h:form>
             </b:column>
         </b:row>
+        <hr/>
         <b:row style="margin-top:10px">
-            <b:column colXs="12" colMd="4">
+            <b:column colXs="12" colMd="4" rendered="#{not empty availableAssetsController.filterTags}">
                 <h:form>
                     <b:panel look="default" title="Filters">
                         <h:selectManyCheckbox value="#{availableAssetsController.selectedFilterTags}"
-                                              converter="#{TagConverter}" layout="pageDirection">
+                                              converter="#{tagConverter}" layout="pageDirection">
                             <f:ajax render=":availableAssetsList"/>
                             <f:selectItems value="#{availableAssetsController.filterTags}" var="tag" itemValue="#{tag}"
                                            itemLabel="#{tag.name}"/>
@@ -98,7 +82,6 @@
                     <c:choose>
                         <c:when test="#{empty availableAssetsController.filteredAssets}">
                             <h2>No Available #{searchByTimeController.assetCategory.name} Found!</h2>
-                            <h4>Try adjusting your reservation time or filters.</h4>
                         </c:when>
                         <c:otherwise>
 
@@ -114,7 +97,7 @@
                                     </h:panelGroup>
                                     <div class="form-group">
                                         <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.segmentedTimeRange)}">
+                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}">
                                             <f:ajax render=":includeGroup"/>
                                         </h:commandButton>
                                     </div>

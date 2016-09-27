@@ -6,15 +6,15 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.results;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Tag;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.NotificationService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
-import com.aptitekk.aptibook.core.entities.services.UserGroupService;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Tag;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.web.controllers.frontPage.reserve.RequestReservationViewController;
+import org.joda.time.DateTime;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -48,8 +48,8 @@ public class AvailableAssetsController implements Serializable {
     private List<Tag> filterTags;
     private List<Tag> selectedFilterTags;
 
-    public void searchForAssets(AssetCategory assetCategory, SegmentedTimeRange segmentedTimeRange) {
-        this.availableAssets = reservationService.findAvailableAssets(assetCategory, segmentedTimeRange, 0f);
+    public void searchForAssets(AssetCategory assetCategory, DateTime startTime, DateTime endTime) {
+        this.availableAssets = reservationService.findAvailableAssets(assetCategory, startTime, endTime);
 
         filterTags = assetCategory.getTags();
         selectedFilterTags = new ArrayList<>();
@@ -82,12 +82,14 @@ public class AvailableAssetsController implements Serializable {
      * Loads the RequestReservationViewController with the proper details.
      * The page should be reloaded with ajax after this method is called.
      *
-     * @param asset              The Asset that the user wants to reserve.
-     * @param segmentedTimeRange The Segmented Time Range of the requested reservation.
+     * @param asset     The Asset that the user wants to reserve.
+     * @param startTime The start time of the reservation.
+     * @param endTime   The end time of the reservation.
      */
-    public void onMakeReservationFired(Asset asset, SegmentedTimeRange segmentedTimeRange) {
+    public void onMakeReservationFired(Asset asset, DateTime startTime, DateTime endTime) {
         requestReservationViewController.setAsset(asset);
-        requestReservationViewController.setSegmentedTimeRange(segmentedTimeRange);
+        requestReservationViewController.setStartTime(startTime);
+        requestReservationViewController.setEndTime(endTime);
     }
 
     public List<Asset> getAvailableAssets() {

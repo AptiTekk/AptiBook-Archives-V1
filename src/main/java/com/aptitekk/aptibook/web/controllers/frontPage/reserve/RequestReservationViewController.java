@@ -6,17 +6,19 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.reserve;
 
-import com.aptitekk.aptibook.core.entities.Asset;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.ReservationFieldEntry;
-import com.aptitekk.aptibook.core.entities.services.AssetService;
-import com.aptitekk.aptibook.core.entities.services.NotificationService;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldEntryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
+import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -44,15 +46,23 @@ public class RequestReservationViewController implements Serializable {
     @Inject
     private ReservationFieldEntryService reservationFieldEntryService;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     /**
      * The asset that is being requested for reservation.
      */
     private Asset asset;
 
     /**
-     * The Segmented Time Range of the reservation request.
+     * The reservation start time
      */
-    private SegmentedTimeRange segmentedTimeRange;
+    private DateTime startTime;
+
+    /**
+     * The reservation end time
+     */
+    private DateTime endTime;
 
     /**
      * The Title for reservation being edited.
@@ -73,13 +83,15 @@ public class RequestReservationViewController implements Serializable {
         //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
         asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
 
-        if (reservationService.isAssetAvailableForReservation(asset, segmentedTimeRange)) {
+        if (reservationService.isAssetAvailableForReservation(asset, startTime, endTime)) {
             Reservation reservation = new Reservation();
             reservation.setUser(authenticationController.getAuthenticatedUser());
             reservation.setAsset(asset);
-            reservation.setDate(segmentedTimeRange.getDate());
-            reservation.setTimeStart(segmentedTimeRange.getStartTime());
-            reservation.setTimeEnd(segmentedTimeRange.getEndTime());
+
+            DateTimeZone currentTenantTimezone = tenantSessionService.getCurrentTenantTimezone();
+            reservation.setStartTime(startTime.withZoneRetainFields(currentTenantTimezone));
+            reservation.setEndTime(endTime.withZoneRetainFields(currentTenantTimezone));
+
             reservation.setTitle(reservationTitle);
 
             if (!asset.getNeedsApproval())
@@ -120,7 +132,8 @@ public class RequestReservationViewController implements Serializable {
      */
     public void cancel() {
         this.asset = null;
-        this.segmentedTimeRange = null;
+        this.startTime = null;
+        this.endTime = null;
     }
 
     public Asset getAsset() {
@@ -131,12 +144,20 @@ public class RequestReservationViewController implements Serializable {
         this.asset = asset;
     }
 
-    public SegmentedTimeRange getSegmentedTimeRange() {
-        return segmentedTimeRange;
+    public DateTime getStartTime() {
+        return startTime;
     }
 
-    public void setSegmentedTimeRange(SegmentedTimeRange segmentedTimeRange) {
-        this.segmentedTimeRange = segmentedTimeRange;
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public DateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(DateTime endTime) {
+        this.endTime = endTime;
     }
 
     public String getReservationTitle() {

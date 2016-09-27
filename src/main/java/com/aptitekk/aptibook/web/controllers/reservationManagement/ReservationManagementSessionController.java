@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.SettingsSessionController;
 
 import javax.enterprise.context.SessionScoped;
@@ -26,7 +26,8 @@ public class ReservationManagementSessionController implements Serializable {
     public enum ManagementPage {
         PENDING("Pending", "pending", "hourglass-half", null),
         APPROVED("Approved", "approved", "calendar-check-o", null),
-        REJECTED("Rejected", "rejected", "calendar-times-o", null);
+        REJECTED("Rejected", "rejected", "calendar-times-o", null),
+        CALENDAR("Calendar", "calendar", "calendar", null);
 
         private String name;
         private String fileName;

@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.settings;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -27,8 +27,8 @@ public class SettingsSessionController implements Serializable {
     public enum SettingsPage {
         ASSET_CATEGORIES("Asset Categories", "assetCategories", "folder-open", Permission.Group.ASSET_CATEGORIES, null),
         ASSETS("Assets", "assets", "tags", Permission.Group.ASSETS, ASSET_CATEGORIES),
-        GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
-        USERS("Users", "users", "user", Permission.Group.USERS, GROUPS),
+        USER_GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
+        USERS("Users", "users", "user", Permission.Group.USERS, USER_GROUPS),
         PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, null),
         PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, null);
 

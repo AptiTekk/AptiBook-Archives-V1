@@ -1,0 +1,86 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<ui:composition>
+    <style type="text/css">
+        .notifications-badge {
+            position: absolute;
+            left: 30px;
+            top: 8px;
+            padding: 2px;
+            background-color: #0081c2;
+        }
+    </style>
+
+    <b:navBar brandImg="#{resource['images:Logo.svg']}"
+              brandHref="#{facesNavigationController.getUrlFromNavigationCase('secure')}"
+              fixed="top"
+              onclick="loading_start()" fluid="true">
+        <h:panelGroup
+                layout="block" id="header">
+            <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
+                <h:form>
+                    <b:navbarLinks pull="right" style="margin-right: 20px">
+                        <b:dropMenu value="Reservation Management" iconAwesome="calendar-check-o"
+                                    rendered="#{not empty reservationManagementViewController.pages}">
+                            <ui:repeat value="#{reservationManagementViewController.pages}" var="page">
+                                <b:navLink outcome="manage" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
+                                           onclick="loading_start()"
+                                           active="#{reservationManagementViewController.currentPage == page}"
+                                           style="#{reservationManagementViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
+                                    <f:param name="managementPage" value="#{page.name}"/>
+                                </b:navLink>
+                            </ui:repeat>
+                        </b:dropMenu>
+                        <b:dropMenu value="AptiBook Settings" iconAwesome="cogs"
+                                    rendered="#{not empty settingsViewController.pages}">
+                            <ui:repeat value="#{settingsViewController.pages}" var="page">
+                                <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"
+                                           onclick="loading_start()"
+                                           active="#{settingsViewController.currentPage == page}"
+                                           style="#{settingsViewController.pages.contains(page.parent) ? 'margin-left: 10px;' : ''}">
+                                    <f:param name="settingsPage" value="#{page.name}"/>
+                                </b:navLink>
+                            </ui:repeat>
+                        </b:dropMenu>
+                        <b:dropMenu value="#{authenticationController.authenticatedUser.fullname}"
+                                    iconAwesome="user">
+                            <b:navLink outcome="my" value="My Reservations" iconAwesome="calendar"
+                                       onclick="loading_start()"/>
+                            <b:navLink outcome="myAccount" value="My Account" iconAwesome="pencil"
+                                       onclick="loading_start()"/>
+                            <b:navLink/>
+                            <b:navCommandLink action="#{authenticationController.logout}" value="Sign Out"
+                                              iconAwesome="sign-out" style="cursor:pointer;"/>
+                        </b:dropMenu>
+                        <b:navLink outcome="notifications" iconAwesome="bell"
+                                   onclick="loading_start()" id="notifications">
+                            <ui:fragment
+                                    rendered="#{notificationController.unreadNotifications != null}">
+                                <b:badge styleClass="notifications-badge"
+                                         value="#{notificationController.unreadNotifications.size()}"
+                                         rendered="#{not empty notificationController.unreadNotifications}"/>
+                            </ui:fragment>
+                            <b:growl showSummary="false" showDetail="true" delay="2000" allowDismiss="true"
+                                     animationEnter="animated fadeIn"
+                                     animationExit="animated fadeOut" escape="true" for="notifications"/>
+                        </b:navLink>
+                    </b:navbarLinks>
+                </h:form>
+            </ui:fragment>
+        </h:panelGroup>
+    </b:navBar>
+</ui:composition>
+</html>

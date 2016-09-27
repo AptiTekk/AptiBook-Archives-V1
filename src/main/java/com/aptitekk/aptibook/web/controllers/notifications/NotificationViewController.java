@@ -6,7 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.notifications;
 
-import com.aptitekk.aptibook.core.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -22,9 +25,17 @@ public class NotificationViewController implements Serializable {
     @Inject
     private NotificationController notificationController;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
+    @Inject
+    private HelpController helpController;
+
     @PostConstruct
     private void init() {
         notificationController.markAllAsRead();
+
+        helpController.setCurrentTopic(HelpController.Topic.USER_NOTIFICATIONS);
     }
 
     public List<Notification> getUnreadNotifications() {
@@ -33,6 +44,14 @@ public class NotificationViewController implements Serializable {
 
     public List<Notification> getAllNotifications() {
         return notificationController.getAllNotifications();
+    }
+
+    public String formatNotificationTimeAgo(Notification notification) {
+        if(notification != null) {
+            PrettyTime prettyTime = new PrettyTime();
+            return prettyTime.format(notification.getCreation().withZone(tenantSessionService.getCurrentTenantTimezone()).toLocalDateTime().toDate());
+        }
+        return "Unknown time ago";
     }
 
 }

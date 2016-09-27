@@ -19,38 +19,50 @@
         <b:row id="propertiesPageContent">
             <b:column colXs="12">
                 <h:form id="propertiesEditForm">
-                    <c:forEach items="#{propertiesController.propertyInputGroups}" var="inputGroup">
+                    <c:forEach items="#{editPropertyController.propertyInputGroups}" var="inputGroup">
                         <h:panelGroup id="propertyGroup#{inputGroup.propertyGroup.ordinal()}" layout="block"
                                       styleClass="form-group">
-                            <b:message for="propertyGroup#{inputGroup.propertyGroup.ordinal()}" showSummary="false" showDetail="true"/>
+                            <b:message for="@parent" showSummary="false"
+                                       showDetail="true"/>
                             <h4>#{inputGroup.propertyGroup.friendlyName}</h4>
                         </h:panelGroup>
                         <c:forEach items="#{inputGroup.propertiesInputMap}" var="propertyInput">
-                            <div class="form-group">
-                                <b:message for="propertyField#{propertyInput.key.ordinal()}" showSummary="false"
+                            <h:panelGroup layout="block" styleClass="form-group">
+                                <b:message for="@next" showSummary="false"
                                            showDetail="true"/>
                                 <c:choose>
-                                    <c:when test="#{propertyInput.key.secret}">
-                                        <b:inputSecret id="propertyField#{propertyInput.key.ordinal()}"
-                                                       label="#{propertyInput.key.friendlyName}"
-                                                       value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
-                                                       maxlength="#{propertyInput.key.maxLength}"/>
-                                    </c:when>
-                                    <c:when test="#{propertyInput.key.rows > 1}">
-                                        <b:inputTextarea rows="#{propertyInput.key.rows}"
-                                                         id="propertyField#{propertyInput.key.ordinal()}"
-                                                         label="#{propertyInput.key.friendlyName}"
-                                                         value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
-                                                         maxlength="#{propertyInput.key.maxLength}"/>
-                                    </c:when>
-                                    <c:otherwise>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'SingleLineField'}">
+                                        <!--suppress ELValidationInJSP -->
                                         <b:inputText id="propertyField#{propertyInput.key.ordinal()}"
-                                                     label="#{propertyInput.key.friendlyName}"
+                                                     label="#{propertyInput.key.propertyType.label}"
                                                      value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
-                                                     maxlength="#{propertyInput.key.maxLength}"/>
-                                    </c:otherwise>
+                                                     maxlength="#{propertyInput.key.propertyType.maxLength}" />
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'MultiLineField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:inputTextarea id="propertyField#{propertyInput.key.ordinal()}"
+                                                         label="#{propertyInput.key.propertyType.label}"
+                                                         value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                         rows="#{propertyInput.key.propertyType.rows}"
+                                                         maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'PasswordField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:inputSecret id="propertyField#{propertyInput.key.ordinal()}"
+                                                       label="#{propertyInput.key.propertyType.label}"
+                                                       value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                       maxlength="#{propertyInput.key.propertyType.maxLength}"/>
+                                    </c:when>
+                                    <c:when test="#{propertyInput.key.propertyType.class.simpleName == 'BooleanField'}">
+                                        <!--suppress ELValidationInJSP -->
+                                        <b:switch id="propertyField#{propertyInput.key.ordinal()}"
+                                                  label="#{propertyInput.key.propertyType.label}"
+                                                  value="#{inputGroup.propertiesInputMap[propertyInput.key]}"
+                                                  onText="#{propertyInput.key.propertyType.yesLabel}"
+                                                  offText="#{propertyInput.key.propertyType.noLabel}"/>
+                                    </c:when>
                                 </c:choose>
-                            </div>
+                            </h:panelGroup>
                         </c:forEach>
                         <hr/>
                     </c:forEach>
@@ -58,12 +70,12 @@
                         <div class="btn-toolbar pull-right">
                             <h:commandButton styleClass="btn btn-primary"
                                              value="Save Changes"
-                                             action="#{propertiesController.saveProperties}">
+                                             action="#{editPropertyController.saveProperties}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>
                             <h:commandButton styleClass="btn btn-default"
                                              value="Reset Fields"
-                                             action="#{propertiesController.resetFields}">
+                                             action="#{editPropertyController.resetFields}">
                                 <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
                             </h:commandButton>
                         </div>

@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.User;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
@@ -15,50 +15,45 @@ import javax.validation.constraints.Size;
 public abstract class UserFieldSupplier {
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    @Pattern(regexp = "[A-Za-z0-9_-]+", message = "This may only contain letters, numbers, underscores, and hyphens.")
-    String username;
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
+    protected String username;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    String firstName;
+    protected String firstName;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    String lastName;
-
-    @Size(max = 64, message = "This may only be 64 characters long.")
-    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    String email;
+    protected String lastName;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    String phoneNumber;
+    protected String phoneNumber;
 
     @Size(max = 256, message = "This may only be 256 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    String location;
+    protected String location;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    String password;
+    protected String password;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
-    String confirmPassword;
+    protected String confirmPassword;
 
-    boolean wantsEmailNotifications;
+    protected boolean wantsEmailNotifications;
 
-    TreeNode[] userGroupNodes;
+    protected TreeNode[] userGroupNodes;
 
     /**
      * Resets the fields with the values of the supplied user, or null if the user is null.
      *
      * @param user The user to fill the fields with, or null if they should be filled with null.
      */
-    void resetFields(User user) {
+    protected void resetFields(User user) {
         if (user != null) {
             username = user.getUsername();
             firstName = user.getFirstName();
             lastName = user.getLastName();
-            email = user.getEmail();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             wantsEmailNotifications = user.getWantsEmailNotifications();
@@ -66,7 +61,6 @@ public abstract class UserFieldSupplier {
             username = null;
             firstName = null;
             lastName = null;
-            email = null;
             phoneNumber = null;
             location = null;
             wantsEmailNotifications = true;
@@ -98,14 +92,6 @@ public abstract class UserFieldSupplier {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPhoneNumber() {

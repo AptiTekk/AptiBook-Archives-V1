@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.filters;
 
-import com.aptitekk.aptibook.core.entities.Tenant;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.TenantService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.TenantService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
@@ -86,7 +86,7 @@ public class TenantFilter implements Filter {
             }
 
             //Servlets
-            if (pathSplit[1].matches("ping|images")) {
+            if (pathSplit[1].matches("ping|images|oauth")) {
                 chain.doFilter(request, response);
                 return;
             }
@@ -101,6 +101,7 @@ public class TenantFilter implements Filter {
 
     private void redirectUnauthorized(ServletRequest request, ServletResponse response) throws IOException {
         String parameters = "?";
+        //noinspection RedundantCast
         for (Map.Entry<String, String[]> entry : ((Map<String, String[]>) request.getParameterMap()).entrySet()) {
             String key = entry.getKey();
             String[] value = entry.getValue();
@@ -115,7 +116,7 @@ public class TenantFilter implements Filter {
         String attemptedAccessPath = ((HttpServletRequest) request).getRequestURI();
 
         LogManager.logInfo("Unauthorized access request to " + attemptedAccessPath + parameters);
-        ((HttpServletRequest) request).getSession(true).setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
+        ((HttpServletRequest) request).getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
         ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 

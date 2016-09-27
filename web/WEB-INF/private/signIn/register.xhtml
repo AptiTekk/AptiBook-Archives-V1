@@ -1,0 +1,61 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui" xmlns:o="http://omnifaces.org/ui">
+
+<ui:composition>
+    <o:form id="registerForm" includeRequestParams="true">
+        <b:messages for="@form" showDetail="true" showSummary="false"/>
+        <b:message for="@next" showDetail="true" showSummary="false"/>
+        <b:inputText value="#{registrationController.username}" label="Email Address:" required="true"
+                     requiredMessage="This is required.">
+            <f:validator binding="#{uniqueUserValidator}"/>
+            <f:facet name="prepend">
+                <i class="fa fa-at"/>
+            </f:facet>
+        </b:inputText>
+
+        <b:message for="@next" showDetail="true" showSummary="false"/>
+        <b:inputText value="#{registrationController.firstName}" label="First Name:" required="true"
+                     requiredMessage="This is required."/>
+
+        <b:message for="@next" showDetail="true" showSummary="false"/>
+        <b:inputText value="#{registrationController.lastName}" label="Last Name:" required="true"
+                     requiredMessage="This is required."/>
+
+        <!--@elvariable id="confirmationField" type="javax.faces.component.UIInput"-->
+        <b:message for="@next" showDetail="true" showSummary="false"/>
+        <b:inputSecret id="passwordField" value="#{registrationController.password}" label="Password:" required="true"
+                       requiredMessage="This is required.">
+            <f:validator binding="#{passwordsMatchValidator}"/>
+            <f:attribute name="confirmationField" value="#{confirmationField}"/>
+            <f:facet name="prepend">
+                <i class="fa fa-asterisk"/>
+            </f:facet>
+        </b:inputSecret>
+
+        <b:message for="@next" showDetail="true" showSummary="false"/>
+        <b:inputSecret value="#{registrationController.confirmPassword}" label="Confirm Password:" required="true"
+                       requiredMessage="This is required." binding="#{confirmationField}">
+            <f:facet name="prepend">
+                <i class="fa fa-asterisk"/>
+            </f:facet>
+        </b:inputSecret>
+
+        <b:commandButton value="Register" look="primary" styleClass="btn-large" size="block" ajax="true"
+                         action="#{registrationController.register}" update="@form" process="@form"/>
+
+        <hr/>
+
+        <b:button value="Return to Sign In" outcome="index" look="default" size="block"/>
+    </o:form>
+</ui:composition>
+</html>

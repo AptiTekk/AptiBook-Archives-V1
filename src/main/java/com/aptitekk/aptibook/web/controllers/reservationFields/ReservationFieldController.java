@@ -6,12 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationFields;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.ReservationFieldEntry;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldEntryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;

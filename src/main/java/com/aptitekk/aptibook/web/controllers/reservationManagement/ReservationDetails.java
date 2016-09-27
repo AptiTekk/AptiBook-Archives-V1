@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.ReservationDecision;
-import com.aptitekk.aptibook.core.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.entities.ReservationDecision;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
 import java.util.*;
 

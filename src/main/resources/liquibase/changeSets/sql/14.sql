@@ -1,0 +1,1 @@
+UPDATE reservation SET starttime = date + timestart, endtime = date + timeend;

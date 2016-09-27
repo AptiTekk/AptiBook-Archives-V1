@@ -17,5 +17,12 @@
     <include file="changeSets/5__Add_Reservation_Field_Required.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/6__Add_User_Field_Receive_Emails.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/7__Remove_Asset_Available_Times.xml" relativeToChangelogFile="true"/>
-
+    <include file="changeSets/8__Remove_Email_Enum_Properties.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/9__Google_User_Support.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/10__Remove_Policy_Box_Property.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/11__Add_Tenant_Active_Column.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/12__Add_User_Verified_And_Remove_Google_User.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/13__Add_User_Enum_Status.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/14__Allow_Reservations_Span_Days.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/15__Optimize_Column_Types.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

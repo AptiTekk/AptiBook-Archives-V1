@@ -17,11 +17,11 @@
 <ui:composition>
     <b:modal id="deletionConfirmModal" title="User
                          Deletion Confirmation">
-        Are you sure you want to delete User '#{userEditController.selectedUser.username}'?
+        Are you sure you want to delete User '#{editUserController.selectedUser.username}'?
         <f:facet name="footer">
             <h:commandButton styleClass="btn btn-danger"
                              p:data-dismiss="modal" value="Delete"
-                             action="#{userEditController.deleteSelectedUser}">
+                             action="#{editUserController.deleteSelectedUser}">
                 <f:ajax render=":usersPage" onevent="loading"/>
             </h:commandButton>
             <b:button styleClass="btn btn-default"

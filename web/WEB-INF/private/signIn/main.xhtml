@@ -1,0 +1,40 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+
+<ui:composition>
+    <h:form id="loginForm">
+        <b:messages for="loginForm" showSummary="false" showDetail="true"/>
+        <b:inputText id="usernameInput" label="Email Address:" value="#{authenticationController.username}">
+            <b:focus/>
+        </b:inputText>
+
+        <b:inputSecret id="passwordInput" label="Password:" value="#{authenticationController.password}"/>
+
+        <b:commandButton value="Sign In" look="primary" styleClass="btn-large" size="block"
+                         action="#{authenticationController.login}"
+                         ajax="true" update="@form"/>
+
+        <b:commandButton look="default" size="block" ajax="true"
+                         action="#{oAuthController.signInWithGoogle}" update="@form" rendered="#{oAuthController.googleSignInEnabled}">
+                <b:image library="images" name="google-sign-in.svg" height="18px" />
+        </b:commandButton>
+
+        <hr/>
+
+        <b:button value="Register" outcome="index" look="default" size="block" includeViewParams="true">
+            <f:param name="action" value="register"/>
+        </b:button>
+    </h:form>
+</ui:composition>
+</html>

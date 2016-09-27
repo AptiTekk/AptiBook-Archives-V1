@@ -24,21 +24,25 @@
 
         <b:row id="usersPageContent">
             <b:column colXs="12" colLg="5">
-                <h:form>
+                <h:form id="userTablesForm">
                     <div class="form-group">
-                        <b:dataTable value="#{userEditController.users}" var="authenticatedUser"
+                        <b:message for="userTablesForm" showSummary="false" showDetail="true"/>
+                    </div>
+                    <div class="form-group">
+                        <b:dataTable value="#{editUserController.approvedUsers}" var="authenticatedUser"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
                                      fixedHeader="false" responsive="true" widgetVar="dataTable">
+
                             <h:column>
                                 <f:facet name="header">
                                     <h:outputText value="Username"/>
                                 </f:facet>
                                 <b:navCommandLink value="#{authenticatedUser.username}"
-                                                  action="#{userEditController.setSelectedUser(authenticatedUser)}"
+                                                  action="#{editUserController.setSelectedUser(authenticatedUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
                                                   update=":usersPage"
-                                                  style="cursor: pointer; font-weight: #{userEditController.selectedUser == authenticatedUser ? 'bold' : 'normal'}"/>
+                                                  style="font-weight: #{editUserController.selectedUser == authenticatedUser ? 'bold' : 'normal'}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
@@ -54,209 +58,191 @@
                                   p:data-toggle="modal"
                                   p:data-target=".newUserModal"/>
                     </div>
+                    <hr/>
+                    <h:panelGroup layout="block" styleClass="form-group">
+                        <h4>Users Pending Registration Approval:</h4>
+                        <b:dataTable value="#{editUserController.pendingUsers}" var="pendingUser"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     fixedHeader="false" responsive="true" widgetVar="dataTable">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Username"/>
+                                </f:facet>
+                                <b:navCommandLink value="#{pendingUser.username}"
+                                                  action="#{editUserController.setSelectedUser(pendingUser)}"
+                                                  iconAwesome="pencil-square-o"
+                                                  ajax="true"
+                                                  update=":usersPage"
+                                                  style="font-weight: #{editUserController.selectedUser == pendingUser ? 'bold' : 'normal'}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Full Name"/>
+                                </f:facet>
+                                <h:outputText value="#{pendingUser.fullname}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Approve / Reject"/>
+                                </f:facet>
+                                <b:buttonGroup>
+                                    <b:commandButton value="Approve" look="primary"
+                                                     action="#{editUserController.decideUserApproval(true,pendingUser)}"
+                                                     ajax="true" update=":usersPage"/>
+                                    <b:commandButton value="Reject" look="default"
+                                                     action="#{editUserController.decideUserApproval(false,pendingUser)}"
+                                                     ajax="true" update=":usersPage"/>
+                                </b:buttonGroup>
+                            </h:column>
+
+                        </b:dataTable>
+                    </h:panelGroup>
                 </h:form>
             </b:column>
 
-            <b:column colXs="12" colLg="7">
-                <h:form styleClass="form-horizontal" id="userEditForm">
+            <b:column colXs="12" colLg="6" offsetLg="1">
+                <h:form id="userEditForm">
                     <c:choose>
-                        <c:when test="#{userEditController.selectedUser == null}">
-                            <b:column colXs="9" offsetXs="3">
+                        <c:when test="#{editUserController.selectedUser == null}">
+                            <b:column colXs="12">
                                 <h4>Please select a User.</h4>
                                 <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                             </b:column>
                         </c:when>
                         <c:otherwise>
                             <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>Personal Information:</h4>
-                                    * = Required. Username must be unique.
-                                    <b:message for="userEditForm" showSummary="false" showDetail="true"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Username: *" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <c:choose>
-                                        <c:when test="#{userEditController.selectedUser.admin}">
-                                            <h:outputText styleClass="form-control"
-                                                          value="#{userEditController.username}"
-                                                          p:disabled="true"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
-                                            <h:inputText id="usernameEdit" styleClass="form-control"
-                                                         value="#{userEditController.username}"
-                                                         required="true" requiredMessage="This is required."
-                                                         maxlength="32"/>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="First Name:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="firstNameEdit" styleClass="form-control"
-                                                 value="#{userEditController.firstName}" maxlength="32"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Last Name:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
-                                    <h:inputText id="lastNameEdit" styleClass="form-control"
-                                                 value="#{userEditController.lastName}" maxlength="32"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="E-Mail:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="emailEdit" showSummary="false" showDetail="true"/>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-envelope"/></span>
-                                        <h:inputText id="emailEdit" styleClass="form-control"
-                                                     value="#{userEditController.email}"
-                                                     maxlength="64"/>
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Phone Number:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="phoneEdit" showSummary="false" showDetail="true"/>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-earphone"/></span>
-                                        <h:inputText id="phoneEdit" styleClass="form-control"
-                                                     value="#{userEditController.phoneNumber}"
-                                                     maxlength="32"/>
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Location:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <b:message for="locationEdit" showSummary="false" showDetail="true"/>
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-map-marker"/></span>
-                                        <h:inputText id="locationEdit" styleClass="form-control"
-                                                     value="#{userEditController.location}"
-                                                     maxlength="256"/>
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>Change Password:</h4>
-                                    <b:message for="userEditForm:passwordEdit" showSummary="false" showDetail="true"/>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="New Password:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk"/></span>
-                                        <h:inputSecret id="passwordEdit" styleClass="form-control"
-                                                       value="#{userEditController.password}"
-                                                       maxlength="32"/>
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Confirm New Password:" styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span
-                                                class="glyphicon glyphicon-asterisk"/></span>
-                                        <h:inputSecret styleClass="form-control"
-                                                       value="#{userEditController.confirmPassword}"
-                                                       maxlength="32"/>
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <h:outputLabel value="Recieve Email Notifications:"
-                                               styleClass="col-xs-3 control-label"/>
-                                <b:column colXs="9">
-                                    <div class="input-group">
-                                        <b:switch value="#{userEditController.wantsEmailNotifications}"
-                                                  styleClass="form-control" />
-                                    </div>
-                                </b:column>
-                            </div>
-                            <div class="form-group">
-                                <b:column colXs="9" offsetXs="3">
-                                    <h4>User Groups:</h4>
-                                </b:column>
+                                <h4>Personal Information:</h4>
+                                * = Required. Username must be unique.
+                                <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                             </div>
 
                             <c:choose>
-                                <c:when test="#{userEditController.selectedUser.admin}">
+                                <c:when test="#{editUserController.selectedUser.admin}">
+                                    <b:inputText label="Username:"
+                                                 value="#{editUserController.username}"
+                                                 required="true" requiredMessage="This is required."
+                                                 readonly="true"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
+                                    <b:inputText id="usernameEdit"
+                                                 label="Username:"
+                                                 value="#{editUserController.username}"
+                                                 required="true" requiredMessage="This is required."
+                                                 maxlength="32">
+                                        <f:validator binding="#{uniqueUserValidator}"/>
+                                        <f:attribute name="exception" value="#{editUserController.selectedUser}"/>
+                                    </b:inputText>
+                                </c:otherwise>
+                            </c:choose>
+
+                            <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="firstNameEdit" label="First Name:"
+                                         value="#{editUserController.firstName}" maxlength="32"/>
+
+                            <b:message for="lastNameEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="lastNameEdit" label="Last Name:"
+                                         value="#{editUserController.lastName}" maxlength="32"/>
+
+                            <b:message for="phoneEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="phoneEdit" label="Phone Number:"
+                                         value="#{editUserController.phoneNumber}"
+                                         maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-earphone"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <b:message for="locationEdit" showSummary="false" showDetail="true"/>
+                            <b:inputText id="locationEdit" label="Location:"
+                                         value="#{editUserController.location}"
+                                         maxlength="256">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-map-marker"/>
+                                </f:facet>
+                            </b:inputText>
+
+                            <div class="form-group">
+                                <h4>Change Password:</h4>
+                                <b:message for="userEditForm:passwordEdit" showSummary="false" showDetail="true"/>
+                            </div>
+
+                            <b:inputSecret id="passwordEdit" label="New Password:"
+                                           value="#{editUserController.password}"
+                                           maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-asterisk"/>
+                                </f:facet>
+                            </b:inputSecret>
+
+                            <b:inputSecret label="Confirm New Password:"
+                                           value="#{editUserController.confirmPassword}"
+                                           maxlength="32">
+                                <f:facet name="prepend">
+                                    <span class="glyphicon glyphicon-asterisk"/>
+                                </f:facet>
+                            </b:inputSecret>
+
+                            <b:switch label="Recieve Email Notifications:" onText="Yes" offText="No"
+                                      value="#{editUserController.wantsEmailNotifications}"/>
+
+                            <div class="form-group">
+                                <h4>Assigned User Groups:</h4>
+                            </div>
+
+                            <c:choose>
+                                <c:when test="#{editUserController.selectedUser.admin}">
                                     <div class="form-group">
-                                        <b:column colXs="9" offsetXs="3">
-                                            Administrators are automatically granted full permissions. No User Groups need be assigned.
-                                        </b:column>
+                                        Administrators are automatically granted full permissions. No User Groups need be assigned.
                                     </div>
                                 </c:when>
-                                <c:when test="#{empty groupTreeController.getMultipleSelectedTree(userEditController.selectedUser.userGroups, null, false, false).children}">
+                                <c:when test="#{empty groupTreeController.getMultipleSelectedTree(editUserController.selectedUser.userGroups, null, false, false).children}">
                                     <div class="form-group">
-                                        <b:column colXs="9" offsetXs="3">
-                                            There are no User Groups. You may create them on the User Groups page.
-                                        </b:column>
+                                        There are no User Groups. You may create them on the User Groups page.
                                     </div>
                                 </c:when>
                                 <c:otherwise>
                                     <div class="form-group">
-                                        <b:column colXs="9" offsetXs="3">
-                                            <b:message for="userEditForm:memberGroups"
-                                                       showSummary="false" showDetail="true"/>
-                                        </b:column>
+                                        <b:message for="userEditForm:memberGroups"
+                                                   showSummary="false" showDetail="true"/>
                                     </div>
                                     <div class="form-group">
-                                        <b:column colXs="9" offsetXs="3">
-                                            <b:panel title="Member Of" collapsible="false">
-                                                Toggle the selection of User Groups by clicking on them.
+                                        <b:panel title="Member Of" collapsible="false">
+                                            Toggle the selection of User Groups by clicking on them.
 
-                                                <pf:tree id="memberGroups"
-                                                         value="#{groupTreeController.getMultipleSelectedTree(userEditController.selectedUser.userGroups, null, false, false)}"
-                                                         var="node" selectionMode="checkbox"
-                                                         showUnselectableCheckbox="true"
-                                                         selection="#{userEditController.userGroupNodes}"
-                                                         propagateSelectionDown="false" propagateSelectionUp="false">
-                                                    <pf:treeNode>
-                                                        <h:outputText value="#{node.name}"/>
-                                                    </pf:treeNode>
-                                                </pf:tree>
-                                            </b:panel>
-                                        </b:column>
+                                            <pf:tree id="memberGroups"
+                                                     value="#{groupTreeController.getMultipleSelectedTree(editUserController.selectedUser.userGroups, null, false, false)}"
+                                                     var="node" selectionMode="checkbox"
+                                                     showUnselectableCheckbox="true"
+                                                     selection="#{editUserController.userGroupNodes}"
+                                                     propagateSelectionDown="false" propagateSelectionUp="false">
+                                                <pf:treeNode>
+                                                    <h:outputText value="#{node.name}"/>
+                                                </pf:treeNode>
+                                            </pf:tree>
+                                        </b:panel>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
 
                             <div class="form-group">
-                                <div class="col-xs-offset-3 col-xs-9">
-                                    <div class="btn-toolbar">
-                                        <b:button look="danger"
-                                                  value="Delete User"
-                                                  p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"
-                                                  disabled="#{userEditController.selectedUser.admin}"/>
-                                        <div class="btn-toolbar pull-right">
-                                            <h:commandButton styleClass="btn btn-primary"
-                                                             value="Save Changes"
-                                                             action="#{userEditController.updateSettings()}">
-                                                <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                            </h:commandButton>
-                                            <h:commandButton styleClass="btn btn-default"
-                                                             value="Reset Form"
-                                                             action="#{userEditController.resetFields()}">
-                                                <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
-                                            </h:commandButton>
-                                        </div>
+                                <div class="btn-toolbar">
+                                    <b:button look="danger"
+                                              value="Delete User"
+                                              p:data-toggle="modal"
+                                              p:data-target="#deletionConfirmModal"
+                                              disabled="#{editUserController.selectedUser.admin}"/>
+                                    <div class="btn-toolbar pull-right">
+                                        <h:commandButton styleClass="btn btn-primary"
+                                                         value="Save Changes"
+                                                         action="#{editUserController.updateSettings()}">
+                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                        </h:commandButton>
+                                        <h:commandButton styleClass="btn btn-default"
+                                                         value="Reset Form"
+                                                         action="#{editUserController.resetFields()}">
+                                            <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
+                                        </h:commandButton>
                                     </div>
                                 </div>
                             </div>

@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.permissions;
 
-import com.aptitekk.aptibook.core.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
 
 import java.util.List;
 

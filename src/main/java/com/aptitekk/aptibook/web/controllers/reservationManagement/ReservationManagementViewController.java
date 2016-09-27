@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -39,7 +39,6 @@ public class ReservationManagementViewController implements Serializable {
                             authenticationController.forceUserRedirect();
                             return;
                         }
-
                         reservationManagementSessionController.setCurrentPage(page);
                         break;
                     }

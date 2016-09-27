@@ -6,18 +6,15 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
-import com.aptitekk.aptibook.core.util.time.SegmentedTimeRange;
-import com.aptitekk.aptibook.web.controllers.TimeSelectionController;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import org.joda.time.DateTime;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -28,32 +25,17 @@ public class SearchByTimeController implements Serializable {
     @Inject
     private AssetCategoryService assetCategoryService;
 
-    @Inject
-    private TimeSelectionController timeSelectionController;
-
     private int currentStep = 0;
 
     private List<AssetCategory> assetCategories;
     private AssetCategory assetCategory;
 
-    private Date date = Calendar.getInstance().getTime();
-
-    /**
-     * The SegmentedTimeRange for the selected date, start-time, and end-time.
-     */
-    private SegmentedTimeRange segmentedTimeRange;
-
-    /**
-     * Used in getSegmentedTimeRange to ensure that only one SegmentedTimeRange is generated for the selected date, start-time, and end-time.
-     */
-    private int lastTimeRangeHashcode;
-
-    private SegmentedTime startTime;
-    private SegmentedTime endTime;
+    private DateTime startTime;
+    private DateTime endTime;
 
     @PostConstruct
     private void init() {
-        date = timeSelectionController.getMinDate();
+        startTime = new DateTime();
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -85,43 +67,30 @@ public class SearchByTimeController implements Serializable {
         this.assetCategory = assetCategory;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getPickerStartTime() {
+        return startTime != null ? startTime.toDate() : null;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-        this.startTime = null;
-        this.endTime = null;
+    public void setPickerStartTime(Date pickerStartTime) {
+        startTime = new DateTime(pickerStartTime);
+        if (endTime == null || endTime.isBefore(startTime))
+            endTime = startTime;
     }
 
-    public SegmentedTime getStartTime() {
+    public Date getPickerEndTime() {
+        return endTime != null ? endTime.toDate() : null;
+    }
+
+    public void setPickerEndTime(Date pickerEndTime) {
+        if (pickerEndTime != null)
+            endTime = new DateTime(pickerEndTime);
+    }
+
+    public DateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(SegmentedTime startTime) {
-        this.startTime = startTime;
-        this.endTime = null;
-    }
-
-    public SegmentedTime getEndTime() {
+    public DateTime getEndTime() {
         return endTime;
-    }
-
-    public void setEndTime(SegmentedTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public SegmentedTimeRange getSegmentedTimeRange() {
-        int hashcode = date.hashCode() + startTime.hashCode() + endTime.hashCode();
-        if (lastTimeRangeHashcode == hashcode && segmentedTimeRange != null)
-            return segmentedTimeRange;
-        else {
-            Calendar calendarDate = Calendar.getInstance();
-            calendarDate.setTime(date);
-
-            lastTimeRangeHashcode = hashcode;
-            return segmentedTimeRange = new SegmentedTimeRange(calendarDate, startTime, endTime);
-        }
     }
 }

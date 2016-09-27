@@ -17,7 +17,7 @@
 <ui:composition>
     <h:form id="assignModalForm">
         <b:modal styleClass="assignModal"
-                 title="Change Assignments for '#{permissionsController.assignmentPermission.descriptor.friendlyName}'">
+                 title="Change Assignments for '#{assignPermissionController.assignmentPermission.descriptor.friendlyName}'">
             <h:panelGroup id="assignModalContent">
 
                 <h:panelGroup id="assignModalUsers">
@@ -26,7 +26,7 @@
                         Click on a username to add it to the assigned Users.
                     </div>
                     <div class="form-group">
-                        <b:dataTable value="#{permissionsController.availableUsers.toArray()}" var="user">
+                        <b:dataTable value="#{assignPermissionController.availableUsers.toArray()}" var="user">
                             <h:column>
                                 <f:facet name="header">
                                     Username
@@ -34,8 +34,7 @@
                                 <b:navCommandLink iconAwesome="plus-circle"
                                                   value="#{user.username}"
                                                   ajax="true"
-                                                  action="#{permissionsController.assignUser(user)}"
-                                                  style="cursor: pointer;"
+                                                  action="#{assignPermissionController.assignUser(user)}"
                                                   update="@parent:@parent:@parent"/>
                             </h:column>
                         </b:dataTable>
@@ -45,7 +44,7 @@
                         Click on a username to remove it from the assigned Users.
                     </div>
                     <div class="form-group">
-                        <b:dataTable value="#{permissionsController.assignedUsers.toArray()}" var="user"
+                        <b:dataTable value="#{assignPermissionController.assignedUsers.toArray()}" var="user"
                                      id="assignedUsers">
                             <h:column>
                                 <f:facet name="header">
@@ -54,8 +53,7 @@
                                 <b:navCommandLink iconAwesome="minus-circle"
                                                   value="#{user.username}"
                                                   ajax="true"
-                                                  action="#{permissionsController.unAssignUser(user)}"
-                                                  style="cursor: pointer;"
+                                                  action="#{assignPermissionController.unAssignUser(user)}"
                                                   update="@parent:@parent:@parent"/>
                             </h:column>
                         </b:dataTable>
@@ -68,10 +66,10 @@
                 </div>
                 <div class="form-group">
                     <pf:tree
-                            value="#{groupTreeController.getMultipleSelectedTree(permissionsController.assignmentPermission.userGroups, null, false, false)}"
+                            value="#{groupTreeController.getMultipleSelectedTree(assignPermissionController.assignmentPermission.userGroups, null, false, false)}"
                             var="node" selectionMode="checkbox"
                             showUnselectableCheckbox="true"
-                            selection="#{permissionsController.assignedGroups}"
+                            selection="#{assignPermissionController.assignedGroups}"
                             propagateSelectionDown="false" propagateSelectionUp="false">
                         <pf:treeNode>
                             <h:outputText value="#{node.name}"/>
@@ -83,7 +81,7 @@
             <f:facet name="footer">
                 <b:commandButton value="Save Changes"
                                  look="primary"
-                                 action="#{permissionsController.saveChanges}"
+                                 action="#{assignPermissionController.saveChanges}"
                                  actionListener="#{groupTreeController.invalidateTrees()}"
                                  ajax="true"
                                  update=":permissionsForm"

@@ -6,13 +6,13 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.entities.Permission;
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.UserGroup;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
@@ -36,7 +36,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
     private AuthenticationController authenticationController;
 
     @Inject
-    private UserEditController userEditController;
+    private EditUserController editUserController;
 
     private boolean hasModifyPermission() {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.USERS_MODIFY_ALL);
@@ -51,7 +51,6 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             newUser.setUsername(username);
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
-            newUser.setEmail(email);
             newUser.setPhoneNumber(phoneNumber);
             newUser.setLocation(location);
             newUser.setPassword(Sha256Helper.rawToSha(password));
@@ -84,9 +83,9 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             LogManager.logInfo("New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
-                if (userEditController != null) {
-                    userEditController.refreshUserList();
-                    userEditController.setSelectedUser(newUser);
+                if (editUserController != null) {
+                    editUserController.refreshUserLists();
+                    editUserController.setSelectedUser(newUser);
                 }
             } else {
                 throw new Exception("User not found!");
@@ -107,75 +106,4 @@ public class NewUserController extends UserFieldSupplier implements Serializable
         resetFields(null);
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
-    public TreeNode[] getUserGroupNodes() {
-        return userGroupNodes;
-    }
-
-    public void setUserGroupNodes(TreeNode[] userGroupNodes) {
-        this.userGroupNodes = userGroupNodes;
-    }
 }

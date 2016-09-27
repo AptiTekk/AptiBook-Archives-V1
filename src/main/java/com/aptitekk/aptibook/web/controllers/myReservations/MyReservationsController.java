@@ -6,17 +6,16 @@
 
 package com.aptitekk.aptibook.web.controllers.myReservations;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
-import com.aptitekk.aptibook.core.entities.services.UserService;
-import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
-import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
-import com.aptitekk.aptibook.core.util.time.SegmentedTime;
-import com.aptitekk.aptibook.web.controllers.AuthenticationController;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
+import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
+import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.primefaces.event.SelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +31,7 @@ public class MyReservationsController implements Serializable {
 
     @Inject
     private UserService userService;
+
     @Inject
     private ReservationService reservationService;
 
@@ -41,11 +41,12 @@ public class MyReservationsController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
+    @Inject
+    private HelpController helpController;
+
     private Map<AssetCategory, List<Reservation>> presentReservations;
 
     private ReservationScheduleModel eventModel;
-
-    private ReservationScheduleEvent selectedEvent;
 
     @PostConstruct
     private void init() {
@@ -55,7 +56,7 @@ public class MyReservationsController implements Serializable {
         AssetCategory[] assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
         assetCategories.toArray(assetCategoriesDisplayed);
         eventModel = new ReservationScheduleModel() {
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
                 List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();
@@ -67,6 +68,8 @@ public class MyReservationsController implements Serializable {
                 return allBetweenDates;
             }
         };
+
+        helpController.setCurrentTopic(HelpController.Topic.USER_MY_RESERVATIONS);
     }
 
 
@@ -77,23 +80,14 @@ public class MyReservationsController implements Serializable {
 
             for (Reservation reservation : authenticationController.getAuthenticatedUser().getReservations()) {
 
-                //Make sure that the reservation is after right now.
-                LocalDate reservationDate = new DateTime(reservation.getDate()).toLocalDate();
-                LocalDate nowDate = new DateTime().toLocalDate();
-
-                if (reservationDate.isBefore(nowDate))
-                    continue;
-                if (reservationDate.isEqual(nowDate) && reservation.getTimeEnd().compareTo(new SegmentedTime()) <= 0)
+                //Ignore reservations that have ended.
+                if (reservation.getEndTime().isBeforeNow())
                     continue;
 
                 presentReservations.putIfAbsent(reservation.getAsset().getAssetCategory(), new ArrayList<>());
                 presentReservations.get(reservation.getAsset().getAssetCategory()).add(reservation);
             }
         }
-    }
-
-    public void onEventSelect(SelectEvent selectEvent) {
-        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
     }
 
     public Set<AssetCategory> getAssetCategories() {
@@ -110,10 +104,6 @@ public class MyReservationsController implements Serializable {
 
     public void setEventModel(ReservationScheduleModel eventModel) {
         this.eventModel = eventModel;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
     }
 
 }

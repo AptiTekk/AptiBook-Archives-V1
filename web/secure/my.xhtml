@@ -11,7 +11,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui" xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html">
 
-<ui:composition template="/WEB-INF/templates/default_header.xhtml">
+<ui:composition template="/WEB-INF/templates/formats/default.xhtml">
     <ui:define name="content">
 
         <b:container>
@@ -29,9 +29,9 @@
                     <b:row style="margin-top: 20px;">
                         <b:column colXs="12">
                             <p:schedule widgetVar="calendar" value="#{myReservationsController.eventModel}"
-                                        timeZone="#{myReservationsController.timeZone}" aspectRatio="1.6"
-                                        allDaySlot="false">
-                                <p:ajax event="eventSelect" listener="#{myReservationsController.onEventSelect}"
+                                        timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6"
+                                        allDaySlot="false" styleClass="interactive-events">
+                                <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"
                                         update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                             </p:schedule>
                         </b:column>
@@ -89,39 +89,32 @@
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Requested On:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.formattedDateCreated}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.dateCreated))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
                                                     </b:row>
                                                     <b:row>
-                                                        <b:column colXs="12" colSm="4">
-                                                            <div class="form-group">
-                                                                <h:outputLabel value="Reservation Date:"/>
-                                                                <b:inputText
-                                                                        value="#{reservation.formattedDate}"
-                                                                        readonly="true"/>
-                                                            </div>
-                                                        </b:column>
-                                                        <b:column colXs="12" colSm="4">
+                                                        <b:column colXs="12" colSm="6">
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation Start Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.timeStart.timeString}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.startTime))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
-                                                        <b:column colXs="12" colSm="4">
+                                                        <b:column colXs="12" colSm="6">
                                                             <div class="form-group">
                                                                 <h:outputLabel value="Reservation End Time:"/>
                                                                 <b:inputText
-                                                                        value="#{reservation.timeEnd.timeString}"
+                                                                        value="#{timeController.formatFriendly(timeController.applyTimeZone(reservation.endTime))}"
                                                                         readonly="true"/>
                                                             </div>
                                                         </b:column>
                                                     </b:row>
                                                     <b:row>
-                                                        <b:column colXs="12">
+                                                        <b:column colXs="12"
+                                                                  rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
                                                             <b:panel title="Field Entries" look="default"
                                                                      collapsible="true"
                                                                      collapsed="true">

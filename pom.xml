@@ -216,10 +216,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
             <artifactId>jpa-postgresql</artifactId>
         </dependency>
         <dependency>
@@ -242,13 +238,30 @@
             <artifactId>liquibase-cdi</artifactId>
             <version>3.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>3.0.14.Final</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.8.3</version>
+        </dependency>
+
         <!-- End Java EE Dependencies -->
 
         <!-- Front-End Dependencies -->
         <dependency>
+            <scope>system</scope>
             <groupId>net.bootsfaces</groupId>
             <artifactId>bootsfaces</artifactId>
-            <version>0.9.0</version>
+            <version>0.9.2-SNAPSHOT</version>
+            <systemPath>${project.basedir}/lib/bootsfaces-0.9.2-SNAPSHOT.jar</systemPath>
+            <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
@@ -269,26 +282,24 @@
 
         <!-- Google Dependencies -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-servlet</artifactId>
-            <version>1.21.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-calendar</artifactId>
-            <version>v3-rev173-1.21.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>1.21.0</version>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-apis</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <!-- End Google Dependencies -->
+
+        <!-- Time Dependencies -->
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>3.2.7.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.4</version>
+        </dependency>
+        <!-- End Time Dependencies -->
 
         <dependency>
             <groupId>commons-io</groupId>
@@ -301,22 +312,10 @@
             <version>0.4.8</version>
         </dependency>
         <dependency>
-            <groupId>org.ocpsoft.prettytime</groupId>
-            <artifactId>prettytime</artifactId>
-            <version>3.2.7.Final</version>
+            <groupId>com.sparkpost</groupId>
+            <artifactId>sparkpost-lib</artifactId>
+            <version>0.16.1</version>
         </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.9.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.mail</groupId>
-            <artifactId>javax.mail</artifactId>
-            <version>1.5.5</version>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
 </project>

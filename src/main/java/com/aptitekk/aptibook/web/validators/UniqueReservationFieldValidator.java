@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.validators;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.ReservationField;
-import com.aptitekk.aptibook.core.entities.services.ReservationFieldService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ReservationField;
+import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.enterprise.context.RequestScoped;
@@ -46,7 +46,7 @@ public class UniqueReservationFieldValidator implements Validator, Serializable 
             LogManager.logError("Could not Validate:\n" +
                     "input: " + inputText + "\n" +
                     "assetCategory: " + assetCategory + "\n" +
-                    "exemption: " + exceptionAttribute + "\n" +
+                    "exception: " + exceptionAttribute + "\n" +
                     "service: " + reservationFieldService);
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error during validation."));
         }

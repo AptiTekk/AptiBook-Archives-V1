@@ -16,7 +16,7 @@
 <ui:composition>
     <h:panelGroup layout="block" id="permissionsPage">
         <h:form id="permissionsForm">
-            <c:forEach items="#{permissionsController.permissionDetailsList}" var="permissionDetails">
+            <c:forEach items="#{assignPermissionController.permissionDetailsList}" var="permissionDetails">
                 <b:row>
                     <b:column colXs="12">
                         <h3>#{permissionDetails.group.friendlyName}</h3>
@@ -70,7 +70,7 @@
                             <div class="form-group">
                                 <b:commandButton look="default"
                                                  value="Change Assignments"
-                                                 action="#{permissionsController.setAssignmentPermission(permission)}"
+                                                 action="#{assignPermissionController.setAssignmentPermission(permission)}"
                                                  ajax="true" update=":assignModalForm"
                                                  oncomplete="$('.assignModal').modal();"/>
                             </div>

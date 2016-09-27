@@ -1,0 +1,42 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+<ui:composition>
+    <h:form id="helpModalForm">
+        <b:modal styleClass="helpModal" title="Quick Help">
+            <ui:fragment rendered="#{not empty helpController.popularTopicTitles}">
+                <h4>Popular Topics</h4>
+                <p>Listed are some popular help topics for this page. (Links will open in a new tab.)</p>
+                <ul>
+                    <ui:repeat value="#{helpController.popularTopicTitles.toArray()}" var="popularTopicTitle">
+                        <li>
+                            <a target="_blank" href="#{helpController.getPopularTopicURL(popularTopicTitle)}">#{popularTopicTitle}</a>
+                        </li>
+                    </ui:repeat>
+                </ul>
+                <hr/>
+                <h4>Not what you're looking for?</h4>
+            </ui:fragment>
+            <ui:fragment rendered="#{empty helpController.popularTopicTitles}">
+                <h4>Need Support?</h4>
+            </ui:fragment>
+            <p>We have a great knowledgebase full of many informative topics. Most questions already have answers, saving you time and effort.</p>
+            <p> If you can't find what you're looking for, let us know! We will do our best to answer your questions.</p>
+            <f:facet name="footer">
+                <b:button value="Visit Our Knowledgebase" look="primary"
+                          onclick="window.open('https://support.aptitekk.com/');"/>
+                <b:button value="Close" look="default" onclick="$('.helpModal').modal('hide')"/>
+            </f:facet>
+        </b:modal>
+    </h:form>
+</ui:composition>
+</html>

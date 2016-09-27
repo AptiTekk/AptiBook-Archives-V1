@@ -48,8 +48,8 @@
                 <h3>Reservation Calendar</h3>
                 <hr/>
                 <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
-                            timeZone="#{frontPageController.timeZone}" aspectRatio="1.6" allDaySlot="false">
-                    <p:ajax event="eventSelect" listener="#{frontPageController.onEventSelect}"
+                            timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6" allDaySlot="false" styleClass="interactive-events">
+                    <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"
                             update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                 </p:schedule>
             </b:column>

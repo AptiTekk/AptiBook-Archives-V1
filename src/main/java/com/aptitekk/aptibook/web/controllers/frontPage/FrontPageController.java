@@ -6,12 +6,15 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.services.AssetCategoryService;
-import com.aptitekk.aptibook.core.entities.services.ReservationService;
-import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleEvent;
-import com.aptitekk.aptibook.core.util.schedule.ReservationScheduleModel;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
+import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import org.joda.time.DateTime;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ScheduleModel;
 
@@ -20,10 +23,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 @Named
 @ViewScoped
@@ -35,9 +36,10 @@ public class FrontPageController implements Serializable {
     @Inject
     private AssetCategoryService assetCategoryService;
 
-    private ReservationScheduleModel scheduleModel;
+    @Inject
+    private HelpController helpController;
 
-    private ReservationScheduleEvent selectedEvent;
+    private ReservationScheduleModel scheduleModel;
 
     private List<AssetCategory> assetCategories;
 
@@ -50,7 +52,7 @@ public class FrontPageController implements Serializable {
         assetCategories.toArray(assetCategoriesDisplayed);
         scheduleModel = new ReservationScheduleModel() {
             @Override
-            public List<Reservation> getReservationsBetweenDates(Calendar start, Calendar end) {
+            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
                 List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();
@@ -62,22 +64,12 @@ public class FrontPageController implements Serializable {
                 return allBetweenDates;
             }
         };
+
+        helpController.setCurrentTopic(HelpController.Topic.FRONT_PAGE);
     }
 
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
-    }
-
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
-    }
-
-    public void onEventSelect(SelectEvent selectEvent) {
-        selectedEvent = (ReservationScheduleEvent) selectEvent.getObject();
-    }
-
-    public ReservationScheduleEvent getSelectedEvent() {
-        return selectedEvent;
     }
 
     public List<AssetCategory> getAssetCategories() {

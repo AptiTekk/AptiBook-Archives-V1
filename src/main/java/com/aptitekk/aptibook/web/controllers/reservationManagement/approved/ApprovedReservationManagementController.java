@@ -6,9 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement.approved;
 
-import com.aptitekk.aptibook.core.entities.AssetCategory;
-import com.aptitekk.aptibook.core.entities.Reservation;
-import com.aptitekk.aptibook.core.entities.services.UserGroupService;
+import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Reservation;
+import com.aptitekk.aptibook.core.domain.services.UserGroupService;
+import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetails;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetailsController;
 
@@ -29,6 +30,9 @@ public class ApprovedReservationManagementController implements Serializable {
     private ReservationDetailsController reservationDetailsController;
 
     @Inject
+    private HelpController helpController;
+
+    @Inject
     private UserGroupService userGroupService;
 
     private Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap;
@@ -36,6 +40,8 @@ public class ApprovedReservationManagementController implements Serializable {
     @PostConstruct
     public void init() {
         buildReservationList();
+
+        helpController.setCurrentTopic(HelpController.Topic.RESERVATION_MANAGEMENT_APPROVED);
     }
 
     private void buildReservationList() {

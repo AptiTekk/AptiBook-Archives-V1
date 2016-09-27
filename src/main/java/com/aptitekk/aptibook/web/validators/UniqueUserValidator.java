@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.validators;
 
-import com.aptitekk.aptibook.core.entities.User;
-import com.aptitekk.aptibook.core.entities.services.UserService;
+import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -28,12 +28,12 @@ public class UniqueUserValidator implements Validator, Serializable {
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
-        Object exemptionAttribute = uiComponent.getAttributes().get("exemption");
+        Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
         if (inputText != null && inputText instanceof String && userService != null) {
             User otherUser = userService.findByName((String) inputText);
             if (otherUser != null) {
-                if (exemptionAttribute != null && exemptionAttribute instanceof User && otherUser.equals(exemptionAttribute))
+                if (exceptionAttribute != null && exceptionAttribute instanceof User && otherUser.equals(exceptionAttribute))
                     return;
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User with this name already exists."));
             }
