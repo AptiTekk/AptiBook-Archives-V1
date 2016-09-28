@@ -123,7 +123,7 @@ public class TenantSynchronizer {
             }
         }
 
-        tenantManagementService.refreshAllowedTenants();
+        tenantManagementService.refresh();
         LogManager.logDebug("[TenantSynchronizer] Synchronization Complete.");
     }
 
