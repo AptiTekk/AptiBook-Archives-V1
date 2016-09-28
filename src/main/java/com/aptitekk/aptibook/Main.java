@@ -76,7 +76,6 @@ public class Main {
                 if (file.isDirectory())
                     recursiveAddAsClassesResource(deployment, file);
                 else {
-                    System.out.println(file.getPath());
                     if (file.getPath().startsWith(RESOURCES.getPath())) {
                         String filePath = file.getPath().substring(RESOURCES.getPath().length() + 1).replaceAll("\\\\", "/");
                         deployment.addAsWebInfResource(new ClassLoaderAsset(filePath, Main.class.getClassLoader()), "classes/" + filePath);
@@ -93,7 +92,6 @@ public class Main {
                 if (file.isDirectory())
                     recursiveAddAsWebResource(deployment, file);
                 else {
-                    System.out.println(file.getPath());
                     if (file.getPath().startsWith(WEB_INF.getPath())) {
                         if (file.getName().equals("web.xml")) {
                             deployment.setWebXML(file);
