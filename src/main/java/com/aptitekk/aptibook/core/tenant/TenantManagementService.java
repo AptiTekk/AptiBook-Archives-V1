@@ -37,11 +37,15 @@ public class TenantManagementService {
     @PostConstruct
     private void init()
     {
+        refresh();
+    }
+
+    public void refresh() {
         refreshAllowedTenants();
         refreshDateTimeZones();
     }
 
-    public void refreshAllowedTenants() {
+    private void refreshAllowedTenants() {
         allowedTenants = new HashMap<>();
 
         for (Tenant tenant : tenantService.getAll()) {
@@ -50,7 +54,7 @@ public class TenantManagementService {
         }
     }
 
-    public void refreshDateTimeZones() {
+    private void refreshDateTimeZones() {
         dateTimeZones = new HashMap<>();
 
         for(Tenant tenant : tenantService.getAll()) {

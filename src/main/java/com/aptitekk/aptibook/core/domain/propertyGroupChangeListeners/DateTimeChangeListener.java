@@ -19,6 +19,6 @@ public class DateTimeChangeListener implements Property.Group.ChangeListener {
 
     @Override
     public void onPropertiesChanged(Property.Group propertyGroup) {
-        tenantManagementService.refreshDateTimeZones();
+        tenantManagementService.refresh();
     }
 }
