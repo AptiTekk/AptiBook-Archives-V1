@@ -30,7 +30,7 @@ public class TimeController implements Serializable {
         if (dateTime == null)
             return null;
 
-        return dateTime.withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+        return dateTime.withZoneSameInstant(tenantSessionService.getCurrentTenantZoneId());
     }
 
     public TimeZone getCurrentTimeZone() {

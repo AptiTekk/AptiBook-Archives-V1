@@ -15,6 +15,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ public class SearchByTimeController implements Serializable {
     @PostConstruct
     private void init() {
         startTime = ZonedDateTime.now().withZoneSameInstant(tenantSessionService.getCurrentTenantZoneId());
+        endTime = startTime;
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -72,22 +74,22 @@ public class SearchByTimeController implements Serializable {
     }
 
     public Date getPickerStartTime() {
-        return startTime != null ? Date.from(startTime.toInstant()) : null;
+        return startTime != null ? Date.from(startTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant()) : null;
     }
 
     public void setPickerStartTime(Date pickerStartTime) {
-        startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), tenantSessionService.getCurrentTenantZoneId());
+        startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
         if (endTime == null || endTime.isBefore(startTime))
             endTime = startTime;
     }
 
     public Date getPickerEndTime() {
-        return endTime != null ? Date.from(endTime.toInstant()) : null;
+        return Date.from(endTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant());
     }
 
     public void setPickerEndTime(Date pickerEndTime) {
         if (pickerEndTime != null)
-            endTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), tenantSessionService.getCurrentTenantZoneId());
+            endTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
     }
 
     public ZonedDateTime getStartTime() {
