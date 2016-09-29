@@ -8,10 +8,9 @@ package com.aptitekk.aptibook;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
-import org.wildfly.swarm.container.Container;
+import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.infinispan.InfinispanFraction;
-import org.wildfly.swarm.jpa.postgresql.PostgreSQLJPAFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 
 import java.io.File;
@@ -23,16 +22,17 @@ public class Main {
     private static final File WEB_INF = new File(WEB, "WEB-INF");
 
     public static void main(String[] args) throws Exception {
-        Container container = new Container();
+        Swarm swarm = new Swarm();
 
         //Configure PostgreSQLDS
-        container.fraction(new DatasourcesFraction()
-                .jdbcDriver("postgresql", (d) -> {
+        swarm.fraction(new DatasourcesFraction()
+                .jdbcDriver("org.postgresql", (d) -> {
                     d.driverClassName("org.postgresql.Driver");
+                    d.xaDatasourceClass("org.postgresql.xa.PGXADataSource");
                     d.driverModuleName("org.postgresql");
                 })
                 .dataSource("PostgreSQLDS", (ds) -> {
-                    ds.driverName("postgresql");
+                    ds.driverName("org.postgresql");
                     ds.connectionUrl(System.getenv("JDBC_DATABASE_URL"));
                     ds.userName(System.getenv("JDBC_DATABASE_USERNAME"));
                     ds.password(System.getenv("JDBC_DATABASE_PASSWORD"));
@@ -40,18 +40,20 @@ public class Main {
         );
 
         //Enable Infinispan Caching
-        container.fraction(InfinispanFraction.createDefaultFraction());
+        swarm.fraction(InfinispanFraction.createDefaultFraction());
 
-        //Disable "ExampleDS" default datasource; make default PostgreSQLDS.
-        container.fraction(new PostgreSQLJPAFraction()
+        /*//Disable "ExampleDS" default datasource; make default PostgreSQLDS.
+        swarm.fraction(new PostgreSQLJPAFraction()
                 .inhibitDefaultDatasource()
                 .defaultDatasource("java:jboss/datasources/PostgreSQLDS")
-        );
+        );*/
 
-        container.start();
+        swarm.start();
 
         // ---------------------------- ShrinkWrap WAR Generation ----------------------------
         WARArchive deployment = ShrinkWrap.create(WARArchive.class);
+
+        deployment.addModule("org.postgresql");
 
         //Add all classes
         deployment.addPackages(true, "com.aptitekk.aptibook");
@@ -66,7 +68,7 @@ public class Main {
         deployment.addAllDependencies();
         // ---------------------------- END ShrinkWrap WAR Generation ------------------------
 
-        container.deploy(deployment);
+        swarm.deploy(deployment);
     }
 
     private static void recursiveAddAsClassesResource(WARArchive deployment, File root) {

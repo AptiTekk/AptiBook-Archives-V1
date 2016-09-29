@@ -7,7 +7,7 @@
           <option name="environmentProperties">
             <map>
               <entry key="JDBC_DATABASE_PASSWORD" value="ejayjbMRNG1O@" />
-              <entry key="JDBC_DATABASE_URL" value="jdbc:postgresql://util.aptitekk.com:2000/agenda_dev1?user=agenda&amp;password=ejayjbMRNG1O@" />
+              <entry key="JDBC_DATABASE_URL" value="jdbc:postgresql://util.aptitekk.com:2000/agenda_dev1" />
               <entry key="JDBC_DATABASE_USERNAME" value="agenda" />
               <entry key="WOOCOMMERCE_CK" value="ck_d9f38a0a886d962609f98c3de96eb868224f4b6c" />
               <entry key="WOOCOMMERCE_CS" value="cs_829136f6e72a6a70436ebb38e22055bfb2635d0e" />
