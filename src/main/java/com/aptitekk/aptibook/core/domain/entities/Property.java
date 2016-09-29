@@ -13,7 +13,6 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.components.propertyTypes.BooleanField;
 import com.aptitekk.aptibook.web.components.propertyTypes.SingleLineField;
 import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.PropertyType;
-import org.joda.time.DateTimeZone;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.UnsatisfiedResolutionException;
@@ -24,6 +23,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.validator.ValidatorException;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.Set;
 
 @Entity
@@ -86,8 +86,8 @@ public class Property extends MultiTenantEntity implements Serializable {
 
         DATE_TIME_TIMEZONE("UTC", Group.DATE_TIME, new SingleLineField("Timezone", 32), (key, submittedValue) -> {
             try {
-                DateTimeZone dateTimeZone = DateTimeZone.forID(submittedValue);
-                if (dateTimeZone == null)
+                ZoneId zoneId = ZoneId.of(submittedValue);
+                if (zoneId == null)
                     throw new Exception("Timezone not found");
             } catch (Exception e) {
                 throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The specified timezone was invalid."));

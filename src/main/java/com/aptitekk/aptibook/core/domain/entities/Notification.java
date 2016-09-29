@@ -12,12 +12,13 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.ocpsoft.prettytime.PrettyTime;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 
 @Entity
@@ -34,7 +35,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
     private String body;
 
-    private DateTime creation = new DateTime(DateTimeZone.UTC);
+    private ZonedDateTime creation = ZonedDateTime.now();
 
     private Boolean notif_read = false;
 
@@ -80,12 +81,8 @@ public class Notification extends MultiTenantEntity implements Serializable {
         this.body = body;
     }
 
-    public DateTime getCreation() {
+    public ZonedDateTime getCreation() {
         return creation;
-    }
-
-    public void setCreation(DateTime creation) {
-        this.creation = creation;
     }
 
     public Boolean getRead() {

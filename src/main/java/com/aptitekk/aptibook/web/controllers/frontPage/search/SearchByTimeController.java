@@ -8,13 +8,14 @@ package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
 import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
-import org.joda.time.DateTime;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,17 +26,20 @@ public class SearchByTimeController implements Serializable {
     @Inject
     private AssetCategoryService assetCategoryService;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     private int currentStep = 0;
 
     private List<AssetCategory> assetCategories;
     private AssetCategory assetCategory;
 
-    private DateTime startTime;
-    private DateTime endTime;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
 
     @PostConstruct
     private void init() {
-        startTime = new DateTime();
+        startTime = ZonedDateTime.now().withZoneSameInstant(tenantSessionService.getCurrentTenantZoneId());
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -68,29 +72,29 @@ public class SearchByTimeController implements Serializable {
     }
 
     public Date getPickerStartTime() {
-        return startTime != null ? startTime.toDate() : null;
+        return startTime != null ? Date.from(startTime.toInstant()) : null;
     }
 
     public void setPickerStartTime(Date pickerStartTime) {
-        startTime = new DateTime(pickerStartTime);
+        startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), tenantSessionService.getCurrentTenantZoneId());
         if (endTime == null || endTime.isBefore(startTime))
             endTime = startTime;
     }
 
     public Date getPickerEndTime() {
-        return endTime != null ? endTime.toDate() : null;
+        return endTime != null ? Date.from(endTime.toInstant()) : null;
     }
 
     public void setPickerEndTime(Date pickerEndTime) {
         if (pickerEndTime != null)
-            endTime = new DateTime(pickerEndTime);
+            endTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), tenantSessionService.getCurrentTenantZoneId());
     }
 
-    public DateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public DateTime getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 }

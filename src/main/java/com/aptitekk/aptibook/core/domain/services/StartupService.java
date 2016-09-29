@@ -6,6 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.cron.TenantSynchronizer;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,7 @@ import javax.ejb.Startup;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.TimeZone;
 
 @Startup
 @Singleton
@@ -23,11 +25,18 @@ public class StartupService implements Serializable {
     @Inject
     private TenantService tenantService;
 
+    @Inject
+    private TenantSynchronizer tenantSynchronizer;
+
     @PostConstruct
     public void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+
         for (Tenant tenant : tenantService.getAll()) {
             tenantService.ensureTenantIntegrity(tenant);
         }
+
+        tenantSynchronizer.synchronizeTenants();
     }
 
 
