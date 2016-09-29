@@ -7,16 +7,12 @@
 package com.aptitekk.aptibook.core.domain.converters;
 
 import com.aptitekk.aptibook.DefaultTest;
-import com.aptitekk.aptibook.TestArchiver;
-import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.wildfly.swarm.undertow.WARArchive;
 
 import java.util.Date;
 

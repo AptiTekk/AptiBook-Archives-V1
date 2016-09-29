@@ -7,7 +7,6 @@
 package com.aptitekk.aptibook;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 import org.wildfly.swarm.undertow.WARArchive;
@@ -16,14 +15,16 @@ public abstract class DefaultTest {
 
     @CreateSwarm
     public static Swarm newContainer() throws Exception {
-        Swarm swarm = new Swarm();
-
-        return swarm;
+        return SwarmBuilder.buildSwarm();
     }
 
     @Deployment
     public static WARArchive createDeployment() {
-        return TestArchiver.buildArchive();
+        try {
+            return SwarmBuilder.buildDeployment();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
