@@ -65,7 +65,7 @@
                     <b:dateTimePicker id="startTimePicker" format="MM/DD/YYYY h:mm a"
                                       value="#{searchByTimeController.pickerStartTime}" ajax="true"
                                       useCurrent="false"
-                                      update="endTimePicker searchButton" process="@this" mode="inline"
+                                      update="endTimePicker searchButton" process="@this" sideBySide="true"
                                       ondtchange="ajax:true"/>
 
                     <h:outputText value="Select an End Time" styleClass="lead"/>
@@ -74,7 +74,7 @@
                                       value="#{searchByTimeController.pickerEndTime}"
                                       useCurrent="false"
                                       disabled="#{searchByTimeController.pickerStartTime == null}" ajax="true"
-                                      update="searchButton" process="@this" mode="inline" ondtchange="ajax:true"/>
+                                      update="searchButton" process="@this" sideBySide="true" ondtchange="ajax:true"/>
                 </b:column>
             </b:row>
 

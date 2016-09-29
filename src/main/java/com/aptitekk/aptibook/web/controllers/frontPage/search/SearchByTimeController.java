@@ -40,7 +40,8 @@ public class SearchByTimeController implements Serializable {
 
     @PostConstruct
     private void init() {
-        startTime = ZonedDateTime.now().withZoneSameInstant(tenantSessionService.getCurrentTenantZoneId());
+        //Set Start and End times to this moment in time, formatted for the tenant's timezone.
+        startTime = ZonedDateTime.now(tenantSessionService.getCurrentTenantZoneId());
         endTime = startTime;
         assetCategories = assetCategoryService.getAll();
     }
@@ -74,22 +75,34 @@ public class SearchByTimeController implements Serializable {
     }
 
     public Date getPickerStartTime() {
-        return startTime != null ? Date.from(startTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant()) : null;
+        //Convert ZonedDateTime of tenant's timezone to Date using same local time.
+        return Date.from(startTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant());
     }
 
     public void setPickerStartTime(Date pickerStartTime) {
-        startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
-        if (endTime == null || endTime.isBefore(startTime))
-            endTime = startTime;
+        if (pickerStartTime != null) {
+            //Convert Date from picker to ZonedDateTime of tenant's timezone using same local time.
+            startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+            //Make sure end time isn't before start time.
+            if (endTime.isBefore(startTime))
+                endTime = startTime;
+        }
     }
 
     public Date getPickerEndTime() {
+        //Convert ZonedDateTime of tenant's timezone to Date using same local time.
         return Date.from(endTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant());
     }
 
     public void setPickerEndTime(Date pickerEndTime) {
-        if (pickerEndTime != null)
-            endTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+        if (pickerEndTime != null) {
+            //Convert Date from picker to ZonedDateTime of tenant's timezone using same local time.
+            ZonedDateTime newEndTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+
+            //Make sure we don't somehow reserve back in time.
+            if (!newEndTime.isBefore(startTime))
+                endTime = newEndTime;
+        }
     }
 
     public ZonedDateTime getStartTime() {
