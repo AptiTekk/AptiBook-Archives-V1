@@ -14,12 +14,12 @@ import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.web.controllers.frontPage.reserve.RequestReservationViewController;
-import org.joda.time.DateTime;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class AvailableAssetsController implements Serializable {
     private List<Tag> filterTags;
     private List<Tag> selectedFilterTags;
 
-    public void searchForAssets(AssetCategory assetCategory, DateTime startTime, DateTime endTime) {
+    public void searchForAssets(AssetCategory assetCategory, ZonedDateTime startTime, ZonedDateTime endTime) {
         this.availableAssets = reservationService.findAvailableAssets(assetCategory, startTime, endTime);
 
         filterTags = assetCategory.getTags();
@@ -86,7 +86,7 @@ public class AvailableAssetsController implements Serializable {
      * @param startTime The start time of the reservation.
      * @param endTime   The end time of the reservation.
      */
-    public void onMakeReservationFired(Asset asset, DateTime startTime, DateTime endTime) {
+    public void onMakeReservationFired(Asset asset, ZonedDateTime startTime, ZonedDateTime endTime) {
         requestReservationViewController.setAsset(asset);
         requestReservationViewController.setStartTime(startTime);
         requestReservationViewController.setEndTime(endTime);

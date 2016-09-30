@@ -15,7 +15,6 @@ import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
-import org.joda.time.DateTime;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +22,7 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -59,7 +59,7 @@ public class CalendarReservationManagementController implements Serializable {
 
         scheduleModel = new ReservationScheduleModel() {
             @Override
-            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
+            public List<Reservation> getReservationsBetweenDates(ZonedDateTime start, ZonedDateTime end) {
                 ArrayList<Reservation> prunedReservations = new ArrayList<>(reservations);
                 Iterator<Reservation> iterator = prunedReservations.iterator();
                 while (iterator.hasNext()) {
