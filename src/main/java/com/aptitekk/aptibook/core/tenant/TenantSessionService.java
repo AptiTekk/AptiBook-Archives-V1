@@ -8,19 +8,13 @@ package com.aptitekk.aptibook.core.tenant;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
-import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateful;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.ZoneId;
-import java.util.HashMap;
-import java.util.Map;
 
 @Stateful
 public class TenantSessionService implements Serializable {
