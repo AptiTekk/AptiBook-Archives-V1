@@ -10,12 +10,12 @@ import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
-import org.joda.time.DateTimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,11 +32,10 @@ public class TenantManagementService {
 
     private Map<String, Tenant> allowedTenants;
 
-    private Map<Tenant, DateTimeZone> dateTimeZones;
+    private Map<Tenant, ZoneId> zoneIdMap;
 
     @PostConstruct
-    private void init()
-    {
+    private void init() {
         refresh();
     }
 
@@ -55,15 +54,15 @@ public class TenantManagementService {
     }
 
     private void refreshDateTimeZones() {
-        dateTimeZones = new HashMap<>();
+        zoneIdMap = new HashMap<>();
 
-        for(Tenant tenant : tenantService.getAll()) {
+        for (Tenant tenant : tenantService.getAll()) {
             Property dateTimeZoneKey = propertiesService.getPropertyByKey(Property.Key.DATE_TIME_TIMEZONE, tenant);
             try {
-                DateTimeZone dateTimeZone = DateTimeZone.forID(dateTimeZoneKey.getPropertyValue());
-                dateTimeZones.put(tenant, dateTimeZone);
+                ZoneId dateTimeZone = ZoneId.of(dateTimeZoneKey.getPropertyValue());
+                zoneIdMap.put(tenant, dateTimeZone);
             } catch (Exception e) {
-                dateTimeZones.put(tenant, DateTimeZone.UTC);
+                zoneIdMap.put(tenant, ZoneId.systemDefault());
             }
         }
     }
@@ -86,11 +85,12 @@ public class TenantManagementService {
     }
 
     /**
-     * Returns the DateTimeZone for the specified tenant, as is set on the properties page by the administrator.
+     * Returns the ZoneId for the specified tenant, as is set on the properties page by the administrator.
+     *
      * @param tenant The tenant to get the DateTimeZone of.
-     * @return The DateTimeZone of the tenant.
+     * @return The ZoneId of the tenant.
      */
-    public DateTimeZone getDateTimeZone(Tenant tenant) {
-        return dateTimeZones.get(tenant);
+    public ZoneId getZoneId(Tenant tenant) {
+        return zoneIdMap.get(tenant);
     }
 }

@@ -8,13 +8,15 @@ package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
 import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
-import org.joda.time.DateTime;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -25,17 +27,22 @@ public class SearchByTimeController implements Serializable {
     @Inject
     private AssetCategoryService assetCategoryService;
 
+    @Inject
+    private TenantSessionService tenantSessionService;
+
     private int currentStep = 0;
 
     private List<AssetCategory> assetCategories;
     private AssetCategory assetCategory;
 
-    private DateTime startTime;
-    private DateTime endTime;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
 
     @PostConstruct
     private void init() {
-        startTime = new DateTime();
+        //Set Start and End times to this moment in time, formatted for the tenant's timezone.
+        startTime = ZonedDateTime.now(tenantSessionService.getCurrentTenantZoneId());
+        endTime = startTime;
         assetCategories = assetCategoryService.getAll();
     }
 
@@ -68,29 +75,41 @@ public class SearchByTimeController implements Serializable {
     }
 
     public Date getPickerStartTime() {
-        return startTime != null ? startTime.toDate() : null;
+        //Convert ZonedDateTime of tenant's timezone to Date using same local time.
+        return Date.from(startTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant());
     }
 
     public void setPickerStartTime(Date pickerStartTime) {
-        startTime = new DateTime(pickerStartTime);
-        if (endTime == null || endTime.isBefore(startTime))
-            endTime = startTime;
+        if (pickerStartTime != null) {
+            //Convert Date from picker to ZonedDateTime of tenant's timezone using same local time.
+            startTime = ZonedDateTime.ofInstant(pickerStartTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+            //Make sure end time isn't before start time.
+            if (endTime.isBefore(startTime))
+                endTime = startTime;
+        }
     }
 
     public Date getPickerEndTime() {
-        return endTime != null ? endTime.toDate() : null;
+        //Convert ZonedDateTime of tenant's timezone to Date using same local time.
+        return Date.from(endTime.withZoneSameLocal(ZoneId.of("UTC")).toInstant());
     }
 
     public void setPickerEndTime(Date pickerEndTime) {
-        if (pickerEndTime != null)
-            endTime = new DateTime(pickerEndTime);
+        if (pickerEndTime != null) {
+            //Convert Date from picker to ZonedDateTime of tenant's timezone using same local time.
+            ZonedDateTime newEndTime = ZonedDateTime.ofInstant(pickerEndTime.toInstant(), ZoneId.of("UTC")).withZoneSameLocal(tenantSessionService.getCurrentTenantZoneId());
+
+            //Make sure we don't somehow reserve back in time.
+            if (!newEndTime.isBefore(startTime))
+                endTime = newEndTime;
+        }
     }
 
-    public DateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public DateTime getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 }

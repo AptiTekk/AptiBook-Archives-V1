@@ -352,12 +352,16 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 /* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
 
 .fc-event {
-    border: none !important;
+    border: 2px solid #ededed !important;
     background-color: #4272b7 !important;
 }
 
 .interactive-events .fc .fc-event {
     cursor: pointer;
+}
+
+.fc-time-grid-event .fc-bg {
+    display: none;
 }
 
 td.fc-day.fc-today {

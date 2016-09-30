@@ -22,6 +22,7 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,9 +98,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "Reservation Approved",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> has been Approved!",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
@@ -107,9 +108,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                     "Reservation Rejected",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> has been Rejected.",
                     reservation.getUser());
         }
