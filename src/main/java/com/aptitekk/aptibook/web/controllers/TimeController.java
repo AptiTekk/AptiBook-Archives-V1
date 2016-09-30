@@ -7,12 +7,13 @@
 package com.aptitekk.aptibook.web.controllers;
 
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import org.joda.time.DateTime;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 
 @Named
@@ -22,32 +23,32 @@ public class TimeController implements Serializable {
     @Inject
     private TenantSessionService tenantSessionService;
 
-    public static final String STANDARD_DATE_FORMAT = "MM/dd/yyyy h:mm a";
-    public static final String FRIENDLY_DATE_FORMAT = "EEEE, dd MMMM, yyyy h:mm aa";
+    public static final DateTimeFormatter STANDARD_DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm a");
+    public static final DateTimeFormatter FRIENDLY_DATE_FORMATTER = DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy h:mm a");
 
-    public DateTime applyTimeZone(DateTime dateTime) {
-        if(dateTime == null)
+    public ZonedDateTime applyTimeZone(ZonedDateTime dateTime) {
+        if (dateTime == null)
             return null;
 
-        return dateTime.withZone(tenantSessionService.getCurrentTenantTimezone());
+        return dateTime.withZoneSameInstant(tenantSessionService.getCurrentTenantZoneId());
     }
 
     public TimeZone getCurrentTimeZone() {
-        return tenantSessionService.getCurrentTenantTimezone().toTimeZone();
+        return TimeZone.getTimeZone(tenantSessionService.getCurrentTenantZoneId());
     }
 
-    public String formatStandard(DateTime dateTime) {
-        if(dateTime == null)
+    public String formatStandard(ZonedDateTime dateTime) {
+        if (dateTime == null)
             return null;
 
-        return dateTime.toString(STANDARD_DATE_FORMAT);
+        return dateTime.format(STANDARD_DATE_FORMATTER);
     }
 
-    public String formatFriendly(DateTime dateTime) {
-        if(dateTime == null)
+    public String formatFriendly(ZonedDateTime dateTime) {
+        if (dateTime == null)
             return null;
 
-        return dateTime.toString(FRIENDLY_DATE_FORMAT);
+        return dateTime.format(FRIENDLY_DATE_FORMATTER);
     }
 
 }

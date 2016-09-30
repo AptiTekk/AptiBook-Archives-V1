@@ -11,12 +11,12 @@ import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.util.LogManager;
-import org.joda.time.DateTime;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Stateful
@@ -41,7 +41,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param end   The end date. Should be after the start date.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
-    public List<Reservation> getAllBetweenDates(DateTime start, DateTime end) {
+    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end) {
         return getAllBetweenDates(start, end, null, (AssetCategory[]) null);
     }
 
@@ -54,7 +54,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param assetCategories The categories to filter by. Null if no category filtering should be performed.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
-    public List<Reservation> getAllBetweenDates(DateTime start, DateTime end, AssetCategory... assetCategories) {
+    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, AssetCategory... assetCategories) {
         return getAllBetweenDates(start, end, null, assetCategories);
     }
 
@@ -68,7 +68,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param assetCategories The categories to filter by. Null if no category filtering should be performed.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
-    public List<Reservation> getAllBetweenDates(DateTime start, DateTime end, User user, AssetCategory... assetCategories) {
+    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, User user, AssetCategory... assetCategories) {
         if (start == null || end == null || start.isAfter(end))
             return null;
 
@@ -110,7 +110,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param endTime       The reservation end time
      * @return A list of available assets during the selected times.
      */
-    public List<Asset> findAvailableAssets(AssetCategory assetCategory, DateTime startTime, DateTime endTime) {
+    public List<Asset> findAvailableAssets(AssetCategory assetCategory, ZonedDateTime startTime, ZonedDateTime endTime) {
         //This list contains all the assets for the given AssetCategory.
         List<Asset> assetsOfType = assetCategory.getAssets();
         //This list is what will be returned, it will contain all of the assets that are available for reservation.
@@ -133,7 +133,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param endTime   The reservation end time
      * @return true if available, false if not.
      */
-    public boolean isAssetAvailableForReservation(Asset asset, DateTime startTime, DateTime endTime) {
+    public boolean isAssetAvailableForReservation(Asset asset, ZonedDateTime startTime, ZonedDateTime endTime) {
         LogManager.logDebug("Checking " + asset.getName());
 
         //Iterate over all reservations of the asset and check for intersections
@@ -143,11 +143,11 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
                 continue;
 
             //If the reservation's end time is before our start time, we're okay.
-            if(reservation.getEndTime().isBefore(startTime))
+            if (reservation.getEndTime().isBefore(startTime))
                 continue;
 
             //If the reservation's start time is after our end time, we're okay.
-            if(reservation.getStartTime().isAfter(endTime))
+            if (reservation.getStartTime().isAfter(endTime))
                 continue;
 
             //All checks failed, there was a conflict.

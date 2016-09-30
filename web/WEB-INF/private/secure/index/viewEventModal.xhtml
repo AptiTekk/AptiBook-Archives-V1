@@ -22,9 +22,9 @@
                              readonly="true"/>
                 <b:inputText label="Reserved By:" value="#{viewEventModalController.selectedEvent.reservation.user.fullname}"
                              readonly="true"/>
-                <b:inputText label="Start Time:" value="#{timeController.formatFriendly(viewEventModalController.selectedEvent.reservation.startTime)}"
+                <b:inputText label="Start Time:" value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.startTime))}"
                              readonly="true"/>
-                <b:inputText label="End Time:" value="#{timeController.formatFriendly(viewEventModalController.selectedEvent.reservation.endTime)}"
+                <b:inputText label="End Time:" value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.endTime))}"
                              readonly="true"/>
             </h:panelGroup>
             <f:facet name="footer">

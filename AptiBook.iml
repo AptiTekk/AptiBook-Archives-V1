@@ -234,8 +234,8 @@
     <orderEntry type="library" name="Maven: org.omnifaces:omnifaces:2.4" level="project" />
     <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-apis:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-core:3.0.0" level="project" />
-    <orderEntry type="library" name="Maven: org.ocpsoft.prettytime:prettytime:3.2.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.9.4" level="project" />
+    <orderEntry type="library" name="Maven: org.ocpsoft.prettytime:prettytime:4.0.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.threeten:threeten-extra:1.0" level="project" />
     <orderEntry type="library" name="Maven: net.coobird:thumbnailator:0.4.8" level="project" />
     <orderEntry type="library" name="Maven: com.sparkpost:sparkpost-lib:0.16.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
