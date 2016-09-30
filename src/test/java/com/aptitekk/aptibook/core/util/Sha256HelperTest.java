@@ -4,14 +4,23 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook;
+package com.aptitekk.aptibook.core.util;
 
+import com.aptitekk.aptibook.SwarmBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 import org.wildfly.swarm.undertow.WARArchive;
 
-public abstract class DefaultTest {
+import java.util.UUID;
+
+import static org.junit.Assert.assertNotNull;
+
+@RunWith(Arquillian.class)
+public class Sha256HelperTest {
 
     @CreateSwarm
     public static Swarm newContainer() throws Exception {
@@ -25,6 +34,13 @@ public abstract class DefaultTest {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Test
+    public void testEncryption() {
+        String raw = UUID.randomUUID().toString();
+        byte[] sha = Sha256Helper.rawToSha(raw);
+        assertNotNull("Encryption failed.", sha);
     }
 
 }
