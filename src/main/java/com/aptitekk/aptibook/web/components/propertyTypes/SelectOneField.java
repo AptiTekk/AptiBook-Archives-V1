@@ -7,20 +7,35 @@
 package com.aptitekk.aptibook.web.components.propertyTypes;
 
 import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.PropertyType;
-import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.RegexPropertyType;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class SelectOneField extends PropertyType {
 
-    private final Set<String> values;
+    private final List<String> values;
 
-    public SelectOneField(String label, Set<String> values) {
+    public SelectOneField(String label, List<String> values) {
         super(label);
-        this.values = values;
+        this.values = new ArrayList<>(values);
     }
 
-    public Set<String> getValues() {
+    public SelectOneField(String label, Set<String> values) {
+        this(label, values, false);
+    }
+
+    public SelectOneField(String label, Set<String> values, boolean sort) {
+        super(label);
+
+        List<String> listValues = new ArrayList<>(values);
+        if (sort)
+            Collections.sort(listValues);
+        this.values = listValues;
+    }
+
+    public List<String> getValues() {
         return values;
     }
 
