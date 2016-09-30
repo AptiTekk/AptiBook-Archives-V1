@@ -28,7 +28,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -68,14 +67,13 @@ public class OAuthController implements Serializable {
         serviceBuilder.apiKey(GOOGLE_API_KEY);
         serviceBuilder.apiSecret(GOOGLE_API_SECRET);
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        URI requestURI = FacesURIBuilder.buildStandardURI("oauth", null);
+        URI requestURI = FacesURIBuilder.buildURI("oauth", null);
         if (requestURI == null) {
             googleSignInEnabled = false;
             LogManager.logError("Could not create callback URL for Google OAuth.");
             return null;
         }
-        serviceBuilder.callback(requestURI.getPath());
+        serviceBuilder.callback(requestURI.toString());
 
         serviceBuilder.scope("email");
         serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
