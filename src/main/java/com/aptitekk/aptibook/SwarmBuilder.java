@@ -12,6 +12,7 @@ import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.infinispan.InfinispanFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
+import org.wildfly.swarm.undertow.UndertowFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 
 import java.io.File;
@@ -24,6 +25,9 @@ public class SwarmBuilder {
 
     public static Swarm buildSwarm() throws Exception {
         Swarm swarm = new Swarm();
+
+        //Enable HTTPS
+        swarm.fraction(UndertowFraction.createDefaultFraction(RESOURCES + "/KeyStore.jks", "aptibook", "aptibook"));
 
         //Configure PostgreSQLDS
         swarm.fraction(new DatasourcesFraction()
