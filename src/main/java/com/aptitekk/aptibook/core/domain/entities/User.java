@@ -12,7 +12,9 @@ import com.aptitekk.aptibook.core.util.EqualsHelper;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -50,6 +52,8 @@ public class User extends MultiTenantEntity implements Serializable {
         PENDING;
     }
 
+    @SuppressWarnings("JpaAttributeTypeInspection")
+    private Map<Notification.Type, Boolean> notificationTypeSettings = new HashMap<>();
 
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();

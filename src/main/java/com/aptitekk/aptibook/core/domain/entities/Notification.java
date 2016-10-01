@@ -24,6 +24,28 @@ import java.time.ZonedDateTime;
 @Entity
 public class Notification extends MultiTenantEntity implements Serializable {
 
+    public enum Type {
+
+        TYPE_RESERVATION_APPROVED("Reservation Approved", true),
+        TYPE_RESERVATION_REJECTED("Reservation Approved", false);
+        private String label;
+        private boolean defaultValue;
+
+        Type(String label, boolean defaultValue) {
+            this.label = label;
+            this.defaultValue = defaultValue;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public boolean getDefaultValue() {
+            return defaultValue;
+        }
+
+    }
+
     @Id
     @GeneratedValue
     private int id;

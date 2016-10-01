@@ -51,6 +51,7 @@ public class NotificationController implements Serializable {
     private void loadNotifications() {
         allNotifications = notificationService.getAllForUser(user);
 
+
         //Build Unread Notifications List
         unreadNotifications = new ArrayList<>();
         unreadNotifications.addAll(allNotifications.stream().filter(n -> !n.getRead()).collect(Collectors.toList()));
