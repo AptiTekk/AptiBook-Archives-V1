@@ -56,7 +56,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-api:7.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.mail:javax.mail:1.5.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.activation:activation:1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow:2016.9" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:management:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:container:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:spi:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:bootstrap:2016.9" level="project" />
@@ -65,14 +65,10 @@
     <orderEntry type="library" name="Maven: org.wildfly.swarm:config-api-runtime:0.4.6" level="project" />
     <orderEntry type="library" name="Maven: org.ow2.asm:asm-all:5.0.4" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:io:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:logging:2016.9" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:undertow:2016.9" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:io:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:ee:2016.9" level="project" />
-    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming:2016.9" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.enterprise.concurrent:jboss-concurrency-api_1.0_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:1.0.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.7.Final" level="project" />
-    <orderEntry type="library" name="Maven: org.glassfish:javax.el-impl:3.0.1-b08-jbossorg-1" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:request-controller:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-jboss:2.0.0-alpha-9" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-javaee:2.0.0-alpha-9" level="project" />
@@ -93,6 +89,11 @@
     <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.2" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:bean-validation:2016.9" level="project" />
     <orderEntry type="library" name="Maven: javax.validation:validation-api:1.1.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.wildfly.swarm:naming:2016.9" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.enterprise.concurrent:jboss-concurrency-api_1.0_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.interceptor:jboss-interceptors-api_1.2_spec:1.0.0.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.spec.javax.el:jboss-el-api_3.0_spec:1.0.7.Final" level="project" />
+    <orderEntry type="library" name="Maven: org.glassfish:javax.el-impl:3.0.1-b08-jbossorg-1" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:transactions:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.wildfly.swarm:jgroups-module:2016.9" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final" level="project" />

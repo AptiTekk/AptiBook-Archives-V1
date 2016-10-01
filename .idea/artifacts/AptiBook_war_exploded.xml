@@ -145,6 +145,7 @@
           <element id="library" level="project" name="Maven: org.wildfly.swarm:spi:2016.9" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:transactions:2016.9" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:undertow:2016.9" />
+          <element id="library" level="project" name="Maven: org.wildfly.swarm:management:2016.9" />
         </element>
       </element>
       <element id="directory" name="META-INF">

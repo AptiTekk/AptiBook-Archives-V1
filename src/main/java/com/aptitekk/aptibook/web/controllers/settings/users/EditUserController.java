@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
@@ -75,7 +76,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Approved."));
                 refreshUserLists();
                 emailService.sendEmailNotification(user.getUsername(), "Registration Approved", "<p>Good News! Your account has been Approved, and you may now sign in to AptiBook!</p>"
-                        + "<a href='" + tenantSessionService.buildURI("index.xhtml", null) + "'" + ">Click Here to Sign In</a>");
+                        + "<a href='" + FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", null) + "'" + ">Click Here to Sign In</a>");
             } catch (Exception e) {
                 LogManager.logError("Error approving user. User: " + user.getUsername());
                 e.printStackTrace();
@@ -89,7 +90,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 refreshUserLists();
                 HashMap<String, String> queryParams = new HashMap<>();
                 queryParams.put("action", "register");
-                tenantSessionService.buildURI("index.xhtml", queryParams);
+                FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", queryParams);
                 emailService.sendEmailNotification(user.getUsername(), "Registration Rejected", "<p>Unfortunately, your account has been rejected. "
                         + "If you believe this is a mistake, please contact your System Administrators. ");
             } catch (Exception e) {

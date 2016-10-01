@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
@@ -62,7 +63,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
                 "<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
                         "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
                         "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
-                        "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams) + "'" + ">Verify Account</a>");
+                        "<a href='" + FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", queryParams) + "'" + ">Verify Account</a>");
 
         if (!emailSent) {
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We could not send an email to the Email Address provided. Please enter a valid Email Address!"));
