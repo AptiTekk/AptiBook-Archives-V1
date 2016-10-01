@@ -6,11 +6,14 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class UserFieldSupplier {
 
@@ -43,6 +46,9 @@ public abstract class UserFieldSupplier {
     protected boolean wantsEmailNotifications;
 
     protected TreeNode[] userGroupNodes;
+
+
+    protected Map<Notification.Type, Boolean> map;
 
     /**
      * Resets the fields with the values of the supplied user, or null if the user is null.
@@ -139,4 +145,10 @@ public abstract class UserFieldSupplier {
     }
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) { this.wantsEmailNotifications = wantsEmailNotifications; }
+
+    public Map<Notification.Type, Boolean> getMap() {
+        return map;
+    }
+
+
 }
