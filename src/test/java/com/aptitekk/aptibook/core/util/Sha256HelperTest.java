@@ -9,12 +9,12 @@ package com.aptitekk.aptibook.core.util;
 import com.aptitekk.aptibook.SwarmBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.undertow.WARArchive;
 
-import java.util.UUID;
-
-
+@RunWith(Arquillian.class)
 public class Sha256HelperTest {
 
     public static Swarm newContainer() throws Exception {
@@ -30,6 +30,7 @@ public class Sha256HelperTest {
         }
     }
 
+    @Test
     public void testEncryption() {
     }
 
