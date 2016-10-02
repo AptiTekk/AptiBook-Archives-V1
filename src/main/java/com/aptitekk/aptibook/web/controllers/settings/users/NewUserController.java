@@ -6,12 +6,12 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import org.primefaces.model.TreeNode;
 
@@ -55,7 +55,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             newUser.setLocation(location);
             newUser.setVerified(true);
             newUser.setUserState(User.State.APPROVED);
-            newUser.setPassword(Sha256Helper.rawToSha(password));
+            newUser.setHashedPassword(PasswordStorage.createHash(password));
 
             if (userGroupNodes != null) {
                 List<UserGroup> selectedUserGroups = new ArrayList<>();

@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
@@ -15,7 +15,6 @@ import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import org.primefaces.model.TreeNode;
@@ -150,9 +149,15 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
 
             if (password != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
-                selectedUser.setPassword(Sha256Helper.rawToSha(password));
-                FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
+                try {
+                    selectedUser.setHashedPassword(PasswordStorage.createHash(password));
+                    FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
+                } catch (PasswordStorage.CannotPerformOperationException e) {
+                    LogManager.logError("Could not change user password: "+e.getMessage());
+                    FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An error occurred while changing your password. Your password has not been changed."));
+                }
             }
 
             if (userGroupNodes != null) {

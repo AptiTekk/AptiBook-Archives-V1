@@ -26,4 +26,5 @@
     <include file="changeSets/14__Allow_Reservations_Span_Days.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/15__Optimize_Column_Types.xml" relativeToChangelogFile="true"/>
     <include file="changeSets/16__User_Notification_Settings.xml" relativeToChangelogFile="true"/>
+    <include file="changeSets/17__Improved_Passwords.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
