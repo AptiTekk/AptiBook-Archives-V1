@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.*;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -89,14 +89,18 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
         User adminUser = userService.findByName(UserService.ADMIN_EMAIL_ADDRESS, tenant);
         if (adminUser == null) {
 
-            adminUser = new User();
-            adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
-            adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
-            adminUser.setVerified(true);
-            adminUser.setUserState(User.State.APPROVED);
             try {
-                userService.insert(adminUser, tenant);
-            } catch (Exception e) {
+                adminUser = new User();
+                adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
+                adminUser.setHashedPassword(PasswordStorage.createHash(UserService.DEFAULT_ADMIN_PASSWORD));
+                adminUser.setVerified(true);
+                adminUser.setUserState(User.State.APPROVED);
+                try {
+                    userService.insert(adminUser, tenant);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (PasswordStorage.CannotPerformOperationException e) {
                 e.printStackTrace();
             }
         }

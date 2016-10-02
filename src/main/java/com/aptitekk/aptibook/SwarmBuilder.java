@@ -12,6 +12,7 @@ import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.infinispan.InfinispanFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
+import org.wildfly.swarm.management.ManagementFraction;
 import org.wildfly.swarm.undertow.UndertowFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 

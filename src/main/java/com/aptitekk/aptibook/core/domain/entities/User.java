@@ -36,7 +36,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private String location;
 
-    private byte[] password;
+    private String hashedPassword;
 
     private boolean wantsEmailNotifications;
 
@@ -117,12 +117,12 @@ public class User extends MultiTenantEntity implements Serializable {
         this.location = location;
     }
 
-    public byte[] getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(byte[] password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public boolean isVerified() {
@@ -229,14 +229,14 @@ public class User extends MultiTenantEntity implements Serializable {
                 && EqualsHelper.areEquals(getLastName(), other.getLastName())
                 && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
                 && EqualsHelper.areEquals(getLocation(), other.getLocation())
-                && EqualsHelper.areEquals(getPassword(), other.getPassword())
+                && EqualsHelper.areEquals(getHashedPassword(), other.getHashedPassword())
                 && EqualsHelper.areEquals(getVerificationCode(), other.getVerificationCode())
                 && EqualsHelper.areEquals(isVerified(), other.isVerified());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getEmailAddress(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword(), getVerificationCode(), isVerified());
+        return EqualsHelper.calculateHashCode(getEmailAddress(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getHashedPassword(), getVerificationCode(), isVerified());
     }
 
 }
