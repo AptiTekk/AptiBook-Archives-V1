@@ -12,14 +12,13 @@ import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class UserFieldSupplier {
 
-    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Size(max = 64, message = "This may only be 64 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    protected String username;
+    protected String emailAddress;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
@@ -57,14 +56,14 @@ public abstract class UserFieldSupplier {
      */
     protected void resetFields(User user) {
         if (user != null) {
-            username = user.getUsername();
+            emailAddress = user.getEmailAddress();
             firstName = user.getFirstName();
             lastName = user.getLastName();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             wantsEmailNotifications = user.getWantsEmailNotifications();
         } else {
-            username = null;
+            emailAddress = null;
             firstName = null;
             lastName = null;
             phoneNumber = null;
@@ -76,12 +75,12 @@ public abstract class UserFieldSupplier {
         userGroupNodes = null;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getFirstName() {

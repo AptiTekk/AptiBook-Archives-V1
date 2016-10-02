@@ -24,7 +24,7 @@
 
             <ui:fragment rendered="#{myAccountController.user != null}">
                 <div class="page-header">
-                    <h2>Account Settings for #{myAccountController.user.username}</h2>
+                    <h2>Account Settings for #{myAccountController.user.emailAddress}</h2>
                 </div>
 
                 <b:row>
@@ -36,7 +36,7 @@
                             </div>
 
                             <b:inputText label="Username:"
-                                         value="#{myAccountController.user.username}"
+                                         value="#{myAccountController.user.emailAddress}"
                                          readonly="true"/>
 
                             <b:message for="firstNameEdit" showSummary="false" showDetail="true"/>
