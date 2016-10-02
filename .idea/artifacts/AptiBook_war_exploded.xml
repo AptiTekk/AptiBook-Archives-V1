@@ -146,6 +146,9 @@
           <element id="library" level="project" name="Maven: org.wildfly.swarm:transactions:2016.9" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:undertow:2016.9" />
           <element id="library" level="project" name="Maven: org.wildfly.swarm:management:2016.9" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.8.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.8.3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.8.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">

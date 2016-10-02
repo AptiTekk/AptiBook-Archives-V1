@@ -18,8 +18,7 @@
     <properties>
         <!-- Define the version of the JBoss BOMs we want to import to specify
         tested stacks. -->
-        <version.jboss.bom>10.0.0.Final</version.jboss.bom>
-        <version.wildfly-swarm>2016.9</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.8.1</version.wildfly-swarm>
 
         <version.hibernate>5.0.7.Final</version.hibernate>
         <version.postgresql-jdbc>9.4.1209</version.postgresql-jdbc>
@@ -262,11 +261,11 @@
         <!-- End Java EE Dependencies -->
 
         <!-- Testing Dependencies -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>arquillian</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
