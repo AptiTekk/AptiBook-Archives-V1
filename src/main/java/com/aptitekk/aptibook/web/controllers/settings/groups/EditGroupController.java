@@ -152,7 +152,7 @@ public class EditGroupController implements Serializable {
             selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
             resetSettings();
 
-            FacesContext.getCurrentInstance().addMessage("groupEditForm:usersTable", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been removed from '" + selectedUserGroup.getName() + "'"));
+            FacesContext.getCurrentInstance().addMessage("groupEditForm:usersTable", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been removed from '" + selectedUserGroup.getName() + "'"));
         }
     }
 

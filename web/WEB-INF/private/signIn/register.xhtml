@@ -15,7 +15,7 @@
     <o:form id="registerForm" includeRequestParams="true">
         <b:messages for="@form" showDetail="true" showSummary="false"/>
         <b:message for="@next" showDetail="true" showSummary="false"/>
-        <b:inputText value="#{registrationController.username}" label="Email Address:" required="true"
+        <b:inputText value="#{registrationController.emailAddress}" label="Email Address:" required="true"
                      requiredMessage="This is required.">
             <f:validator binding="#{uniqueUserValidator}"/>
             <f:facet name="prepend">

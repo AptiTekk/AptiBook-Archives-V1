@@ -61,7 +61,7 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
         }
 
         if (FacesContext.getCurrentInstance().getMessageList("userEditForm").isEmpty()) {
-            user.setUsername(username);
+            user.setEmailAddress(emailAddress);
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setPhoneNumber(phoneNumber);
