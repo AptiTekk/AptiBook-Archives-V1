@@ -79,9 +79,9 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
                     LogManager.logInfo("New user has been created. User: " + user.getEmailAddress());
                     return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
                 } catch (Exception e) {
-                    LogManager.logError("Could not persist user with username: " + user.getEmailAddress());
+                    LogManager.logError("Could not persist user with email address: " + user.getEmailAddress());
                     e.printStackTrace();
-                    FacesContext.getCurrentInstance().addMessage("registerForm:username", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
+                    FacesContext.getCurrentInstance().addMessage("registerForm:emailAddress", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
                     return null;
                 }
             }

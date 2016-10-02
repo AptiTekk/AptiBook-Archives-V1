@@ -41,7 +41,7 @@
                                 <c:otherwise>
                                     <ul>
                                         <c:forEach items="#{permission.users.toArray()}" var="user">
-                                            <li>#{user.username}</li>
+                                            <li>#{user.emailAddress}</li>
                                         </c:forEach>
                                     </ul>
                                 </c:otherwise>

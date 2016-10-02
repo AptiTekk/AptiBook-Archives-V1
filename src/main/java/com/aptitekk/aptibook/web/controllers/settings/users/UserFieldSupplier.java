@@ -16,7 +16,7 @@ import java.util.Map;
 
 public abstract class UserFieldSupplier {
 
-    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Size(max = 64, message = "This may only be 64 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     protected String emailAddress;
 

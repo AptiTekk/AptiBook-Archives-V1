@@ -4,16 +4,15 @@
   ~ Proprietary and confidential.
   -->
 
-<!-- Created 10/1/2016-->
+<!-- Created 10/2/2016-->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <!-- Changes password column of user from byte to string, renames column. -->
-    <changeSet id="17" author="MitchTalmadge">
-        <modifyDataType tableName="user" columnName="password" newDataType="TEXT"/>
-        <renameColumn tableName="user" oldColumnName="password" newColumnName="hashedpassword" />
+    <!-- Rename UserName column in table user to emailaddress. -->
+    <changeSet id="18" author="PashaShestakov">
+        <renameColumn tableName="user" oldColumnName="username" newColumnName="emailaddress"/>
     </changeSet>
 
 </databaseChangeLog>

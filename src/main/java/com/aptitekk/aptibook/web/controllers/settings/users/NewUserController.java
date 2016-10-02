@@ -48,7 +48,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
 
         try {
             User newUser = new User();
-            newUser.setEmailAddress(username);
+            newUser.setEmailAddress(emailAddress);
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
             newUser.setPhoneNumber(phoneNumber);

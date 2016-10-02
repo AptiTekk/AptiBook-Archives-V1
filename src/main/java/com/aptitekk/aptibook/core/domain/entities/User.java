@@ -79,10 +79,10 @@ public class User extends MultiTenantEntity implements Serializable {
         return emailAddress;
     }
 
-    public void setEmailAddress(String username) {
-        if(username != null)
-            username = username.toLowerCase();
-        this.emailAddress = username;
+    public void setEmailAddress(String emailAddress) {
+        if(emailAddress != null)
+            emailAddress = emailAddress.toLowerCase();
+        this.emailAddress = emailAddress;
     }
 
     public String getFirstName() {
@@ -194,7 +194,7 @@ public class User extends MultiTenantEntity implements Serializable {
     }
 
     /**
-     * Gets the full name of the user, or the username if the first name is empty.
+     * Gets the full name of the user, or the email address if the first name is empty.
      *
      * @return The user's full name.
      */
