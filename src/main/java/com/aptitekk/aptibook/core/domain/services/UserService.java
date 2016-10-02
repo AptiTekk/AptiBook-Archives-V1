@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
@@ -97,20 +97,20 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
             return null;
         }
 
-        byte[] hashedPassword = Sha256Helper.rawToSha(password);
-        if (hashedPassword == null)
-            return null;
-
         try {
-            return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.tenant = :tenant", User.class)
+            User user = entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
                     .setParameter("username", username.toLowerCase())
-                    .setParameter("password", hashedPassword)
                     .setParameter("tenant", getTenant())
                     .getSingleResult();
-        } catch (PersistenceException e) {
+            if (user != null) {
+                if (PasswordStorage.verifyPassword(password, user.getHashedPassword()))
+                    return user;
+            }
+        } catch (PersistenceException | PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException e) {
             return null;
         }
+        return null;
     }
 
 }

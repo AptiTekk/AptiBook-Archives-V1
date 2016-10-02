@@ -6,12 +6,14 @@
 
 package com.aptitekk.aptibook.web.controllers.myAccount;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.UserService;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
+import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
+import sun.security.util.Password;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -70,9 +72,15 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
 
             if (password != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
-                user.setPassword(Sha256Helper.rawToSha(password));
-                FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
+                try {
+                    user.setHashedPassword(PasswordStorage.createHash(password));
+                    FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
+                } catch (PasswordStorage.CannotPerformOperationException e) {
+                    LogManager.logError("Could not change user password: "+e.getMessage());
+                    FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
+                            new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An error occurred while changing your password. Your password has not been changed."));
+                }
             }
 
             try {

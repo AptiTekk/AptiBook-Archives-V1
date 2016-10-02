@@ -38,9 +38,6 @@ public class Sha256HelperTest {
 
     @Test
     public void testEncryption() {
-        String raw = UUID.randomUUID().toString();
-        byte[] sha = Sha256Helper.rawToSha(raw);
-        assertNotNull("Encryption failed.", sha);
     }
 
 }
