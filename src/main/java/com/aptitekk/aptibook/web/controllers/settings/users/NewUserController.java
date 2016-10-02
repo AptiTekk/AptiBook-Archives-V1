@@ -48,7 +48,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
 
         try {
             User newUser = new User();
-            newUser.setUsername(username);
+            newUser.setEmailAddress(username);
             newUser.setFirstName(firstName);
             newUser.setLastName(lastName);
             newUser.setPhoneNumber(phoneNumber);
@@ -84,7 +84,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             userService.insert(newUser);
             LogManager.logInfo("New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
-                FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getUsername() + "' Added!"));
+                FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getEmailAddress() + "' Added!"));
                 if (editUserController != null) {
                     editUserController.refreshUserLists();
                     editUserController.setSelectedUser(newUser);

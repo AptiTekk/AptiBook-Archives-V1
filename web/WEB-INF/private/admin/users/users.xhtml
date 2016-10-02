@@ -37,7 +37,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Username"/>
                                 </f:facet>
-                                <b:navCommandLink value="#{authenticatedUser.username}"
+                                <b:navCommandLink value="#{authenticatedUser.emailAddress}"
                                                   action="#{editUserController.setSelectedUser(authenticatedUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
@@ -68,7 +68,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="Username"/>
                                 </f:facet>
-                                <b:navCommandLink value="#{pendingUser.username}"
+                                <b:navCommandLink value="#{pendingUser.emailAddress}"
                                                   action="#{editUserController.setSelectedUser(pendingUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"

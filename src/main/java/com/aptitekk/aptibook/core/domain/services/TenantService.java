@@ -86,11 +86,11 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
     }
 
     private void checkForAdminUser(Tenant tenant) {
-        User adminUser = userService.findByName(UserService.ADMIN_USERNAME, tenant);
+        User adminUser = userService.findByName(UserService.ADMIN_EMAIL_ADDRESS, tenant);
         if (adminUser == null) {
 
             adminUser = new User();
-            adminUser.setUsername(UserService.ADMIN_USERNAME);
+            adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
             adminUser.setPassword(Sha256Helper.rawToSha(UserService.DEFAULT_ADMIN_PASSWORD));
             adminUser.setVerified(true);
             adminUser.setUserState(User.State.APPROVED);
@@ -104,7 +104,7 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
     }
 
     private void ensureAdminHasRootGroup(Tenant tenant) {
-        User adminUser = userService.findByName(UserService.ADMIN_USERNAME, tenant);
+        User adminUser = userService.findByName(UserService.ADMIN_EMAIL_ADDRESS, tenant);
         if (adminUser != null) {
             UserGroup rootGroup = userGroupService.getRootGroup(tenant);
             if (rootGroup != null) {

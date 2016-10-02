@@ -26,7 +26,7 @@ public class User extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    private String username;
+    private String emailAddress;
 
     private String firstName;
 
@@ -75,14 +75,14 @@ public class User extends MultiTenantEntity implements Serializable {
         return this.id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
+    public void setEmailAddress(String username) {
         if(username != null)
             username = username.toLowerCase();
-        this.username = username;
+        this.emailAddress = username;
     }
 
     public String getFirstName() {
@@ -200,7 +200,7 @@ public class User extends MultiTenantEntity implements Serializable {
      */
     public String getFullname() {
         if (getFirstName() == null || getFirstName().isEmpty())
-            return getUsername();
+            return getEmailAddress();
         else
             return getFirstName() + (getLastName() == null ? "" : " " + getLastName());
     }
@@ -211,7 +211,7 @@ public class User extends MultiTenantEntity implements Serializable {
      * @return True if the user is the admin, false otherwise.
      */
     public boolean isAdmin() {
-        return getUsername().equalsIgnoreCase(UserService.ADMIN_USERNAME);
+        return getEmailAddress().equalsIgnoreCase(UserService.ADMIN_EMAIL_ADDRESS);
     }
 
     @Override
@@ -224,7 +224,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
         User other = (User) o;
 
-        return EqualsHelper.areEquals(getUsername(), other.getUsername())
+        return EqualsHelper.areEquals(getEmailAddress(), other.getEmailAddress())
                 && EqualsHelper.areEquals(getFirstName(), other.getFirstName())
                 && EqualsHelper.areEquals(getLastName(), other.getLastName())
                 && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
@@ -236,7 +236,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword(), getVerificationCode(), isVerified());
+        return EqualsHelper.calculateHashCode(getEmailAddress(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword(), getVerificationCode(), isVerified());
     }
 
 }

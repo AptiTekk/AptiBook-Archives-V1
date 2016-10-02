@@ -17,7 +17,7 @@ import java.io.Serializable;
 @Stateful
 public class UserService extends MultiTenantEntityServiceAbstract<User> implements Serializable {
 
-    public static final String ADMIN_USERNAME = "admin";
+    public static final String ADMIN_EMAIL_ADDRESS = "admin";
     static final String DEFAULT_ADMIN_PASSWORD = "admin";
 
 
@@ -76,7 +76,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         }
         try {
             return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
+                    .createQuery("SELECT u FROM User u WHERE u.emailAddress = :username AND u.tenant = :tenant", User.class)
                     .setParameter("username", username.toLowerCase())
                     .setParameter("tenant", tenant)
                     .getSingleResult();
@@ -103,7 +103,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
 
         try {
             return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.tenant = :tenant", User.class)
+                    .createQuery("SELECT u FROM User u WHERE u.emailAddress = :username AND u.password = :password AND u.tenant = :tenant", User.class)
                     .setParameter("username", username.toLowerCase())
                     .setParameter("password", hashedPassword)
                     .setParameter("tenant", getTenant())

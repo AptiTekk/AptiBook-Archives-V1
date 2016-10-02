@@ -6,7 +6,6 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
-import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
@@ -71,30 +70,30 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             user.setUserState(User.State.APPROVED);
             try {
                 userService.merge(user);
-                LogManager.logInfo("User approved and merged, User: " + user.getUsername());
+                LogManager.logInfo("User approved and merged, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Approved."));
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Approved."));
                 refreshUserLists();
-                emailService.sendEmailNotification(user.getUsername(), "Registration Approved", "<p>Good News! Your account has been Approved, and you may now sign in to AptiBook!</p>"
+                emailService.sendEmailNotification(user.getEmailAddress(), "Registration Approved", "<p>Good News! Your account has been Approved, and you may now sign in to AptiBook!</p>"
                         + "<a href='" + FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", null) + "'" + ">Click Here to Sign In</a>");
             } catch (Exception e) {
-                LogManager.logError("Error approving user. User: " + user.getUsername());
+                LogManager.logError("Error approving user. User: " + user.getEmailAddress());
                 e.printStackTrace();
             }
         } else {
             try {
                 userService.delete(user.getId());
-                LogManager.logInfo("User deleted, User: " + user.getUsername());
+                LogManager.logInfo("User deleted, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
-                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getUsername() + "' has been Rejected."));
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Rejected."));
                 refreshUserLists();
                 HashMap<String, String> queryParams = new HashMap<>();
                 queryParams.put("action", "register");
                 FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", queryParams);
-                emailService.sendEmailNotification(user.getUsername(), "Registration Rejected", "<p>Unfortunately, your account has been rejected. "
+                emailService.sendEmailNotification(user.getEmailAddress(), "Registration Rejected", "<p>Unfortunately, your account has been rejected. "
                         + "If you believe this is a mistake, please contact your System Administrators. ");
             } catch (Exception e) {
-                LogManager.logError("Error deleting user, User: " + user.getUsername());
+                LogManager.logError("Error deleting user, User: " + user.getEmailAddress());
                 e.printStackTrace();
             }
         }
@@ -139,7 +138,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         }
 
         if (FacesContext.getCurrentInstance().getMessageList("userEditForm").isEmpty()) {
-            selectedUser.setUsername(username);
+            selectedUser.setEmailAddress(username);
             selectedUser.setFirstName(firstName);
             selectedUser.setLastName(lastName);
             selectedUser.setPhoneNumber(phoneNumber);
@@ -200,7 +199,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 refreshUserLists();
             } catch (Exception e) {
                 e.printStackTrace();
-                LogManager.logError("Error while updating User Settings for " + selectedUser.getUsername() + ": " + e.getMessage());
+                LogManager.logError("Error while updating User Settings for " + selectedUser.getEmailAddress() + ": " + e.getMessage());
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
             }
@@ -224,7 +223,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LogManager.logError("Error While Deleting User " + selectedUser.getUsername() + ": " + e.getMessage());
+            LogManager.logError("Error While Deleting User " + selectedUser.getEmailAddress() + ": " + e.getMessage());
             context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
         }
 

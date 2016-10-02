@@ -45,7 +45,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
 
     public String register() {
         User user = new User();
-        user.setUsername(username);
+        user.setEmailAddress(username);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPassword(Sha256Helper.rawToSha(password));
@@ -59,7 +59,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         //Create Registration Notification
         HashMap<String, String> queryParams = new HashMap<>();
         queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
-        boolean emailSent = emailService.sendEmailNotification(user.getUsername(), "Registration Verification",
+        boolean emailSent = emailService.sendEmailNotification(user.getEmailAddress(), "Registration Verification",
                 "<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
                         "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
                         "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
@@ -69,16 +69,16 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
             FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We could not send an email to the Email Address provided. Please enter a valid Email Address!"));
             return null;
         } else {
-            LogManager.logInfo("Email Confirmation has been sent to: " + user.getUsername());
+            LogManager.logInfo("Email Confirmation has been sent to: " + user.getEmailAddress());
 
             //Insert User
             try {
                 userService.insert(user);
 
-                LogManager.logInfo("New user has been created. User: " + user.getUsername());
+                LogManager.logInfo("New user has been created. User: " + user.getEmailAddress());
                 return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
             } catch (Exception e) {
-                LogManager.logError("Could not persist user with username: " + user.getUsername());
+                LogManager.logError("Could not persist user with username: " + user.getEmailAddress());
                 e.printStackTrace();
                 FacesContext.getCurrentInstance().addMessage("registerForm:username", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
                 return null;
