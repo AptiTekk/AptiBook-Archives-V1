@@ -172,7 +172,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
     public void resetSettings() {
         if (selectedAsset != null) {
             assetName = selectedAsset.getName();
-            tagController.setSelectedAsset(selectedAsset);
+            tagController.setAvailableTags(selectedAsset.getAssetCategory().getTags());
             tagController.setSelectedAssetTags(selectedAsset.getTags());
             assetApprovalRequired = selectedAsset.getNeedsApproval();
             this.assetOwnerGroup = selectedAsset.getOwner();

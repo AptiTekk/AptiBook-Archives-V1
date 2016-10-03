@@ -89,6 +89,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                     asset.setOwner(assetOwnerGroup);
                     asset.setAssetCategory(assetCategory);
                     assetService.insert(asset);
+                    tagController.updateAssetTags(asset);
                     editAssetController.refreshAssets();
                     LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + asset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
@@ -103,7 +104,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
 
     private void resetSettings() {
         assetName = null;
-        tagController.setSelectedAsset(null);
+        tagController.setAvailableTags(assetCategory != null ? assetCategory.getTags() : null);
         tagController.setSelectedAssetTags(null);
         assetApprovalRequired = false;
         this.assetOwnerGroup = null;
