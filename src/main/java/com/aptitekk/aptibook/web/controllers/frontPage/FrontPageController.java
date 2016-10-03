@@ -58,6 +58,8 @@ public class FrontPageController implements Serializable {
             @Override
             public List<Reservation> getReservationsBetweenDates(ZonedDateTime start, ZonedDateTime end) {
                 List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, displayedCategories);
+                if(allBetweenDates == null)
+                    return new ArrayList<>();
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();
                 while (iterator.hasNext()) {
@@ -74,7 +76,6 @@ public class FrontPageController implements Serializable {
 
     private AssetCategory[] buildDisplayedAssetCategories() {
         List<AssetCategory> displayedCategories = new ArrayList<>();
-        //make the pruned list only what displayed list is true
         for (int i = 0; i < assetCategoryFilterValues.length; i++) {
             if (assetCategoryFilterValues[i]) {
                 displayedCategories.add(assetCategories.get(i));
