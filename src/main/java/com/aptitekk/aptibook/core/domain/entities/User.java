@@ -38,8 +38,6 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private String hashedPassword;
 
-    private boolean wantsEmailNotifications;
-
     private String verificationCode;
 
     private boolean verified;
@@ -175,14 +173,6 @@ public class User extends MultiTenantEntity implements Serializable {
 
     public void setPermissions(List<Permission> permissions) {
         this.permissions = permissions;
-    }
-
-    public boolean getWantsEmailNotifications() {
-        return wantsEmailNotifications;
-    }
-
-    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
-        this.wantsEmailNotifications = wantsEmailNotifications;
     }
 
     public State getUserState() {

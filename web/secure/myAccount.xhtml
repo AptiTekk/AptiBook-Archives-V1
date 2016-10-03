@@ -35,7 +35,7 @@
                                 <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                             </div>
 
-                            <b:inputText label="Username:"
+                            <b:inputText label="Email Address:"
                                          value="#{myAccountController.user.emailAddress}"
                                          readonly="true"/>
 
@@ -112,20 +112,19 @@
 
                             </c:if>
                             <div class="form-group">
-                                <h4>Email Notification Settings:</h4>
+                                <h4>Email Notification Preferences:</h4>
+                                Use the sliders below to customize when you will receive email notifications.
                             </div>
                             <c:choose>
                                 <c:when test="#{myAccountController.user.admin}">
                                     The admin account cannot receive email notifications.
                                 </c:when>
                                 <c:otherwise>
-                                    <b:switch label="Recieve Email Notifications:"
-                                              value="#{myAccountController.wantsEmailNotifications}"
-                                              styleClass="form-control"/>
                                     <c:forEach items="#{myAccountController.notificationTypeSettings}"
                                                var="notificationSettingValue" varStatus="status">
-                                        <b:switch label="#{myAccountController.notificationTypes[status.index].label}"
-                                                  value="#{notificationSettingValue}" onText="Yes" offText="No"/>
+                                        <b:switch
+                                                label="#{myAccountController.notificationTypes[status.index].label}"
+                                                value="#{notificationSettingValue}" onText="Yes" offText="No"/>
                                     </c:forEach>
                                 </c:otherwise>
                             </c:choose>

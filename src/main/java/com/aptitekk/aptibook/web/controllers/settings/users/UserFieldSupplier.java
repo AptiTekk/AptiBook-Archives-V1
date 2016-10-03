@@ -62,7 +62,6 @@ public abstract class UserFieldSupplier {
             lastName = user.getLastName();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
-            wantsEmailNotifications = user.getWantsEmailNotifications();
             notificationTypeSettings = new Boolean[user.getNotificationTypeSettings().size()];
             for(Notification.Type type : notificationTypes)
             {

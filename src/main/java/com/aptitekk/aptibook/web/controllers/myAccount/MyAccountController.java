@@ -69,7 +69,6 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
             user.setLastName(lastName);
             user.setPhoneNumber(phoneNumber);
             user.setLocation(location);
-            user.setWantsEmailNotifications(wantsEmailNotifications);
 
             Map<Notification.Type, Boolean> notificationTypeSettings = new HashMap<>();
             for(Notification.Type type : getNotificationTypes())

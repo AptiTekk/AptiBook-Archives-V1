@@ -22,7 +22,6 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +33,8 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     @Inject
     private UserGroupService userGroupService;
 
-    @Inject EmailService emailService;
+    @Inject
+    EmailService emailService;
 
     public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)
@@ -51,11 +51,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
-            if(user.getWantsEmailNotifications()) {
-                    emailService.sendEmailNotification(notification);
-            }
+            emailService.sendEmailNotification(notification);
         } catch (Exception e) {
-            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId() );
+            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId());
             e.printStackTrace();
         }
     }
@@ -82,7 +80,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                             + reservation.getAsset().getName()
                             + "</b> has been automatically <i>approved</i> for "
                             + "<b>"
-                            +reservation.getUser().getFullname()
+                            + reservation.getUser().getFullname()
                             + "</b>"
                             + ".",
                     userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
