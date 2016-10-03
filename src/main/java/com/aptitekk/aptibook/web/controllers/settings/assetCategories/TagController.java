@@ -157,8 +157,6 @@ public class TagController implements Serializable {
             else
                 this.selectedAssetCategoryTagNames = new ArrayList<>();
             return;
-        }else{
-            System.out.println("null");
         }
 
         List<String> filteredTags = new ArrayList<>();
