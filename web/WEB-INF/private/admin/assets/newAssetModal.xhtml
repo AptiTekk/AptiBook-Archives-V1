@@ -56,7 +56,8 @@
 
                 <div class="form-group">
                     <h:outputLabel value="Requires Approval:"/>
-                    <b:switch id="approvalCheck" value="#{newAssetController.assetApprovalRequired}"/>
+                    <b:switch id="approvalCheck" value="#{newAssetController.assetApprovalRequired}" onText="Yes"
+                              offText="No"/>
                 </div>
 
                 <div class="form-group">
