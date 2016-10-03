@@ -62,7 +62,7 @@ public abstract class UserFieldSupplier {
             lastName = user.getLastName();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
-            notificationTypeSettings = new Boolean[user.getNotificationTypeSettings().size()];
+            notificationTypeSettings = new Boolean[notificationTypes.length];
             for(Notification.Type type : notificationTypes)
             {
                 notificationTypeSettings[type.ordinal()] = user.getNotificationTypeSettings().get(type);

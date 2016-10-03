@@ -28,11 +28,11 @@
                 </div>
 
                 <h:form id="userEditForm">
+                    <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                     <b:row>
                         <b:column colXs="12" colMd="6">
                             <div class="form-group">
                                 <h4>Personal Information:</h4>
-                                <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                             </div>
 
                             <b:inputText label="Email Address:"
@@ -95,16 +95,14 @@
                                     </c:when>
                                     <c:otherwise>
                                         <div class="form-group">
-                                            <b:panel title="Member Of" collapsible="false">
-                                                <pf:tree id="memberGroups"
-                                                         value="#{groupTreeController.getMultipleSelectedTree(myAccountController.user.userGroups, null, false, true)}"
-                                                         var="node"
-                                                         selection="#{myAccountController.userGroupNodes}">
-                                                    <pf:treeNode>
-                                                        <h:outputText value="#{node.name}"/>
-                                                    </pf:treeNode>
-                                                </pf:tree>
-                                            </b:panel>
+                                            <pf:tree id="memberGroups"
+                                                     value="#{groupTreeController.getMultipleSelectedTree(myAccountController.user.userGroups, null, false, true)}"
+                                                     var="node"
+                                                     selection="#{myAccountController.userGroupNodes}">
+                                                <pf:treeNode>
+                                                    <h:outputText value="#{node.name}"/>
+                                                </pf:treeNode>
+                                            </pf:tree>
                                         </div>
                                     </c:otherwise>
                                 </c:choose>
@@ -124,7 +122,8 @@
                                                var="notificationSettingValue" varStatus="status">
                                         <b:switch
                                                 label="#{myAccountController.notificationTypes[status.index].label}"
-                                                value="#{notificationSettingValue}" onText="Yes" offText="No"/>
+                                                value="#{notificationSettingValue}" onText="Yes" offText="No"
+                                                rendered="#{not myAccountController.notificationTypes[status.index].userGroupRequired or not empty authenticationController.authenticatedUser.userGroups}"/>
                                     </c:forEach>
                                 </c:otherwise>
                             </c:choose>

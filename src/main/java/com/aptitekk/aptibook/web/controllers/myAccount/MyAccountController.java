@@ -79,7 +79,7 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
             user.setNotificationTypeSettings(notificationTypeSettings);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Account Settings Updated."));
 
             if (password != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
                 try {
