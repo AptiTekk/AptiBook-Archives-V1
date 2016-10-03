@@ -185,6 +185,14 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     color: white;
 }
 
+.ui-autocomplete-token.ui-state-active {
+    color: inherit;
+}
+
+.ui-autocomplete-panel {
+    z-index: 5000 !important;
+}
+
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
     opacity: 1;
     background-color: #eeeeee;

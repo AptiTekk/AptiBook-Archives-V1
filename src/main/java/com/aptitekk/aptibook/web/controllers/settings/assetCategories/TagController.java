@@ -38,8 +38,9 @@ public class TagController implements Serializable {
     private List<String> selectedAssetCategoryTagNames = new ArrayList<>();
     private List<Tag> selectedAssetTags = new ArrayList<>();
 
-    private Asset selectedAsset;
     private List<Tag> availableTags;
+
+
 
     private void createNewAssetCategoryTag(AssetCategory assetCategory, String tagName) {
         if (assetCategory != null && tagName != null) {
@@ -140,7 +141,6 @@ public class TagController implements Serializable {
                 if (tag.getName().toLowerCase().startsWith(input.toLowerCase()))
                     filteredTags.add(tag);
             }
-
             return filteredTags;
         }
         return null;
@@ -157,6 +157,8 @@ public class TagController implements Serializable {
             else
                 this.selectedAssetCategoryTagNames = new ArrayList<>();
             return;
+        }else{
+            System.out.println("null");
         }
 
         List<String> filteredTags = new ArrayList<>();
@@ -193,13 +195,8 @@ public class TagController implements Serializable {
             this.selectedAssetTags = null;
     }
 
-    public Asset getSelectedAsset() {
-        return selectedAsset;
-    }
-
-    public void setSelectedAsset(Asset selectedAsset) {
-        this.selectedAsset = selectedAsset;
-        this.availableTags = selectedAsset != null ? selectedAsset.getAssetCategory().getTags() : null;
+    public void setAvailableTags(List<Tag> availableTags) {
+        this.availableTags = availableTags;
     }
 
 }

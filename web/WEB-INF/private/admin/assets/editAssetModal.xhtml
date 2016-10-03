@@ -106,12 +106,12 @@
             </h:panelGroup>
 
             <f:facet name="footer">
-                <b:commandButton look="danger" style="float: left;" value="Delete Asset"
-                                 ajax="true" update=":deleteAssetModalForm"
-                                 oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
                 <h:commandButton styleClass="btn btn-primary" value="Save Changes"
                                  action="#{editAssetController.updateSettings()}"
                                  actionListener="#{groupTreeController.invalidateTrees}">
+                <b:commandButton look="danger" style="float: left;" value="Delete Asset"
+                                 ajax="true" update=":deleteAssetModalForm"
+                                 oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
                     <f:ajax execute="@form"
                             render="editAssetModalContent :assetsPageContent"
                             onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editAssetModal').modal('hide')}}}"/>
