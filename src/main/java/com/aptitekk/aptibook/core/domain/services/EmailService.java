@@ -47,7 +47,7 @@ public class EmailService implements Serializable {
 
 
     public boolean sendEmailNotification(Notification notification) {
-        if (notification.getUser() == null || notification.getUser().getEmailAddress() == null || notification.getUser().getEmailAddress().isEmpty() || !notification.getUser().getWantsEmailNotifications())
+        if (notification.getUser() == null || notification.getUser().getEmailAddress() == null || notification.getUser().getEmailAddress().isEmpty())
             return false;
 
         return sendEmailNotification(notification.getUser().getEmailAddress(), notification.getSubject(), notification.getBody());

@@ -43,7 +43,7 @@ public class ReservationDetailsController implements Serializable {
 
                     //Found a reservation with a pending status.
                     if (reservation.getStatus() == status) {
-                        //If there is not an AssetCategory already in the map, add one with an empty list.
+                        //If there is not an AssetCategory already in the notificationTypeSettings, add one with an empty list.
                         reservationDetailsMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
 
                         reservationDetailsMap.get(asset.getAssetCategory()).add(generateReservationDetails(reservation));

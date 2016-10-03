@@ -113,7 +113,6 @@ public class AuthenticationController implements Serializable {
                 user.setEmailAddress(googleUserInfoModel.getEmail());
                 user.setVerified(true);
                 user.setUserState(User.State.APPROVED);
-                user.setWantsEmailNotifications(true);
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
