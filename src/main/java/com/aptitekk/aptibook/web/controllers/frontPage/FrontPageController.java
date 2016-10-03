@@ -76,7 +76,6 @@ public class FrontPageController implements Serializable {
 
     private AssetCategory[] buildDisplayedAssetCategories() {
         List<AssetCategory> displayedCategories = new ArrayList<>();
-        //make the pruned list only what displayed list is true
         for (int i = 0; i < assetCategoryFilterValues.length; i++) {
             if (assetCategoryFilterValues[i]) {
                 displayedCategories.add(assetCategories.get(i));

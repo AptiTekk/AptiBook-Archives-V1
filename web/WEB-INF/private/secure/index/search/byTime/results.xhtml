@@ -44,7 +44,8 @@
                         from
                         <b:dateTimePicker format="MM/DD/YYYY h:mm a"
                                           value="#{searchByTimeController.pickerStartTime}" ajax="true"
-                                          update="endTimePicker" process="@this" sideBySide="true" ondtchange="ajax:true"/>
+                                          update="endTimePicker" process="@this" sideBySide="true"
+                                          ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
                         to
@@ -53,7 +54,8 @@
                                           value="#{searchByTimeController.pickerEndTime}"
                                           disabled="#{searchByTimeController.pickerStartTime == null}"
                                           ajax="true"
-                                          update="searchButton" process="@this" sideBySide="true" ondtchange="ajax:true"/>
+                                          update="searchButton" process="@this" sideBySide="true"
+                                          ondtchange="ajax:true"/>
                     </div>
                     <div class="form-group">
                         <b:commandButton id="searchButton" look="primary" value="Search Again"
@@ -68,12 +70,12 @@
             <b:column colXs="12" colMd="4" rendered="#{not empty availableAssetsController.filterTags}">
                 <h:form>
                     <b:panel look="default" title="Filters">
-                        <h:selectManyCheckbox value="#{availableAssetsController.selectedFilterTags}"
-                                              converter="#{tagConverter}" layout="pageDirection">
-                            <f:ajax render=":availableAssetsList"/>
-                            <f:selectItems value="#{availableAssetsController.filterTags}" var="tag" itemValue="#{tag}"
-                                           itemLabel="#{tag.name}"/>
-                        </h:selectManyCheckbox>
+                        <c:forEach items="#{availableAssetsController.filterTags}" var="tag" varStatus="status">
+                            <b:switch value="#{availableAssetsController.selectedFilterTags[status.index]}"
+                                      label="#{tag.name}"
+                                      ajax="true" update=":availableAssetsList"
+                                      onchange="ajax:availableAssetsController.filterAssets()"/>
+                        </c:forEach>
                     </b:panel>
                 </h:form>
             </b:column>
