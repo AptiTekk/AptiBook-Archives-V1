@@ -12,7 +12,6 @@ import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.datasources.DatasourcesFraction;
 import org.wildfly.swarm.infinispan.InfinispanFraction;
 import org.wildfly.swarm.jpa.JPAFraction;
-import org.wildfly.swarm.management.ManagementFraction;
 import org.wildfly.swarm.undertow.UndertowFraction;
 import org.wildfly.swarm.undertow.WARArchive;
 
@@ -24,11 +23,12 @@ public class SwarmBuilder {
     private static final File WEB = new File("web");
     private static final File WEB_INF = new File(WEB, "WEB-INF");
 
-    public static Swarm buildSwarm() throws Exception {
+    public static Swarm buildSwarm(boolean useHttps) throws Exception {
         Swarm swarm = new Swarm();
 
         //Enable HTTPS
-        swarm.fraction(UndertowFraction.createDefaultFraction(RESOURCES + "/KeyStore.jks", "aptibook", "aptibook"));
+        if (useHttps)
+            swarm.fraction(UndertowFraction.createDefaultFraction(RESOURCES + "/KeyStore.jks", "aptibook", "aptibook"));
 
         //Configure PostgreSQLDS
         swarm.fraction(new DatasourcesFraction()

@@ -14,7 +14,6 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
-import sun.security.util.Password;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
