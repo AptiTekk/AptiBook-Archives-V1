@@ -10,7 +10,6 @@ import com.aptitekk.aptibook.SwarmBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,7 @@ import org.wildfly.swarm.arquillian.CreateSwarm;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotEquals;
 
 @RunWith(Arquillian.class)
 public class PasswordStorageTest {
@@ -36,7 +35,9 @@ public class PasswordStorageTest {
 
     @Deployment
     public static JavaArchive createDeployment() {
-        return ShrinkWrap.createFromZipFile(JavaArchive.class, new File("target/aptibook-swarm.jar"));
+        return ShrinkWrap.createFromZipFile(JavaArchive.class, new File("target/aptibook-swarm.jar"))
+                .merge(ShrinkWrap.createFromZipFile(JavaArchive.class, new File("target/aptibook.jar")))
+                .merge(ShrinkWrap.create(JavaArchive.class).addAsResource("src/test/resources/arquillian.xml"));
     }
 
     @Test
