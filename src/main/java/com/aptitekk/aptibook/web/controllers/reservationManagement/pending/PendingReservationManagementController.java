@@ -73,19 +73,33 @@ public class PendingReservationManagementController implements Serializable {
     public void approveReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
             try {
-                ReservationDecision decision = new ReservationDecision();
-                decision.setApproved(true);
-                decision.setReservation(reservationDetails.getReservation());
-                decision.setUser(authenticationController.getAuthenticatedUser());
-                decision.setUserGroup(reservationDetails.getBehalfUserGroup());
-                reservationDecisionService.insert(decision);
-
-                reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
-                    reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
-                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                boolean decisionExisted = false;
+                for (ReservationDecision reservationDecision : reservationDetails.getReservation().getDecisions()) {
+                    if (reservationDecision.getUser().equals(authenticationController.getAuthenticatedUser())) {
+                        if (!reservationDecision.isApproved()) {
+                            reservationDecision.setApproved(true);
+                            reservationDecisionService.merge(reservationDecision);
+                        }
+                        decisionExisted = true;
+                        break;
+                    }
                 }
-                reservationService.merge(reservationDetails.getReservation());
+
+                if (!decisionExisted) {
+                    ReservationDecision decision = new ReservationDecision();
+                    decision.setApproved(true);
+                    decision.setReservation(reservationDetails.getReservation());
+                    decision.setUser(authenticationController.getAuthenticatedUser());
+                    decision.setUserGroup(reservationDetails.getBehalfUserGroup());
+                    reservationDecisionService.insert(decision);
+
+                    reservationDetails.getReservation().getDecisions().add(decision);
+                    if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
+                        reservationDetails.getReservation().setStatus(Reservation.Status.APPROVED);
+                        notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                    }
+                    reservationService.merge(reservationDetails.getReservation());
+                }
 
                 buildReservationList();
 
@@ -100,19 +114,33 @@ public class PendingReservationManagementController implements Serializable {
     public void rejectReservation(ReservationDetails reservationDetails) {
         if (reservationDetails != null) {
             try {
-                ReservationDecision decision = new ReservationDecision();
-                decision.setApproved(false);
-                decision.setReservation(reservationDetails.getReservation());
-                decision.setUser(authenticationController.getAuthenticatedUser());
-                decision.setUserGroup(reservationDetails.getBehalfUserGroup());
-                reservationDecisionService.insert(decision);
-
-                reservationDetails.getReservation().getDecisions().add(decision);
-                if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
-                    reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
-                    notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                boolean decisionExisted = false;
+                for (ReservationDecision reservationDecision : reservationDetails.getReservation().getDecisions()) {
+                    if (reservationDecision.getUser().equals(authenticationController.getAuthenticatedUser())) {
+                        if (reservationDecision.isApproved()) {
+                            reservationDecision.setApproved(false);
+                            reservationDecisionService.merge(reservationDecision);
+                        }
+                        decisionExisted = true;
+                        break;
+                    }
                 }
-                reservationService.merge(reservationDetails.getReservation());
+
+                if (!decisionExisted) {
+                    ReservationDecision decision = new ReservationDecision();
+                    decision.setApproved(false);
+                    decision.setReservation(reservationDetails.getReservation());
+                    decision.setUser(authenticationController.getAuthenticatedUser());
+                    decision.setUserGroup(reservationDetails.getBehalfUserGroup());
+                    reservationDecisionService.insert(decision);
+
+                    reservationDetails.getReservation().getDecisions().add(decision);
+                    if (reservationDetails.getBehalfUserGroup().isRoot() || reservationDetails.getBehalfUserGroup().getParent().isRoot()) {
+                        reservationDetails.getReservation().setStatus(Reservation.Status.REJECTED);
+                        notificationService.sendReservationDecisionNotification(reservationDetails.getReservation());
+                    }
+                    reservationService.merge(reservationDetails.getReservation());
+                }
 
                 buildReservationList();
 
