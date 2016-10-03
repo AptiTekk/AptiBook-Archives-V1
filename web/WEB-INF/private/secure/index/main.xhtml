@@ -43,25 +43,6 @@
                               ajax="true" onchange="ajax:frontPageController.updateFilters();" oncomplete="PF('calendar').update();"
                    />
                     </c:forEach>
-
-                   <!-- <ui:repeat value="#{frontPageController.assetCategoriesDisplayed}" var="category">
-                        <b:switch value="#{frontPageController.assetCategories}"
-                                  label="#{category.name}"
-                                  converter="#{assetCategoryConverter}"
-                                  onsuccess="{PF('calendar').update(); }"
-                                  ajax="true"
-                        />
-
-                    </ui:repeat>-->
-
-                    <!--<h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
-                                          layout="pageDirection" converter="#{assetCategoryConverter}"
-                                          styleClass="filter-checkboxes">
-                        <f:selectItems value="#{frontPageController.assetCategories}" var="category"
-                                       itemValue="#{category}" itemLabel="#{category.name}"/>
-                        <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
-                                execute="@this"/>
-                    </h:selectManyCheckbox>-->
                 </h:form>
             </b:column>
             <b:column colXs="0" colSm="0" colMd="7">
