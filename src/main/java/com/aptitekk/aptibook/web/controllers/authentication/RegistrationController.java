@@ -50,7 +50,6 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
             user.setFirstName(firstName);
             user.setLastName(lastName);
             user.setHashedPassword(PasswordStorage.createHash(password));
-            user.setWantsEmailNotifications(true);
             user.setVerified(false);
             user.setUserState(User.State.PENDING);
 

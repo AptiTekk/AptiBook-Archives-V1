@@ -7,6 +7,7 @@
 package com.aptitekk.aptibook.core.domain.entityConverters;
 
 import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
@@ -47,8 +48,13 @@ public class NotificationTypeMapAttributeConverter implements AttributeConverter
                     map.put(type, Boolean.parseBoolean(split[1]));
                 } catch (IllegalArgumentException ignored) {
                 }
-
             }
+        }
+
+        //Load default values for types that haven't been set.
+        for(Notification.Type type : Notification.Type.values())
+        {
+            map.putIfAbsent(type, type.getDefaultValue());
         }
         return map;
     }

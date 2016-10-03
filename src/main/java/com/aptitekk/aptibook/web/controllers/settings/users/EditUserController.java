@@ -143,7 +143,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             selectedUser.setLastName(lastName);
             selectedUser.setPhoneNumber(phoneNumber);
             selectedUser.setLocation(location);
-            selectedUser.setWantsEmailNotifications(wantsEmailNotifications);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
                     new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
