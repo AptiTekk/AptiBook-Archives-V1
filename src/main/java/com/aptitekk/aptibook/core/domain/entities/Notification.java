@@ -27,7 +27,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
     public enum Type {
 
         TYPE_RESERVATION_APPROVED("Reservation Approved", true),
-        TYPE_RESERVATION_REJECTED("Reservation Approved", false);
+        TYPE_RESERVATION_REJECTED("Reservation Rejected", true);
         private String label;
         private boolean defaultValue;
 

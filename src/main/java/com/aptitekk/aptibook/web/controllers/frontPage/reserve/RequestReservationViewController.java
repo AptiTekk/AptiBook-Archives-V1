@@ -70,7 +70,7 @@ public class RequestReservationViewController implements Serializable {
     private String reservationTitle;
 
     /**
-     * A map containing a String for each Reservation Field to store the user's input.
+     * A notificationTypeSettings containing a String for each Reservation Field to store the user's input.
      */
     private HashMap<ReservationField, String> fieldMap = new HashMap<>();
     /**

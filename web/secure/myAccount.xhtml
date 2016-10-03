@@ -27,9 +27,9 @@
                     <h2>Account Settings for #{myAccountController.user.emailAddress}</h2>
                 </div>
 
-                <b:row>
-                    <b:column colXs="12" colMd="6">
-                        <h:form id="userEditForm">
+                <h:form id="userEditForm">
+                    <b:row>
+                        <b:column colXs="12" colMd="6">
                             <div class="form-group">
                                 <h4>Personal Information:</h4>
                                 <b:message for="userEditForm" showSummary="false" showDetail="true"/>
@@ -62,7 +62,7 @@
                                     <span class="glyphicon glyphicon-map-marker"/>
                                 </f:facet>
                             </b:inputText>
-
+                            <hr/>
                             <div class="form-group">
                                 <h4>Change Password:</h4>
                                 <b:message for="userEditForm:passwordEdit" showSummary="false" showDetail="true"/>
@@ -82,11 +82,58 @@
                                     <span class="glyphicon glyphicon-asterisk"/>
                                 </f:facet>
                             </b:inputSecret>
+                        </b:column>
+                        <b:column colXs="12" colMd="4">
+                            <c:if test="#{not empty myAccountController.user.userGroups}">
+                                <div class="form-group">
+                                    <h4>Assigned Groups:</h4>
+                                </div>
 
-                            <b:switch label="Recieve Email Notifications:"
-                                      value="#{myAccountController.wantsEmailNotifications}"
-                                      styleClass="form-control"/>
+                                <c:choose>
+                                    <c:when test="#{myAccountController.user.admin}">
+                                        The admin account is automatically granted full permissions. No Groups need to be assigned.
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="form-group">
+                                            <b:panel title="Member Of" collapsible="false">
+                                                <pf:tree id="memberGroups"
+                                                         value="#{groupTreeController.getMultipleSelectedTree(myAccountController.user.userGroups, null, false, true)}"
+                                                         var="node"
+                                                         selection="#{myAccountController.userGroupNodes}">
+                                                    <pf:treeNode>
+                                                        <h:outputText value="#{node.name}"/>
+                                                    </pf:treeNode>
+                                                </pf:tree>
+                                            </b:panel>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                                <hr/>
 
+                            </c:if>
+                            <div class="form-group">
+                                <h4>Email Notification Settings:</h4>
+                            </div>
+                            <c:choose>
+                                <c:when test="#{myAccountController.user.admin}">
+                                    The admin account cannot receive email notifications.
+                                </c:when>
+                                <c:otherwise>
+                                    <b:switch label="Recieve Email Notifications:"
+                                              value="#{myAccountController.wantsEmailNotifications}"
+                                              styleClass="form-control"/>
+                                    <c:forEach items="#{myAccountController.notificationTypeSettings}"
+                                               var="notificationSettingValue" varStatus="status">
+                                        <b:switch label="#{myAccountController.notificationTypes[status.index].label}"
+                                                  value="#{notificationSettingValue}" onText="Yes" offText="No"/>
+                                    </c:forEach>
+                                </c:otherwise>
+                            </c:choose>
+                        </b:column>
+                    </b:row>
+                    <hr/>
+                    <b:row>
+                        <b:column colXs="12">
                             <div class="btn-toolbar">
                                 <h:commandButton styleClass="btn btn-primary"
                                                  value="Save Changes" style="display: inline-block"
@@ -99,36 +146,10 @@
                                     <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
                                 </h:commandButton>
                             </div>
-                        </h:form>
-                    </b:column>
-                    <c:if test="#{not empty myAccountController.user.userGroups}">
-                        <b:column colXs="12" colMd="4">
-                            <div class="form-group">
-                                <h4>Assigned User Groups:</h4>
-                            </div>
-
-                            <c:choose>
-                                <c:when test="#{myAccountController.user.admin}">
-                                    Administrators are automatically granted full permissions. No User Groups need be assigned.
-                                </c:when>
-                                <c:otherwise>
-                                    <div class="form-group">
-                                        <b:panel title="Member Of" collapsible="false">
-                                            <pf:tree id="memberGroups"
-                                                     value="#{groupTreeController.getMultipleSelectedTree(myAccountController.user.userGroups, null, false, true)}"
-                                                     var="node"
-                                                     selection="#{myAccountController.userGroupNodes}">
-                                                <pf:treeNode>
-                                                    <h:outputText value="#{node.name}"/>
-                                                </pf:treeNode>
-                                            </pf:tree>
-                                        </b:panel>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
                         </b:column>
-                    </c:if>
-                </b:row>
+                    </b:row>
+                </h:form>
+
             </ui:fragment>
 
             <ui:fragment rendered="#{myAccountController.user == null}">

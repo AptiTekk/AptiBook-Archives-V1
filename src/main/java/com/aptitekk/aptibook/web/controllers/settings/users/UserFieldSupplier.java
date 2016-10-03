@@ -46,8 +46,9 @@ public abstract class UserFieldSupplier {
 
     protected TreeNode[] userGroupNodes;
 
+    protected final Notification.Type[] notificationTypes = Notification.Type.values();
 
-    protected Map<Notification.Type, Boolean> map;
+    protected Boolean[] notificationTypeSettings;
 
     /**
      * Resets the fields with the values of the supplied user, or null if the user is null.
@@ -62,6 +63,11 @@ public abstract class UserFieldSupplier {
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             wantsEmailNotifications = user.getWantsEmailNotifications();
+            notificationTypeSettings = new Boolean[user.getNotificationTypeSettings().size()];
+            for(Notification.Type type : notificationTypes)
+            {
+                notificationTypeSettings[type.ordinal()] = user.getNotificationTypeSettings().get(type);
+            }
         } else {
             emailAddress = null;
             firstName = null;
@@ -69,6 +75,7 @@ public abstract class UserFieldSupplier {
             phoneNumber = null;
             location = null;
             wantsEmailNotifications = true;
+            notificationTypeSettings = null;
         }
         password = null;
         confirmPassword = null;
@@ -145,9 +152,11 @@ public abstract class UserFieldSupplier {
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) { this.wantsEmailNotifications = wantsEmailNotifications; }
 
-    public Map<Notification.Type, Boolean> getMap() {
-        return map;
+    public Notification.Type[] getNotificationTypes() {
+        return notificationTypes;
     }
 
-
+    public Boolean[] getNotificationTypeSettings() {
+        return notificationTypeSettings;
+    }
 }
