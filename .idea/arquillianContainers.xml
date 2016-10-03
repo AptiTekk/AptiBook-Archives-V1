@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArquillianContainersManager">
     <container containerId="container.arquillian.manual" name="WildFly Embedded">
-      <maven-library groupId="org.wildfly.swarm" artifactId="wildfly-swarm-arquillian" version="1.0.0.Alpha5" />
+      <maven-library groupId="org.jboss.arquillian.junit" artifactId="arquillian-junit-container" version="1.1.11.Final" />
     </container>
     <container containerId="container.arquillian.manual" name="Wildfly Managed">
       <maven-library groupId="org.wildfly.arquillian" artifactId="wildfly-arquillian-container-managed" version="1.1.0.Final" />
