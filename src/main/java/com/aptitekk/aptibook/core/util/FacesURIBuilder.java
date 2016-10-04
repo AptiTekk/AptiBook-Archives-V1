@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class FacesURIBuilder {
 
+    private final static Boolean FORCE_HTTPS = Boolean.parseBoolean(System.getProperty("FORCE_HTTPS"));
+
     /**
      * Builds a standard (non tenant-based) URI.
      *
@@ -36,7 +38,7 @@ public class FacesURIBuilder {
 
         try {
             URIBuilder b = new URIBuilder();
-            b.setScheme(origRequest.getScheme());
+            b.setScheme(FORCE_HTTPS ? "https" : origRequest.getScheme());
             b.setHost(origRequest.getServerName());
             if (origRequest.getServerPort() != 80)
                 b.setPort(origRequest.getServerPort());
