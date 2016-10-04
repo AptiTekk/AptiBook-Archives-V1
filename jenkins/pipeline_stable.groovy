@@ -58,9 +58,9 @@ def runTests(mvnHome) {
 }
 
 def changeVersion() {
-    sh "${mvnHome}/bin/mvn versions:set -DremoveSnapshot=true"
-    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=\"\${project.version}-${env.JOB_NAME}\""
-    sh "${mvnHome}/bin/mvn versions:commit"
+    sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="${project.version}-' + env.JOB_NAME + '"'
+    sh mvnHome + '/bin/mvn versions:commit'
 }
 
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
