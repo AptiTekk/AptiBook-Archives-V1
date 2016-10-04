@@ -80,20 +80,20 @@
                             </b:inputText>
 
                             <div class="btn-toolbar">
-                                <b:commandButton look="danger" value="Delete User Group" ajax="true"
-                                                 update=":deletionConfirmModalForm"
-                                                 oncomplete="$('.deletionConfirmModal').modal()"/>
+                                <h:commandButton styleClass="btn btn-primary"
+                                                 value="Save Changes"
+                                                 action="#{editGroupController.updateSettings()}">
+                                    <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                </h:commandButton>
+                                <h:commandButton styleClass="btn btn-default"
+                                                 value="Reset Form"
+                                                 action="#{editGroupController.resetSettings()}">
+                                    <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
+                                </h:commandButton>
                                 <div class="btn-toolbar pull-right">
-                                    <h:commandButton styleClass="btn btn-primary"
-                                                     value="Save Changes"
-                                                     action="#{editGroupController.updateSettings()}">
-                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                    </h:commandButton>
-                                    <h:commandButton styleClass="btn btn-default"
-                                                     value="Reset Form"
-                                                     action="#{editGroupController.resetSettings()}">
-                                        <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                    </h:commandButton>
+                                    <b:commandButton look="danger" value="Delete User Group" ajax="true"
+                                                     update=":deletionConfirmModalForm"
+                                                     oncomplete="$('.deletionConfirmModal').modal()"/>
                                 </div>
                             </div>
 
@@ -113,7 +113,7 @@
                                                 action="#{editGroupController.removeUserFromSelectedGroup(user)}"
                                                 ajax="true" update="@parent:@parent:@parent:@parent"
                                                 iconAwesome="minus-circle"
-                                                value="#{user.emailAddress}" />
+                                                value="#{user.emailAddress}"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">

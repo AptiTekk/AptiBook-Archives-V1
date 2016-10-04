@@ -106,18 +106,23 @@
             </h:panelGroup>
 
             <f:facet name="footer">
-                <h:commandButton styleClass="btn btn-primary" value="Save Changes"
-                                 action="#{editAssetController.updateSettings()}"
-                                 actionListener="#{groupTreeController.invalidateTrees}">
-                    <b:commandButton look="danger" style="float: left;" value="Delete Asset"
-                                     ajax="true" update=":deleteAssetModalForm"
-                                     oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
-                    <f:ajax execute="@form"
-                            render="editAssetModalContent :assetsPageContent"
-                            onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editAssetModal').modal('hide')}}}"/>
-                </h:commandButton>
-                <b:button value="Cancel" look="default"
-                          onclick="$('.editAssetModal').modal('hide');"/>
+                <div class="btn-toolbar">
+                    <h:commandButton styleClass="btn btn-primary" value="Save Changes"
+                                     action="#{editAssetController.updateSettings()}"
+                                     actionListener="#{groupTreeController.invalidateTrees}">
+                        <f:ajax execute="@form"
+                                render="editAssetModalContent :assetsPageContent"
+                                onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editAssetModal').modal('hide')}}}"/>
+                    </h:commandButton>
+                    <div class="pull-right btn-toolbar">
+
+                        <b:commandButton look="danger" style="float: left;" value="Delete Asset"
+                                         ajax="true" update=":deleteAssetModalForm"
+                                         oncomplete="$('.deleteAssetModal').modal();$('.editAssetModal').modal('hide')"/>
+                        <b:button value="Cancel" look="default"
+                                  onclick="$('.editAssetModal').modal('hide');"/>
+                    </div>
+                </div>
             </f:facet>
         </b:modal>
     </h:form>

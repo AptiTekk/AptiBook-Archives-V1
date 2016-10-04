@@ -90,23 +90,25 @@
                             </div>
                             <div class="form-group">
                                 <div class="btn-toolbar">
-                                    <b:commandButton look="danger" value="Delete Asset Category" ajax="true"
-                                                     update=":assetCategoryDeletionConfirmModalForm"
-                                                     oncomplete="$('.assetCategoryDeletionConfirmModal').modal()"
-                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
+                                    <h:commandButton styleClass="btn btn-primary"
+                                                     value="Save Changes"
+                                                     action="#{editAssetCategoryController.updateSettings()}"
+                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}">
+                                        <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
+                                    </h:commandButton>
+                                    <h:commandButton styleClass="btn btn-default"
+                                                     value="Reset Form"
+                                                     action="#{editAssetCategoryController.resetSettings()}"
+                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}">
+                                        <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
+                                    </h:commandButton>
+
                                     <div class="pull-right btn-toolbar">
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Form"
-                                                         action="#{editAssetCategoryController.resetSettings()}"
-                                                         disabled="#{!editAssetCategoryController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes"
-                                                         action="#{editAssetCategoryController.updateSettings()}"
-                                                         disabled="#{!editAssetCategoryController.hasModifyPermission()}">
-                                            <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
-                                        </h:commandButton>
+                                        <b:commandButton look="danger" value="Delete Asset Category" ajax="true"
+                                                         update=":assetCategoryDeletionConfirmModalForm"
+                                                         oncomplete="$('.assetCategoryDeletionConfirmModal').modal()"
+                                                         disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
+
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +133,7 @@
                                                 ajax="true"
                                                 action="#{editReservationFieldController.setReservationField(reservationField)}"
                                                 update=":editReservationFieldModalForm"
-                                                oncomplete="$('.editReservationFieldModal').modal()" />
+                                                oncomplete="$('.editReservationFieldModal').modal()"/>
                                     </h:column>
                                     <h:column>
                                         <f:facet name="header">
