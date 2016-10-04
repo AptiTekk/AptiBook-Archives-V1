@@ -224,22 +224,23 @@
 
                             <div class="form-group">
                                 <div class="btn-toolbar">
-                                    <b:button look="danger"
-                                              value="Delete User"
-                                              p:data-toggle="modal"
-                                              p:data-target="#deletionConfirmModal"
-                                              disabled="#{editUserController.selectedUser.admin}"/>
+                                    <h:commandButton styleClass="btn btn-primary"
+                                                     value="Save Changes"
+                                                     action="#{editUserController.updateSettings()}">
+                                        <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
+                                    </h:commandButton>
+                                    <h:commandButton styleClass="btn btn-default"
+                                                     value="Reset Form"
+                                                     action="#{editUserController.resetFields()}">
+                                        <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
+                                    </h:commandButton>
                                     <div class="btn-toolbar pull-right">
-                                        <h:commandButton styleClass="btn btn-primary"
-                                                         value="Save Changes"
-                                                         action="#{editUserController.updateSettings()}">
-                                            <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                        </h:commandButton>
-                                        <h:commandButton styleClass="btn btn-default"
-                                                         value="Reset Form"
-                                                         action="#{editUserController.resetFields()}">
-                                            <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
-                                        </h:commandButton>
+                                        <b:button look="danger"
+                                                  value="Delete User"
+                                                  p:data-toggle="modal"
+                                                  p:data-target="#deletionConfirmModal"
+                                                  disabled="#{editUserController.selectedUser.admin}"/>
+
                                     </div>
                                 </div>
                             </div>
