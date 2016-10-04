@@ -94,6 +94,18 @@ hr {
     color: #fff;
 }
 
+.footer a {
+    color: #fff;
+}
+
+.footer a:hover, .footer a:active, .footer a:focus {
+    color: #f1f1f1;
+}
+
+span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:focus {
+    text-decoration: none;
+}
+
 #main-login {
     min-height: 100vh;
     display: flex;

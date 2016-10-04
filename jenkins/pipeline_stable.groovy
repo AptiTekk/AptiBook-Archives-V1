@@ -19,6 +19,8 @@ node {
         runTests(mvnHome)
         slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
 
+        changeVersion()
+
         stage "Deploy Approval"
         if (!getDeploymentApproval()) {
             echo "Aborted by User."
@@ -27,6 +29,7 @@ node {
         }
 
         stage "Deploy to Production"
+        slackSend color: "#4272b7", message: "Deploying AptiBook to Heroku... (Job ${env.BUILD_NUMBER})"
         deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl)
 
     } catch (err) {
@@ -52,6 +55,12 @@ def checkoutFromGit() {
 
 def runTests(mvnHome) {
     sh "${mvnHome}/bin/mvn clean install -P test -U"
+}
+
+def changeVersion() {
+    sh "${mvnHome}/bin/mvn versions:set -DremoveSnapshot=true"
+    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=\"\${project.version}-${env.JOB_NAME}\""
+    sh "${mvnHome}/bin/mvn versions:commit"
 }
 
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
@@ -80,8 +89,10 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
 
     if (found)
         slackSend color: "good", message: "A new deployment of ${herokuAppName} has been deployed successfully at ${liveUrl}."
-    else
-        error "Could not connect to Production deployment after 3 minutes. Did it deploy?"
+    else {
+        slackSend color: "danger", message: "Deployment of ${herokuAppName} was not detected after 3 minutes. Did it deploy?"
+        error
+    }
 }
 
 def boolean getDeploymentApproval() {

@@ -12,7 +12,7 @@
 
     <groupId>com.aptitekk</groupId>
     <artifactId>aptibook</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -36,6 +36,14 @@
 
     <build>
         <finalName>aptibook</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Set Compiler Level -->
             <plugin>
@@ -185,10 +193,6 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>management</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
             <artifactId>logging</artifactId>
         </dependency>
         <dependency>
@@ -257,12 +261,6 @@
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>arquillian</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.shrinkwrap.resolver</groupId>
-            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-            <version>2.2.4</version>
             <scope>test</scope>
         </dependency>
         <!-- End Testing Dependencies -->
