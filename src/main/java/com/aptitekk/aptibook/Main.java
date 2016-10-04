@@ -9,7 +9,7 @@ package com.aptitekk.aptibook;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        SwarmBuilder.buildSwarm(true).start().deploy(SwarmBuilder.buildDeployment());
+        SwarmBuilder.buildSwarm().start().deploy(SwarmBuilder.buildDeployment());
     }
 
 }

@@ -81,8 +81,10 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
 
     if (found)
         slackSend color: "good", message: "A new deployment of ${herokuAppName} has been deployed successfully at ${liveUrl}."
-    else
-        error "Could not connect to Production deployment after 3 minutes. Did it deploy?"
+    else {
+        slackSend color: "danger", message: "Deployment of ${herokuAppName} was not detected after 3 minutes. Did it deploy?"
+        error
+    }
 }
 
 def boolean getDeploymentApproval() {

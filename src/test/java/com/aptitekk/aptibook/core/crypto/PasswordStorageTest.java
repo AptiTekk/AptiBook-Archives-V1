@@ -29,7 +29,7 @@ public class PasswordStorageTest {
     @CreateSwarm
     public static Swarm createSwarm() {
         try {
-            return SwarmBuilder.buildSwarm(false);
+            return SwarmBuilder.buildSwarm();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
