@@ -9,6 +9,8 @@ package com.aptitekk.aptibook.web.components.primeFaces.schedule;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import org.primefaces.model.DefaultScheduleEvent;
 
+import java.util.Date;
+
 public class ReservationScheduleEvent extends DefaultScheduleEvent {
 
     private final Reservation reservation;
@@ -22,8 +24,8 @@ public class ReservationScheduleEvent extends DefaultScheduleEvent {
         setTitle(reservation.getAsset().getName() + " - " + (reservation.getTitle() != null ? reservation.getTitle() : "No Title."));
 
         //Set Time
-        setStartDate(reservation.getStartTime().toDate());
-        setEndDate(reservation.getEndTime().toDate());
+        setStartDate(Date.from(reservation.getStartTime().toInstant()));
+        setEndDate(Date.from(reservation.getEndTime().toInstant()));
     }
 
     public Reservation getReservation() {

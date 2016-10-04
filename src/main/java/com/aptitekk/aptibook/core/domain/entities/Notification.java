@@ -12,16 +12,47 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.ocpsoft.prettytime.PrettyTime;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 
 @Entity
 public class Notification extends MultiTenantEntity implements Serializable {
+
+    public enum Type {
+
+        TYPE_RESERVATION_APPROVED("Reservation Approved", true, false),
+        TYPE_RESERVATION_REJECTED("Reservation Rejected", true, false),
+        TYPE_RESERVATION_REQUESTED("New Reservation Request", true, true),
+        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true);
+
+        private String label;
+        private boolean defaultValue;
+        private boolean userGroupRequired;
+
+        Type(String label, boolean defaultValue, boolean userGroupRequired) {
+            this.label = label;
+            this.defaultValue = defaultValue;
+            this.userGroupRequired = userGroupRequired;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+
+        public boolean getDefaultValue() {
+            return defaultValue;
+        }
+
+        public boolean isUserGroupRequired() {
+            return userGroupRequired;
+        }
+    }
 
     @Id
     @GeneratedValue
@@ -34,7 +65,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
     private String body;
 
-    private DateTime creation = new DateTime(DateTimeZone.UTC);
+    private ZonedDateTime creation = ZonedDateTime.now();
 
     private Boolean notif_read = false;
 
@@ -80,12 +111,8 @@ public class Notification extends MultiTenantEntity implements Serializable {
         this.body = body;
     }
 
-    public DateTime getCreation() {
+    public ZonedDateTime getCreation() {
         return creation;
-    }
-
-    public void setCreation(DateTime creation) {
-        this.creation = creation;
     }
 
     public Boolean getRead() {

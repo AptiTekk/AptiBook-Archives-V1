@@ -7,10 +7,9 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -22,7 +21,7 @@ public class Tenant extends GlobalEntity {
 
     private boolean active;
 
-    private DateTime timeSetInactive;
+    private ZonedDateTime timeSetInactive;
 
     @Column(nullable = false, unique = true)
     private int subscriptionId;
@@ -83,7 +82,7 @@ public class Tenant extends GlobalEntity {
         if (active)
             timeSetInactive = null;
         else
-            timeSetInactive = new DateTime(DateTimeZone.UTC);
+            timeSetInactive = ZonedDateTime.now();
     }
 
     /**
@@ -91,7 +90,7 @@ public class Tenant extends GlobalEntity {
      *
      * @return The time when the Tenant was set inactive if it is inactive, or null if it was active. The time will be in UTC.
      */
-    public DateTime getTimeSetInactive() {
+    public ZonedDateTime getTimeSetInactive() {
         return timeSetInactive;
     }
 

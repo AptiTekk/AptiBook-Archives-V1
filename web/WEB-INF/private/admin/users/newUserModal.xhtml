@@ -22,15 +22,15 @@
                 <div class="form-group">
                     <b:column colXs="9" offsetXs="3">
                         <h4>Personal Information:</h4>
-                        * = Required. Username must be unique.
+                        * = Required.
                     </b:column>
                 </div>
                 <div class="form-group">
-                    <h:outputLabel value="Username: *" styleClass="col-xs-3 control-label"/>
+                    <h:outputLabel value="Email Address: *" styleClass="col-xs-3 control-label"/>
                     <b:column colXs="9">
-                        <b:message for="newUsername" showSummary="false" showDetail="true"/>
-                        <h:inputText id="newUsername" styleClass="form-control"
-                                     value="#{newUserController.username}"
+                        <b:message for="newEmailAddress" showSummary="false" showDetail="true"/>
+                        <h:inputText id="newEmailAddress" styleClass="form-control"
+                                     value="#{newUserController.emailAddress}"
                                      required="true"
                                      requiredMessage="This is required." maxlength="32">
                             <f:validator binding="#{uniqueUserValidator}"/>
@@ -113,16 +113,6 @@
                                            value="#{newUserController.confirmPassword}" required="true"
                                            requiredMessage="This is required."
                                            maxlength="32" binding="#{confirmationField}"/>
-                        </div>
-                    </b:column>
-                </div>
-                <div class="form-group">
-                    <h:outputLabel value="Recieve Email Notifications:"
-                                   styleClass="col-xs-3 control-label"/>
-                    <b:column colXs="9">
-                        <div class="input-group">
-                            <b:switch value="#{newUserController.wantsEmailNotifications}"
-                                      styleClass="form-control" />
                         </div>
                     </b:column>
                 </div>

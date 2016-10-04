@@ -17,13 +17,13 @@ import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -57,12 +57,12 @@ public class RequestReservationViewController implements Serializable {
     /**
      * The reservation start time
      */
-    private DateTime startTime;
+    private ZonedDateTime startTime;
 
     /**
      * The reservation end time
      */
-    private DateTime endTime;
+    private ZonedDateTime endTime;
 
     /**
      * The Title for reservation being edited.
@@ -70,7 +70,7 @@ public class RequestReservationViewController implements Serializable {
     private String reservationTitle;
 
     /**
-     * A map containing a String for each Reservation Field to store the user's input.
+     * A notificationTypeSettings containing a String for each Reservation Field to store the user's input.
      */
     private HashMap<ReservationField, String> fieldMap = new HashMap<>();
     /**
@@ -88,9 +88,9 @@ public class RequestReservationViewController implements Serializable {
             reservation.setUser(authenticationController.getAuthenticatedUser());
             reservation.setAsset(asset);
 
-            DateTimeZone currentTenantTimezone = tenantSessionService.getCurrentTenantTimezone();
-            reservation.setStartTime(startTime.withZoneRetainFields(currentTenantTimezone));
-            reservation.setEndTime(endTime.withZoneRetainFields(currentTenantTimezone));
+            ZoneId currentTenantTimezone = tenantSessionService.getCurrentTenantZoneId();
+            reservation.setStartTime(startTime.withZoneSameInstant(currentTenantTimezone));
+            reservation.setEndTime(endTime.withZoneSameInstant(currentTenantTimezone));
 
             reservation.setTitle(reservationTitle);
 
@@ -144,19 +144,19 @@ public class RequestReservationViewController implements Serializable {
         this.asset = asset;
     }
 
-    public DateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public DateTime getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime) {
+    public void setEndTime(ZonedDateTime endTime) {
         this.endTime = endTime;
     }
 

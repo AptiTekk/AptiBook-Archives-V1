@@ -12,7 +12,9 @@ import com.aptitekk.aptibook.core.util.EqualsHelper;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -24,7 +26,7 @@ public class User extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    private String username;
+    private String emailAddress;
 
     private String firstName;
 
@@ -34,9 +36,7 @@ public class User extends MultiTenantEntity implements Serializable {
 
     private String location;
 
-    private byte[] password;
-
-    private boolean wantsEmailNotifications;
+    private String hashedPassword;
 
     private String verificationCode;
 
@@ -50,6 +50,8 @@ public class User extends MultiTenantEntity implements Serializable {
         PENDING;
     }
 
+    @SuppressWarnings("JpaAttributeTypeInspection")
+    private Map<Notification.Type, Boolean> notificationTypeSettings = new HashMap<>();
 
     @ManyToMany
     private List<UserGroup> userGroups = new ArrayList<>();
@@ -71,14 +73,14 @@ public class User extends MultiTenantEntity implements Serializable {
         return this.id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
-        if(username != null)
-            username = username.toLowerCase();
-        this.username = username;
+    public void setEmailAddress(String emailAddress) {
+        if(emailAddress != null)
+            emailAddress = emailAddress.toLowerCase();
+        this.emailAddress = emailAddress;
     }
 
     public String getFirstName() {
@@ -113,12 +115,12 @@ public class User extends MultiTenantEntity implements Serializable {
         this.location = location;
     }
 
-    public byte[] getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(byte[] password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public boolean isVerified() {
@@ -173,10 +175,6 @@ public class User extends MultiTenantEntity implements Serializable {
         this.permissions = permissions;
     }
 
-    public boolean getWantsEmailNotifications() {
-        return wantsEmailNotifications;
-    }
-
     public State getUserState() {
         return userState;
     }
@@ -185,18 +183,22 @@ public class User extends MultiTenantEntity implements Serializable {
         this.userState = userState;
     }
 
-    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
-        this.wantsEmailNotifications = wantsEmailNotifications;
+    public Map<Notification.Type, Boolean> getNotificationTypeSettings() {
+        return notificationTypeSettings;
+    }
+
+    public void setNotificationTypeSettings(Map<Notification.Type, Boolean> notificationTypeSettings) {
+        this.notificationTypeSettings = notificationTypeSettings;
     }
 
     /**
-     * Gets the full name of the user, or the username if the first name is empty.
+     * Gets the full name of the user, or the email address if the first name is empty.
      *
      * @return The user's full name.
      */
     public String getFullname() {
         if (getFirstName() == null || getFirstName().isEmpty())
-            return getUsername();
+            return getEmailAddress();
         else
             return getFirstName() + (getLastName() == null ? "" : " " + getLastName());
     }
@@ -207,7 +209,7 @@ public class User extends MultiTenantEntity implements Serializable {
      * @return True if the user is the admin, false otherwise.
      */
     public boolean isAdmin() {
-        return getUsername().equalsIgnoreCase(UserService.ADMIN_USERNAME);
+        return getEmailAddress().equalsIgnoreCase(UserService.ADMIN_EMAIL_ADDRESS);
     }
 
     @Override
@@ -220,19 +222,19 @@ public class User extends MultiTenantEntity implements Serializable {
 
         User other = (User) o;
 
-        return EqualsHelper.areEquals(getUsername(), other.getUsername())
+        return EqualsHelper.areEquals(getEmailAddress(), other.getEmailAddress())
                 && EqualsHelper.areEquals(getFirstName(), other.getFirstName())
                 && EqualsHelper.areEquals(getLastName(), other.getLastName())
                 && EqualsHelper.areEquals(getPhoneNumber(), other.getPhoneNumber())
                 && EqualsHelper.areEquals(getLocation(), other.getLocation())
-                && EqualsHelper.areEquals(getPassword(), other.getPassword())
+                && EqualsHelper.areEquals(getHashedPassword(), other.getHashedPassword())
                 && EqualsHelper.areEquals(getVerificationCode(), other.getVerificationCode())
                 && EqualsHelper.areEquals(isVerified(), other.isVerified());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getUsername(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getPassword(), getVerificationCode(), isVerified());
+        return EqualsHelper.calculateHashCode(getEmailAddress(), getFirstName(), getLastName(), getPhoneNumber(), getLocation(), getHashedPassword(), getVerificationCode(), isVerified());
     }
 
 }

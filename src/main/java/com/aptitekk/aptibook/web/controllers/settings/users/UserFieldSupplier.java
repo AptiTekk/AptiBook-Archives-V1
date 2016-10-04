@@ -6,17 +6,19 @@
 
 package com.aptitekk.aptibook.web.controllers.settings.users;
 
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.Map;
 
 public abstract class UserFieldSupplier {
 
-    @Size(max = 32, message = "This may only be 32 characters long.")
+    @Size(max = 64, message = "This may only be 64 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
-    protected String username;
+    protected String emailAddress;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
@@ -44,6 +46,10 @@ public abstract class UserFieldSupplier {
 
     protected TreeNode[] userGroupNodes;
 
+    protected final Notification.Type[] notificationTypes = Notification.Type.values();
+
+    protected Boolean[] notificationTypeSettings;
+
     /**
      * Resets the fields with the values of the supplied user, or null if the user is null.
      *
@@ -51,31 +57,36 @@ public abstract class UserFieldSupplier {
      */
     protected void resetFields(User user) {
         if (user != null) {
-            username = user.getUsername();
+            emailAddress = user.getEmailAddress();
             firstName = user.getFirstName();
             lastName = user.getLastName();
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
-            wantsEmailNotifications = user.getWantsEmailNotifications();
+            notificationTypeSettings = new Boolean[notificationTypes.length];
+            for(Notification.Type type : notificationTypes)
+            {
+                notificationTypeSettings[type.ordinal()] = user.getNotificationTypeSettings().get(type);
+            }
         } else {
-            username = null;
+            emailAddress = null;
             firstName = null;
             lastName = null;
             phoneNumber = null;
             location = null;
             wantsEmailNotifications = true;
+            notificationTypeSettings = null;
         }
         password = null;
         confirmPassword = null;
         userGroupNodes = null;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getFirstName() {
@@ -139,4 +150,12 @@ public abstract class UserFieldSupplier {
     }
 
     public void setWantsEmailNotifications(boolean wantsEmailNotifications) { this.wantsEmailNotifications = wantsEmailNotifications; }
+
+    public Notification.Type[] getNotificationTypes() {
+        return notificationTypes;
+    }
+
+    public Boolean[] getNotificationTypeSettings() {
+        return notificationTypeSettings;
+    }
 }

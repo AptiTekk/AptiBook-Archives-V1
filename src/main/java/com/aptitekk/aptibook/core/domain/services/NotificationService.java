@@ -33,28 +33,28 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     @Inject
     private UserGroupService userGroupService;
 
-    @Inject EmailService emailService;
+    @Inject
+    EmailService emailService;
 
-    public void buildNotification(String subject, String body, List<UserGroup> userGroupList) {
+    public void sendNotification(Notification.Type type, String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)
             return;
 
         for (UserGroup userGroup : userGroupList) {
             for (User user : userGroup.getUsers()) {
-                buildNotification(subject, body, user);
+                sendNotification(type, subject, body, user);
             }
         }
     }
 
-    public void buildNotification(String subject, String body, User user) {
+    public void sendNotification(Notification.Type type, String subject, String body, User user) {
         Notification notification = new Notification(user, subject, body);
         try {
             insert(notification);
-            if(user.getWantsEmailNotifications()) {
-                    emailService.sendEmailNotification(notification);
-            }
+            if (!user.isAdmin() && (type == null || user.getNotificationTypeSettings().get(type)))
+                emailService.sendEmailNotification(notification);
         } catch (Exception e) {
-            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId() );
+            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId());
             e.printStackTrace();
         }
     }
@@ -64,7 +64,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
             return;
 
         if (reservation.getAsset().getNeedsApproval()) {
-            buildNotification(
+            sendNotification(Notification.Type.TYPE_RESERVATION_REQUESTED,
                     "New Reservation Request",
                     "A new Reservation for <b>"
                             + reservation.getAsset().getName()
@@ -75,13 +75,13 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                             + ".",
                     userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
         } else {
-            buildNotification(
+            sendNotification(Notification.Type.TYPE_RESERVATION_REQUESTED,
                     "New Reservation Approved",
                     "A new Reservation for <b>"
                             + reservation.getAsset().getName()
                             + "</b> has been automatically <i>approved</i> for "
                             + "<b>"
-                            +reservation.getUser().getFullname()
+                            + reservation.getUser().getFullname()
                             + "</b>"
                             + ".",
                     userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
@@ -93,23 +93,23 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
             return;
 
         if (reservation.getStatus() == Reservation.Status.APPROVED) {
-            buildNotification(
+            sendNotification(Notification.Type.TYPE_RESERVATION_APPROVED,
                     "Reservation Approved",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> has been Approved!",
                     reservation.getUser());
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
-            buildNotification(
+            sendNotification(Notification.Type.TYPE_RESERVATION_REJECTED,
                     "Reservation Rejected",
                     "Your Reservation for <b>" + reservation.getAsset().getName()
                             + "</b> from <b>"
-                            + reservation.getStartTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
-                            + reservation.getEndTime().toString(TimeController.FRIENDLY_DATE_FORMAT)
+                            + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> has been Rejected.",
                     reservation.getUser());
         }

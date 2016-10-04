@@ -7,11 +7,10 @@
 package com.aptitekk.aptibook.core.domain.entities;
 
 import com.aptitekk.aptibook.core.util.EqualsHelper;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
@@ -29,16 +28,16 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     @GeneratedValue
     private int id;
 
-    private DateTime dateCreated = new DateTime(DateTimeZone.UTC);
+    private ZonedDateTime dateCreated = ZonedDateTime.now();
 
     private String title;
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
-    private DateTime startTime;
+    private ZonedDateTime startTime;
 
-    private DateTime endTime;
+    private ZonedDateTime endTime;
 
     @ManyToOne
     private Asset asset;
@@ -56,7 +55,7 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         return id;
     }
 
-    public DateTime getDateCreated() {
+    public ZonedDateTime getDateCreated() {
         return dateCreated;
     }
 
@@ -88,19 +87,19 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         this.status = status;
     }
 
-    public DateTime getStartTime() {
+    public ZonedDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(DateTime startTime) {
+    public void setStartTime(ZonedDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public DateTime getEndTime() {
+    public ZonedDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(DateTime endTime) {
+    public void setEndTime(ZonedDateTime endTime) {
         this.endTime = endTime;
     }
 

@@ -35,7 +35,7 @@ public class UniqueUserValidator implements Validator, Serializable {
             if (otherUser != null) {
                 if (exceptionAttribute != null && exceptionAttribute instanceof User && otherUser.equals(exceptionAttribute))
                     return;
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User with this name already exists."));
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User with this email address already exists."));
             }
         }
     }

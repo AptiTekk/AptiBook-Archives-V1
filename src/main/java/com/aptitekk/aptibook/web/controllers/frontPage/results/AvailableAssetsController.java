@@ -14,12 +14,12 @@ import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.web.controllers.frontPage.reserve.RequestReservationViewController;
-import org.joda.time.DateTime;
 
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,27 +46,36 @@ public class AvailableAssetsController implements Serializable {
     private List<Asset> filteredAssets;
 
     private List<Tag> filterTags;
-    private List<Tag> selectedFilterTags;
+    private boolean[] selectedFilterTags;
 
-    public void searchForAssets(AssetCategory assetCategory, DateTime startTime, DateTime endTime) {
+
+    public void searchForAssets(AssetCategory assetCategory, ZonedDateTime startTime, ZonedDateTime endTime) {
         this.availableAssets = reservationService.findAvailableAssets(assetCategory, startTime, endTime);
 
         filterTags = assetCategory.getTags();
-        selectedFilterTags = new ArrayList<>();
+        selectedFilterTags = new boolean[filterTags.size()];
+        for (int i = 0; i < selectedFilterTags.length; i++) {
+            selectedFilterTags[i] = false;
+        }
         filterAssets();
     }
 
     /**
      * Updates the filteredAssets list with only those assets which contain all the selectedFilterTags
      */
-    private void filterAssets() {
+    public void filterAssets() {
         filteredAssets = new ArrayList<>();
-
+        List<Tag> selectedTags = new ArrayList<>();
+        for (int i = 0; i < selectedFilterTags.length; i++) {
+            if (selectedFilterTags[i]) {
+                selectedTags.add(filterTags.get(i));
+            }
+        }
         for (Asset asset : availableAssets) {
             boolean skipAsset = false;
 
             //Make sure the Asset has all the selected filter Tags
-            for (Tag tag : selectedFilterTags) {
+            for (Tag tag : selectedTags) {
                 if (!asset.getTags().contains(tag))
                     skipAsset = true;
             }
@@ -86,7 +95,7 @@ public class AvailableAssetsController implements Serializable {
      * @param startTime The start time of the reservation.
      * @param endTime   The end time of the reservation.
      */
-    public void onMakeReservationFired(Asset asset, DateTime startTime, DateTime endTime) {
+    public void onMakeReservationFired(Asset asset, ZonedDateTime startTime, ZonedDateTime endTime) {
         requestReservationViewController.setAsset(asset);
         requestReservationViewController.setStartTime(startTime);
         requestReservationViewController.setEndTime(endTime);
@@ -104,13 +113,11 @@ public class AvailableAssetsController implements Serializable {
         return filterTags;
     }
 
-    public List<Tag> getSelectedFilterTags() {
+    public boolean[] getSelectedFilterTags() {
         return selectedFilterTags;
     }
 
-    public void setSelectedFilterTags(List<Tag> selectedFilterTags) {
-        this.selectedFilterTags = selectedFilterTags;
 
-        filterAssets();
-    }
+
+
 }

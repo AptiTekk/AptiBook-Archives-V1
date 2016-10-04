@@ -11,13 +11,12 @@ import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.util.LogManager;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Interval;
+import org.threeten.extra.Days;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Singleton
@@ -42,7 +41,7 @@ public class NotificationCleaner {
         for (Tenant tenant : tenants) {
             List<Notification> notifications = notificationService.getAll(tenant);
             for (Notification notification : notifications) {
-                if (notification.getRead() && new Interval(notification.getCreation(), new DateTime(DateTimeZone.UTC)).toDuration().getStandardDays() >= 3) {
+                if (notification.getRead() && Days.between(notification.getCreation(), ZonedDateTime.now()).getAmount() > 3) {
                     try {
                         notificationService.delete(notification.getId());
                         numNotificationsRemoved++;

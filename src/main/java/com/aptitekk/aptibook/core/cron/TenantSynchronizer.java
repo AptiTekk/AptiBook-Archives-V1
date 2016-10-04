@@ -16,14 +16,13 @@ import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.client.jaxrs.engines.URLConnectionEngine;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Interval;
+import org.threeten.extra.Days;
 
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,11 +43,10 @@ public class TenantSynchronizer {
     private TenantManagementService tenantManagementService;
 
     @Schedule(minute = "*", hour = "*", persistent = false)
-    private void synchronizeTenants() {
+    public void synchronizeTenants() {
         LogManager.logDebug("[TenantSynchronizer] Synchronizing Tenants...");
 
-        if(WOOCOMMERCE_URL == null || WOOCOMMERCE_CK == null || WOOCOMMERCE_CS == null)
-        {
+        if (WOOCOMMERCE_URL == null || WOOCOMMERCE_CK == null || WOOCOMMERCE_CS == null) {
             LogManager.logError("[TenantSynchronizer] Failed to Synchronize due to missing environment variable(s).");
             return;
         }
@@ -102,9 +100,9 @@ public class TenantSynchronizer {
 
                             //Delete tenant if it has been inactive for 30 or more days.
                             if (currentTenant != null && !currentTenant.isActive()) {
-                                DateTime timeSetInactive = currentTenant.getTimeSetInactive();
+                                ZonedDateTime timeSetInactive = currentTenant.getTimeSetInactive();
                                 if (timeSetInactive != null) {
-                                    if (new Interval(timeSetInactive, new DateTime(DateTimeZone.UTC)).toDuration().getStandardDays() >= 30)
+                                    if (Days.between(timeSetInactive, ZonedDateTime.now()).getAmount() > 30)
                                         deleteTenant(currentTenant);
                                 }
                             }

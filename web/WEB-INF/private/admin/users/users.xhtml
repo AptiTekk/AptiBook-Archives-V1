@@ -35,9 +35,9 @@
 
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Username"/>
+                                    <h:outputText value="Email Address"/>
                                 </f:facet>
-                                <b:navCommandLink value="#{authenticatedUser.username}"
+                                <b:navCommandLink value="#{authenticatedUser.emailAddress}"
                                                   action="#{editUserController.setSelectedUser(authenticatedUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
@@ -66,9 +66,9 @@
                                      fixedHeader="false" responsive="true" widgetVar="dataTable">
                             <h:column>
                                 <f:facet name="header">
-                                    <h:outputText value="Username"/>
+                                    <h:outputText value="Email Address"/>
                                 </f:facet>
-                                <b:navCommandLink value="#{pendingUser.username}"
+                                <b:navCommandLink value="#{pendingUser.emailAddress}"
                                                   action="#{editUserController.setSelectedUser(pendingUser)}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
@@ -112,22 +112,22 @@
                         <c:otherwise>
                             <div class="form-group">
                                 <h4>Personal Information:</h4>
-                                * = Required. Username must be unique.
+                                * = Required.
                                 <b:message for="userEditForm" showSummary="false" showDetail="true"/>
                             </div>
 
                             <c:choose>
                                 <c:when test="#{editUserController.selectedUser.admin}">
-                                    <b:inputText label="Username:"
-                                                 value="#{editUserController.username}"
+                                    <b:inputText label="Email Address:"
+                                                 value="#{editUserController.emailAddress}"
                                                  required="true" requiredMessage="This is required."
                                                  readonly="true"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <b:message for="usernameEdit" showSummary="false" showDetail="true"/>
-                                    <b:inputText id="usernameEdit"
-                                                 label="Username:"
-                                                 value="#{editUserController.username}"
+                                    <b:message for="emailAddressEdit" showSummary="false" showDetail="true"/>
+                                    <b:inputText id="emailAddressEdit"
+                                                 label="Email Address:"
+                                                 value="#{editUserController.emailAddress}"
                                                  required="true" requiredMessage="This is required."
                                                  maxlength="32">
                                         <f:validator binding="#{uniqueUserValidator}"/>
@@ -182,9 +182,6 @@
                                     <span class="glyphicon glyphicon-asterisk"/>
                                 </f:facet>
                             </b:inputSecret>
-
-                            <b:switch label="Recieve Email Notifications:" onText="Yes" offText="No"
-                                      value="#{editUserController.wantsEmailNotifications}"/>
 
                             <div class="form-group">
                                 <h4>Assigned User Groups:</h4>

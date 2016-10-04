@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
@@ -17,12 +17,12 @@ import java.io.Serializable;
 @Stateful
 public class UserService extends MultiTenantEntityServiceAbstract<User> implements Serializable {
 
-    public static final String ADMIN_USERNAME = "admin";
+    public static final String ADMIN_EMAIL_ADDRESS = "admin";
     static final String DEFAULT_ADMIN_PASSWORD = "admin";
 
 
     /**
-     * Finds User Entity by its username, within the current Tenant.
+     * Finds User Entity by its email address, within the current Tenant.
      *
      * @param verificationCode The verification code of the User to search for.
      * @return A User Entity with the specified registration code, or null if one does not exist.
@@ -32,7 +32,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
     }
 
     /**
-     * Finds User Entity by its username, within the current Tenant.
+     * Finds User Entity by its email address, within the current Tenant.
      *
      * @param verificationCode The verification code of the User to search for.
      * @param tenant           The Tenant of the User to search for.
@@ -54,30 +54,30 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
     }
 
     /**
-     * Finds User Entity by its username, within the current Tenant.
+     * Finds User Entity by its email address, within the current Tenant.
      *
-     * @param username The username of the User to search for.
-     * @return A User Entity with the specified username, or null if one does not exist.
+     * @param emailAddress The email address of the User to search for.
+     * @return A User Entity with the specified email address, or null if one does not exist.
      */
-    public User findByName(String username) {
-        return findByName(username, getTenant());
+    public User findByName(String emailAddress) {
+        return findByName(emailAddress, getTenant());
     }
 
     /**
-     * Finds User Entity by its username, within the specified Tenant.
+     * Finds User Entity by its email address, within the specified Tenant.
      *
-     * @param username The username of the User to search for.
+     * @param emailAddress The email address of the User to search for.
      * @param tenant   The Tenant of the User to search for.
-     * @return A User Entity with the specified username, or null if one does not exist.
+     * @return A User Entity with the specified email address, or null if one does not exist.
      */
-    public User findByName(String username, Tenant tenant) {
-        if (username == null || tenant == null) {
+    public User findByName(String emailAddress, Tenant tenant) {
+        if (emailAddress == null || tenant == null) {
             return null;
         }
         try {
             return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.tenant = :tenant", User.class)
-                    .setParameter("username", username.toLowerCase())
+                    .createQuery("SELECT u FROM User u WHERE u.emailAddress = :emailAddress AND u.tenant = :tenant", User.class)
+                    .setParameter("emailAddress", emailAddress.toLowerCase())
                     .setParameter("tenant", tenant)
                     .getSingleResult();
         } catch (PersistenceException e) {
@@ -88,29 +88,29 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
     /**
      * Determines if the credentials are correct or not for the current Tenant.
      *
-     * @param username The username of the user to check.
+     * @param emailAddress The email address of the user to check.
      * @param password The password of the user to check (raw).
      * @return The User if the credentials are correct, or null if they are not.
      */
-    public User getUserWithCredentials(String username, String password) {
-        if (username == null || password == null || getTenant() == null) {
+    public User getUserWithCredentials(String emailAddress, String password) {
+        if (emailAddress == null || password == null || getTenant() == null) {
             return null;
         }
-
-        byte[] hashedPassword = Sha256Helper.rawToSha(password);
-        if (hashedPassword == null)
-            return null;
 
         try {
-            return entityManager
-                    .createQuery("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.tenant = :tenant", User.class)
-                    .setParameter("username", username.toLowerCase())
-                    .setParameter("password", hashedPassword)
+            User user = entityManager
+                    .createQuery("SELECT u FROM User u WHERE u.emailAddress = :emailAddress AND u.tenant = :tenant", User.class)
+                    .setParameter("emailAddress", emailAddress.toLowerCase())
                     .setParameter("tenant", getTenant())
                     .getSingleResult();
-        } catch (PersistenceException e) {
+            if (user != null) {
+                if (PasswordStorage.verifyPassword(password, user.getHashedPassword()))
+                    return user;
+            }
+        } catch (PersistenceException | PasswordStorage.CannotPerformOperationException | PasswordStorage.InvalidHashException e) {
             return null;
         }
+        return null;
     }
 
 }

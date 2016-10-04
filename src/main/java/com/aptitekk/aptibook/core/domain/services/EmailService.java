@@ -47,10 +47,10 @@ public class EmailService implements Serializable {
 
 
     public boolean sendEmailNotification(Notification notification) {
-        if (notification.getUser() == null || notification.getUser().getUsername() == null || notification.getUser().getUsername().isEmpty() || !notification.getUser().getWantsEmailNotifications())
+        if (notification.getUser() == null || notification.getUser().getEmailAddress() == null || notification.getUser().getEmailAddress().isEmpty())
             return false;
 
-        return sendEmailNotification(notification.getUser().getUsername(), notification.getSubject(), notification.getBody());
+        return sendEmailNotification(notification.getUser().getEmailAddress(), notification.getSubject(), notification.getBody());
     }
 
     public boolean sendEmailNotification(String emailAddress, String subject, String body) {

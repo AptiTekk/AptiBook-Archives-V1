@@ -44,4 +44,8 @@
         <exception-type>java.lang.Exception</exception-type>
         <location>/WEB-INF/error/500.xhtml</location>
     </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/index.xhtml</location>
+    </error-page>
 </web-app>

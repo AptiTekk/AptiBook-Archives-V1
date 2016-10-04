@@ -10,12 +10,8 @@ import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
-import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleEvent;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
-import org.joda.time.DateTime;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.ScheduleModel;
 
 import javax.annotation.PostConstruct;
@@ -23,6 +19,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,17 +41,25 @@ public class FrontPageController implements Serializable {
 
     private List<AssetCategory> assetCategories;
 
-    private AssetCategory[] assetCategoriesDisplayed;
+    private boolean[] assetCategoryFilterValues;
+
+    private AssetCategory[] displayedCategories;
 
     @PostConstruct
     private void init() {
         assetCategories = assetCategoryService.getAll();
-        assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
-        assetCategories.toArray(assetCategoriesDisplayed);
+        assetCategoryFilterValues = new boolean[assetCategories.size()];
+        for (int i = 0; i < assetCategoryFilterValues.length; i++)
+            assetCategoryFilterValues[i] = true;
+
+        displayedCategories = buildDisplayedAssetCategories();
+
         scheduleModel = new ReservationScheduleModel() {
             @Override
-            public List<Reservation> getReservationsBetweenDates(DateTime start, DateTime end) {
-                List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, assetCategoriesDisplayed);
+            public List<Reservation> getReservationsBetweenDates(ZonedDateTime start, ZonedDateTime end) {
+                List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, displayedCategories);
+                if(allBetweenDates == null)
+                    return new ArrayList<>();
 
                 Iterator<Reservation> iterator = allBetweenDates.iterator();
                 while (iterator.hasNext()) {
@@ -68,6 +74,17 @@ public class FrontPageController implements Serializable {
         helpController.setCurrentTopic(HelpController.Topic.FRONT_PAGE);
     }
 
+    private AssetCategory[] buildDisplayedAssetCategories() {
+        List<AssetCategory> displayedCategories = new ArrayList<>();
+        for (int i = 0; i < assetCategoryFilterValues.length; i++) {
+            if (assetCategoryFilterValues[i]) {
+                displayedCategories.add(assetCategories.get(i));
+            }
+        }
+        AssetCategory[] displayedCategoriesArray = new AssetCategory[displayedCategories.size()];
+        return displayedCategories.toArray(displayedCategoriesArray);
+    }
+
     public ScheduleModel getScheduleModel() {
         return scheduleModel;
     }
@@ -76,11 +93,12 @@ public class FrontPageController implements Serializable {
         return assetCategories;
     }
 
-    public AssetCategory[] getAssetCategoriesDisplayed() {
-        return assetCategoriesDisplayed;
+    public boolean[] getAssetCategoryFilterValues() {
+        return assetCategoryFilterValues;
     }
 
-    public void setAssetCategoriesDisplayed(AssetCategory[] assetCategoriesDisplayed) {
-        this.assetCategoriesDisplayed = assetCategoriesDisplayed;
+    public void updateFilters() {
+        displayedCategories = buildDisplayedAssetCategories();
     }
+
 }

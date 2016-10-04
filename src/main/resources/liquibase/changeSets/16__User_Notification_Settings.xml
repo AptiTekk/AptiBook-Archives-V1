@@ -1,0 +1,20 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!-- Created 9/30/2016-->
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+
+    <!-- Notification settings for User. -->
+    <changeSet id="16" author="PashaShestakov">
+        <addColumn tableName="user">
+            <column name="notificationtypesettings" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

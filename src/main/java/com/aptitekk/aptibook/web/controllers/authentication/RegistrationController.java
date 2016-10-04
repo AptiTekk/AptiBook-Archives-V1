@@ -6,13 +6,14 @@
 
 package com.aptitekk.aptibook.web.controllers.authentication;
 
+import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.Sha256Helper;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -43,45 +44,50 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
     static final String REGISTRATION_VERIFICATION_PARAMETER = "verificationCode";
 
     public String register() {
-        User user = new User();
-        user.setUsername(username);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setPassword(Sha256Helper.rawToSha(password));
-        user.setWantsEmailNotifications(true);
-        user.setVerified(false);
-        user.setUserState(User.State.PENDING);
+        try {
+            User user = new User();
+            user.setEmailAddress(emailAddress);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setHashedPassword(PasswordStorage.createHash(password));
+            user.setVerified(false);
+            user.setUserState(User.State.PENDING);
 
-        //Generate verification code
-        user.setVerificationCode(generateVerificationCode());
+            //Generate verification code
+            user.setVerificationCode(generateVerificationCode());
 
-        //Create Registration Notification
-        HashMap<String, String> queryParams = new HashMap<>();
-        queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
-        boolean emailSent = emailService.sendEmailNotification(user.getUsername(), "Registration Verification",
-                "<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
-                        "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
-                        "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
-                        "<a href='" + tenantSessionService.buildURI("index.xhtml", queryParams) + "'" + ">Verify Account</a>");
+            //Create Registration Notification
+            HashMap<String, String> queryParams = new HashMap<>();
+            queryParams.put(REGISTRATION_VERIFICATION_PARAMETER, user.getVerificationCode());
+            boolean emailSent = emailService.sendEmailNotification(user.getEmailAddress(), "Registration Verification",
+                    "<p>Hi! Someone (hopefully you) has registered an account with AptiBook using this email address. " +
+                            "To cut down on spam, all we ask is that you click the link below to verify your account.</p>" +
+                            "<p>If you did not intend to register with AptiBook, simply ignore this email and have a nice day!</p>" +
+                            "<a href='" + FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", queryParams) + "'" + ">Verify Account</a>");
 
-        if (!emailSent) {
-            FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We could not send an email to the Email Address provided. Please enter a valid Email Address!"));
-            return null;
-        } else {
-            LogManager.logInfo("Email Confirmation has been sent to: " + user.getUsername());
-
-            //Insert User
-            try {
-                userService.insert(user);
-
-                LogManager.logInfo("New user has been created. User: " + user.getUsername());
-                return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
-            } catch (Exception e) {
-                LogManager.logError("Could not persist user with username: " + user.getUsername());
-                e.printStackTrace();
-                FacesContext.getCurrentInstance().addMessage("registerForm:username", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
+            if (!emailSent) {
+                FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We could not send an email to the Email Address provided. Please enter a valid Email Address!"));
                 return null;
+            } else {
+                LogManager.logInfo("Email Confirmation has been sent to: " + user.getEmailAddress());
+
+                //Insert User
+                try {
+                    userService.insert(user);
+
+                    LogManager.logInfo("New user has been created. User: " + user.getEmailAddress());
+                    return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
+                } catch (Exception e) {
+                    LogManager.logError("Could not persist user with email address: " + user.getEmailAddress());
+                    e.printStackTrace();
+                    FacesContext.getCurrentInstance().addMessage("registerForm:emailAddress", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
+                    return null;
+                }
             }
+        } catch (PasswordStorage.CannotPerformOperationException e) {
+            LogManager.logError("Could not add new user on registration due to crypto error: " + e.getMessage());
+            FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "There was a problem while processing your request. Please try again later."));
+            return null;
         }
     }
 

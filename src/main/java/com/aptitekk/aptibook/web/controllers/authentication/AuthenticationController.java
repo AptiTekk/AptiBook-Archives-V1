@@ -47,7 +47,7 @@ public class AuthenticationController implements Serializable {
     @Inject
     private OAuthController oAuthController;
 
-    private String username;
+    private String emailAddress;
     private String password;
 
     private User authenticatedUser;
@@ -69,11 +69,11 @@ public class AuthenticationController implements Serializable {
                         authenticatedUser = null; //Sign the user out if they are signed in...
                         try {
                             userService.merge(user);
-                            LogManager.logInfo("User " + user.getUsername() + " has been verified.");
+                            LogManager.logInfo("User " + user.getEmailAddress() + " has been verified.");
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                         } catch (Exception e) {
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We had a problem while verifying your account. Please try again later!"));
-                            LogManager.logError("Could not verify user: " + user.getUsername());
+                            LogManager.logError("Could not verify user: " + user.getEmailAddress());
                             e.printStackTrace();
                         }
                     }
@@ -110,14 +110,13 @@ public class AuthenticationController implements Serializable {
                 User user = new User();
                 user.setFirstName(googleUserInfoModel.getGivenName());
                 user.setLastName(googleUserInfoModel.getFamilyName());
-                user.setUsername(googleUserInfoModel.getEmail());
+                user.setEmailAddress(googleUserInfoModel.getEmail());
                 user.setVerified(true);
                 user.setUserState(User.State.APPROVED);
-                user.setWantsEmailNotifications(true);
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
-                    LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+                    LogManager.logInfo("'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                     return redirectHome();
                 } catch (Exception e) {
@@ -126,7 +125,7 @@ public class AuthenticationController implements Serializable {
                 return null;
             } else {
                 setAuthenticatedUser(existingUser);
-                LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in with Google.");
+                LogManager.logInfo("'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                 return redirectHome();
             }
@@ -145,25 +144,25 @@ public class AuthenticationController implements Serializable {
     public String login() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         FacesContext context = FacesContext.getCurrentInstance();
-        User authenticatedUser = userService.getUserWithCredentials(username, password);
+        User authenticatedUser = userService.getUserWithCredentials(emailAddress, password);
         password = null;
 
         if (authenticatedUser == null) // Invalid Credentials
         {
-            LogManager.logInfo("Login attempt for '" + username + "' has failed.");
+            LogManager.logInfo("Login attempt for '" + emailAddress + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
             return null;
         } else if (!authenticatedUser.isVerified() && !authenticatedUser.isAdmin()) {
-            LogManager.logInfo("Login attempt for '" + username + "' has failed due to being unverified.");
+            LogManager.logInfo("Login attempt for '" + emailAddress + "' has failed due to being unverified.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified by email."));
             //TODO: Allow them to re-send the email.
             return null;
         } else if (authenticatedUser.getUserState() != User.State.APPROVED && !authenticatedUser.isAdmin()) {
-            LogManager.logInfo("Login attempt for '" + username + "' has failed due to being unapproved.");
+            LogManager.logInfo("Login attempt for '" + emailAddress + "' has failed due to being unapproved.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not yet been approved by an administrator."));
             return null;
         } else {
-            LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged in.");
+            LogManager.logInfo("'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
             return redirectHome();
@@ -171,7 +170,7 @@ public class AuthenticationController implements Serializable {
     }
 
     public String logout() {
-        LogManager.logInfo("'" + authenticatedUser.getUsername() + "' has logged out.");
+        LogManager.logInfo("'" + authenticatedUser.getEmailAddress() + "' has logged out.");
 
         oAuthController.clearTokens();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
@@ -221,12 +220,12 @@ public class AuthenticationController implements Serializable {
         this.authenticatedUser = authenticatedUser;
     }
 
-    public String getUsername() {
-        return username;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
     }
 
     public String getPassword() {

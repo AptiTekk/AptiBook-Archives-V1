@@ -8,8 +8,9 @@ package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
-import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.rest.oAuthModels.GoogleUserInfoModel;
+import com.aptitekk.aptibook.core.tenant.TenantSessionService;
+import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -27,9 +28,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
 
 @Named("oAuthController")
 @ViewScoped
@@ -66,9 +67,13 @@ public class OAuthController implements Serializable {
         serviceBuilder.apiKey(GOOGLE_API_KEY);
         serviceBuilder.apiSecret(GOOGLE_API_SECRET);
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        String requestUrl = httpServletRequest.getRequestURL().toString();
-        serviceBuilder.callback(requestUrl.substring(0, requestUrl.indexOf("/", requestUrl.indexOf(httpServletRequest.getServerName()))) + httpServletRequest.getContextPath() + "/oauth");
+        URI requestURI = FacesURIBuilder.buildURI("oauth", null);
+        if (requestURI == null) {
+            googleSignInEnabled = false;
+            LogManager.logError("Could not create callback URL for Google OAuth.");
+            return null;
+        }
+        serviceBuilder.callback(requestURI.toString());
 
         serviceBuilder.scope("email");
         serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());

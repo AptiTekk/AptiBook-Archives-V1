@@ -185,6 +185,14 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
     color: white;
 }
 
+.ui-autocomplete-token.ui-state-active {
+    color: inherit;
+}
+
+.ui-autocomplete-panel {
+    z-index: 5000 !important;
+}
+
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled {
     opacity: 1;
     background-color: #eeeeee;
@@ -352,12 +360,16 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 /* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
 
 .fc-event {
-    border: none !important;
+    border: 2px solid #ededed !important;
     background-color: #4272b7 !important;
 }
 
 .interactive-events .fc .fc-event {
     cursor: pointer;
+}
+
+.fc-time-grid-event .fc-bg {
+    display: none;
 }
 
 td.fc-day.fc-today {

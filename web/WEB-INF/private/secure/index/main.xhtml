@@ -12,7 +12,9 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
 
 <ui:composition>
     <style type="text/css">
@@ -34,21 +36,21 @@
 
                 <h:form>
                     <h4>Displayed Categories</h4>
-                    <h:selectManyCheckbox value="#{frontPageController.assetCategoriesDisplayed}"
-                                          layout="pageDirection" converter="#{assetCategoryConverter}"
-                                          styleClass="filter-checkboxes">
-                        <f:selectItems value="#{frontPageController.assetCategories}" var="category"
-                                       itemValue="#{category}" itemLabel="#{category.name}"/>
-                        <f:ajax onevent="function onevent(data) { if(data.status === 'success') PF('calendar').update(); }"
-                                execute="@this"/>
-                    </h:selectManyCheckbox>
+
+                    <c:forEach items="#{frontPageController.assetCategories}" var="category" varStatus="status">
+                    <b:switch value="#{frontPageController.assetCategoryFilterValues[status.index]}"
+                              label="#{category.name}"
+                              ajax="true" onchange="ajax:frontPageController.updateFilters();" oncomplete="PF('calendar').update();"
+                   />
+                    </c:forEach>
                 </h:form>
             </b:column>
             <b:column colXs="0" colSm="0" colMd="7">
                 <h3>Reservation Calendar</h3>
                 <hr/>
                 <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
-                            timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6" allDaySlot="false" styleClass="interactive-events">
+                            timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6" allDaySlot="false"
+                            styleClass="interactive-events">
                     <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"
                             update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
                 </p:schedule>

@@ -16,6 +16,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Named
@@ -47,9 +49,9 @@ public class NotificationViewController implements Serializable {
     }
 
     public String formatNotificationTimeAgo(Notification notification) {
-        if(notification != null) {
-            PrettyTime prettyTime = new PrettyTime();
-            return prettyTime.format(notification.getCreation().withZone(tenantSessionService.getCurrentTenantTimezone()).toLocalDateTime().toDate());
+        if (notification != null) {
+            PrettyTime prettyTime = new PrettyTime(Date.from(ZonedDateTime.now().toInstant()));
+            return prettyTime.format(Date.from(notification.getCreation().toInstant()));
         }
         return "Unknown time ago";
     }
