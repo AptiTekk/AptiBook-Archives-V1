@@ -76,7 +76,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
             if (assetCategories.length == 0)
                 return null;
 
-        StringBuilder queryBuilder = new StringBuilder("SELECT r FROM Reservation r JOIN r.asset a WHERE (r.startTime BETWEEN ?1 AND ?2) OR (r.startTime < ?1 AND r.endTime > ?1) AND r.tenant = ?3 ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT r FROM Reservation r JOIN r.asset a WHERE ((r.startTime BETWEEN ?1 AND ?2) OR (r.startTime < ?1 AND r.endTime > ?1)) AND r.tenant = ?3 ");
         HashMap<Integer, Object> parameterMap = new HashMap<>();
 
         if (assetCategories != null) {
