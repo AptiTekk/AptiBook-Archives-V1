@@ -36,6 +36,14 @@
 
     <build>
         <finalName>aptibook</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Set Compiler Level -->
             <plugin>

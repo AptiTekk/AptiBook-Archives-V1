@@ -12,15 +12,20 @@
       xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 <ui:composition>
     <b:container fluid="true">
-        <b:column colXs="12" colSm="6">
-            <p>Crafted with <span class="fa fa-heartbeat"/> by AptiTekk, LLC.</p>
-        </b:column>
+        <h:form>
+            <b:column colXs="12" colSm="6">
+                <p>
+                    <b:navCommandLink iconAwesome="info-circle" value="" styleClass="no-decoration"
+                                      ajax="true" oncomplete="$('.infoModal').modal();"/>
+                    | Crafted with <span class="fa fa-heartbeat"/> by AptiTekk, LLC.
+                </p>
+            </b:column>
 
-        <b:column colXs="12" colSm="6">
-            <h:form>
-                <b:commandButton value="Quick Help" look="default" styleClass="pull-right" p:data-target=".helpModal" p:data-toggle="modal" onclick="return false;"/>
-            </h:form>
-        </b:column>
+            <b:column colXs="12" colSm="6">
+                <b:commandButton value="Quick Help" look="default" styleClass="pull-right" p:data-target=".helpModal"
+                                 p:data-toggle="modal" onclick="return false;"/>
+            </b:column>
+        </h:form>
     </b:container>
 </ui:composition>
 </html>
