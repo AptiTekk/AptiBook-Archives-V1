@@ -27,6 +27,7 @@ node {
         }
 
         stage "Deploy to Production"
+        slackSend color: "#4272b7", message: "Deploying AptiBook to Heroku... (Job ${env.BUILD_NUMBER})"
         deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl)
 
     } catch (err) {
