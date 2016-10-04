@@ -259,6 +259,12 @@
             <artifactId>arquillian</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>2.2.4</version>
+            <scope>test</scope>
+        </dependency>
         <!-- End Testing Dependencies -->
 
         <!-- Front-End Dependencies -->
