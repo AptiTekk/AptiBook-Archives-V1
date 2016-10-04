@@ -4,7 +4,7 @@
     <module name="" />
     <option name="arquillianRunConfiguration">
       <value>
-        <option name="containerStateName" value="WildFly Embedded" />
+        <option name="containerStateName" value="WildFly Swarm" />
       </value>
     </option>
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
@@ -30,6 +30,8 @@
       <env name="WOOCOMMERCE_URL" value="https://dev.aptitekk.com/wp/wc-api/v3/" />
     </envs>
     <patterns />
-    <method />
+    <method>
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="package" />
+    </method>
   </configuration>
 </component>

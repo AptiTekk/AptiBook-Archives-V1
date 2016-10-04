@@ -21,7 +21,7 @@
         <version.wildfly-swarm>2016.9</version.wildfly-swarm>
 
         <version.hibernate>5.0.7.Final</version.hibernate>
-        <version.postgresql-jdbc>9.4.1209</version.postgresql-jdbc>
+        <version.postgresql-jdbc>9.4.1211</version.postgresql-jdbc>
 
         <version.arquillian.bom>1.1.11.Final</version.arquillian.bom>
 
@@ -124,13 +124,6 @@
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>bom</artifactId>
                 <version>${version.wildfly-swarm}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.arquillian.bom}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -267,8 +260,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <version>2.2.4</version>
             <scope>test</scope>
         </dependency>
         <!-- End Testing Dependencies -->
