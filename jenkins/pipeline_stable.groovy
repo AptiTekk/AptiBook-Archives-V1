@@ -19,6 +19,8 @@ node {
         runTests(mvnHome)
         slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
 
+        changeVersion()
+
         stage "Deploy Approval"
         if (!getDeploymentApproval()) {
             echo "Aborted by User."
@@ -53,6 +55,12 @@ def checkoutFromGit() {
 
 def runTests(mvnHome) {
     sh "${mvnHome}/bin/mvn clean install -P test -U"
+}
+
+def changeVersion() {
+    sh "${mvnHome}/bin/mvn versions:set -DremoveSnapshot=true"
+    sh "${mvnHome}/bin/mvn versions:set -DnewVersion=\"\${project.version}-${env.JOB_NAME}\""
+    sh "${mvnHome}/bin/mvn versions:commit"
 }
 
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
