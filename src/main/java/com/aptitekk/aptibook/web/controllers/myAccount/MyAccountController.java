@@ -7,6 +7,7 @@
 package com.aptitekk.aptibook.web.controllers.myAccount;
 
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
+import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -22,6 +23,8 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.aptitekk.aptibook.web.controllers.help.HelpController.Topic.USER_SETTINGS;
 
@@ -66,10 +69,17 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
             user.setLastName(lastName);
             user.setPhoneNumber(phoneNumber);
             user.setLocation(location);
-            user.setWantsEmailNotifications(wantsEmailNotifications);
+
+            Map<Notification.Type, Boolean> notificationTypeSettings = new HashMap<>();
+            for(Notification.Type type : getNotificationTypes())
+            {
+                notificationTypeSettings.put(type, getNotificationTypeSettings()[type.ordinal()]);
+            }
+
+            user.setNotificationTypeSettings(notificationTypeSettings);
 
             FacesContext.getCurrentInstance().addMessage("userEditForm",
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Personal Information Updated."));
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Account Settings Updated."));
 
             if (password != null && FacesContext.getCurrentInstance().getMessageList("userEditForm:passwordEdit").isEmpty()) {
                 try {
