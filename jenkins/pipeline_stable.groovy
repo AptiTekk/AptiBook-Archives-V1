@@ -59,7 +59,8 @@ def runTests(mvnHome) {
 
 def changeVersion(mvnHome, jobName) {
     sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
-    sh mvnHome + '/bin/mvn versions:set -DnewVersion="${project.version}-' + jobName + '"'
+    sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`-' + jobName + '"'
     sh mvnHome + '/bin/mvn versions:commit'
 }
 
