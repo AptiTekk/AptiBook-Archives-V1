@@ -19,7 +19,7 @@ node {
         runTests(mvnHome)
         slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
 
-        changeVersion(mvnHome, env.JOB_NAME)
+        changeVersion(mvnHome, env.BUILD_NUMBER)
 
         stage "Deploy Approval"
         if (!getDeploymentApproval()) {
@@ -57,10 +57,10 @@ def runTests(mvnHome) {
     sh "${mvnHome}/bin/mvn clean install -P test -U"
 }
 
-def changeVersion(mvnHome, jobName) {
+def changeVersion(mvnHome, buildNumber) {
     sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
     sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
-    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`-' + jobName + '"'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`-' + buildNumber + '"'
     sh mvnHome + '/bin/mvn versions:commit'
 }
 
