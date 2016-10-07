@@ -141,10 +141,9 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                     File file = fileService.createFileFromImagePart(image);
                     selectedAsset.setImage(file);
                 } catch (IOException e) {
-                    LogManager.logError("Attempt to upload image for " + selectedAsset.getName() + " failed due to IOException.");
+                    LogManager.logException("Image Upload Failed", e);
                     FacesContext.getCurrentInstance().addMessage("editAssetModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
                     update = false;
-                    e.printStackTrace();
                 }
             }
 
@@ -162,7 +161,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    LogManager.logError("Error updating asset settings " + e.getMessage());
+                    LogManager.logException("Updating Asset Settings Failed", e);
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
@@ -202,8 +201,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
             }
         } catch (Exception e) {
             context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
-            LogManager.logError("Error while Deleting Asset: " + e.getMessage());
-            e.printStackTrace();
+            LogManager.logException("Error while Deleting Asset", e);
         }
 
         selectedAsset = null;

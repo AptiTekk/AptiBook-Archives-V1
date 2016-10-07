@@ -66,11 +66,10 @@ public class Property extends MultiTenantEntity implements Serializable {
                         if (listener != null)
                             listener.onPropertiesChanged(this);
                     } else {
-                        LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it in the bean set.");
+                        LogManager.logError("Tried to access property listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it in the bean set.");
                     }
                 } catch (UnsatisfiedResolutionException e) {
-                    LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it." +
-                            "\nError: " + e.getMessage());
+                    LogManager.logException("Tried to access property listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it.", e);
                 }
             }
         }

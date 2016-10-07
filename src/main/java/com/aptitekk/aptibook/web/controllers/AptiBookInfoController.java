@@ -33,7 +33,7 @@ public class AptiBookInfoController implements Serializable {
             aptiBookProperties.load(propertiesStream);
             propertiesStream.close();
         } catch (IOException e) {
-            LogManager.logError("Could not load aptibook.properties: " + e.getMessage());
+            LogManager.logException("Could not load aptibook.properties", e);
         }
 
         String tempAttributions;
@@ -45,7 +45,7 @@ public class AptiBookInfoController implements Serializable {
             tempAttributions = IOUtils.toString(attributionsInputStream);
             attributionsInputStream.close();
         } catch (IOException e) {
-            LogManager.logError("Could not load attributions: " + e.getMessage());
+            LogManager.logException("Could not load attributions", e);
             tempAttributions = null;
         }
 

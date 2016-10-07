@@ -146,8 +146,7 @@ public class EditAssetCategoryController implements Serializable {
                     refreshAssetCategories();
                     FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category Updated"));
                 } catch (Exception e) {
-                    LogManager.logError("Error updating Asset Category settings for " + selectedAssetCategory.getName() + ": " + e.getMessage());
-                    e.printStackTrace();
+                    LogManager.logException("Error updating Asset Category settings", e);
                     FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating Asset Category: " + e.getMessage()));
                 }
             }
@@ -186,8 +185,7 @@ public class EditAssetCategoryController implements Serializable {
                 LogManager.logError("Error while deleting Asset Category " + selectedAssetCategory.getName() + ": Asset Category not found.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LogManager.logError("Error while deleting Asset Category " + selectedAssetCategory.getName() + ": " + e.getMessage());
+            LogManager.logException("Error while deleting Asset Category", e);
             context.addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting Asset Category!"));
         }
 
@@ -208,7 +206,7 @@ public class EditAssetCategoryController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New Reservation Field Added."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
-                LogManager.logError("Error while adding new Reservation Field to " + selectedAssetCategory.getName() + " Asset Category.");
+                LogManager.logException("Error while adding new Reservation Field.", e);
             }
         }
     }

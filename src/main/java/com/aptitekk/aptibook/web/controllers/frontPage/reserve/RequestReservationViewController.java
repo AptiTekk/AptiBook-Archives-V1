@@ -111,16 +111,14 @@ public class RequestReservationViewController implements Serializable {
                             reservationFieldEntryService.insert(reservationFieldEntry);
                             LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
                         } catch (Exception e) {
-                            LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
-                            e.printStackTrace();
+                            LogManager.logException("Error persisting ReservationFieldEntry", e);
                         }
                     }
                 }
 
                 notificationService.sendNewReservationNotifications(reservation);
             } catch (Exception e) {
-                LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + authenticationController.getAuthenticatedUser().getFullname() + "Exception message: " + e.getMessage());
-                e.printStackTrace();
+                LogManager.logException("Error while creating new Reservation", e);
             }
         }
 

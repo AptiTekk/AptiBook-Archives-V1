@@ -76,7 +76,7 @@ public class FileService extends MultiTenantEntityServiceAbstract<File> implemen
                 insert(file);
                 return file;
             } catch (Exception e) {
-                LogManager.logError("Attempt to upload image failed while persisting: " + e.getMessage());
+                LogManager.logException("Attempt to upload image failed while persisting.", e);
                 return null;
             }
         } else {

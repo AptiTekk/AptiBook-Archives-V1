@@ -73,8 +73,7 @@ public class AuthenticationController implements Serializable {
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                         } catch (Exception e) {
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We had a problem while verifying your account. Please try again later!"));
-                            LogManager.logError("Could not verify user: " + user.getEmailAddress());
-                            e.printStackTrace();
+                            LogManager.logException("Could not verify user", e);
                         }
                     }
 

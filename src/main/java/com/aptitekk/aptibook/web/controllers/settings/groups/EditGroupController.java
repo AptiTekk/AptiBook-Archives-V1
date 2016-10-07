@@ -92,8 +92,7 @@ public class EditGroupController implements Serializable {
                     resetSettings();
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    LogManager.logError("Error while updating User Group" + selectedUserGroup.getName() + ": " + e.getMessage());
+                    LogManager.logException("Could not update User Group", e);
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
                 }
             }
@@ -123,19 +122,17 @@ public class EditGroupController implements Serializable {
                 try {
                     userGroupService.merge(child);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    LogManager.logError(e.getMessage());
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    LogManager.logException("Could not change UserGroup parent", e);
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
                 }
             }
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
                 LogManager.logInfo("User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Deleted"));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
-                e.printStackTrace();
-                LogManager.logError("Error while deleting User Group " + selectedUserGroup.getName() + ": " + e.getMessage());
+                LogManager.logException("Could not delete User Group", e);
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }

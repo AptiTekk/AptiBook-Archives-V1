@@ -46,7 +46,7 @@ public class NotificationCleaner {
                         notificationService.delete(notification.getId());
                         numNotificationsRemoved++;
                     } catch (Exception e) {
-                        LogManager.logError("[NotificationCleaner] Could not delete Notification on cleanup: " + e.getMessage());
+                        LogManager.logException("[NotificationCleaner] Could not delete Notification on cleanup.", e);
                     }
                 }
             }

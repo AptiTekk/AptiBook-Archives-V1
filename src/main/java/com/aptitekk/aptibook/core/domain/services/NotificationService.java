@@ -54,8 +54,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
             if (!user.isAdmin() && (type == null || user.getNotificationTypeSettings().get(type)))
                 emailService.sendEmailNotification(notification);
         } catch (Exception e) {
-            LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId());
-            e.printStackTrace();
+            LogManager.logException("Could not insert Notification.", e);
         }
     }
 

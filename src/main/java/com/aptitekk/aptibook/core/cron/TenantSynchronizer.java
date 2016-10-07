@@ -144,10 +144,10 @@ public class TenantSynchronizer {
         try {
             return service.getAll().getSubscriptions();
         } catch (ClientErrorException e) {
-            LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Client Error: " + e.getMessage());
+            LogManager.logException("[TenantSynchronizer] Could not Synchronize Tenants due to Client Error", e);
             return null;
         } catch (Exception e) {
-            LogManager.logError("[TenantSynchronizer] Could not Synchronize Tenants due to Unknown Error: " + e.getClass().getName() + " - " + e.getMessage());
+            LogManager.logException("[TenantSynchronizer] Could not Synchronize Tenants due to Unknown Error.", e);
             return null;
         }
     }
@@ -187,7 +187,7 @@ public class TenantSynchronizer {
                 tenant = tenantService.merge(tenant);
                 LogManager.logInfo("[TenantSynchronizer] Updated Slug For Tenant ID " + tenant.getId() + ". Previously: " + previousSlug + "; Now: " + newSlug);
             } catch (Exception e) {
-                LogManager.logError("[TenantSynchronizer] Could not update slug for Tenant ID " + tenant.getId() + ": " + e.getMessage());
+                LogManager.logException("[TenantSynchronizer] Could not update slug for Tenant ID " + tenant.getId(), e);
             }
         } else {
             LogManager.logError("[TenantSynchronizer] Could not update slug for Tenant ID " + tenant.getId() + ": A Tenant with this slug already exists.");
@@ -209,7 +209,7 @@ public class TenantSynchronizer {
             tenant = tenantService.merge(tenant);
             LogManager.logInfo("[TenantSynchronizer] Set Tenant ID " + tenant.getId() + (active ? " Active." : " Inactive."));
         } catch (Exception e) {
-            LogManager.logError("[TenantSynchronizer] Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive") + ": " + e.getMessage());
+            LogManager.logException("[TenantSynchronizer] Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive"), e);
         }
     }
 
@@ -239,7 +239,7 @@ public class TenantSynchronizer {
             LogManager.logInfo("[TenantSynchronizer] Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", and Slug " + tenant.getSlug());
             return tenant;
         } catch (Exception e) {
-            LogManager.logError("[TenantSynchronizer] Could not create Tenant for Subscription ID " + tenant.getSubscriptionId() + ": " + e.getMessage());
+            LogManager.logException("[TenantSynchronizer] Could not create Tenant for Subscription ID " + tenant.getSubscriptionId(), e);
             return null;
         }
     }
@@ -255,7 +255,7 @@ public class TenantSynchronizer {
             tenantService.delete(tenant.getId());
             LogManager.logInfo("[TenantSynchronizer] Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
         } catch (Exception e) {
-            LogManager.logError("[TenantSynchronizer] Could not delete Tenant with ID " + tenant.getId() + ": " + e.getMessage());
+            LogManager.logException("[TenantSynchronizer] Could not delete Tenant with ID " + tenant.getId(), e);
         }
     }
 

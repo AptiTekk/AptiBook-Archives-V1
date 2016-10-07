@@ -104,7 +104,7 @@ public class EmailService implements Serializable {
             ResourceTransmissions.create(connection, 0, transmission);
             return true;
         } catch (SparkPostException e) {
-            LogManager.logError("Error sending email: " + e.getMessage());
+            LogManager.logException("Unable to send an email to these addresses: "+recipientArray+".", e);
             return false;
         }
 

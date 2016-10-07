@@ -20,6 +20,10 @@ public class LogManager {
         LOGGER.error(message);
     }
 
+    public static void logException(String message, Throwable t) {
+        LOGGER.error(message, t);
+    }
+
     public static void logDebug(String message) {
         LOGGER.debug(message);
     }

@@ -8,6 +8,7 @@ package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.cron.TenantSynchronizer;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;

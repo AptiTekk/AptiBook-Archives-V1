@@ -43,8 +43,8 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {
+                LogManager.logException("Error while adding new Reservation Field", e);
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
-                LogManager.logError("Error while adding new Reservation Field to " + editAssetCategoryController.getSelectedAssetCategory().getName() + " Asset Category: " + e.getMessage());
             }
         }
     }
