@@ -40,7 +40,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Updated!"));
             } catch (Exception e) {
-                LogManager.logException("Error while updating Reservation Field", e);
+                LogManager.logException(getClass(), "Error while updating Reservation Field", e);
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while updating Field."));
             }
 
@@ -56,7 +56,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationTitle + "' Deleted!"));
             } catch (Exception e) {
-                LogManager.logException("Error while deleting Reservation Field", e);
+                LogManager.logException(getClass(), "Error while deleting Reservation Field", e);
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while deleting Field."));
             }
         }

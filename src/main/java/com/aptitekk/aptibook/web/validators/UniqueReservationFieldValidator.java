@@ -43,7 +43,7 @@ public class UniqueReservationFieldValidator implements Validator, Serializable 
                     throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A Reservation Field with this name already exists."));
             }
         } else {
-            LogManager.logError("[UniqueReservationFieldValidator] Unable to Validate");
+            LogManager.logError(getClass(), "Unable to Validate");
             throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error during validation."));
         }
     }

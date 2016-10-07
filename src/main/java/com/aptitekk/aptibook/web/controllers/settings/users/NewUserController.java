@@ -82,7 +82,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             }
 
             userService.insert(newUser);
-            LogManager.logInfo("New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
+            LogManager.logInfo(getClass(), "New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getEmailAddress() + "' Added!"));
                 if (editUserController != null) {
@@ -95,7 +95,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
 
             resetFields();
         } catch (Exception e) {
-            LogManager.logException("Could not Create User", e);
+            LogManager.logException(getClass(), "Could not Create User", e);
             FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
         }
     }

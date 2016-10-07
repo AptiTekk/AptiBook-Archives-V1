@@ -78,7 +78,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                         File file = fileService.createFileFromImagePart(image);
                         asset.setImage(file);
                     } catch (IOException e) {
-                        LogManager.logException("Image Upload Failed", e);
+                        LogManager.logException(getClass(), "Image Upload Failed", e);
                         FacesContext.getCurrentInstance().addMessage("newAssetModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
                     }
                 }
@@ -90,12 +90,12 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                     assetService.insert(asset);
                     tagController.updateAssetTags(asset);
                     editAssetController.refreshAssets();
-                    LogManager.logInfo("Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
+                    LogManager.logInfo(getClass(), "Asset created, Asset Id and Name: " + asset.getId() + ", " + asset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + asset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Added!"));
                 }
             }
         } catch (Exception e) {
-            LogManager.logException("Could not persist new asset", e);
+            LogManager.logException(getClass(), "Could not persist new asset", e);
             FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
         }
     }

@@ -12,20 +12,20 @@ public class LogManager {
 
     private static final Logger LOGGER = Logger.getLogger(LogManager.class);
 
-    public static void logInfo(String message) {
-        LOGGER.info(message);
+    public static void logInfo(Class clazz, String message) {
+        LOGGER.info("[" + clazz.getSimpleName() + "] " + message);
     }
 
-    public static void logError(String message) {
-        LOGGER.error(message);
+    public static void logError(Class clazz, String message) {
+        LOGGER.error("[" + clazz.getSimpleName() + "] " + message);
     }
 
-    public static void logException(String message, Throwable t) {
-        LOGGER.error(message, t);
+    public static void logException(Class clazz, String message, Throwable t) {
+        LOGGER.error("[" + clazz.getSimpleName() + "] " + message, t);
     }
 
-    public static void logDebug(String message) {
-        LOGGER.debug(message);
+    public static void logDebug(Class clazz, String message) {
+        LOGGER.debug("[" + clazz.getSimpleName() + "] " + message);
     }
 
 }

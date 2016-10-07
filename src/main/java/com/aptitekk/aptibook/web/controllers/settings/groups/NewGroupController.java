@@ -65,7 +65,7 @@ public class NewGroupController implements Serializable {
                 newGroup.setParent(userGroupService.getRootGroup());
 
             userGroupService.insert(newGroup);
-            LogManager.logInfo("User Group added, User Group Id and Name: " + newGroup.getId() + ", " + newGroup.getName());
+            LogManager.logInfo(getClass(), "User Group added, User Group Id and Name: " + newGroup.getId() + ", " + newGroup.getName());
             if (editGroupController != null)
                 editGroupController.setSelectedUserGroup(newGroup);
 
@@ -73,7 +73,7 @@ public class NewGroupController implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + newGroup.getName() + "' Added"));
         } catch (Exception e) {
-            LogManager.logException("Could not add User Group", e);
+            LogManager.logException(getClass(), "Could not add User Group", e);
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
         }
     }

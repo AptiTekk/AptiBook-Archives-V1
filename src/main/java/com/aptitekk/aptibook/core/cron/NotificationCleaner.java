@@ -34,7 +34,7 @@ public class NotificationCleaner {
      */
     @Schedule(hour = "*", persistent = false)
     private void cleanReadNotifications() {
-        LogManager.logDebug("[NotificationCleaner] Cleaning Notifications...");
+        LogManager.logDebug(getClass(), "Cleaning Notifications...");
 
         int numNotificationsRemoved = 0;
         List<Tenant> tenants = tenantService.getAll();
@@ -46,13 +46,13 @@ public class NotificationCleaner {
                         notificationService.delete(notification.getId());
                         numNotificationsRemoved++;
                     } catch (Exception e) {
-                        LogManager.logException("[NotificationCleaner] Could not delete Notification on cleanup.", e);
+                        LogManager.logException(getClass(), "Could not delete Notification on cleanup.", e);
                     }
                 }
             }
         }
 
-        LogManager.logDebug("[NotificationCleaner] Removed " + numNotificationsRemoved + " old Notifications. Cleaning complete.");
+        LogManager.logDebug(getClass(), "Removed " + numNotificationsRemoved + " old Notifications. Cleaning complete.");
     }
 
 }

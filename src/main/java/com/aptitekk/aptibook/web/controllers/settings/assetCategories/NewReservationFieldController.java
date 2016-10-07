@@ -38,12 +38,12 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
 
             try {
                 reservationFieldService.insert(reservationField);
-                LogManager.logInfo("New Reservation Field persisted. Id and Title: " + reservationField.getId() + ", " + reservationField.getTitle());
+                LogManager.logInfo(getClass(), "New Reservation Field persisted. Id and Title: " + reservationField.getId() + ", " + reservationField.getTitle());
 
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {
-                LogManager.logException("Error while adding new Reservation Field", e);
+                LogManager.logException(getClass(), "Error while adding new Reservation Field", e);
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
             }
         }

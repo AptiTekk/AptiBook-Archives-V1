@@ -141,7 +141,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                     File file = fileService.createFileFromImagePart(image);
                     selectedAsset.setImage(file);
                 } catch (IOException e) {
-                    LogManager.logException("Image Upload Failed", e);
+                    LogManager.logException(getClass(), "Image Upload Failed", e);
                     FacesContext.getCurrentInstance().addMessage("editAssetModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
                     update = false;
                 }
@@ -157,11 +157,11 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                         selectedAsset.setOwner(assetOwnerGroup);
 
                     setSelectedAsset(assetService.merge(selectedAsset));
-                    LogManager.logInfo("Asset updated, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
+                    LogManager.logInfo(getClass(), "Asset updated, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    LogManager.logException("Updating Asset Settings Failed", e);
+                    LogManager.logException(getClass(), "Updating Asset Settings Failed", e);
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
                 }
             }
@@ -193,7 +193,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
                 context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Successful", "Asset Deleted!"));
-                LogManager.logInfo("Asset deleted, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
+                LogManager.logInfo(getClass(), "Asset deleted, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
                 assetService.delete(selectedAsset.getId());
                 refreshAssets();
             } else {
@@ -201,7 +201,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
             }
         } catch (Exception e) {
             context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
-            LogManager.logException("Error while Deleting Asset", e);
+            LogManager.logException(getClass(), "Error while Deleting Asset", e);
         }
 
         selectedAsset = null;
