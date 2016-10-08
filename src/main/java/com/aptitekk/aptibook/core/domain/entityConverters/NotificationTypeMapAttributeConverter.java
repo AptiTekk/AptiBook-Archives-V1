@@ -7,16 +7,14 @@
 package com.aptitekk.aptibook.core.domain.entityConverters;
 
 import com.aptitekk.aptibook.core.domain.entities.Notification;
-import com.sun.tools.corba.se.idl.constExpr.Not;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.Pack200;
 
 /**
- * This class converts the joda DateTime object to and from database columns.
+ * This class converts the NotificationTypeMap (which contains user preferences for email notifications) to and from a database column.
  */
 @Converter(autoApply = true)
 public class NotificationTypeMapAttributeConverter implements AttributeConverter<Map<Notification.Type, Boolean>, String> {
@@ -52,8 +50,7 @@ public class NotificationTypeMapAttributeConverter implements AttributeConverter
         }
 
         //Load default values for types that haven't been set.
-        for(Notification.Type type : Notification.Type.values())
-        {
+        for (Notification.Type type : Notification.Type.values()) {
             map.putIfAbsent(type, type.getDefaultValue());
         }
         return map;
