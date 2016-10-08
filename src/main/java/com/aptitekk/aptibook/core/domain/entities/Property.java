@@ -66,11 +66,10 @@ public class Property extends MultiTenantEntity implements Serializable {
                         if (listener != null)
                             listener.onPropertiesChanged(this);
                     } else {
-                        LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it in the bean set.");
+                        LogManager.logError(getClass(), "Tried to access property listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it in the bean set.");
                     }
                 } catch (UnsatisfiedResolutionException e) {
-                    LogManager.logError("Tried to access listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it." +
-                            "\nError: " + e.getMessage());
+                    LogManager.logException(getClass(), "Tried to access property listener for " + propertyGroupChangeListenerClass.getName() + " but could not find it.", e);
                 }
             }
         }
@@ -85,7 +84,7 @@ public class Property extends MultiTenantEntity implements Serializable {
         GOOGLE_SIGN_IN_ENABLED("false", Group.GOOGLE_SIGN_IN, new BooleanField("Enable Google Sign In")),
         GOOGLE_SIGN_IN_WHITELIST("gmail.com, example.com", Group.GOOGLE_SIGN_IN, new SingleLineField("Allowed Domain Names (Comma separated)", 256)),
 
-        DATE_TIME_TIMEZONE("UTC", Group.DATE_TIME, new SelectOneField("Timezone", ZoneId.getAvailableZoneIds(), true), (key, submittedValue) -> {
+        DATE_TIME_TIMEZONE("America/Denver", Group.DATE_TIME, new SelectOneField("Timezone", ZoneId.getAvailableZoneIds(), true), (key, submittedValue) -> {
             try {
                 ZoneId zoneId = ZoneId.of(submittedValue);
                 if (zoneId == null)

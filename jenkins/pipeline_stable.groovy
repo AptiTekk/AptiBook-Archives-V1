@@ -60,8 +60,9 @@ def runTests(mvnHome) {
 def changeVersion(mvnHome, buildNumber) {
     sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
     sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
-    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`-' + buildNumber + '"'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`.`date +%d`_' + buildNumber + '"'
     sh mvnHome + '/bin/mvn versions:commit'
+    sh "git commit -a -m 'Jenkins Automatic Version Change'"
 }
 
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {

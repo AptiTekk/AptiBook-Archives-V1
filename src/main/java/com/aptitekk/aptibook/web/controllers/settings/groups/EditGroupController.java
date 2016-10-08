@@ -87,13 +87,12 @@ public class EditGroupController implements Serializable {
             if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
                 try {
                     selectedUserGroup.setName(editableGroupName);
-                    LogManager.logInfo("User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
+                    LogManager.logInfo(getClass(), "User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                     selectedUserGroup = userGroupService.merge(selectedUserGroup);
                     resetSettings();
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    LogManager.logError("Error while updating User Group" + selectedUserGroup.getName() + ": " + e.getMessage());
+                    LogManager.logException(getClass(), "Could not update User Group", e);
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
                 }
             }
@@ -123,19 +122,17 @@ public class EditGroupController implements Serializable {
                 try {
                     userGroupService.merge(child);
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    LogManager.logError(e.getMessage());
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    LogManager.logException(getClass(), "Could not change UserGroup parent", e);
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
                 }
             }
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-                LogManager.logInfo("User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Group '" + selectedUserGroup.getName() + "' Deleted"));
+                LogManager.logInfo(getClass(), "User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
-                e.printStackTrace();
-                LogManager.logError("Error while deleting User Group " + selectedUserGroup.getName() + ": " + e.getMessage());
+                LogManager.logException(getClass(), "Could not delete User Group", e);
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
             }
         }
@@ -148,7 +145,7 @@ public class EditGroupController implements Serializable {
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
             userService.merge(user);
-            LogManager.logInfo("Update user, removed from User group. User id and name: " + ", " + user.getId() + user.getFullname());
+            LogManager.logInfo(getClass(), "Update user, removed from User group. User id and name: " + ", " + user.getId() + user.getFullname());
             selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
             resetSettings();
 

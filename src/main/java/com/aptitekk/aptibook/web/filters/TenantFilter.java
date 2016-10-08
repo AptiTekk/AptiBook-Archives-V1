@@ -39,7 +39,7 @@ public class TenantFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
-        LogManager.logInfo("Tenant Filter Initialized.");
+        LogManager.logInfo(getClass(), "Tenant Filter Initialized.");
     }
 
     @Override
@@ -115,7 +115,7 @@ public class TenantFilter implements Filter {
 
         String attemptedAccessPath = ((HttpServletRequest) request).getRequestURI();
 
-        LogManager.logInfo("Unauthorized access request to " + attemptedAccessPath + parameters);
+        LogManager.logInfo(getClass(), "Unauthorized access request to " + attemptedAccessPath + parameters);
         ((HttpServletRequest) request).getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
         ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }

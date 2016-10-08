@@ -34,7 +34,7 @@ public class FileService extends MultiTenantEntityServiceAbstract<File> implemen
      */
     public File createFileFromImagePart(Part part) throws IOException {
         if (part == null) {
-            LogManager.logError("Attempt to upload image failed due to a null Part");
+            LogManager.logError(getClass(), "Attempt to upload image failed due to a null Part");
             return null;
         }
 
@@ -76,11 +76,11 @@ public class FileService extends MultiTenantEntityServiceAbstract<File> implemen
                 insert(file);
                 return file;
             } catch (Exception e) {
-                LogManager.logError("Attempt to upload image failed while persisting: " + e.getMessage());
+                LogManager.logException(getClass(), "Attempt to upload image failed while persisting.", e);
                 return null;
             }
         } else {
-            LogManager.logError("Attempt to upload image failed due to a null byte array output.");
+            LogManager.logError(getClass(), "Attempt to upload image failed due to a null byte array output.");
             return null;
         }
     }
