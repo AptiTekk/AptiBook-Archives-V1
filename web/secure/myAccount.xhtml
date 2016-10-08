@@ -111,6 +111,9 @@
                             </c:if>
                             <c:choose>
                                 <c:when test="#{myAccountController.user.admin}">
+                                    <div class="form-group">
+                                        <h4>Email Notification Preferences:</h4>
+                                    </div>
                                     The admin account cannot receive email notifications.
                                 </c:when>
                                 <c:otherwise>
