@@ -99,7 +99,7 @@ public class RequestReservationViewController implements Serializable {
 
             try {
                 reservationService.insert(reservation);
-                LogManager.logInfo("Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
+                LogManager.logInfo(getClass(), "Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
                 successfulReservation = reservation;
                 for (Entry<ReservationField, String> entry : fieldMap.entrySet()) {
                     if (entry.getKey() != null && entry.getValue() != null) {
@@ -109,18 +109,16 @@ public class RequestReservationViewController implements Serializable {
                         reservationFieldEntry.setContent(entry.getValue());
                         try {
                             reservationFieldEntryService.insert(reservationFieldEntry);
-                            LogManager.logInfo("ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
+                            LogManager.logInfo(getClass(), "ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
                         } catch (Exception e) {
-                            LogManager.logError("Error in persisting ReservationFieldEntry, ReservationFieldEntry id: " + reservationFieldEntry.getId());
-                            e.printStackTrace();
+                            LogManager.logException(getClass(), "Error persisting ReservationFieldEntry", e);
                         }
                     }
                 }
 
                 notificationService.sendNewReservationNotifications(reservation);
             } catch (Exception e) {
-                LogManager.logError("Error in Making reservation. Asset name, and user name: " + asset.getName() + authenticationController.getAuthenticatedUser().getFullname() + "Exception message: " + e.getMessage());
-                e.printStackTrace();
+                LogManager.logException(getClass(), "Error while creating new Reservation", e);
             }
         }
 

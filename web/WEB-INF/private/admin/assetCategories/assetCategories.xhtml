@@ -25,18 +25,15 @@
                     <div class="form-group">
                         <b:dataTable value="#{editAssetCategoryController.assetCategories}" var="assetCategory"
                                      styleClass="table table-striped table-bordered" style="width:100%;"
-                                     responsive="true">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Asset Category"/>
-                                </f:facet>
+                                     responsive="true" searching="false" paginated="false">
+                            <b:dataTableColumn label="Asset Category">
                                 <b:navCommandLink value="#{assetCategory.name}"
                                                   iconAwesome="pencil-square-o"
                                                   ajax="true"
                                                   action="#{editAssetCategoryController.setSelectedAssetCategory(assetCategory)}"
                                                   update=":assetCategoriesPage"
                                                   style="font-weight: #{editAssetCategoryController.selectedAssetCategory == assetCategory ? 'bold' : 'normal'}"/>
-                            </h:column>
+                            </b:dataTableColumn>
                         </b:dataTable>
                     </div>
                     <h:panelGroup layout="block" styleClass="btn-toolbar"
@@ -77,7 +74,7 @@
                                 </b:inputText>
                             </div>
                             <div class="form-group">
-                                <h:outputLabel value="Asset Tags:"/>
+                                <h:outputLabel value="Available Filters:"/>
                                 <!--@elvariable id="tag" type="java.lang.String"-->
                                 <pf:autoComplete multiple="true"
                                                  value="#{tagController.selectedAssetCategoryTagNames}"

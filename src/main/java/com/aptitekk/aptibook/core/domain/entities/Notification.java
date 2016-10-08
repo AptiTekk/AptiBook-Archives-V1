@@ -25,20 +25,25 @@ import java.time.ZonedDateTime;
 public class Notification extends MultiTenantEntity implements Serializable {
 
     public enum Type {
-
         TYPE_RESERVATION_APPROVED("Reservation Approved", true, false),
         TYPE_RESERVATION_REJECTED("Reservation Rejected", true, false),
         TYPE_RESERVATION_REQUESTED("New Reservation Request", true, true),
-        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true);
+        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true, Permission.Descriptor.ASSETS_MODIFY_ALL);
 
-        private String label;
-        private boolean defaultValue;
-        private boolean userGroupRequired;
+        private final String label;
+        private final boolean defaultValue;
+        private final boolean userGroupRequired;
+        private final Permission.Descriptor requiredPermissionDescriptor;
 
         Type(String label, boolean defaultValue, boolean userGroupRequired) {
+            this(label, defaultValue, userGroupRequired, null);
+        }
+
+        Type(String label, boolean defaultValue, boolean userGroupRequired, Permission.Descriptor requiredPermissionDescriptor) {
             this.label = label;
             this.defaultValue = defaultValue;
             this.userGroupRequired = userGroupRequired;
+            this.requiredPermissionDescriptor = requiredPermissionDescriptor;
         }
 
         public String getLabel() {
@@ -51,6 +56,10 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
         public boolean isUserGroupRequired() {
             return userGroupRequired;
+        }
+
+        public Permission.Descriptor getRequiredPermissionDescriptor() {
+            return requiredPermissionDescriptor;
         }
     }
 

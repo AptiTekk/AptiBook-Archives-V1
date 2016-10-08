@@ -9,6 +9,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
 >
 <ui:composition>
     <h:form id="infoModalForm">
@@ -18,10 +19,16 @@
                 #{aptiBookInfoController.version}
             </h:panelGroup>
             <hr/>
-            <h:panelGroup layout="block" rendered="#{not empty aptiBookInfoController.attributions}">
+            <h:panelGroup layout="block" rendered="#{not empty aptiBookInfoController.attributionsMap}">
                 <h4>Third-Party Library Attributions:</h4>
-                <b:inputTextarea value="#{aptiBookInfoController.attributions}" readonly="true" rows="10"
-                                 style="resize: none;"/>
+                <b:accordion>
+                    <c:forEach items="#{aptiBookInfoController.attributionsMap}" var="attribution">
+                        <b:panel title="#{attribution.key}">
+                            <b:inputTextarea value="#{attribution.value}" readonly="true" rows="10"
+                                             style="resize: none;"/>
+                        </b:panel>
+                    </c:forEach>
+                </b:accordion>
             </h:panelGroup>
             <f:facet name="footer">
                 <b:button value="Close" look="default" onclick="$('.infoModal').modal('hide')"/>

@@ -40,8 +40,8 @@ public class EmailService implements Serializable {
         if (API_KEY != null && API_URL != null) {
             client = new Client(API_KEY);
         } else {
-            LogManager.logError("Could not create EmailService Client. API_KEY or API_URL is null!");
-            LogManager.logError("API_KEY: " + API_KEY + " | API_URL: " + API_URL);
+            LogManager.logError(getClass(), "Could not create EmailService Client. API_KEY or API_URL is null!");
+            LogManager.logError(getClass(), "API_KEY: " + API_KEY + " | API_URL: " + API_URL);
         }
     }
 
@@ -104,7 +104,7 @@ public class EmailService implements Serializable {
             ResourceTransmissions.create(connection, 0, transmission);
             return true;
         } catch (SparkPostException e) {
-            LogManager.logError("Error sending email: " + e.getMessage());
+            LogManager.logException(getClass(), "Unable to send an email to these addresses: "+recipientArray+".", e);
             return false;
         }
 
