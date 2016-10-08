@@ -69,7 +69,7 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     sh "${mvnHome}/bin/mvn clean install -U"
     sh "heroku maintenance:on --app ${herokuAppName}"
     sh "heroku git:remote --app ${herokuAppName}"
-    sh "git push heroku HEAD:master"
+    sh "git push heroku HEAD:master -f"
     sleep 60
     sh "heroku maintenance:off --app ${herokuAppName}"
 
