@@ -84,11 +84,6 @@ public class AptiBookInfoController implements Serializable {
         }
     }
 
-    @PostConstruct
-    private void init() {
-
-    }
-
     public String getVersion() {
         return aptiBookProperties.getProperty("version");
     }
