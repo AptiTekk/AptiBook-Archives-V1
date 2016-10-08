@@ -12,7 +12,7 @@ node {
 
     try {
         stage "Checkout"
-        slackSend color: "#4272b7", message: "A new AptiBook build is starting... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "A new ${env.JOB_NAME} Pipeline build is starting... (Job ${env.BUILD_NUMBER})"
         checkoutFromGit()
 
         stage "Test"
