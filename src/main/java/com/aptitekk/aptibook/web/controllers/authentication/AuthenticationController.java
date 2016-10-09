@@ -121,7 +121,7 @@ public class AuthenticationController implements Serializable {
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
                     return determineRedirectPath();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogManager.logException(getClass(), "Could not create User for Google Sign In", e);
                 }
                 return null;
             } else {

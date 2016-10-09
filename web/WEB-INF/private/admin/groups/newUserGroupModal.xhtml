@@ -25,7 +25,7 @@
 
                 <b:message for="newGroupName" showSummary="false" showDetail="true"/>
                 <b:inputText id="newGroupName" label="Name:"
-                             value="#{newGroupController.name}"
+                             value="#{newUserGroupController.name}"
                              required="true"
                              requiredMessage="This is required." maxlength="32">
                     <f:validator binding="#{uniqueUserGroupValidator}"/>
@@ -37,11 +37,11 @@
                         <b:message for="newGroupParent"
                                    showSummary="false" showDetail="true"/>
                         <pf:tree id="newGroupParent"
-                                 value="#{groupTreeController.getTree(newGroupController.parentGroup, null, true, false)}"
+                                 value="#{groupTreeController.getTree(newUserGroupController.parentGroup, null, true, false)}"
                                  var="node" selectionMode="single">
                             <pf:ajax event="select" onstart="loading_start()"
                                      oncomplete="loading_complete()"
-                                     listener="#{newGroupController.onParentGroupSelected}"/>
+                                     listener="#{newUserGroupController.onParentGroupSelected}"/>
                             <pf:treeNode>
                                 <h:outputText value="#{node.name}"/>
                             </pf:treeNode>
@@ -55,7 +55,7 @@
                 <b:commandButton value="Add" look="primary" ajax="true"
                                  update="newUserGroupFields :groupsPageContent"
                                  oncomplete="if(!validationFailed) $('.newUserGroupModal').modal('hide')"
-                                 action="#{newGroupController.addGroup}"
+                                 action="#{newUserGroupController.addGroup}"
                                  actionListener="#{groupTreeController.invalidateTrees()}"/>
             </f:facet>
         </b:modal>

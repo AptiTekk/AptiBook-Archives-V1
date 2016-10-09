@@ -15,6 +15,7 @@ import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.faces.application.FacesMessage;
@@ -79,13 +80,13 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
                     return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
                 } catch (Exception e) {
                     LogManager.logException(getClass(), "Could not persist user", e);
-                    FacesContext.getCurrentInstance().addMessage("registerForm:emailAddress", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An Internal Server Error occurred while trying to register your account. Please try again later!"));
+                    FacesContext.getCurrentInstance().addMessage("registerForm:emailAddress", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                     return null;
                 }
             }
         } catch (PasswordStorage.CannotPerformOperationException e) {
             LogManager.logException(getClass(), "Could not add new user on registration due to crypto error", e);
-            FacesContext.getCurrentInstance().addMessage("registerForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "There was a problem while processing your request. Please try again later."));
+            FacesContext.getCurrentInstance().addMessage("registerForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             return null;
         }
     }

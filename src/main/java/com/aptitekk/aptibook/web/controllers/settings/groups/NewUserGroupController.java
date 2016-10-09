@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +26,7 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class NewGroupController implements Serializable {
+public class NewUserGroupController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;
@@ -38,12 +39,6 @@ public class NewGroupController implements Serializable {
 
     private boolean hasModifyPermission() {
         return authenticationController != null && authenticationController.userHasPermission(Permission.Descriptor.GROUPS_MODIFY_ALL);
-    }
-
-    @PostConstruct
-    public void init() {
-        if (editUserGroupController != null)
-            editUserGroupController.setNewGroupController(this);
     }
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -65,7 +60,6 @@ public class NewGroupController implements Serializable {
                 newGroup.setParent(userGroupService.getRootGroup());
 
             userGroupService.insert(newGroup);
-            LogManager.logInfo(getClass(), "User Group added, User Group Id and Name: " + newGroup.getId() + ", " + newGroup.getName());
             if (editUserGroupController != null)
                 editUserGroupController.setSelectedUserGroup(newGroup);
 
@@ -74,7 +68,7 @@ public class NewGroupController implements Serializable {
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + newGroup.getName() + "' Added"));
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not add User Group", e);
-            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, CommonFacesMessages.EXCEPTION_MESSAGE));
         }
     }
 

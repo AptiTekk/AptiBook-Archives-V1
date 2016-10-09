@@ -17,6 +17,7 @@ import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -202,8 +203,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 refreshUserLists();
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Could not Update User Settings", e);
-                FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
         }
@@ -225,7 +225,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             }
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not Delete User", e);
-            context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
+            context.addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
 
         refreshUserLists();

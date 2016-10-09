@@ -73,6 +73,7 @@ public class RequestReservationViewController implements Serializable {
      * A notificationTypeSettings containing a String for each Reservation Field to store the user's input.
      */
     private HashMap<ReservationField, String> fieldMap = new HashMap<>();
+
     /**
      * Current Reservation being edited by user, variable to check if we can redirect to success page.
      */
@@ -99,7 +100,6 @@ public class RequestReservationViewController implements Serializable {
 
             try {
                 reservationService.insert(reservation);
-                LogManager.logInfo(getClass(), "Reservation persisted, Reservation Id and Title: " + reservation.getId() + ", " + reservation.getTitle());
                 successfulReservation = reservation;
                 for (Entry<ReservationField, String> entry : fieldMap.entrySet()) {
                     if (entry.getKey() != null && entry.getValue() != null) {
@@ -109,7 +109,6 @@ public class RequestReservationViewController implements Serializable {
                         reservationFieldEntry.setContent(entry.getValue());
                         try {
                             reservationFieldEntryService.insert(reservationFieldEntry);
-                            LogManager.logInfo(getClass(), "ReservationFieldEntry persisted, ReservationFieldEntry Id: " + reservationFieldEntry.getId());
                         } catch (Exception e) {
                             LogManager.logException(getClass(), "Error persisting ReservationFieldEntry", e);
                         }
@@ -123,7 +122,6 @@ public class RequestReservationViewController implements Serializable {
         }
 
     }
-
 
     /**
      * Used when the user decides to cancel making a reservation request.

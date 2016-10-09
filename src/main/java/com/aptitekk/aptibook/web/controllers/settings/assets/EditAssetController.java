@@ -16,6 +16,7 @@ import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationContro
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
 import com.aptitekk.aptibook.web.controllers.settings.groups.GroupTreeController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -132,7 +133,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
             boolean update = true;
 
             if (assetOwnerGroup == null) {
-                FacesContext.getCurrentInstance().addMessage("editAssetModalForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This is required. Please select an owner group for this asset."));
+                FacesContext.getCurrentInstance().addMessage("editAssetModalForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset."));
                 update = false;
             }
 
@@ -162,7 +163,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                 } catch (Exception e) {
                     e.printStackTrace();
                     LogManager.logException(getClass(), "Updating Asset Settings Failed", e);
-                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
         }
@@ -200,7 +201,7 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                 throw new Exception("Asset not found!");
             }
         } catch (Exception e) {
-            context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Failure", "Error While Deleting Asset!"));
+            context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             LogManager.logException(getClass(), "Error while Deleting Asset", e);
         }
 
