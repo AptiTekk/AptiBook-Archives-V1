@@ -30,6 +30,7 @@ public class PermissionService extends MultiTenantEntityServiceAbstract<Permissi
              List<User> usersWithPermission = entityManager
                      //select distinct u from User u left join fetch u.friends where u.id = :id
             //select p from ModPm p join p.modScopeTypes type where type.scopeTypeId = 1
+                     //rip
                     .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
                     .setParameter(1, descriptor)
                     .setParameter(2, getTenant())
