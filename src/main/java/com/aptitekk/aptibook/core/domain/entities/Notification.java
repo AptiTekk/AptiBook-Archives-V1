@@ -26,19 +26,22 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
     public enum Type {
 
-        TYPE_RESERVATION_APPROVED("Reservation Approved", true, false),
-        TYPE_RESERVATION_REJECTED("Reservation Rejected", true, false),
-        TYPE_RESERVATION_REQUESTED("New Reservation Request", true, true),
-        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true);
+        TYPE_RESERVATION_APPROVED("Reservation Approved", true, false, null),
+        TYPE_RESERVATION_REJECTED("Reservation Rejected", true, false, null),
+        TYPE_RESERVATION_REQUESTED("New Reservation Request", true, true, null),
+        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true, null),
+        TYPE_APPROVAL_REQUEST("New User Registration", true, true, Permission.Descriptor.USERS_MODIFY_ALL);
 
         private String label;
         private boolean defaultValue;
         private boolean userGroupRequired;
+        private Permission.Descriptor descriptor;
 
-        Type(String label, boolean defaultValue, boolean userGroupRequired) {
+        Type(String label, boolean defaultValue, boolean userGroupRequired, Permission.Descriptor descriptor) {
             this.label = label;
             this.defaultValue = defaultValue;
             this.userGroupRequired = userGroupRequired;
+            this.descriptor = descriptor;
         }
 
         public String getLabel() {
@@ -51,6 +54,10 @@ public class Notification extends MultiTenantEntity implements Serializable {
 
         public boolean isUserGroupRequired() {
             return userGroupRequired;
+        }
+
+        public Permission.Descriptor getDescriptor() {
+            return descriptor;
         }
     }
 
