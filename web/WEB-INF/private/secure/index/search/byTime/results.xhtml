@@ -101,9 +101,6 @@
                                         <b:buttonToolbar>
                                             <b:commandButton look="default" value="Make Reservation" ajax="true"
                                                              action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}"
-                                                             onmousedown="focused = true;"
-                                                             onmouseup="if(focused) loading_start(); focused = false;"
-                                                             oncomplete="loading_complete();"
                                                              update=":includeGroup"/>
                                         </b:buttonToolbar>
                                     </f:facet>
