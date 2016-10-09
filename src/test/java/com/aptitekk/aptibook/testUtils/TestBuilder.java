@@ -4,31 +4,18 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.web.servlets;
+package com.aptitekk.aptibook.testUtils;
 
 import com.aptitekk.aptibook.SwarmBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 import org.wildfly.swarm.undertow.WARArchive;
 
-import static org.junit.Assert.*;
+public abstract class TestBuilder {
 
-@RunWith(Arquillian.class)
-public class OAuthServletTest {
-
-    @Drone
-    WebDriver browser;
-
-    @CreateSwarm
     public static Swarm createSwarm() {
         try {
             return SwarmBuilder.buildSwarm();
@@ -38,7 +25,6 @@ public class OAuthServletTest {
         }
     }
 
-    @Deployment(testable = false)
     public static WARArchive createDeployment() {
         try {
             return SwarmBuilder.buildDeployment();
@@ -46,12 +32,6 @@ public class OAuthServletTest {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Test
-    public void testOAuthServletRedirection() {
-        browser.navigate().to("http://localhost:8085/oauth?state=tenant=dev&code=1234");
-        assertEquals("OAuthServlet did not redirect properly.", "http://localhost:8085/dev/index.xhtml", browser.getCurrentUrl());
     }
 
 }

@@ -144,17 +144,6 @@ public class EditUserGroupController implements Serializable {
                 }
             }
 
-            //Detach relationship with all Permissions
-            for(Permission permission : selectedUserGroup.getPermissions()) {
-                permission.getUserGroups().remove(selectedUserGroup);
-                try {
-                    permissionService.merge(permission);
-                } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not remove UserGroup from Permission", e);
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
-                }
-            }
-
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));

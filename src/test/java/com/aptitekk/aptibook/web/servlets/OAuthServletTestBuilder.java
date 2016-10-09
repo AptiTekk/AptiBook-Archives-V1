@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.servlets;
 
-import com.aptitekk.aptibook.SwarmBuilder;
+import com.aptitekk.aptibook.testUtils.TestBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
@@ -17,38 +17,28 @@ import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
 import org.wildfly.swarm.undertow.WARArchive;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
-public class PingServletTest {
+public class OAuthServletTestBuilder {
 
     @Drone
     WebDriver browser;
 
     @CreateSwarm
     public static Swarm createSwarm() {
-        try {
-            return SwarmBuilder.buildSwarm();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return TestBuilder.createSwarm();
     }
 
     @Deployment(testable = false)
     public static WARArchive createDeployment() {
-        try {
-            return SwarmBuilder.buildDeployment();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return TestBuilder.createDeployment();
     }
 
     @Test
-    public void testPingServlet() {
-        browser.navigate().to("http://localhost:8085/ping");
-        assertEquals("PingServlet did not return pong", "pong", browser.getPageSource());
+    public void testOAuthServletRedirection() {
+        browser.navigate().to("http://localhost:8085/oauth?state=tenant=dev&code=1234");
+        assertEquals("OAuthServlet did not redirect properly.", "http://localhost:8085/dev/index.xhtml", browser.getCurrentUrl());
     }
 
 }
