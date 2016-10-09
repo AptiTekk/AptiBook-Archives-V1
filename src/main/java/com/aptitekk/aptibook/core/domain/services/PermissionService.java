@@ -12,12 +12,51 @@ import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 
 @Stateful
 public class PermissionService extends MultiTenantEntityServiceAbstract<Permission> implements Serializable {
+
+    @Inject
+    private UserService userService;
+
+    public List<User> getAllUsersWithPermission(Permission.Descriptor descriptor){
+        try
+        {
+            System.out.println("Descriptor: "+descriptor);
+             List<User> usersWithPermission = entityManager
+                     //select distinct u from User u left join fetch u.friends where u.id = :id
+            //select p from ModPm p join p.modScopeTypes type where type.scopeTypeId = 1
+                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+            System.out.println("Users: "+usersWithPermission);
+
+            List<UserGroup> groupsWithPermission = entityManager
+                    .createQuery("SELECT g FROM UserGroup g INNER JOIN g.permissions p WHERE p.descriptor = ?1 AND g.tenant = ?2", UserGroup.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+
+            for(UserGroup userGroup : groupsWithPermission)
+            {
+                usersWithPermission.addAll(userGroup.getUsers());
+            }
+
+            usersWithPermission.add(userService.findByName("admin"));
+
+            return usersWithPermission;
+        }catch (Exception e){
+            return  null;
+        }
+    }
+
+
+
 
     public List<Permission> getAllJoinUsersAndGroups() {
         try {
