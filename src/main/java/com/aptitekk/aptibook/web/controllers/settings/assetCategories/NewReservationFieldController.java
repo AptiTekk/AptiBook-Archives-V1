@@ -39,8 +39,6 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
 
             try {
                 reservationFieldService.insert(reservationField);
-                LogManager.logInfo(getClass(), "New Reservation Field persisted. Id and Title: " + reservationField.getId() + ", " + reservationField.getTitle());
-
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {

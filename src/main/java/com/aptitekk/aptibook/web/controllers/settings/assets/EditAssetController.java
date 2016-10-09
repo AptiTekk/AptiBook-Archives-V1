@@ -158,7 +158,6 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
                         selectedAsset.setOwner(assetOwnerGroup);
 
                     setSelectedAsset(assetService.merge(selectedAsset));
-                    LogManager.logInfo(getClass(), "Asset updated, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
                     FacesContext.getCurrentInstance().addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset '" + selectedAsset.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -194,7 +193,6 @@ public class EditAssetController extends AssetFieldSupplier implements Serializa
         try {
             if (assetService.get(selectedAsset.getId()) != null) {
                 context.addMessage("assetsForm_" + selectedAsset.getAssetCategory().getId(), new FacesMessage("Successful", "Asset Deleted!"));
-                LogManager.logInfo(getClass(), "Asset deleted, Asset Id and Name: " + selectedAsset.getId() + ", " + selectedAsset.getName());
                 assetService.delete(selectedAsset.getId());
                 refreshAssets();
             } else {
