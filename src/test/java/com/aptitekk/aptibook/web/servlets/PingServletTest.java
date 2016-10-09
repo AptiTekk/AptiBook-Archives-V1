@@ -4,28 +4,26 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.crypto;
+package com.aptitekk.aptibook.web.servlets;
 
 import com.aptitekk.aptibook.SwarmBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
 import org.wildfly.swarm.Swarm;
 import org.wildfly.swarm.arquillian.CreateSwarm;
-import org.wildfly.swarm.spi.api.JARArchive;
 import org.wildfly.swarm.undertow.WARArchive;
 
-import java.io.File;
-import java.util.UUID;
-
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class PasswordStorageTest {
+public class PingServletTest {
+
+    @Drone
+    WebDriver browser;
 
     @CreateSwarm
     public static Swarm createSwarm() {
@@ -48,20 +46,9 @@ public class PasswordStorageTest {
     }
 
     @Test
-    public void testHashesAreUnique() throws PasswordStorage.CannotPerformOperationException {
-        String password = UUID.randomUUID().toString();
-        String hash1 = PasswordStorage.createHash(password);
-        String hash2 = PasswordStorage.createHash(password);
-
-        assertNotEquals("Hashes were not unique.", hash1, hash2);
-    }
-
-    @Test
-    public void testVerifyPassword() throws PasswordStorage.CannotPerformOperationException, PasswordStorage.InvalidHashException {
-        String password = UUID.randomUUID().toString();
-        String hash = PasswordStorage.createHash(password);
-
-        assertTrue("Password verification failed.", PasswordStorage.verifyPassword(password, hash));
+    public void testPingServlet() {
+        browser.navigate().to("http://localhost:8085/ping");
+        assertEquals("PingServlet did not return pong", "pong", browser.getPageSource());
     }
 
 }
