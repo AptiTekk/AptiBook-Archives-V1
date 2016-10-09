@@ -28,7 +28,7 @@ public class Notification extends MultiTenantEntity implements Serializable {
         TYPE_RESERVATION_APPROVED("Reservation Approved", true, false),
         TYPE_RESERVATION_REJECTED("Reservation Rejected", true, false),
         TYPE_RESERVATION_REQUESTED("New Reservation Request", true, true),
-        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true, Permission.Descriptor.ASSETS_MODIFY_ALL);
+        TYPE_RESERVATION_REQUEST_AUTO_APPROVED("New Reservation Request Automatically Approved", false, true);
 
         private final String label;
         private final boolean defaultValue;
