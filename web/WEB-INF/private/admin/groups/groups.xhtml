@@ -26,17 +26,17 @@
                     <div class="form-group">
                         <b:panel title="Select a User Group" collapsible="false" styleClass="dataTablePanel">
                             <c:choose>
-                                <c:when test="#{empty groupTreeController.getTree(editGroupController.selectedUserGroup, null, false, false).children}">
+                                <c:when test="#{empty groupTreeController.getTree(editUserGroupController.selectedUserGroup, null, false, false).children}">
                                     There are no User Groups. Click the button below to add one.
                                 </c:when>
                                 <c:otherwise>
                                     <p>Drag and drop User Groups to re-arrange the hierarchy.<br/>
                                         Click on a User Group to select it for editing.</p>
                                     <pf:tree id="tree"
-                                             value="#{groupTreeController.getTree(editGroupController.selectedUserGroup, null, false, false)}"
+                                             value="#{groupTreeController.getTree(editUserGroupController.selectedUserGroup, null, false, false)}"
                                              var="node" draggable="true" droppable="true" selectionMode="single"
                                              dynamic="true">
-                                        <pf:ajax event="select" listener="#{editGroupController.onNodeSelect}"
+                                        <pf:ajax event="select" listener="#{editUserGroupController.onNodeSelect}"
                                                  update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
                                         <pf:ajax event="dragdrop" update=":groupsPage"
@@ -60,7 +60,7 @@
             <b:column colXs="12" colLg="6" offsetLg="1">
                 <h:form id="groupEditForm">
                     <c:choose>
-                        <c:when test="#{editGroupController.selectedUserGroup == null}">
+                        <c:when test="#{editUserGroupController.selectedUserGroup == null}">
                             <h4>Please select a User Group.</h4>
                             <b:message for="groupEditForm" showSummary="false" showDetail="true"/>
                         </c:when>
@@ -73,30 +73,30 @@
 
                             <b:message for="groupNameEdit" showSummary="false" showDetail="true"/>
                             <b:inputText id="groupNameEdit" label="Name:"
-                                         value="#{editGroupController.editableGroupName}"
+                                         value="#{editUserGroupController.editableGroupName}"
                                          required="true"
                                          requiredMessage="This is required." maxlength="32">
                                 <f:validator binding="#{uniqueUserGroupValidator}"/>
-                                <f:attribute name="exception" value="#{editGroupController.selectedUserGroup}"/>
+                                <f:attribute name="exception" value="#{editUserGroupController.selectedUserGroup}"/>
                             </b:inputText>
 
-                            <div class="btn-toolbar">
-                                <h:commandButton styleClass="btn btn-primary"
+                            <b:buttonToolbar>
+                                <b:commandButton look="primary"
                                                  value="Save Changes"
-                                                 action="#{editGroupController.updateSettings()}">
-                                    <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                </h:commandButton>
-                                <h:commandButton styleClass="btn btn-default"
+                                                 ajax="true"
+                                                 action="#{editUserGroupController.updateSettings()}"
+                                                 update=":groupsPage" process="@form"/>
+                                <b:commandButton look="default"
                                                  value="Reset Form"
-                                                 action="#{editGroupController.resetSettings()}">
-                                    <f:ajax execute="@form" render=":groupsPage" onevent="loading"/>
-                                </h:commandButton>
-                                <div class="btn-toolbar pull-right">
+                                                 ajax="true"
+                                                 action="#{editUserGroupController.resetSettings()}"
+                                                 update=":groupsPage" process="@form"/>
+                                <b:buttonToolbar styleClass="pull-right">
                                     <b:commandButton look="danger" value="Delete User Group" ajax="true"
                                                      update=":deletionConfirmModalForm"
                                                      oncomplete="$('.deletionConfirmModal').modal()"/>
-                                </div>
-                            </div>
+                                </b:buttonToolbar>
+                            </b:buttonToolbar>
 
                             <hr/>
 
@@ -104,14 +104,14 @@
                                 <h:outputLabel value="Users:" for="usersTable"/>
                                 <b:message for="usersTable" showSummary="false" showDetail="true"/>
                                 <b:dataTable searching="true" paginated="true"
-                                             value="#{editGroupController.selectedUserGroup.users}" var="user"
+                                             value="#{editUserGroupController.selectedUserGroup.users}" var="user"
                                              id="usersTable">
                                     <h:column>
                                         <f:facet name="header">
                                             <h:outputText value="Username"/>
                                         </f:facet>
                                         <b:navCommandLink
-                                                action="#{editGroupController.removeUserFromSelectedGroup(user)}"
+                                                action="#{editUserGroupController.removeUserFromSelectedGroup(user)}"
                                                 ajax="true" update="@parent:@parent:@parent:@parent"
                                                 iconAwesome="minus-circle"
                                                 value="#{user.emailAddress}"/>

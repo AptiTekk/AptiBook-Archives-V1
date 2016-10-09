@@ -31,7 +31,7 @@ public class NewGroupController implements Serializable {
     private UserGroupService userGroupService;
 
     @Inject
-    private EditGroupController editGroupController;
+    private EditUserGroupController editUserGroupController;
 
     @Inject
     private AuthenticationController authenticationController;
@@ -42,8 +42,8 @@ public class NewGroupController implements Serializable {
 
     @PostConstruct
     public void init() {
-        if (editGroupController != null)
-            editGroupController.setNewGroupController(this);
+        if (editUserGroupController != null)
+            editUserGroupController.setNewGroupController(this);
     }
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -66,8 +66,8 @@ public class NewGroupController implements Serializable {
 
             userGroupService.insert(newGroup);
             LogManager.logInfo(getClass(), "User Group added, User Group Id and Name: " + newGroup.getId() + ", " + newGroup.getName());
-            if (editGroupController != null)
-                editGroupController.setSelectedUserGroup(newGroup);
+            if (editUserGroupController != null)
+                editUserGroupController.setSelectedUserGroup(newGroup);
 
             name = null;
 

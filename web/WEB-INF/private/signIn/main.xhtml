@@ -22,12 +22,11 @@
         <b:inputSecret id="passwordInput" label="Password:" value="#{authenticationController.password}"/>
 
         <b:commandButton value="Sign In" look="primary" styleClass="btn-large" size="block"
-                         action="#{authenticationController.login}"
-                         ajax="true" update="@form"/>
+                         ajax="true" action="#{authenticationController.login}" update="@form"/>
 
-        <b:commandButton look="default" size="block" ajax="true"
-                         action="#{oAuthController.signInWithGoogle}" update="@form" rendered="#{oAuthController.googleSignInEnabled}">
-                <b:image library="images" name="google-sign-in.svg" height="18px" />
+        <b:commandButton look="default" size="block" ajax="true" action="#{oAuthController.signInWithGoogle}"
+                         update="@form" rendered="#{oAuthController.googleSignInEnabled}">
+            <b:image library="images" name="google-sign-in.svg" height="18px"/>
         </b:commandButton>
 
         <hr/>

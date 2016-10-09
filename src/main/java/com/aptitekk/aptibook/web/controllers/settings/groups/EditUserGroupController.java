@@ -14,6 +14,7 @@ package com.aptitekk.aptibook.web.controllers.settings.groups;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -33,13 +34,16 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class EditGroupController implements Serializable {
+public class EditUserGroupController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private PermissionService permissionService;
 
     @Inject
     private HelpController helpController;
@@ -93,7 +97,7 @@ public class EditGroupController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
                     LogManager.logException(getClass(), "Could not update User Group", e);
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
                 }
             }
         }
@@ -117,23 +121,45 @@ public class EditGroupController implements Serializable {
         if (this.selectedUserGroup != null) {
             UserGroup parentGroup = selectedUserGroup.getParent();
 
-            for (UserGroup child : selectedUserGroup.getChildren()) { //Reassign parents of the children of the node to be deleted.
+            //Reassign parents of the children of the node to be deleted.
+            for (UserGroup child : selectedUserGroup.getChildren()) {
                 child.setParent(parentGroup);
                 try {
                     userGroupService.merge(child);
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not change UserGroup parent", e);
+                    LogManager.logException(getClass(), "Could not change UserGroup Parent", e);
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
                 }
             }
+
+            //Detach relationship with all Users
+            for (User user : selectedUserGroup.getUsers()) {
+                user.getUserGroups().remove(selectedUserGroup);
+                try {
+                    userService.merge(user);
+                } catch (Exception e) {
+                    LogManager.logException(getClass(), "Could not remove UserGroup from User", e);
+                }
+            }
+
+            //Detach relationship with all Permissions
+            for(Permission permission : selectedUserGroup.getPermissions()) {
+                permission.getUserGroups().remove(selectedUserGroup);
+                try {
+                    permissionService.merge(permission);
+                } catch (Exception e) {
+                    LogManager.logException(getClass(), "Could not remove UserGroup from Permission", e);
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
+                }
+            }
+
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-                LogManager.logInfo(getClass(), "User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Could not delete User Group", e);
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
             }
         }
     }
@@ -145,7 +171,6 @@ public class EditGroupController implements Serializable {
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
             userService.merge(user);
-            LogManager.logInfo(getClass(), "Update user, removed from User group. User id and name: " + ", " + user.getId() + user.getFullname());
             selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
             resetSettings();
 

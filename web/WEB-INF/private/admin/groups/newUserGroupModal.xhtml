@@ -31,7 +31,7 @@
                     <f:validator binding="#{uniqueUserGroupValidator}"/>
                 </b:inputText>
 
-                <c:if test="#{not empty groupTreeController.getTree(editGroupController.selectedUserGroup, null, false, false).children}">
+                <c:if test="#{not empty groupTreeController.getTree(editUserGroupController.selectedUserGroup, null, false, false).children}">
                     <div class="form-group">
                         <h:outputLabel value="Parent: *" for="newGroupParent"/>
                         <b:message for="newGroupParent"
