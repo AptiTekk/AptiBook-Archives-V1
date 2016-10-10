@@ -20,7 +20,7 @@ import org.wildfly.swarm.undertow.WARArchive;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
-public class PingServletTestBuilder {
+public class PingServletTest {
 
     @Drone
     WebDriver browser;

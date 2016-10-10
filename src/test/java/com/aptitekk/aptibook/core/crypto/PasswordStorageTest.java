@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
-public class PasswordStorageTestBuilder {
+public class PasswordStorageTest {
 
     @CreateSwarm
     public static Swarm createSwarm() {
