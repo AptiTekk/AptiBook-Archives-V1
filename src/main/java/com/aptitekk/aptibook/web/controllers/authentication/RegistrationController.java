@@ -38,9 +38,6 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
     private EmailService emailService;
 
     @Inject
-    private NotificationService notificationService;
-
-    @Inject
     private UserService userService;
 
     @Inject
@@ -51,16 +48,6 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
 
     static final String REGISTRATION_VERIFICATION_PARAMETER = "verificationCode";
 
-    public void notifyAdmins() {
-        List<User> admins = permissionService.getAllUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
-        for (User user : admins) {
-            notificationService.sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST
-                    , "New User Registration"
-                    , "<p> A new user has registered for AptiBook, and is waiting for administrator approval to begin using AptiBook. "
-                            + "Please approve or reject this user. </p>"
-                    , user);
-        }
-    }
 
 
     public String register() {

@@ -11,10 +11,7 @@
  */
 package com.aptitekk.aptibook.core.domain.services;
 
-import com.aptitekk.aptibook.core.domain.entities.Notification;
-import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.entities.*;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.TimeController;
 
@@ -35,6 +32,23 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
 
     @Inject
     EmailService emailService;
+
+    @Inject
+    PermissionService permissionService;
+
+
+    public void sendNewRegistrationNotifications(User newUser) {
+        List<User> admins = permissionService.getAllUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
+        for (User user : admins) {
+            sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST
+                    , "New User Registration"
+                    , "<p> A new user <b>" +
+                            user.getFullname() +
+                            " </b>has registered for AptiBook, and is waiting for administrator approval to begin using AptiBook. "
+                            + "Please approve or reject this user. </p>"
+                    , user);
+        }
+    }
 
     public void sendNotification(Notification.Type type, String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)

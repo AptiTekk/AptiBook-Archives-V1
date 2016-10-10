@@ -35,13 +35,13 @@ public class Notification extends MultiTenantEntity implements Serializable {
         private String label;
         private boolean defaultValue;
         private boolean userGroupRequired;
-        private Permission.Descriptor descriptor;
+        private Permission.Descriptor requiredPermissionDescriptor;
 
-        Type(String label, boolean defaultValue, boolean userGroupRequired, Permission.Descriptor descriptor) {
+        Type(String label, boolean defaultValue, boolean userGroupRequired, Permission.Descriptor requiredPermissionDescriptor) {
             this.label = label;
             this.defaultValue = defaultValue;
             this.userGroupRequired = userGroupRequired;
-            this.descriptor = descriptor;
+            this.requiredPermissionDescriptor = requiredPermissionDescriptor;
         }
 
         public String getLabel() {
@@ -56,8 +56,8 @@ public class Notification extends MultiTenantEntity implements Serializable {
             return userGroupRequired;
         }
 
-        public Permission.Descriptor getDescriptor() {
-            return descriptor;
+        public Permission.Descriptor getRequiredPermissionDescriptor() {
+            return requiredPermissionDescriptor;
         }
     }
 

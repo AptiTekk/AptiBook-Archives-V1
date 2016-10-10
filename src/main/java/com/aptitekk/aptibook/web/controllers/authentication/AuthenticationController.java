@@ -10,6 +10,7 @@ package com.aptitekk.aptibook.web.controllers.authentication;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
@@ -48,7 +49,7 @@ public class AuthenticationController implements Serializable {
     private OAuthController oAuthController;
 
     @Inject
-    private RegistrationController registrationController;
+    private NotificationService notificationService;
 
     private String emailAddress;
     private String password;
@@ -72,7 +73,7 @@ public class AuthenticationController implements Serializable {
                         authenticatedUser = null; //Sign the user out if they are signed in...
                         try {
                             userService.merge(user);
-                            registrationController.notifyAdmins();
+                            notificationService.sendNewRegistrationNotifications(user);
                             LogManager.logInfo("User " + user.getEmailAddress() + " has been verified.");
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                         } catch (Exception e) {
