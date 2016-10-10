@@ -7,10 +7,10 @@
 package com.aptitekk.aptibook.web.controllers.authentication;
 
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
+import com.aptitekk.aptibook.core.domain.entities.Notification;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.domain.services.EmailService;
-import com.aptitekk.aptibook.core.domain.services.PropertiesService;
-import com.aptitekk.aptibook.core.domain.services.UserService;
+import com.aptitekk.aptibook.core.domain.services.*;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -22,8 +22,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
 @Named
 @ViewScoped
@@ -41,7 +43,12 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
     @Inject
     private TenantSessionService tenantSessionService;
 
+    @Inject
+    private PermissionService permissionService;
+
     static final String REGISTRATION_VERIFICATION_PARAMETER = "verificationCode";
+
+
 
     public String register() {
         try {
