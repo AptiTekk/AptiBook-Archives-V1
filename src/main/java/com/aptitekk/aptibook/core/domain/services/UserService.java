@@ -119,23 +119,35 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
         return null;
     }
 
+    /**
+     * Finds and returns a list of all users with the given permission. Also includes all users with full permissions, and admin, as they inherit all permissions.
+     *
+     * @param descriptor The permission to filter users by.
+     * @return A list of users with either the given permission or full permissions. Includes admin.
+     */
     public List<User> getUsersWithPermission(Permission.Descriptor descriptor) {
         try {
             List<User> usersWithPermission = entityManager
-                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
+                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE (p.descriptor = ?1 OR p.descriptor = ?2) AND u.tenant = ?3", User.class)
                     .setParameter(1, descriptor)
-                    .setParameter(2, getTenant())
+                    .setParameter(2, Permission.Descriptor.GENERAL_FULL_PERMISSIONS)
+                    .setParameter(3, getTenant())
                     .getResultList();
 
             List<UserGroup> groupsWithPermission = entityManager
-                    .createQuery("SELECT distinct g FROM UserGroup g LEFT JOIN fetch g.permissions p WHERE p.descriptor = ?1 AND g.tenant = ?2", UserGroup.class)
+                    .createQuery("SELECT distinct g FROM UserGroup g LEFT JOIN fetch g.permissions p WHERE (p.descriptor = ?1 OR p.descriptor = ?2) AND g.tenant = ?3", UserGroup.class)
                     .setParameter(1, descriptor)
-                    .setParameter(2, getTenant())
+                    .setParameter(2, Permission.Descriptor.GENERAL_FULL_PERMISSIONS)
+                    .setParameter(3, getTenant())
                     .getResultList();
 
             for (UserGroup userGroup : groupsWithPermission) {
-                usersWithPermission.addAll(userGroup.getUsers());
+                for (User user : userGroup.getUsers()) {
+                    if (!usersWithPermission.contains(user))
+                        usersWithPermission.add(user);
+                }
             }
+
             usersWithPermission.add(findByEmailAddress(ADMIN_EMAIL_ADDRESS));
             return usersWithPermission;
 
