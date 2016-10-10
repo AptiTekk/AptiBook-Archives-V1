@@ -73,7 +73,7 @@ public class AuthenticationController implements Serializable {
                         authenticatedUser = null; //Sign the user out if they are signed in...
                         try {
                             userService.merge(user);
-                            notificationService.sendNewRegistrationNotifications(user);
+                            notificationService.sendNewUserRegistrationNotifications(user);
                             LogManager.logInfo("User " + user.getEmailAddress() + " has been verified.");
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                         } catch (Exception e) {

@@ -36,20 +36,6 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     @Inject
     PermissionService permissionService;
 
-
-    public void sendNewRegistrationNotifications(User newUser) {
-        List<User> admins = permissionService.getAllUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
-        for (User user : admins) {
-            sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST
-                    , "New User Registration"
-                    , "<p> A new user <b>" +
-                            user.getFullname() +
-                            " </b>has registered for AptiBook, and is waiting for administrator approval to begin using AptiBook. "
-                            + "Please approve or reject this user. </p>"
-                    , user);
-        }
-    }
-
     public void sendNotification(Notification.Type type, String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)
             return;
@@ -70,6 +56,18 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         } catch (Exception e) {
             LogManager.logError("Error in building Notification, or sending Email notification. Notification id: " + notification.getId());
             e.printStackTrace();
+        }
+    }
+
+    public void sendNewUserRegistrationNotifications(User newUser) {
+        List<User> recipients = permissionService.getAllUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
+        for (User user : recipients) {
+            sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST,
+                    "New User Registration",
+                    "<p> A new user, <b>" + newUser.getFullname() +
+                            "</b>, has registered for AptiBook, and is waiting for approval to sign in."
+                            + "Please approve or reject this user.</p>",
+                    user);
         }
     }
 
