@@ -20,7 +20,7 @@ import org.wildfly.swarm.undertow.WARArchive;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Arquillian.class)
-public class OAuthServletTestBuilder {
+public class OAuthServletTest {
 
     @Drone
     WebDriver browser;
