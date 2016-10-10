@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 import com.aptitekk.aptibook.core.domain.entities.ReservationField;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -38,13 +39,11 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
 
             try {
                 reservationFieldService.insert(reservationField);
-                LogManager.logInfo(getClass(), "New Reservation Field persisted. Id and Title: " + reservationField.getId() + ", " + reservationField.getTitle());
-
                 editAssetCategoryController.refreshAssetCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Error while adding new Reservation Field", e);
-                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }
     }

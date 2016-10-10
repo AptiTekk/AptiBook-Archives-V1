@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -137,7 +138,6 @@ public class EditAssetCategoryController implements Serializable {
 
                     //Persist name change
                     assetCategoryService.merge(selectedAssetCategory);
-                    LogManager.logInfo(getClass(), "Asset Category updated, Asset Category Id and Name: " + selectedAssetCategory.getId() + ", " + selectedAssetCategory.getName());
                     //Update tags
                     tagController.updateAssetTags(selectedAssetCategory);
 
@@ -147,7 +147,7 @@ public class EditAssetCategoryController implements Serializable {
                     FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category Updated"));
                 } catch (Exception e) {
                     LogManager.logException(getClass(), "Error updating Asset Category settings", e);
-                    FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating Asset Category: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
         }
@@ -174,19 +174,17 @@ public class EditAssetCategoryController implements Serializable {
         if (!hasModifyPermission())
             return;
 
-        FacesContext context = FacesContext.getCurrentInstance();
         try {
             if (assetCategoryService.get(getSelectedAssetCategory().getId()) != null) {
-                context.addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category Deleted!"));
+                FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Asset Category Deleted!"));
                 assetCategoryService.delete(getSelectedAssetCategory().getId());
-                LogManager.logInfo(getClass(), "Asset Category deleted, Asset Category Id and Name: " + selectedAssetCategory.getId() + ", " + selectedAssetCategory.getName());
                 setSelectedAssetCategory(null);
             } else {
-                LogManager.logError(getClass(), "Error while deleting Asset Category " + selectedAssetCategory.getName() + ": Asset Category not found.");
+                LogManager.logError(getClass(), "Error while deleting Asset Category: Asset Category not found.");
             }
         } catch (Exception e) {
             LogManager.logException(getClass(), "Error while deleting Asset Category", e);
-            context.addMessage("assetCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting Asset Category!"));
+            FacesContext.getCurrentInstance().addMessage("assetCategoryEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
 
         refreshAssetCategories();
@@ -205,8 +203,8 @@ public class EditAssetCategoryController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New Reservation Field Added."));
             } catch (Exception e) {
-                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while adding new Field."));
-                LogManager.logException(getClass(), "Error while adding new Reservation Field.", e);
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
+                LogManager.logException(getClass(), "Could not add new Reservation Field", e);
             }
         }
     }

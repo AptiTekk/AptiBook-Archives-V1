@@ -19,6 +19,7 @@ import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
+import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -108,7 +109,7 @@ public class AuthenticationController implements Serializable {
         }
 
         if (domainIsWhitelisted) {
-            User existingUser = userService.findByName(googleUserInfoModel.getEmail());
+            User existingUser = userService.findByEmailAddress(googleUserInfoModel.getEmail());
             if (existingUser == null) {
                 User user = new User();
                 user.setFirstName(googleUserInfoModel.getGivenName());
@@ -121,16 +122,16 @@ public class AuthenticationController implements Serializable {
                     setAuthenticatedUser(user);
                     LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-                    return redirectHome();
+                    return determineRedirectPath();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LogManager.logException(getClass(), "Could not create User for Google Sign In", e);
                 }
                 return null;
             } else {
                 setAuthenticatedUser(existingUser);
                 LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-                return redirectHome();
+                return determineRedirectPath();
             }
         } else {
             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleUserInfoModel.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
@@ -143,7 +144,6 @@ public class AuthenticationController implements Serializable {
      *
      * @return The outcome page.
      */
-
     public String login() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -168,10 +168,16 @@ public class AuthenticationController implements Serializable {
             LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            return redirectHome();
+            RequestContext.getCurrentInstance().execute("loading_start();");
+            return determineRedirectPath();
         }
     }
 
+    /**
+     * Signs a user out of the application and clears their session.
+     *
+     * @return The outcome page.
+     */
     public String logout() {
         LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged out.");
 
@@ -180,7 +186,14 @@ public class AuthenticationController implements Serializable {
         return "index";
     }
 
-    private String redirectHome() {
+    /**
+     * Determines where the user should be redirected after login.
+     * Will take into account the page the user last tried to access, and will attempt to redirect them back to it.
+     * Otherwise, an outcome page will be used.
+     *
+     * @return null if a redirect was made. Otherwise, an outcome page.
+     */
+    private String determineRedirectPath() {
         String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
         if (originalUrl != null) {
             FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
@@ -188,26 +201,46 @@ public class AuthenticationController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
                 return null;
             } catch (IOException e) {
-                e.printStackTrace();
+                LogManager.logException(getClass(), "Could not redirect user to original url (" + originalUrl + ")", e);
             }
         }
         return "secure";
     }
 
+    /**
+     * Used when a user attempts to access the sign in page, to redirect the users that are already signed in.
+     *
+     * @return The page to redirect to.
+     */
     public String redirectIfLoggedIn() throws IOException {
         if (authenticatedUser != null)
             return "secure";
         return null;
     }
 
+    /**
+     * Determines if a user has a given permission.
+     *
+     * @param descriptor The permission descriptor to check for.
+     * @return True if they have permission, false otherwise.
+     */
     public boolean userHasPermission(Permission.Descriptor descriptor) {
         return authenticatedUser != null && (authenticatedUser.isAdmin() || permissionService.userHasPermission(authenticatedUser, descriptor) || permissionService.userHasPermission(authenticatedUser, Permission.Descriptor.GENERAL_FULL_PERMISSIONS));
     }
 
+    /**
+     * Determines if a user has one or more permissions within a given permission group.
+     *
+     * @param group The permission group to look for permissions within.
+     * @return True if they have one or more permissions, false otherwise.
+     */
     public boolean userHasPermissionOfGroup(Permission.Group group) {
         return authenticatedUser != null && (authenticatedUser.isAdmin() || permissionService.userHasPermissionOfGroup(authenticatedUser, group) || permissionService.userHasPermission(authenticatedUser, Permission.Descriptor.GENERAL_FULL_PERMISSIONS));
     }
 
+    /**
+     * Forces a redirect to the login page. (Used when the user doesn't have permission to access a page, for example.)
+     */
     public void forceUserRedirect() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null) {

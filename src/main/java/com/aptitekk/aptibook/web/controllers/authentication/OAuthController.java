@@ -98,7 +98,7 @@ public class OAuthController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
                 authenticationController.loginWithGoogle(googleUserInfoModel);
             } catch (IOException e) {
-                e.printStackTrace();
+                LogManager.logException(getClass(), "Could not parse Google Sign In Code", e);
             }
         }
     }
@@ -111,11 +111,13 @@ public class OAuthController implements Serializable {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl());
             } catch (IOException e) {
-                FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
-                e.printStackTrace();
+                FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unfortunately, we were unable to Sign In with Google. Please try again later!"));
+                LogManager.logException(getClass(), "Could not Sign In with Google", e);
             }
-        else
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unable to Sign In with Google at this time."));
+        else {
+            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unfortunately, we were unable to Sign In with Google. Please try again later!"));
+            LogManager.logError(getClass(), "Could not Sign In with Google: googleOAuthService is null!");
+        }
     }
 
     void clearTokens() {
@@ -126,7 +128,7 @@ public class OAuthController implements Serializable {
             request.addQuerystringParameter("token", accessToken.getAccessToken());
             Response response = request.send();
             if (!response.isSuccessful())
-                LogManager.logError(getClass(), "Could not revoke token on sign out: " + response.getMessage());
+                LogManager.logError(getClass(), "Could not revoke Token on Sign Out: " + response.getMessage());
         }
     }
 

@@ -6,10 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
-import com.aptitekk.aptibook.core.domain.entities.Asset;
-import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.entities.Tenant;
-import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.entities.*;
 
 import javax.ejb.Stateful;
 import javax.persistence.PersistenceException;
@@ -23,6 +20,20 @@ import java.util.Queue;
 public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup> implements Serializable {
 
     public static final String ROOT_GROUP_NAME = "root";
+
+    @Override
+    public void delete(int id) throws Exception {
+        UserGroup userGroup = get(id);
+
+        if (userGroup != null) {
+            //Remove user assignments
+            for (User user : userGroup.getUsers()) {
+                user.getUserGroups().remove(userGroup);
+            }
+        }
+
+        super.delete(id);
+    }
 
     /**
      * Finds Group Entity by its name, within the current Tenant.

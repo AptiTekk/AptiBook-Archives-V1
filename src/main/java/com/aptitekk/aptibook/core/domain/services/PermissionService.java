@@ -20,35 +20,6 @@ import java.util.List;
 @Stateful
 public class PermissionService extends MultiTenantEntityServiceAbstract<Permission> implements Serializable {
 
-    @Inject
-    private UserService userService;
-
-    public List<User> getAllUsersWithPermission(Permission.Descriptor descriptor) {
-        try {
-            List<User> usersWithPermission = entityManager
-                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
-                    .setParameter(1, descriptor)
-                    .setParameter(2, getTenant())
-                    .getResultList();
-
-            List<UserGroup> groupsWithPermission = entityManager
-                    .createQuery("SELECT distinct g FROM UserGroup g LEFT JOIN fetch g.permissions p WHERE p.descriptor = ?1 AND g.tenant = ?2", UserGroup.class)
-                    .setParameter(1, descriptor)
-                    .setParameter(2, getTenant())
-                    .getResultList();
-
-            for (UserGroup userGroup : groupsWithPermission) {
-                usersWithPermission.addAll(userGroup.getUsers());
-            }
-            usersWithPermission.add(userService.findByName("admin"));
-            return usersWithPermission;
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-
     public List<Permission> getAllJoinUsersAndGroups() {
         try {
             List<Permission> permissionsUsers = entityManager

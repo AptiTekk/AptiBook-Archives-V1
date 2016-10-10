@@ -223,26 +223,25 @@
                             </c:choose>
 
                             <div class="form-group">
-                                <div class="btn-toolbar">
-                                    <h:commandButton styleClass="btn btn-primary"
+                                <b:buttonToolbar>
+                                    <b:commandButton styleClass="btn btn-primary"
                                                      value="Save Changes"
-                                                     action="#{editUserController.updateSettings()}">
-                                        <f:ajax execute="@form" render=":usersPage" onevent="loading"/>
-                                    </h:commandButton>
-                                    <h:commandButton styleClass="btn btn-default"
+                                                     ajax="true"
+                                                     action="#{editUserController.updateSettings()}"
+                                                     update=":usersPage" process="@form"/>
+                                    <b:commandButton look="default"
                                                      value="Reset Form"
-                                                     action="#{editUserController.resetFields()}">
-                                        <f:ajax execute="@form" render=":userEditForm" onevent="loading"/>
-                                    </h:commandButton>
-                                    <div class="btn-toolbar pull-right">
+                                                     ajax="true"
+                                                     action="#{editUserController.resetFields()}"
+                                                     update="@form" process="@form"/>
+                                    <b:buttonToolbar styleClass="pull-right">
                                         <b:button look="danger"
                                                   value="Delete User"
                                                   p:data-toggle="modal"
-                                                  p:data-target="#deletionConfirmModal"
+                                                  p:data-target=".deletionConfirmModal"
                                                   disabled="#{editUserController.selectedUser.admin}"/>
-
-                                    </div>
-                                </div>
+                                    </b:buttonToolbar>
+                                </b:buttonToolbar>
                             </div>
                         </c:otherwise>
                     </c:choose>

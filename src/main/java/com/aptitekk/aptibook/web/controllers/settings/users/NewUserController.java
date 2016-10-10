@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
@@ -82,7 +83,6 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             }
 
             userService.insert(newUser);
-            LogManager.logInfo(getClass(), "New User persisted, User Id and Name: " + newUser.getId() + ", " + newUser.getFullname());
             if (userService.get(newUser.getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + newUser.getEmailAddress() + "' Added!"));
                 if (editUserController != null) {
@@ -96,7 +96,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
             resetFields();
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not Create User", e);
-            FacesContext.getCurrentInstance().addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Adding User!"));
+            FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
     }
 

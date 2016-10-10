@@ -69,7 +69,7 @@
                             value="#{groupTreeController.getMultipleSelectedTree(assignPermissionController.assignmentPermission.userGroups, null, false, false)}"
                             var="node" selectionMode="checkbox"
                             showUnselectableCheckbox="true"
-                            selection="#{assignPermissionController.assignedGroups}"
+                            selection="#{assignPermissionController.assignedUserGroupNodes}"
                             propagateSelectionDown="false" propagateSelectionUp="false">
                         <pf:treeNode>
                             <h:outputText value="#{node.name}"/>

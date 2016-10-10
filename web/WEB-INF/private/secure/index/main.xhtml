@@ -41,7 +41,7 @@
                     <!--suppress UnnecessaryLabelJS -->
                         <b:switch value="#{frontPageController.assetCategoryFilterValues[status.index]}"
                               label="#{category.name}"
-                              ajax="true" onchange="ajax:frontPageController.updateFilters();javascript:loading_start();" oncomplete="PF('calendar').update();loading_complete();"
+                              ajax="true" onchange="ajax:frontPageController.updateFilters();" oncomplete="PF('calendar').update();"
                    />
                     </c:forEach>
                 </h:form>

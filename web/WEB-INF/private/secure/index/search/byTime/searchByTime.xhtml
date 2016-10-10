@@ -51,9 +51,6 @@
                     <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right" iconAlign="right"
                                      style="width: 50%; margin-left: 50%;" ajax="true"
                                      action="#{searchByTimeController.nextStep}" update="@form"
-                                     onmousedown="focused = true;"
-                                     onmouseup="if(focused) loading_start(); focused = false;"
-                                     oncomplete="loading_complete();"
                                      disabled="#{searchByTimeController.assetCategory == null}"/>
                 </b:column>
             </b:row>
@@ -87,17 +84,11 @@
                         <b:commandButton look="default" value="Previous Step" iconAwesome="arrow-left"
                                          style="width: 50%;"
                                          ajax="true"
-                                         onmousedown="focused = true;"
-                                         onmouseup="if(focused) loading_start(); focused = false;"
-                                         oncomplete="loading_complete();"
                                          action="#{searchByTimeController.previousStep}" update="@form"/>
                         <b:commandButton id="searchButton" look="primary" value="Begin Search" iconAwesome="search"
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
-                                         onmousedown="focused = true;"
-                                         onmouseup="if(focused) loading_start(); focused = false;"
-                                         oncomplete="loading_complete();"
                                          action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          update=":includeGroup"
                                          disabled="#{searchByTimeController.pickerEndTime == null}"/>

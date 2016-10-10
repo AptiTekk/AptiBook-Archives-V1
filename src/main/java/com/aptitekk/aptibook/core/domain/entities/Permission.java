@@ -9,10 +9,11 @@ package com.aptitekk.aptibook.core.domain.entities;
 import com.aptitekk.aptibook.core.util.EqualsHelper;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-public class Permission extends MultiTenantEntity {
+public class Permission extends MultiTenantEntity implements Serializable {
 
     /**
      * Defines the groups of permissions.
@@ -142,10 +143,10 @@ public class Permission extends MultiTenantEntity {
     @Enumerated(value = EnumType.STRING)
     private Descriptor descriptor;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "permissions")
     private Set<UserGroup> userGroups;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "permissions")
     private Set<User> users;
 
     public int getId() {

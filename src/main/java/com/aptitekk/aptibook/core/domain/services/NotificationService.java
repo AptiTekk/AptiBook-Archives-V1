@@ -34,7 +34,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     EmailService emailService;
 
     @Inject
-    PermissionService permissionService;
+    UserService userService;
 
     public void sendNotification(Notification.Type type, String subject, String body, List<UserGroup> userGroupList) {
         if (subject == null || body == null || userGroupList == null)
@@ -59,13 +59,12 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
     }
 
     public void sendNewUserRegistrationNotifications(User newUser) {
-        List<User> recipients = permissionService.getAllUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
+        List<User> recipients = userService.getUsersWithPermission(Permission.Descriptor.USERS_MODIFY_ALL);
         for (User user : recipients) {
             sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST,
                     "New User Registration",
                     "<p> A new user, <b>" + newUser.getFullname() +
-                            "</b>, has registered for AptiBook, and is waiting for approval to sign in."
-                            + "Please approve or reject this user.</p>",
+                            "</b>, has registered for AptiBook, and is waiting for approval to sign in. Please approve or reject this user.</p>",
                     user);
         }
     }

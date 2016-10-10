@@ -14,6 +14,7 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -94,9 +95,8 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
             try {
                 user = userService.merge(user);
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Could not update user settings", e);
-                FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
+                LogManager.logException(getClass(), "Could not update User Settings", e);
+                FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
         }

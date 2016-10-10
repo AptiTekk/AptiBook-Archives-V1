@@ -75,18 +75,18 @@
                         <hr/>
                     </c:forEach>
                     <div class="form-group">
-                        <div class="btn-toolbar">
-                            <h:commandButton styleClass="btn btn-primary"
+                        <b:buttonToolbar>
+                            <b:commandButton look="primary"
                                              value="Save Changes"
-                                             action="#{editPropertyController.saveProperties}">
-                                <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
-                            </h:commandButton>
-                            <h:commandButton styleClass="btn btn-default"
+                                             ajax="true"
+                                             action="#{editPropertyController.saveProperties}"
+                                             update=":propertiesEditForm" process="@form"/>
+                            <b:commandButton styleClass="btn btn-default"
                                              value="Reset Fields"
-                                             action="#{editPropertyController.resetFields}">
-                                <f:ajax execute="@form" render=":propertiesEditForm" onevent="loading"/>
-                            </h:commandButton>
-                        </div>
+                                             ajax="true"
+                                             action="#{editPropertyController.resetFields}"
+                                             update=":propertiesEditForm" process="@form"/>
+                        </b:buttonToolbar>
                     </div>
                 </h:form>
             </b:column>

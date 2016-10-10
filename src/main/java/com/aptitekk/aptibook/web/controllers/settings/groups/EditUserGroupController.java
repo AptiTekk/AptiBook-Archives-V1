@@ -14,11 +14,13 @@ package com.aptitekk.aptibook.web.controllers.settings.groups;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.domain.services.PermissionService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.event.NodeSelectEvent;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +35,7 @@ import java.io.Serializable;
 
 @Named
 @ViewScoped
-public class EditGroupController implements Serializable {
+public class EditUserGroupController implements Serializable {
 
     @Inject
     private UserGroupService userGroupService;
@@ -42,17 +44,22 @@ public class EditGroupController implements Serializable {
     private UserService userService;
 
     @Inject
+    private PermissionService permissionService;
+
+    @Inject
     private HelpController helpController;
 
     @Inject
     private AuthenticationController authenticationController;
+
+    @Inject
+    private NewUserGroupController newUserGroupController;
 
     private UserGroup selectedUserGroup;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String editableGroupName;
-    private NewGroupController newGroupController;
 
     @PostConstruct
     public void init() {
@@ -87,13 +94,12 @@ public class EditGroupController implements Serializable {
             if (FacesContext.getCurrentInstance().getMessageList("groupEditForm").isEmpty()) {
                 try {
                     selectedUserGroup.setName(editableGroupName);
-                    LogManager.logInfo(getClass(), "User Group updated, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                     selectedUserGroup = userGroupService.merge(selectedUserGroup);
                     resetSettings();
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
                     LogManager.logException(getClass(), "Could not update User Group", e);
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Group: " + e.getMessage()));
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
         }
@@ -117,23 +123,24 @@ public class EditGroupController implements Serializable {
         if (this.selectedUserGroup != null) {
             UserGroup parentGroup = selectedUserGroup.getParent();
 
-            for (UserGroup child : selectedUserGroup.getChildren()) { //Reassign parents of the children of the node to be deleted.
+            //Reassign parents of the children of the node to be deleted.
+            for (UserGroup child : selectedUserGroup.getChildren()) {
                 child.setParent(parentGroup);
                 try {
                     userGroupService.merge(child);
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not change UserGroup parent", e);
-                    FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "An error occurred while processing the request."));
+                    LogManager.logException(getClass(), "Could not change UserGroup Parent", e);
+                    FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
+
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
-                LogManager.logInfo(getClass(), "User Group deleted, User Group Id and Name: " + selectedUserGroup.getId() + ", " + selectedUserGroup.getName());
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Could not delete User Group", e);
-                FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }
     }
@@ -145,7 +152,6 @@ public class EditGroupController implements Serializable {
         if (user != null && user.getUserGroups().contains(selectedUserGroup)) {
             user.getUserGroups().remove(selectedUserGroup);
             userService.merge(user);
-            LogManager.logInfo(getClass(), "Update user, removed from User group. User id and name: " + ", " + user.getId() + user.getFullname());
             selectedUserGroup = userGroupService.get(selectedUserGroup.getId());
             resetSettings();
 
@@ -172,8 +178,8 @@ public class EditGroupController implements Serializable {
             return;
 
         this.selectedUserGroup = selectedUserGroup;
-        if (newGroupController != null)
-            newGroupController.setParentGroup(selectedUserGroup);
+        if (newUserGroupController != null)
+            newUserGroupController.setParentGroup(selectedUserGroup);
 
         resetSettings();
     }
@@ -184,9 +190,5 @@ public class EditGroupController implements Serializable {
 
     public void setEditableGroupName(String editableGroupName) {
         this.editableGroupName = editableGroupName;
-    }
-
-    void setNewGroupController(NewGroupController newGroupController) {
-        this.newGroupController = newGroupController;
     }
 }

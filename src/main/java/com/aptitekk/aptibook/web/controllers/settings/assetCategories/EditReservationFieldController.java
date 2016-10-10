@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.web.controllers.settings.assetCategories;
 import com.aptitekk.aptibook.core.domain.entities.ReservationField;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -41,7 +42,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Updated!"));
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Error while updating Reservation Field", e);
-                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while updating Field."));
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
             reservationField = null;
@@ -57,7 +58,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationTitle + "' Deleted!"));
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Error while deleting Reservation Field", e);
-                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Internal Server Error while deleting Field."));
+                FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }
     }
