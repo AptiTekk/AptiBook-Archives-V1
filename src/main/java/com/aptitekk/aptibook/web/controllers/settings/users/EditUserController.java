@@ -70,20 +70,19 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             user.setUserState(User.State.APPROVED);
             try {
                 userService.merge(user);
-                LogManager.logInfo("User approved and merged, User: " + user.getEmailAddress());
+                LogManager.logInfo(getClass(), "User approved and merged, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Approved."));
                 refreshUserLists();
                 emailService.sendEmailNotification(user.getEmailAddress(), "Registration Approved", "<p>Good News! Your account has been Approved, and you may now sign in to AptiBook!</p>"
                         + "<a href='" + FacesURIBuilder.buildTenantURI(tenantSessionService.getCurrentTenant(), "index.xhtml", null) + "'" + ">Click Here to Sign In</a>");
             } catch (Exception e) {
-                LogManager.logError("Error approving user. User: " + user.getEmailAddress());
-                e.printStackTrace();
+                LogManager.logException(getClass(), "Could not Approve User", e);
             }
         } else {
             try {
                 userService.delete(user.getId());
-                LogManager.logInfo("User deleted, User: " + user.getEmailAddress());
+                LogManager.logInfo(getClass(), "User deleted, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Rejected."));
                 refreshUserLists();
@@ -93,8 +92,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                 emailService.sendEmailNotification(user.getEmailAddress(), "Registration Rejected", "<p>Unfortunately, your account has been rejected. "
                         + "If you believe this is a mistake, please contact your System Administrators. ");
             } catch (Exception e) {
-                LogManager.logError("Error deleting user, User: " + user.getEmailAddress());
-                e.printStackTrace();
+                LogManager.logException(getClass(), "Could not Delete User", e);
             }
         }
     }
@@ -153,7 +151,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
                     FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
                 } catch (PasswordStorage.CannotPerformOperationException e) {
-                    LogManager.logError("Could not change user password: "+e.getMessage());
+                    LogManager.logException(getClass(), "Could not change User Password", e);
                     FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An error occurred while changing your password. Your password has not been changed."));
                 }
@@ -200,11 +198,10 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
             try {
                 selectedUser = userService.merge(selectedUser);
-                LogManager.logInfo("User updated, user Id and Name: " + selectedUser.getId() + ", " + selectedUser.getFullname());
+                LogManager.logInfo(getClass(), "User updated, user Id and Name: " + selectedUser.getId() + ", " + selectedUser.getFullname());
                 refreshUserLists();
             } catch (Exception e) {
-                e.printStackTrace();
-                LogManager.logError("Error while updating User Settings for " + selectedUser.getEmailAddress() + ": " + e.getMessage());
+                LogManager.logException(getClass(), "Could not Update User Settings", e);
                 FacesContext.getCurrentInstance().addMessage("userEditForm",
                         new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
             }
@@ -221,14 +218,13 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
-                LogManager.logInfo("User deleted, user Id and Name: " + getSelectedUser().getId() + ", " + getSelectedUser().getFullname());
+                LogManager.logInfo(getClass(), "User deleted, user Id and Name: " + getSelectedUser().getId() + ", " + getSelectedUser().getFullname());
                 setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            LogManager.logError("Error While Deleting User " + selectedUser.getEmailAddress() + ": " + e.getMessage());
+            LogManager.logException(getClass(), "Could not Delete User", e);
             context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
         }
 

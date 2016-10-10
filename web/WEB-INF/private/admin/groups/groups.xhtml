@@ -40,7 +40,8 @@
                                                  update=":groupsPage" onstart="loading_start()"
                                                  oncomplete="loading_complete()"/>
                                         <pf:ajax event="dragdrop" update=":groupsPage"
-                                                 listener="#{groupTreeController.onDragDrop}"/>
+                                                 listener="#{groupTreeController.onDragDrop}" onstart="loading_start()"
+                                                 oncomplete="loading_complete()"/>
                                         <pf:treeNode>
                                             <h:outputText value="#{node.name}"/>
                                         </pf:treeNode>

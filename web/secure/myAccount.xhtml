@@ -109,21 +109,29 @@
                                 <hr/>
 
                             </c:if>
-                            <div class="form-group">
-                                <h4>Email Notification Preferences:</h4>
-                                Use the sliders below to customize when you will receive email notifications.
-                            </div>
                             <c:choose>
                                 <c:when test="#{myAccountController.user.admin}">
+                                    <div class="form-group">
+                                        <h4>Email Notification Preferences:</h4>
+                                    </div>
                                     The admin account cannot receive email notifications.
                                 </c:when>
                                 <c:otherwise>
+                                    <div class="form-group">
+                                        <h4>Email Notification Preferences:</h4>
+                                        Use the sliders below to customize when you will receive email notifications.
+                                    </div>
                                     <c:forEach items="#{myAccountController.notificationTypeSettings}"
                                                var="notificationSettingValue" varStatus="status">
                                         <b:switch
                                                 label="#{myAccountController.notificationTypes[status.index].label}"
                                                 value="#{notificationSettingValue}" onText="Yes" offText="No"
-                                                rendered="#{not myAccountController.notificationTypes[status.index].userGroupRequired or not empty authenticationController.authenticatedUser.userGroups}"/>
+                                                rendered="#{
+                                                (empty myAccountController.notificationTypes[status.index].requiredPermissionDescriptor
+                                                or authenticationController.userHasPermission(myAccountController.notificationTypes[status.index].requiredPermissionDescriptor))
+                                                and
+                                                (not myAccountController.notificationTypes[status.index].userGroupRequired
+                                                or not empty authenticationController.authenticatedUser.userGroups)}"/>
                                     </c:forEach>
                                 </c:otherwise>
                             </c:choose>
@@ -132,18 +140,13 @@
                     <hr/>
                     <b:row>
                         <b:column colXs="12">
-                            <div class="btn-toolbar">
-                                <h:commandButton styleClass="btn btn-primary"
-                                                 value="Save Changes" style="display: inline-block"
-                                                 action="#{myAccountController.updateSettings()}">
-                                    <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
-                                </h:commandButton>
-                                <h:commandButton styleClass="btn btn-default"
-                                                 value="Reset Fields" style="display: inline-block"
-                                                 action="#{myAccountController.resetFields()}">
-                                    <f:ajax execute="@form" render=":userEditPage :header" onevent="loading"/>
-                                </h:commandButton>
-                            </div>
+                            <b:buttonToolbar>
+                                <b:commandButton look="primary" value="Save Changes" ajax="true"
+                                                 action="#{myAccountController.updateSettings}"
+                                                 update=":userEditPage :header"/>
+                                <b:commandButton look="default" value="Reset Fields" ajax="true"
+                                                 action="#{myAccountController.resetFields}" update=":userEditPage"/>
+                            </b:buttonToolbar>
                         </b:column>
                     </b:row>
                 </h:form>

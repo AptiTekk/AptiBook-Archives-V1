@@ -70,7 +70,7 @@ public class OAuthController implements Serializable {
         URI requestURI = FacesURIBuilder.buildURI("oauth", null);
         if (requestURI == null) {
             googleSignInEnabled = false;
-            LogManager.logError("Could not create callback URL for Google OAuth.");
+            LogManager.logError(getClass(), "Could not create callback URL for Google OAuth.");
             return null;
         }
         serviceBuilder.callback(requestURI.toString());
@@ -126,7 +126,7 @@ public class OAuthController implements Serializable {
             request.addQuerystringParameter("token", accessToken.getAccessToken());
             Response response = request.send();
             if (!response.isSuccessful())
-                LogManager.logError("Could not revoke token on sign out: " + response.getMessage());
+                LogManager.logError(getClass(), "Could not revoke token on sign out: " + response.getMessage());
         }
     }
 

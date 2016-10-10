@@ -134,8 +134,6 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @return true if available, false if not.
      */
     public boolean isAssetAvailableForReservation(Asset asset, ZonedDateTime startTime, ZonedDateTime endTime) {
-        LogManager.logDebug("Checking " + asset.getName());
-
         //Iterate over all reservations of the asset and check for intersections
         for (Reservation reservation : asset.getReservations()) {
             //Ignore rejected reservations.

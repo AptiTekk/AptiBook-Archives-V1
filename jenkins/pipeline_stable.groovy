@@ -12,14 +12,14 @@ node {
 
     try {
         stage "Checkout"
-        slackSend color: "#4272b7", message: "A new AptiBook build is starting... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "A new ${env.JOB_NAME} Pipeline build is starting... (Job ${env.BUILD_NUMBER})"
         checkoutFromGit()
 
         stage "Test"
         runTests(mvnHome)
         slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
 
-        changeVersion(mvnHome, env.JOB_NAME)
+        changeVersion(mvnHome, env.BUILD_NUMBER)
 
         stage "Deploy Approval"
         if (!getDeploymentApproval()) {
@@ -57,17 +57,19 @@ def runTests(mvnHome) {
     sh "${mvnHome}/bin/mvn clean install -P test -U"
 }
 
-def changeVersion(mvnHome, jobName) {
+def changeVersion(mvnHome, buildNumber) {
     sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
-    sh mvnHome + '/bin/mvn versions:set -DnewVersion="${project.version}-' + jobName + '"'
+    sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`.`date +%d`_' + buildNumber + '"'
     sh mvnHome + '/bin/mvn versions:commit'
+    sh "git commit -a -m 'Jenkins Automatic Version Change'"
 }
 
 def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     sh "${mvnHome}/bin/mvn clean install -U"
     sh "heroku maintenance:on --app ${herokuAppName}"
     sh "heroku git:remote --app ${herokuAppName}"
-    sh "git push heroku HEAD:master"
+    sh "git push heroku HEAD:master -f"
     sleep 60
     sh "heroku maintenance:off --app ${herokuAppName}"
 
