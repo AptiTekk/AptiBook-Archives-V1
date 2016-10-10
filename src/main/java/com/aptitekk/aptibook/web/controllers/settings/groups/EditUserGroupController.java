@@ -134,16 +134,6 @@ public class EditUserGroupController implements Serializable {
                 }
             }
 
-            //Detach relationship with all Users
-            for (User user : selectedUserGroup.getUsers()) {
-                user.getUserGroups().remove(selectedUserGroup);
-                try {
-                    userService.merge(user);
-                } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not remove UserGroup from User", e);
-                }
-            }
-
             try {
                 userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));

@@ -7,10 +7,12 @@
 package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
+import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
 
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 
@@ -20,6 +22,23 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
     public static final String ADMIN_EMAIL_ADDRESS = "admin";
     static final String DEFAULT_ADMIN_PASSWORD = "admin";
 
+    @Inject
+    private PermissionService permissionService;
+
+    @Override
+    public void delete(int id) throws Exception {
+        User user = get(id);
+
+        if (user != null) {
+            //Remove permission assignments
+            for (Permission permission : user.getPermissions()) {
+                permission.getUsers().remove(user);
+                permissionService.merge(permission);
+            }
+        }
+
+        super.delete(id);
+    }
 
     /**
      * Finds User Entity by its email address, within the current Tenant.
@@ -67,7 +86,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
      * Finds User Entity by its email address, within the specified Tenant.
      *
      * @param emailAddress The email address of the User to search for.
-     * @param tenant   The Tenant of the User to search for.
+     * @param tenant       The Tenant of the User to search for.
      * @return A User Entity with the specified email address, or null if one does not exist.
      */
     public User findByName(String emailAddress, Tenant tenant) {
@@ -89,7 +108,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
      * Determines if the credentials are correct or not for the current Tenant.
      *
      * @param emailAddress The email address of the user to check.
-     * @param password The password of the user to check (raw).
+     * @param password     The password of the user to check (raw).
      * @return The User if the credentials are correct, or null if they are not.
      */
     public User getUserWithCredentials(String emailAddress, String password) {

@@ -66,7 +66,7 @@ public class User extends MultiTenantEntity implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     private List<Permission> permissions;
 
     public int getId() {
