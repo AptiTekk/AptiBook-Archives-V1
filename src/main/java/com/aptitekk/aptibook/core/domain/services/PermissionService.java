@@ -12,12 +12,42 @@ import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 
 @Stateful
 public class PermissionService extends MultiTenantEntityServiceAbstract<Permission> implements Serializable {
+
+    @Inject
+    private UserService userService;
+
+    public List<User> getAllUsersWithPermission(Permission.Descriptor descriptor) {
+        try {
+            List<User> usersWithPermission = entityManager
+                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+
+            List<UserGroup> groupsWithPermission = entityManager
+                    .createQuery("SELECT distinct g FROM UserGroup g LEFT JOIN fetch g.permissions p WHERE p.descriptor = ?1 AND g.tenant = ?2", UserGroup.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+
+            for (UserGroup userGroup : groupsWithPermission) {
+                usersWithPermission.addAll(userGroup.getUsers());
+            }
+            usersWithPermission.add(userService.findByName("admin"));
+            return usersWithPermission;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     public List<Permission> getAllJoinUsersAndGroups() {
         try {
@@ -56,7 +86,7 @@ public class PermissionService extends MultiTenantEntityServiceAbstract<Permissi
      * Gets the Permission Entity that matches the Permission Descriptor, within the specified Tenant.
      *
      * @param descriptor The Permission Descriptor.
-     * @param tenant The Tenant of the Permission being searched for.
+     * @param tenant     The Tenant of the Permission being searched for.
      * @return the Permission Entity if found, null otherwise.
      */
     public Permission getPermissionByDescriptor(Permission.Descriptor descriptor, Tenant tenant) {
