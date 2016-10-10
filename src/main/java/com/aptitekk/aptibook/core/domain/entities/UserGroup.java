@@ -36,7 +36,7 @@ public class UserGroup extends MultiTenantEntity implements Serializable {
     @OrderBy("name ASC")
     private List<UserGroup> children = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userGroups")
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Permission> permissions;
 
     @OneToMany(mappedBy = "userGroup", cascade = CascadeType.REMOVE)

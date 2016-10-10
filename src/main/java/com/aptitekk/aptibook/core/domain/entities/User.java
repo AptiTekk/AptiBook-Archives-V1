@@ -66,7 +66,7 @@ public class User extends MultiTenantEntity implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
+    @ManyToMany
     private List<Permission> permissions;
 
     public int getId() {
@@ -78,7 +78,7 @@ public class User extends MultiTenantEntity implements Serializable {
     }
 
     public void setEmailAddress(String emailAddress) {
-        if(emailAddress != null)
+        if (emailAddress != null)
             emailAddress = emailAddress.toLowerCase();
         this.emailAddress = emailAddress;
     }

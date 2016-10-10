@@ -9,7 +9,6 @@ package com.aptitekk.aptibook.core.domain.services;
 import com.aptitekk.aptibook.core.domain.entities.*;
 
 import javax.ejb.Stateful;
-import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,12 +21,6 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
 
     public static final String ROOT_GROUP_NAME = "root";
 
-    @Inject
-    private UserService userService;
-
-    @Inject
-    private PermissionService permissionService;
-
     @Override
     public void delete(int id) throws Exception {
         UserGroup userGroup = get(id);
@@ -36,13 +29,6 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
             //Remove user assignments
             for (User user : userGroup.getUsers()) {
                 user.getUserGroups().remove(userGroup);
-                userService.merge(user);
-            }
-
-            //Remove permission assignments
-            for (Permission permission : userGroup.getPermissions()) {
-                permission.getUserGroups().remove(userGroup);
-                permissionService.merge(permission);
             }
         }
 

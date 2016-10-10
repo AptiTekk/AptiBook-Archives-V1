@@ -10,11 +10,13 @@ import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.util.List;
 
 @Stateful
 public class UserService extends MultiTenantEntityServiceAbstract<User> implements Serializable {
@@ -24,21 +26,6 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
 
     @Inject
     private PermissionService permissionService;
-
-    @Override
-    public void delete(int id) throws Exception {
-        User user = get(id);
-
-        if (user != null) {
-            //Remove permission assignments
-            for (Permission permission : user.getPermissions()) {
-                permission.getUsers().remove(user);
-                permissionService.merge(permission);
-            }
-        }
-
-        super.delete(id);
-    }
 
     /**
      * Finds User Entity by its email address, within the current Tenant.
@@ -78,8 +65,8 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
      * @param emailAddress The email address of the User to search for.
      * @return A User Entity with the specified email address, or null if one does not exist.
      */
-    public User findByName(String emailAddress) {
-        return findByName(emailAddress, getTenant());
+    public User findByEmailAddress(String emailAddress) {
+        return findByEmailAddress(emailAddress, getTenant());
     }
 
     /**
@@ -89,7 +76,7 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
      * @param tenant       The Tenant of the User to search for.
      * @return A User Entity with the specified email address, or null if one does not exist.
      */
-    public User findByName(String emailAddress, Tenant tenant) {
+    public User findByEmailAddress(String emailAddress, Tenant tenant) {
         if (emailAddress == null || tenant == null) {
             return null;
         }
@@ -130,6 +117,31 @@ public class UserService extends MultiTenantEntityServiceAbstract<User> implemen
             return null;
         }
         return null;
+    }
+
+    public List<User> getUsersWithPermission(Permission.Descriptor descriptor) {
+        try {
+            List<User> usersWithPermission = entityManager
+                    .createQuery("SELECT distinct u from User u LEFT JOIN fetch u.permissions p WHERE p.descriptor = ?1 AND u.tenant = ?2", User.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+
+            List<UserGroup> groupsWithPermission = entityManager
+                    .createQuery("SELECT distinct g FROM UserGroup g LEFT JOIN fetch g.permissions p WHERE p.descriptor = ?1 AND g.tenant = ?2", UserGroup.class)
+                    .setParameter(1, descriptor)
+                    .setParameter(2, getTenant())
+                    .getResultList();
+
+            for (UserGroup userGroup : groupsWithPermission) {
+                usersWithPermission.addAll(userGroup.getUsers());
+            }
+            usersWithPermission.add(findByEmailAddress(ADMIN_EMAIL_ADDRESS));
+            return usersWithPermission;
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

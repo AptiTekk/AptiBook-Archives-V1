@@ -143,10 +143,10 @@ public class Permission extends MultiTenantEntity implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Descriptor descriptor;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "permissions")
     private Set<UserGroup> userGroups;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "permissions")
     private Set<User> users;
 
     public int getId() {

@@ -90,24 +90,6 @@ CREATE TABLE permission (
 );
 
 --
--- Name: permission_user; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE permission_user (
-  permissions_id INTEGER NOT NULL,
-  users_id       INTEGER NOT NULL
-);
-
---
--- Name: permission_usergroup; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE permission_usergroup (
-  permissions_id INTEGER NOT NULL,
-  usergroups_id  INTEGER NOT NULL
-);
-
---
 -- Name: property; Type: TABLE; Schema: public; Tablespace:
 --
 
@@ -226,6 +208,15 @@ CREATE TABLE "user" (
 );
 
 --
+-- Name: user_permission; Type: TABLE; Schema: public; Tablespace:
+--
+
+CREATE TABLE user_permission (
+  users_id       INTEGER NOT NULL,
+  permissions_id INTEGER NOT NULL
+);
+
+--
 -- Name: user_usergroup; Type: TABLE; Schema: public; Tablespace:
 --
 
@@ -243,6 +234,15 @@ CREATE TABLE usergroup (
   name      TEXT,
   tenant_id INTEGER NOT NULL,
   parent_id INTEGER
+);
+
+--
+-- Name: usergroup_permission; Type: TABLE; Schema: public; Tablespace:
+--
+
+CREATE TABLE usergroup_permission (
+  usergroups_id  INTEGER NOT NULL,
+  permissions_id INTEGER NOT NULL
 );
 
 --
@@ -442,34 +442,6 @@ ALTER TABLE ONLY permission
   ADD CONSTRAINT fk_permission_tenant FOREIGN KEY (tenant_id) REFERENCES tenant (id);
 
 --
--- Name: fk_permission_user_permission; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY permission_user
-  ADD CONSTRAINT fk_permission_user_permission FOREIGN KEY (permissions_id) REFERENCES permission (id);
-
---
--- Name: fk_permission_user_user; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY permission_user
-  ADD CONSTRAINT fk_permission_user_user FOREIGN KEY (users_id) REFERENCES "user" (id);
-
---
--- Name: fk_permission_usergroup_permission; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY permission_usergroup
-  ADD CONSTRAINT fk_permission_usergroup_permission FOREIGN KEY (permissions_id) REFERENCES permission (id);
-
---
--- Name: fk_permission_usergroup_usergroup; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY permission_usergroup
-  ADD CONSTRAINT fk_permission_usergroup_usergroup FOREIGN KEY (usergroups_id) REFERENCES usergroup (id);
-
---
 -- Name: fk_property_tenant; Type: FK CONSTRAINT; Schema: public; 
 --
 
@@ -589,6 +561,20 @@ ALTER TABLE ONLY tag
   ADD CONSTRAINT fk_tag_tenant FOREIGN KEY (tenant_id) REFERENCES tenant (id);
 
 --
+-- Name: fk_user_permission_permission; Type: FK CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY user_permission
+  ADD CONSTRAINT fk_user_permission_permission FOREIGN KEY (permissions_id) REFERENCES permission (id);
+
+--
+-- Name: fk_user_permission_user; Type: FK CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY user_permission
+  ADD CONSTRAINT fk_user_permission_user FOREIGN KEY (users_id) REFERENCES "user" (id);
+
+--
 -- Name: fk_user_tenant; Type: FK CONSTRAINT; Schema: public; 
 --
 
@@ -608,6 +594,20 @@ ALTER TABLE ONLY user_usergroup
 
 ALTER TABLE ONLY user_usergroup
   ADD CONSTRAINT fk_user_usergroup_usergroup FOREIGN KEY (usergroups_id) REFERENCES usergroup (id);
+
+--
+-- Name: fk_usergroup_permission_permission; Type: FK CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY usergroup_permission
+  ADD CONSTRAINT fk_usergroup_permission_permission FOREIGN KEY (permissions_id) REFERENCES permission (id);
+
+--
+-- Name: fk_usergroup_permission_usergroup; Type: FK CONSTRAINT; Schema: public;
+--
+
+ALTER TABLE ONLY usergroup_permission
+  ADD CONSTRAINT fk_usergroup_permission_usergroup FOREIGN KEY (usergroups_id) REFERENCES usergroup (id);
 
 --
 -- Name: fk_usergroup_tenant; Type: FK CONSTRAINT; Schema: public; 

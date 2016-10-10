@@ -19,7 +19,6 @@ import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
-import org.primefaces.context.PrimeFacesContext;
 import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
@@ -110,7 +109,7 @@ public class AuthenticationController implements Serializable {
         }
 
         if (domainIsWhitelisted) {
-            User existingUser = userService.findByName(googleUserInfoModel.getEmail());
+            User existingUser = userService.findByEmailAddress(googleUserInfoModel.getEmail());
             if (existingUser == null) {
                 User user = new User();
                 user.setFirstName(googleUserInfoModel.getGivenName());
