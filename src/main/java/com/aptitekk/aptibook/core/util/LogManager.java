@@ -30,7 +30,7 @@ public class LogManager {
 
     public static void logException(Class clazz, String message, Throwable t) {
         LOGGER.error("[" + clazz.getSimpleName() + "] " + message, t);
-        if (RAYGUN_CLIENT != null) {
+        if (RAYGUN_CLIENT != null && AptiBookInfoProvider.isUsingHeroku()) {
             List<String> tags = new ArrayList<>();
             tags.add("V. " + AptiBookInfoProvider.getVersion());
             tags.add(clazz.getSimpleName());

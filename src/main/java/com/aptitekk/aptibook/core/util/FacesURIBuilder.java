@@ -18,8 +18,6 @@ import java.util.Map;
 
 public class FacesURIBuilder {
 
-    private final static Boolean FORCE_HTTPS = Boolean.parseBoolean(System.getenv("HEROKU"));
-
     /**
      * Builds a standard (non tenant-based) URI.
      *
@@ -38,7 +36,8 @@ public class FacesURIBuilder {
 
         try {
             URIBuilder b = new URIBuilder();
-            b.setScheme(FORCE_HTTPS ? "https" : origRequest.getScheme());
+            //Force HTTPS if using Heroku.
+            b.setScheme(AptiBookInfoProvider.isUsingHeroku() ? "https" : origRequest.getScheme());
             b.setHost(origRequest.getServerName());
             if (origRequest.getServerPort() != 80)
                 b.setPort(origRequest.getServerPort());
