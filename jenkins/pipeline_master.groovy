@@ -9,15 +9,15 @@ node {
 
     try {
         stage "Checkout"
-        slackSend color: "#4272b7", message: "A new ${env.JOB_NAME} Pipeline build is starting... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "[Job ${env.BUILD_NUMBER}] A new ${env.JOB_NAME} Pipeline build is starting..."
         checkoutFromGit()
 
         stage "Test"
         runTests(mvnHome)
-        slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed."
+        slackSend color: "good", message: "[Job ${env.BUILD_NUMBER}] All tests for the ${env.JOB_NAME} Pipeline have passed."
 
     } catch (err) {
-        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER})."
+        slackSend color: "danger", message: "[Job ${env.BUILD_NUMBER}] An Error occurred during the ${env.JOB_NAME} Pipeline."
         error err
     }
 }

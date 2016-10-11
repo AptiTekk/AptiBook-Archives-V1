@@ -39,60 +39,64 @@ public class TenantFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
-        LogManager.logInfo(getClass(), "Tenant Filter Initialized.");
+        LogManager.logInfo(getClass(), "Filter Initialized.");
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String path = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
-        String[] pathSplit = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length()).split("/");
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+        try {
+            HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            String path = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
+            String[] pathSplit = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length()).split("/");
 
-        if (pathSplit.length >= 2) {
+            if (pathSplit.length >= 2) {
 
-            //Tenants
-            if (tenantManagementService.getAllowedTenantSlugs().contains(pathSplit[1].toLowerCase())) { //Valid Tenant ID
-                try {
-                    String tenantSlug = pathSplit[1].toLowerCase();
-                    Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
-                    httpServletRequest.setAttribute("tenant", tenant);
+                //Tenants
+                if (tenantManagementService.getAllowedTenantSlugs().contains(pathSplit[1].toLowerCase())) { //Valid Tenant ID
+                    try {
+                        String tenantSlug = pathSplit[1].toLowerCase();
+                        Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
+                        httpServletRequest.setAttribute("tenant", tenant);
 
-                    String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
-                    if (url.contains(";"))
-                        url = url.substring(0, url.indexOf(";"));
+                        String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
+                        if (url.contains(";"))
+                            url = url.substring(0, url.indexOf(";"));
 
-                    if (url.contains("/secure")) {
-                        Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_authenticatedUser");
-                        if (attribute != null && attribute instanceof User) {
+                        if (url.contains("/secure")) {
+                            Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_authenticatedUser");
+                            if (attribute != null && attribute instanceof User) {
+                                httpServletRequest.getRequestDispatcher(url).forward(request, response);
+                                return;
+                            }
+                            redirectUnauthorized(request, response);
+                            return;
+                        } else {
                             httpServletRequest.getRequestDispatcher(url).forward(request, response);
                             return;
                         }
-                        redirectUnauthorized(request, response);
-                        return;
-                    } else {
-                        httpServletRequest.getRequestDispatcher(url).forward(request, response);
+                    } catch (NumberFormatException e) {
+                        ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
                         return;
                     }
-                } catch (NumberFormatException e) {
-                    ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                }
+
+                //Resources
+                if (pathSplit[1].matches("javax\\.faces\\.resource|resources|fonts")) {
+                    chain.doFilter(request, response);
                     return;
                 }
-            }
 
-            //Resources
-            if (pathSplit[1].matches("javax\\.faces\\.resource|resources|fonts")) {
-                chain.doFilter(request, response);
-                return;
-            }
+                //Servlets
+                if (pathSplit[1].matches("ping|images|oauth")) {
+                    chain.doFilter(request, response);
+                    return;
+                }
 
-            //Servlets
-            if (pathSplit[1].matches("ping|images|oauth")) {
-                chain.doFilter(request, response);
-                return;
             }
-
+            redirectInactive(request, response);
+        } catch (Exception e) {
+            LogManager.logException(getClass(), "Uncaught Exception", e);
         }
-        redirectInactive(request, response);
     }
 
     private void redirectInactive(ServletRequest request, ServletResponse response) throws ServletException, IOException {

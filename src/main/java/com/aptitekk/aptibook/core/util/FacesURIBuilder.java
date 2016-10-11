@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class FacesURIBuilder {
 
-    private final static Boolean FORCE_HTTPS = Boolean.parseBoolean(System.getProperty("FORCE_HTTPS"));
+    private final static Boolean FORCE_HTTPS = Boolean.parseBoolean(System.getenv("HEROKU"));
 
     /**
      * Builds a standard (non tenant-based) URI.

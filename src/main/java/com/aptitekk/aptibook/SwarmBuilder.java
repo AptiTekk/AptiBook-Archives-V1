@@ -51,7 +51,6 @@ public class SwarmBuilder {
     }
 
     public static WARArchive buildDeployment() throws Exception {
-        // ---------------------------- ShrinkWrap WAR Generation ----------------------------
         WARArchive deployment = ShrinkWrap.create(WARArchive.class);
 
         deployment.addModule("org.postgresql");
@@ -67,7 +66,7 @@ public class SwarmBuilder {
 
         //Add all Maven dependencies
         deployment.addAllDependencies();
-        // ---------------------------- END ShrinkWrap WAR Generation ------------------------
+
         return deployment;
     }
 

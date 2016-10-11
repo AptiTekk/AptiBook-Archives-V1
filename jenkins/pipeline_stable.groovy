@@ -6,34 +6,35 @@
 
 node {
     def herokuAppName = "aptitekk-aptibook"
+    def jenkinsUrl = "https://dev.aptitekk.com/jenkins/"
     def liveUrl = "https://aptibook.aptitekk.com/"
     def pingUrl = "https://aptibook.aptitekk.com/ping"
     def mvnHome = tool "Maven"
 
     try {
         stage "Checkout"
-        slackSend color: "#4272b7", message: "A new ${env.JOB_NAME} Pipeline build is starting... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "[Job ${env.BUILD_NUMBER}] A new ${env.JOB_NAME} Pipeline build is starting..."
         checkoutFromGit()
 
         stage "Test"
         runTests(mvnHome)
-        slackSend color: "good", message: "All tests for the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER}) have passed. Ready to deploy to Production."
+        slackSend color: "good", message: "[Job ${env.BUILD_NUMBER}] All tests for the ${env.JOB_NAME} Pipeline have passed. Ready to deploy to Production."
 
         changeVersion(mvnHome, env.BUILD_NUMBER)
 
         stage "Deploy Approval"
-        if (!getDeploymentApproval()) {
+        if (!getDeploymentApproval(jenkinsUrl)) {
             echo "Aborted by User."
-            slackSend color: "warning", message: "The ${env.JOB_NAME} Pipeline has been aborted by the user. (Job ${env.BUILD_NUMBER})"
+            slackSend color: "warning", message: "[Job ${env.BUILD_NUMBER}] The ${env.JOB_NAME} Pipeline has been aborted by the user."
             return
         }
 
         stage "Deploy to Production"
-        slackSend color: "#4272b7", message: "Deploying AptiBook to Heroku... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "[Job ${env.BUILD_NUMBER}] Deploying AptiBook to Heroku..."
         deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl)
 
     } catch (err) {
-        slackSend color: "danger", message: "An Error occurred during the ${env.JOB_NAME} Pipeline (Job ${env.BUILD_NUMBER})."
+        slackSend color: "danger", message: "[Job ${env.BUILD_NUMBER}] An Error occurred during the ${env.JOB_NAME} Pipeline."
         error err
     }
 }
@@ -89,17 +90,20 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
         i++
     }
 
+    sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
+    def version = readFile "currentVersion"
+
     if (found)
-        slackSend color: "good", message: "A new deployment of ${herokuAppName} has been deployed successfully at ${liveUrl}."
+        slackSend color: "good", message: "[Job ${env.BUILD_NUMBER}] ${herokuAppName} version ${version} has been deployed successfully at ${liveUrl}."
     else {
-        slackSend color: "danger", message: "Deployment of ${herokuAppName} was not detected after 3 minutes. Did it deploy?"
+        slackSend color: "danger", message: "[Job ${env.BUILD_NUMBER}] Deployment of ${herokuAppName} version ${version} was not detected after 3 minutes. Did it deploy?"
         error
     }
 }
 
-def boolean getDeploymentApproval() {
+boolean getDeploymentApproval(jenkinsUrl) {
     try {
-        slackSend color: "#4272b7", message: "Please approve or abort the pending deployment."
+        slackSend color: "#4272b7", message: "[Job ${env.BUILD_NUMBER}] Please approve or abort the pending deployment at ${jenkinsUrl}."
         input message: "Please approve when you are ready to deploy.", ok: "Approve"
         return true
     } catch (ignored) {

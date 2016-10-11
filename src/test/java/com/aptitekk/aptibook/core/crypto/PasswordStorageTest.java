@@ -6,7 +6,6 @@
 
 package com.aptitekk.aptibook.core.crypto;
 
-import com.aptitekk.aptibook.SwarmBuilder;
 import com.aptitekk.aptibook.testUtils.TestBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
