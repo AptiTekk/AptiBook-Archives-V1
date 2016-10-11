@@ -65,10 +65,11 @@
                 <h:panelGroup layout="block"
                               styleClass="notification #{notification.read ? 'read-notification' : null}">
                     <h:outputText value="#{notification.subject} " style="font-weight:bold"/>
-                    &mdash;
+                    <br/>
                     <h:outputText value="#{notification.body}" escape="false"/>
                     <br/>
-                    <h:outputText value="#{notificationViewController.formatNotificationTimeAgo(notification)}" style="color:#808080"/>
+                    <h:outputText value="#{notificationViewController.formatNotificationTimeAgo(notification)}"
+                                  style="color:#808080"/>
                     <hr/>
                 </h:panelGroup>
             </ui:repeat>

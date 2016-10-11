@@ -89,7 +89,7 @@
 
                             <ui:repeat value="#{availableAssetsController.filteredAssets}" var="asset">
                                 <b:panel look="info" collapsible="false" title="#{asset.name}">
-                                    <h:panelGroup layout="block" class="form-group" rendered="#{asset.image != null}">
+                                    <h:panelGroup layout="block" class="form-group">
                                         <p:lightBox>
                                             <h:outputLink value="#{request.contextPath}/images/assets/#{asset.id}">
                                                 <h:graphicImage url="/images/assets/#{asset.id}"
@@ -97,12 +97,13 @@
                                             </h:outputLink>
                                         </p:lightBox>
                                     </h:panelGroup>
-                                    <div class="form-group">
-                                        <h:commandButton styleClass="btn btn-default" value="Make Reservation"
-                                                         action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}">
-                                            <f:ajax render=":includeGroup"/>
-                                        </h:commandButton>
-                                    </div>
+                                    <f:facet name="footer">
+                                        <b:buttonToolbar>
+                                            <b:commandButton look="default" value="Make Reservation" ajax="true"
+                                                             action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}"
+                                                             update=":includeGroup"/>
+                                        </b:buttonToolbar>
+                                    </f:facet>
                                 </b:panel>
                             </ui:repeat>
 

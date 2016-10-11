@@ -30,7 +30,7 @@
             </ui:fragment>
             <ui:fragment rendered="#{!requestReservationViewController.asset.needsApproval}">
                 <b:column colXs="12">
-                    <b:panel title="Reservation Reserved" look="success" collapsible="false">
+                    <b:panel title="Reservation Approved" look="success" collapsible="false">
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for #{requestReservationViewController.reservationTitle} has been approved."

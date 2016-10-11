@@ -16,6 +16,7 @@ import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.settings.assetCategories.TagController;
 import com.aptitekk.aptibook.web.controllers.settings.groups.GroupTreeController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -70,7 +71,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
                 Asset asset = new Asset();
 
                 if (assetOwnerGroup == null) {
-                    FacesContext.getCurrentInstance().addMessage("newAssetModalForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "This is required. Please select an owner group for this asset."));
+                    FacesContext.getCurrentInstance().addMessage("newAssetModalForm:ownerGroup", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Please select an Owner Group for this Asset."));
                     update = false;
                 }
                 if (image != null) {
@@ -96,7 +97,7 @@ public class NewAssetController extends AssetFieldSupplier implements Serializab
             }
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not persist new asset", e);
-            FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error: " + e.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("assetsForm_" + assetCategory.getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
     }
 

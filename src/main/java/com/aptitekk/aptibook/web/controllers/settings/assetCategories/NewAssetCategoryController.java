@@ -37,7 +37,6 @@ public class NewAssetCategoryController implements Serializable {
         AssetCategory assetCategory = new AssetCategory();
         assetCategory.setName(name);
         assetCategoryService.insert(assetCategory);
-        LogManager.logInfo(getClass(), "New Asset Category persisted , Asset Category Id and Name: " + assetCategory.getId() + ", " + assetCategory.getName());
 
         assetCategory = assetCategoryService.get(assetCategory.getId());
 

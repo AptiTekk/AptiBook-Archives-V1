@@ -41,6 +41,34 @@
         ga('send', 'pageview');
     </script>
 
+    <script type="text/javascript">
+        jsf.ajax.addOnEvent(function (data) {
+            if (data.status === 'begin') {
+                loading_start();
+            } else if (data.status === 'success' || data.status === 'error') {
+                loading_complete();
+            }
+        });
+
+        function loading(data) {
+            if (data.status === "begin") {
+                loading_start();
+            } else if (data.status === "success") {
+                loading_complete();
+            }
+        }
+
+        function loading_start() {
+            var loading = document.getElementById("loading");
+            loading.style.opacity = "1";
+        }
+
+        function loading_complete() {
+            var loading = document.getElementById("loading");
+            loading.style.opacity = "0";
+        }
+    </script>
+
     <title>AptiBook</title>
 
     <h:outputStylesheet library="css" name="style.css"/>
@@ -50,23 +78,6 @@
 <h:body>
     <div id="loading"></div>
     <ui:insert name="default"/>
-    <script type="text/javascript">
-        function loading(data) {
-            if (data.status === "begin") {
-                loading_start();
-            } else if (data.status === "success") {
-                loading_complete();
-            }
-        }
-        function loading_start() {
-            var loading = document.getElementById("loading");
-            loading.style.opacity = "1";
-        }
-        function loading_complete() {
-            var loading = document.getElementById("loading");
-            loading.style.opacity = "0";
-        }
-    </script>
 
     <h:outputScript library="js" name="fix_double_click.js"/>
     <ui:insert name="js"/>

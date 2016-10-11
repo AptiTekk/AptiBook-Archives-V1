@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.RegexPro
 import com.aptitekk.aptibook.web.components.propertyTypes.abstractTypes.TextPropertyType;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -135,7 +136,7 @@ public class EditPropertyController implements Serializable {
                     try {
                         propertiesService.merge(property);
                     } catch (Exception e) {
-                        FacesContext.getCurrentInstance().addMessage("propertiesEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Could not update properties. Internal Server Error."));
+                        FacesContext.getCurrentInstance().addMessage("propertiesEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                         e.printStackTrace();
                         return;
                     }

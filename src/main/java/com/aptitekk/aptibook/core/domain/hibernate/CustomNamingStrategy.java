@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.core.domain.hibernate;
 
-import org.hibernate.boot.model.naming.Identifier;
-import org.hibernate.boot.model.naming.ImplicitForeignKeyNameSource;
-import org.hibernate.boot.model.naming.ImplicitJoinTableNameSource;
-import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
+import org.hibernate.boot.model.naming.*;
+
+import java.util.List;
+import java.util.StringJoiner;
 
 public class CustomNamingStrategy extends ImplicitNamingStrategyJpaCompliantImpl {
 

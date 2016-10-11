@@ -31,7 +31,7 @@ public class UniqueUserValidator implements Validator, Serializable {
         Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
         if (inputText != null && inputText instanceof String && userService != null) {
-            User otherUser = userService.findByName((String) inputText);
+            User otherUser = userService.findByEmailAddress((String) inputText);
             if (otherUser != null) {
                 if (exceptionAttribute != null && exceptionAttribute instanceof User && otherUser.equals(exceptionAttribute))
                     return;

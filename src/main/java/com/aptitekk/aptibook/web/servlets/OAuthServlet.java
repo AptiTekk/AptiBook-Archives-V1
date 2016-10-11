@@ -29,6 +29,7 @@ public class OAuthServlet extends HttpServlet {
             session.setAttribute(OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
             resp.sendRedirect(tenant + "/index.xhtml");
         }
+
     }
 
     @Override

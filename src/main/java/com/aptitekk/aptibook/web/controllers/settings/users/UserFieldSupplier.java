@@ -8,16 +8,17 @@ package com.aptitekk.aptibook.web.controllers.settings.users;
 
 import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.User;
+import com.aptitekk.aptibook.web.validators.constraints.annotations.EmailAddress;
 import org.primefaces.model.TreeNode;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Map;
 
 public abstract class UserFieldSupplier {
 
     @Size(max = 64, message = "This may only be 64 characters long.")
     @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
+    @EmailAddress(message = "This is not a valid email address.")
     protected String emailAddress;
 
     @Size(max = 32, message = "This may only be 32 characters long.")
@@ -63,8 +64,7 @@ public abstract class UserFieldSupplier {
             phoneNumber = user.getPhoneNumber();
             location = user.getLocation();
             notificationTypeSettings = new Boolean[notificationTypes.length];
-            for(Notification.Type type : notificationTypes)
-            {
+            for (Notification.Type type : notificationTypes) {
                 notificationTypeSettings[type.ordinal()] = user.getNotificationTypeSettings().get(type);
             }
         } else {
@@ -149,7 +149,9 @@ public abstract class UserFieldSupplier {
         return wantsEmailNotifications;
     }
 
-    public void setWantsEmailNotifications(boolean wantsEmailNotifications) { this.wantsEmailNotifications = wantsEmailNotifications; }
+    public void setWantsEmailNotifications(boolean wantsEmailNotifications) {
+        this.wantsEmailNotifications = wantsEmailNotifications;
+    }
 
     public Notification.Type[] getNotificationTypes() {
         return notificationTypes;

@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
 
 import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
@@ -56,7 +57,7 @@ public class PermissionService extends MultiTenantEntityServiceAbstract<Permissi
      * Gets the Permission Entity that matches the Permission Descriptor, within the specified Tenant.
      *
      * @param descriptor The Permission Descriptor.
-     * @param tenant The Tenant of the Permission being searched for.
+     * @param tenant     The Tenant of the Permission being searched for.
      * @return the Permission Entity if found, null otherwise.
      */
     public Permission getPermissionByDescriptor(Permission.Descriptor descriptor, Tenant tenant) {

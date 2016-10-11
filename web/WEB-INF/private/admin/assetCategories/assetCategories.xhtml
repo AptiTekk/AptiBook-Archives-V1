@@ -86,19 +86,19 @@
                                 </pf:autoComplete>
                             </div>
                             <div class="form-group">
-                                <div class="btn-toolbar">
-                                    <h:commandButton styleClass="btn btn-primary"
+                                <b:buttonToolbar>
+                                    <b:commandButton look="primary"
                                                      value="Save Changes"
+                                                     ajax="true"
                                                      action="#{editAssetCategoryController.updateSettings()}"
-                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}">
-                                        <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
-                                    </h:commandButton>
-                                    <h:commandButton styleClass="btn btn-default"
+                                                     update=":assetCategoriesPage" process="@form"
+                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
+                                    <b:commandButton look="default"
                                                      value="Reset Form"
+                                                     ajax="true"
                                                      action="#{editAssetCategoryController.resetSettings()}"
-                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}">
-                                        <f:ajax execute="@form" render=":assetCategoriesPage" onevent="loading"/>
-                                    </h:commandButton>
+                                                     update=":assetCategoriesPage" process="@form"
+                                                     disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
 
                                     <div class="pull-right btn-toolbar">
                                         <b:commandButton look="danger" value="Delete Asset Category" ajax="true"
@@ -107,7 +107,7 @@
                                                          disabled="#{!editAssetCategoryController.hasModifyPermission()}"/>
 
                                     </div>
-                                </div>
+                                </b:buttonToolbar>
                             </div>
                         </h:form>
                         <hr/>

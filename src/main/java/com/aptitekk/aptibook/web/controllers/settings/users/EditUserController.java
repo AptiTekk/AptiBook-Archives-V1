@@ -17,6 +17,7 @@ import com.aptitekk.aptibook.core.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
@@ -70,7 +71,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             user.setUserState(User.State.APPROVED);
             try {
                 userService.merge(user);
-                LogManager.logInfo(getClass(), "User approved and merged, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Approved."));
                 refreshUserLists();
@@ -82,7 +82,6 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         } else {
             try {
                 userService.delete(user.getId());
-                LogManager.logInfo(getClass(), "User deleted, User: " + user.getEmailAddress());
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Rejected."));
                 refreshUserLists();
@@ -198,12 +197,10 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
 
             try {
                 selectedUser = userService.merge(selectedUser);
-                LogManager.logInfo(getClass(), "User updated, user Id and Name: " + selectedUser.getId() + ", " + selectedUser.getFullname());
                 refreshUserLists();
             } catch (Exception e) {
                 LogManager.logException(getClass(), "Could not Update User Settings", e);
-                FacesContext.getCurrentInstance().addMessage("userEditForm",
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error while updating User Settings: " + e.getMessage()));
+                FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
         }
@@ -218,14 +215,13 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
                 userService.delete(getSelectedUser().getId());
-                LogManager.logInfo(getClass(), "User deleted, user Id and Name: " + getSelectedUser().getId() + ", " + getSelectedUser().getFullname());
                 setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");
             }
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not Delete User", e);
-            context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Error While Deleting User!"));
+            context.addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
 
         refreshUserLists();

@@ -18,6 +18,7 @@ import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationContro
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetails;
 import com.aptitekk.aptibook.web.controllers.reservationManagement.ReservationDetailsController;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -105,7 +106,8 @@ public class PendingReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error approving reservation.", e);
+                FacesContext.getCurrentInstance().addMessage("pendingReservation", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
+                LogManager.logException(getClass(), "Could not approve Reservation", e);
             }
         }
     }
@@ -145,7 +147,8 @@ public class PendingReservationManagementController implements Serializable {
 
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error rejecting reservation", e);
+                FacesContext.getCurrentInstance().addMessage("pendingReservations", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
+                LogManager.logException(getClass(), "Could not reject Reservation", e);
             }
         }
     }

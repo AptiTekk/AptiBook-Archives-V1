@@ -12,7 +12,7 @@ node {
 
     try {
         stage "Checkout"
-        slackSend color: "#4272b7", message: "A new AptiBook build is starting... (Job ${env.BUILD_NUMBER})"
+        slackSend color: "#4272b7", message: "A new ${env.JOB_NAME} Pipeline build is starting... (Job ${env.BUILD_NUMBER})"
         checkoutFromGit()
 
         stage "Test"
@@ -69,7 +69,7 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     sh "${mvnHome}/bin/mvn clean install -U"
     sh "heroku maintenance:on --app ${herokuAppName}"
     sh "heroku git:remote --app ${herokuAppName}"
-    sh "git push heroku HEAD:master"
+    sh "git push heroku HEAD:master -f"
     sleep 60
     sh "heroku maintenance:off --app ${herokuAppName}"
 

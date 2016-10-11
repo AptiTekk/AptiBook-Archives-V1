@@ -64,20 +64,17 @@
 
                             <div class="form-group">
                                 <!-- Add new Asset Button -->
-                                <h:panelGroup rendered="#{editAssetController.userGroupsEmpty}" style="font-weight: bold;">
+                                <h:panelGroup rendered="#{editAssetController.userGroupsEmpty}"
+                                              style="font-weight: bold;">
                                     You must create one or more User Groups before creating Assets. <br/> <br/>
                                 </h:panelGroup>
-                                <h:commandButton styleClass="btn btn-primary"
+                                <b:commandButton look="primary"
                                                  value="Add New Asset"
-                                                 style="display: inline-block"
-                                                 action="#{newAssetController.setAssetCategory(assetCategory)}"
-                                                 ajax="true"
-                                                 update=":newAssetModalForm"
                                                  onclick="$('.newAssetModal').modal();"
-                                                 disabled="#{editAssetController.userGroupsEmpty}">
-                                    <f:ajax render="@form"
-                                            onevent="loading"/>
-                                </h:commandButton>
+                                                 ajax="true"
+                                                 action="#{newAssetController.setAssetCategory(assetCategory)}"
+                                                 update="@form"
+                                                 disabled="#{editAssetController.userGroupsEmpty}"/>
                             </div>
                         </h:form>
                     </b:column>

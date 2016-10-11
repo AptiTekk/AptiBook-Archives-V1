@@ -19,6 +19,7 @@ import com.sparkpost.resources.ResourceTransmissions;
 import com.sparkpost.transport.RestConnection;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ public class EmailService implements Serializable {
             LogManager.logError(getClass(), "API_KEY: " + API_KEY + " | API_URL: " + API_URL);
         }
     }
-
 
     public boolean sendEmailNotification(Notification notification) {
         if (notification.getUser() == null || notification.getUser().getEmailAddress() == null || notification.getUser().getEmailAddress().isEmpty())
@@ -102,6 +102,8 @@ public class EmailService implements Serializable {
         try {
             connection = new RestConnection(client, API_URL);
             ResourceTransmissions.create(connection, 0, transmission);
+
+
             return true;
         } catch (SparkPostException e) {
             LogManager.logException(getClass(), "Unable to send an email to these addresses: "+recipientArray+".", e);

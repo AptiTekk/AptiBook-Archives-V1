@@ -38,7 +38,8 @@
                     <h4>Displayed Categories</h4>
 
                     <c:forEach items="#{frontPageController.assetCategories}" var="category" varStatus="status">
-                    <b:switch value="#{frontPageController.assetCategoryFilterValues[status.index]}"
+                    <!--suppress UnnecessaryLabelJS -->
+                        <b:switch value="#{frontPageController.assetCategoryFilterValues[status.index]}"
                               label="#{category.name}"
                               ajax="true" onchange="ajax:frontPageController.updateFilters();" oncomplete="PF('calendar').update();"
                    />
