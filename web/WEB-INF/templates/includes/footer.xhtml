@@ -15,8 +15,11 @@
         <h:form>
             <b:column colXs="12" colSm="6">
                 <p>
-                    <b:navCommandLink iconAwesome="info-circle" value="" styleClass="no-decoration"
-                                      ajax="true" oncomplete="$('.infoModal').modal();"/>
+                    <h:link outcome="#{null}" p:data-target=".infoModal" p:data-toggle="modal">
+                        <span style="cursor: pointer">
+                            <i class="fa fa-info-circle"/>
+                        </span>
+                    </h:link>
                     | Crafted with <span class="fa fa-heartbeat"/> by AptiTekk, LLC.
                 </p>
             </b:column>
