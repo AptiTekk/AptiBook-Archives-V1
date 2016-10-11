@@ -44,7 +44,8 @@
     <script type="text/javascript">
         jsf.ajax.addOnEvent(function (data) {
             if (data.status === 'begin') {
-                loading_start();
+                if(!$(data.source).is('input:text'))
+                    loading_start();
             } else if (data.status === 'success' || data.status === 'error') {
                 loading_complete();
             }
