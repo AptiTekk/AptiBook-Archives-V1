@@ -96,11 +96,20 @@ public class TenantFilter implements Filter {
             redirectInactive(request, response);
         } catch (Exception e) {
             LogManager.logException(getClass(), "Uncaught Exception", e);
+            try {
+                redirectError(request, response);
+            } catch (ServletException | IOException e1) {
+                LogManager.logException(getClass(), "Uncaught Exception", e);
+            }
         }
     }
 
     private void redirectInactive(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/error/inactive_tenant.xhtml").forward(request, response);
+    }
+
+    private void redirectError(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/WEB-INF/error/500.xhtml").forward(request, response);
     }
 
     private void redirectUnauthorized(ServletRequest request, ServletResponse response) throws IOException {

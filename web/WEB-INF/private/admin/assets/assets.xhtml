@@ -70,10 +70,10 @@
                                 </h:panelGroup>
                                 <b:commandButton look="primary"
                                                  value="Add New Asset"
-                                                 onclick="$('.newAssetModal').modal();"
                                                  ajax="true"
                                                  action="#{newAssetController.setAssetCategory(assetCategory)}"
-                                                 update="@form"
+                                                 update=":newAssetModalForm"
+                                                 oncomplete="$('.newAssetModal').modal();"
                                                  disabled="#{editAssetController.userGroupsEmpty}"/>
                             </div>
                         </h:form>
