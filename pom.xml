@@ -18,11 +18,12 @@
     <properties>
         <!-- Define the version of the JBoss BOMs we want to import to specify
         tested stacks. -->
-        <version.wildfly-swarm>2016.9</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.10.0</version.wildfly-swarm>
 
         <version.hibernate>5.0.7.Final</version.hibernate>
         <version.postgresql-jdbc>9.4.1211</version.postgresql-jdbc>
 
+        <version.shrinkwrap.resolvers>2.2.4</version.shrinkwrap.resolvers>
         <version.arquillian.bom>1.1.11.Final</version.arquillian.bom>
 
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -321,6 +322,20 @@
             <version>1.0</version>
         </dependency>
         <!-- End Time Dependencies -->
+
+        <!-- Raygun Exception Handler -->
+        <dependency>
+            <groupId>com.mindscapehq</groupId>
+            <artifactId>raygun4java</artifactId>
+            <type>pom</type>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mindscapehq</groupId>
+            <artifactId>core</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <!-- End Raygun -->
 
         <dependency>
             <groupId>commons-io</groupId>

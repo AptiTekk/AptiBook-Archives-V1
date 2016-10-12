@@ -25,7 +25,7 @@
     </style>
 
     <b:navBar brandImg="#{resource['images:Logo.svg']}"
-              brandHref="#{facesNavigationController.getUrlFromNavigationCase('secure')}"
+              brandHref="#{facesContext.viewRoot.viewId.contains('inactive_tenant.xhtml') ? null : facesNavigationController.getUrlFromNavigationCase('index')}"
               fixed="top"
               onclick="loading_start()" fluid="true">
         <h:panelGroup
