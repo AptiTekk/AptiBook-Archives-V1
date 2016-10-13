@@ -106,12 +106,6 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     text-decoration: none;
 }
 
-#main-login {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-}
-
 .checkbox label.bf-no-message {
     padding-left: 0 !important;
 }
