@@ -48,7 +48,7 @@
 
         function loading(data) {
             if (data.status === 'begin') {
-                if(!$(data.source).is('input:text'))
+                if(!$(data.source).is('input:text') &amp;&amp; !$(data.source).hasClass('date'))
                     loading_start();
             } else if (data.status === 'success' || data.status === 'error') {
                 loading_complete();
