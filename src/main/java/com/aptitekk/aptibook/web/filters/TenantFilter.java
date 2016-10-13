@@ -13,6 +13,7 @@ import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
 
+import javax.faces.application.ViewExpiredException;
 import javax.inject.Inject;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -34,6 +35,7 @@ public class TenantFilter implements Filter {
     private UserService userService;
 
     public static final String SESSION_ORIGINAL_URL = "Original-Url";
+
     private FilterConfig filterConfig;
 
     @Override
@@ -46,6 +48,8 @@ public class TenantFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
             String path = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length());
             String[] pathSplit = httpServletRequest.getRequestURI().substring(httpServletRequest.getContextPath().length()).split("/");
 
@@ -53,9 +57,9 @@ public class TenantFilter implements Filter {
 
                 //Tenants
                 if (tenantManagementService.getAllowedTenantSlugs().contains(pathSplit[1].toLowerCase())) { //Valid Tenant ID
-                    try {
-                        String tenantSlug = pathSplit[1].toLowerCase();
-                        Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
+                    String tenantSlug = pathSplit[1].toLowerCase();
+                    Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
+                    if (tenant != null) {
                         httpServletRequest.setAttribute("tenant", tenant);
 
                         String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
@@ -68,15 +72,12 @@ public class TenantFilter implements Filter {
                                 httpServletRequest.getRequestDispatcher(url).forward(request, response);
                                 return;
                             }
-                            redirectUnauthorized(request, response);
+                            redirectUnauthorized(httpServletRequest, httpServletResponse);
                             return;
                         } else {
                             httpServletRequest.getRequestDispatcher(url).forward(request, response);
                             return;
                         }
-                    } catch (NumberFormatException e) {
-                        ((HttpServletResponse) response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                        return;
                     }
                 }
 
@@ -93,18 +94,36 @@ public class TenantFilter implements Filter {
                 }
 
             }
-            redirectInactive(request, response);
-        } catch (Exception e) {
-            LogManager.logException(getClass(), "Uncaught Exception", e);
+
+            redirectInactiveTenant(request, response);
+        } catch (ViewExpiredException e) {
             try {
-                redirectError(request, response);
-            } catch (ServletException | IOException e1) {
-                LogManager.logException(getClass(), "Uncaught Exception", e);
+                redirectViewExpired(request, response);
+            } catch (Exception e1) {
+                handleUncaughtException(e1, request, response);
             }
+        } catch (Exception e) {
+            handleUncaughtException(e, request, response);
         }
     }
 
-    private void redirectInactive(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+    private void handleUncaughtException(Exception e, ServletRequest request, ServletResponse response) {
+        LogManager.logException(getClass(), "Uncaught Exception", e);
+        try {
+            redirectError(request, response);
+        } catch (ServletException | IOException e1) {
+            LogManager.logException(getClass(), "Uncaught Exception", e);
+        }
+    }
+
+    private void redirectViewExpired(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+        if (request.getAttribute("tenant") != null)
+            ((HttpServletResponse) response).sendRedirect(((Tenant) request.getAttribute("tenant")).getSlug() + "/index.xhtml?session-expired=true");
+        else
+            request.getRequestDispatcher("/WEB-INF/error/view_expired.xhtml").forward(request, response);
+    }
+
+    private void redirectInactiveTenant(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/error/inactive_tenant.xhtml").forward(request, response);
     }
 
@@ -112,7 +131,7 @@ public class TenantFilter implements Filter {
         request.getRequestDispatcher("/WEB-INF/error/500.xhtml").forward(request, response);
     }
 
-    private void redirectUnauthorized(ServletRequest request, ServletResponse response) throws IOException {
+    public static void redirectUnauthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String parameters = "?";
         //noinspection RedundantCast
         for (Map.Entry<String, String[]> entry : ((Map<String, String[]>) request.getParameterMap()).entrySet()) {
@@ -126,11 +145,10 @@ public class TenantFilter implements Filter {
 
         parameters = parameters.substring(0, parameters.length() - 1);
 
-        String attemptedAccessPath = ((HttpServletRequest) request).getRequestURI();
+        String attemptedAccessPath = request.getRequestURI();
 
-        LogManager.logInfo(getClass(), "Unauthorized access request to " + attemptedAccessPath + parameters);
-        ((HttpServletRequest) request).getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
-        ((HttpServletResponse) response).sendRedirect(filterConfig.getServletContext().getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
+        request.getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
+        response.sendRedirect(request.getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 
     @Override
