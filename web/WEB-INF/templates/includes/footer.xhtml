@@ -8,25 +8,24 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:b="http://bootsfaces.net/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:o="http://omnifaces.org/ui">
 <ui:composition>
     <b:container fluid="true">
-        <h:form>
+        <o:form useRequestURI="true">
             <b:column colXs="12" colSm="6">
                 <p>
-                    <h:panelGroup style="cursor: pointer" p:data-target=".infoModal" p:data-toggle="modal">
-                        <i class="fa fa-info-circle"/>
-                    </h:panelGroup>
+                    <b:navLink value="" iconAwesome="info-circle" styleClass="no-decoration"
+                               onclick="$('.infoModal').modal();return false;"/>
                     | Crafted with <span class="fa fa-heartbeat"/> by AptiTekk, LLC.
                 </p>
             </b:column>
 
             <b:column colXs="12" colSm="6">
-                <b:commandButton value="Quick Help" look="default" styleClass="pull-right" p:data-target=".helpModal"
-                                 p:data-toggle="modal" onclick="return false;"/>
+                <b:button value="Quick Help" look="default" styleClass="pull-right"
+                          onclick="$('.helpModal').modal();return false;"/>
             </b:column>
-        </h:form>
+        </o:form>
     </b:container>
 </ui:composition>
 </html>

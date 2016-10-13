@@ -9,9 +9,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:o="http://omnifaces.org/ui"
 >
 <ui:composition>
-    <h:form id="helpModalForm">
+    <o:form id="helpModalForm" useRequestURI="true">
         <b:modal styleClass="helpModal" title="Quick Help">
             <ui:fragment rendered="#{not empty helpController.popularTopicTitles}">
                 <h4>Popular Topics</h4>
@@ -37,6 +38,6 @@
                 <b:button value="Close" look="default" onclick="$('.helpModal').modal('hide')"/>
             </f:facet>
         </b:modal>
-    </h:form>
+    </o:form>
 </ui:composition>
 </html>

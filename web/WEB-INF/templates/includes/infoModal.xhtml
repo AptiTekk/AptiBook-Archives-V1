@@ -9,31 +9,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:o="http://omnifaces.org/ui"
 >
 <ui:composition>
-    <h:form id="infoModalForm">
+    <o:form id="infoModalForm" useRequestURI="true">
         <b:modal styleClass="infoModal" title="AptiBook Information">
             <h:panelGroup layout="block" rendered="#{not empty aptiBookInfoController.version}">
                 <h4>AptiBook Version:</h4>
                 #{aptiBookInfoController.version}
             </h:panelGroup>
             <hr/>
-            <h:panelGroup layout="block" rendered="#{not empty aptiBookInfoController.attributionsMap}">
+            <h:panelGroup id="infoModalAttributions" layout="block"
+                          rendered="#{not empty aptiBookInfoController.attributionsMap}">
                 <h4>Third-Party Library Attributions:</h4>
-                <b:accordion>
-                    <c:forEach items="#{aptiBookInfoController.attributionsMap}" var="attribution">
-                        <b:panel title="#{attribution.key}">
-                            <b:inputTextarea value="#{attribution.value}" readonly="true" rows="10"
-                                             style="resize: none;"/>
-                        </b:panel>
-                    </c:forEach>
-                </b:accordion>
+                <b:dataTable value="#{aptiBookInfoController.attributionsMap.keySet().toArray()}"
+                             var="attributionName"
+                             searching="false" paginated="false">
+                    <b:dataTableColumn label="Library Name">
+                        <b:navCommandLink value="#{attributionName}" ajax="true"
+                                          action="#{aptiBookInfoController.setSelectedAttribution(attributionName)}"
+                                          update=":attributionModalForm" oncomplete="$('.attributionModal').modal();"/>
+                    </b:dataTableColumn>
+                </b:dataTable>
             </h:panelGroup>
             <f:facet name="footer">
                 <b:button value="Close" look="default" onclick="$('.infoModal').modal('hide')"/>
             </f:facet>
         </b:modal>
-    </h:form>
+    </o:form>
+    <ui:include src="attributionModal.xhtml"/>
 </ui:composition>
 </html>
