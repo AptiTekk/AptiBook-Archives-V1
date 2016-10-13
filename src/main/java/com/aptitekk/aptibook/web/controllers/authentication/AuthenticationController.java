@@ -172,8 +172,6 @@ public class AuthenticationController implements Serializable {
      */
     public String logout() {
         LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged out.");
-
-        oAuthController.clearTokens();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
