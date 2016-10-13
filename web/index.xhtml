@@ -13,44 +13,86 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui">
 
-<ui:composition template="/WEB-INF/templates/formats/blank.xhtml">
+<ui:composition template="/WEB-INF/templates/formats/only_footer.xhtml">
     <f:metadata>
         <f:viewAction action="#{oAuthController.checkGoogleCode()}"/>
         <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
-
     </f:metadata>
+    <ui:define name="css">
+        <style type="text/css">
+            #wrapper {
+                display: table;
+                position: absolute;
+                height: 100%;
+                width: 100%;
+            }
+
+            .containerColumn {
+                background-color: #fff;
+                padding: 15px 15px;
+                box-shadow: #aaa 0 0 10px 0;
+            }
+
+            #contentColumn {
+                min-height: calc(100vh - 96px - 50px);
+            }
+
+            @media (min-width: 768px) {
+                #verticalSpacer {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+
+                #horizontalSpacer {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+
+                .containerColumn {
+                    padding: 15px 30px;
+                    border-radius: 10px;
+                }
+
+                #contentColumn {
+                    min-height: initial;
+                }
+            }
+
+
+        </style>
+    </ui:define>
     <ui:define name="content">
         <div class="texture-bg" style="height: 100%">
             <b:container fluid="true" style="min-height: 100vh; padding-left: 0; padding-right: 0;">
-                <h:panelGroup layout="block"
-                              style="display: table; position: absolute; height: 100%; width: 100%;">
-                    <h:panelGroup layout="block"
-                                  style="display: table-cell; vertical-align: middle;">
-                        <h:panelGroup layout="block"
-                                      style="margin-left: auto; margin-right: auto;">
+                <h:panelGroup id="wrapper" layout="block">
+                    <h:panelGroup id="verticalSpacer" layout="block">
+                        <h:panelGroup id="horizontalSpacer" layout="block">
                             <b:column colXs="12" colSm="6" offsetSm="3" colLg="4" offsetLg="4">
-                                <b:row>
-                                    <b:column colXs="10" offsetXs="1" colMd="8" offsetMd="2"
-                                              style="background-color: #fff; padding: 15px 30px; border-radius: 10px; box-shadow: #aaa 0 0 10px 0">
+                                <b:row style="padding-bottom:15px">
+                                    <b:column id="logoColumn" colXs="12" colMd="8" offsetMd="2"
+                                              styleClass="containerColumn">
                                         <a href="#{facesNavigationController.getUrlFromNavigationCase('index')}">
                                             <h:graphicImage value="/resources/images/Logo.svg"
                                                             style="width:100%;"/>
                                         </a>
                                     </b:column>
                                 </b:row>
-                                <b:row style="margin-top:15px">
-                                    <b:column id="contentColumn" colXs="10" offsetXs="1" colMd="8" offsetMd="2"
-                                              style="background-color: #fff; padding: 15px 30px; border-radius: 10px; box-shadow: #aaa 0 0 10px 0">
-
-                                        <ui:fragment rendered="#{empty param.get('action')}">
+                                <b:row style="padding-bottom:50px;">
+                                    <b:column id="contentColumn" colXs="12" colMd="8" offsetMd="2"
+                                              styleClass="containerColumn">
+                                        <ui:fragment
+                                                rendered="#{empty param.get('action') or not registrationController.registrationEnabled}">
                                             <ui:include src="WEB-INF/private/signIn/main.xhtml"/>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{param.get('action') == 'register'}">
-                                            <ui:fragment rendered="#{empty param.get('complete')}">
-                                                <ui:include src="WEB-INF/private/signIn/register.xhtml"/>
-                                            </ui:fragment>
-                                            <ui:fragment rendered="#{param.get('complete') == 'true'}">
-                                                <ui:include src="WEB-INF/private/signIn/registerConfirmation.xhtml"/>
+                                            <ui:fragment rendered="#{registrationController.registrationEnabled}">
+                                                <ui:fragment rendered="#{empty param.get('complete')}">
+                                                    <ui:include src="WEB-INF/private/signIn/register.xhtml"/>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{param.get('complete') == 'true'}">
+                                                    <ui:include
+                                                            src="WEB-INF/private/signIn/registerConfirmation.xhtml"/>
+                                                </ui:fragment>
                                             </ui:fragment>
                                         </ui:fragment>
 

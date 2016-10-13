@@ -76,9 +76,12 @@
     <ui:insert name="css"/>
 
 </h:head>
-<h:body>
+<h:body styleClass="aptibook">
     <div id="loading"></div>
     <ui:insert name="default"/>
+
+    <ui:include src="includes/helpModal.xhtml"/>
+    <ui:include src="includes/infoModal.xhtml"/>
 
     <h:outputScript library="js" name="fix_double_click.js"/>
     <ui:insert name="js"/>

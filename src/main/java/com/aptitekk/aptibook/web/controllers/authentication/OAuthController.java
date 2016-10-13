@@ -31,6 +31,8 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Named("oAuthController")
 @ViewScoped
@@ -77,6 +79,7 @@ public class OAuthController implements Serializable {
 
         serviceBuilder.scope("email");
         serviceBuilder.state("tenant=" + tenantSessionService.getCurrentTenant().getSlug());
+
         return serviceBuilder.build(GoogleApi20.instance());
     }
 
@@ -101,6 +104,8 @@ public class OAuthController implements Serializable {
                 LogManager.logException(getClass(), "Could not parse Google Sign In Code", e);
             }
         }
+
+        clearTokens();
     }
 
     public void signInWithGoogle() {
@@ -109,7 +114,10 @@ public class OAuthController implements Serializable {
 
         if (googleOAuthService != null)
             try {
-                FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl());
+                final Map<String, String> additionalParams = new HashMap<>();
+                additionalParams.put("access_type", "online");
+                additionalParams.put("prompt", "consent");
+                FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl(additionalParams));
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unfortunately, we were unable to Sign In with Google. Please try again later!"));
                 LogManager.logException(getClass(), "Could not Sign In with Google", e);
@@ -128,7 +136,7 @@ public class OAuthController implements Serializable {
             request.addQuerystringParameter("token", accessToken.getAccessToken());
             Response response = request.send();
             if (!response.isSuccessful())
-                LogManager.logError(getClass(), "Could not revoke Token on Sign Out: " + response.getMessage());
+                LogManager.logError(getClass(), "Could not revoke Token: " + response.getMessage());
         }
     }
 
