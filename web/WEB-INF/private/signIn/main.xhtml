@@ -14,6 +14,8 @@
 
 <ui:composition>
     <h:form id="loginForm">
+        <b:alert severity="warning"
+                 rendered="#{param.get('session-expired') == 'true'}">Your session has expired. Please sign in again.</b:alert>
         <b:messages for="loginForm" showSummary="false" showDetail="true"/>
         <b:inputText id="usernameInput" label="Email Address:" value="#{authenticationController.emailAddress}">
             <b:focus/>
