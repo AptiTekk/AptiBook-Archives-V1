@@ -89,16 +89,16 @@ hr {
     box-shadow: #aaa 0 10px 25px 0;
 }
 
-.footer p {
+.aptibook .footer p {
     margin-top: 8px;
     color: #fff;
 }
 
-.footer a {
+.aptibook .footer a {
     color: #fff;
 }
 
-.footer a:hover, .footer a:active, .footer a:focus {
+.aptibook .footer a:hover, .footer a:active, .footer a:focus {
     color: #f1f1f1;
 }
 
@@ -106,14 +106,43 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     text-decoration: none;
 }
 
-.checkbox label.bf-no-message {
-    padding-left: 0 !important;
+.aptibook .checkbox label.bf-no-message {
+    padding-left: 0;
 }
 
-.checkbox {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+.aptibook .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
 }
+
+/* ---------------------------------- BEGIN COLOR MODIFICATIONS ---------------------------------- */
+
+.aptibook a {
+    color: #4272b7;
+}
+
+.aptibook .btn-primary,
+.aptibook .pagination > .active > a,
+.aptibook .pagination > .active > span,
+.aptibook .pagination > .active > a:hover,
+.aptibook .pagination > .active > span:hover,
+.aptibook .pagination > .active > a:focus,
+.aptibook .pagination > .active > span:focus {
+    background-color: #4272b7;
+    border-color: #39629C;
+}
+
+.aptibook .btn-primary:hover {
+    background-color: #39629C;
+    border-color: #39629C;
+}
+
+.aptibook .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
+.aptibook .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
+    background: #4272b7;
+}
+
+/* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN RESULTS PAGE MODIFICATIONS ---------------------------------- */
 
