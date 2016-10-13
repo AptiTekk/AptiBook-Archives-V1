@@ -9,6 +9,7 @@ package com.aptitekk.aptibook.web.controllers.authentication;
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.Permission;
+import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.services.*;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
@@ -18,6 +19,7 @@ import com.aptitekk.aptibook.web.controllers.settings.users.UserFieldSupplier;
 import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -49,7 +51,12 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
 
     static final String REGISTRATION_VERIFICATION_PARAMETER = "verificationCode";
 
+    private boolean registrationEnabled;
 
+    @PostConstruct
+    private void init() {
+        registrationEnabled = Boolean.parseBoolean(propertiesService.getPropertyByKey(Property.Key.REGISTRATION_ENABLED).getPropertyValue());
+    }
 
     public String register() {
         try {
@@ -106,4 +113,7 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
         return verificationCode;
     }
 
+    public boolean isRegistrationEnabled() {
+        return registrationEnabled;
+    }
 }

@@ -13,13 +13,8 @@
 <ui:composition template="/WEB-INF/templates/base.xhtml">
     <ui:define name="default">
 
-        <div style="height:50px">
-            <ui:include src="/WEB-INF/templates/includes/header.xhtml"/>
-        </div>
-
-        <div style="min-height: calc(100vh - 60px - 50px);padding-bottom:60px;">
+        <div style="min-height: calc(100vh - 60px);">
             <ui:insert name="content"/>
-
         </div>
 
         <div class="footer">

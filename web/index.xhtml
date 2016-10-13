@@ -13,7 +13,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:b="http://bootsfaces.net/ui">
 
-<ui:composition template="/WEB-INF/templates/formats/blank.xhtml">
+<ui:composition template="/WEB-INF/templates/formats/only_footer.xhtml">
     <f:metadata>
         <f:viewAction action="#{oAuthController.checkGoogleCode()}"/>
         <f:viewAction action="#{authenticationController.redirectIfLoggedIn()}"/>
@@ -42,15 +42,19 @@
                                     <b:column id="contentColumn" colXs="10" offsetXs="1" colMd="8" offsetMd="2"
                                               style="background-color: #fff; padding: 15px 30px; border-radius: 10px; box-shadow: #aaa 0 0 10px 0">
 
-                                        <ui:fragment rendered="#{empty param.get('action')}">
+                                        <ui:fragment
+                                                rendered="#{empty param.get('action') or not registrationController.registrationEnabled}">
                                             <ui:include src="WEB-INF/private/signIn/main.xhtml"/>
                                         </ui:fragment>
                                         <ui:fragment rendered="#{param.get('action') == 'register'}">
-                                            <ui:fragment rendered="#{empty param.get('complete')}">
-                                                <ui:include src="WEB-INF/private/signIn/register.xhtml"/>
-                                            </ui:fragment>
-                                            <ui:fragment rendered="#{param.get('complete') == 'true'}">
-                                                <ui:include src="WEB-INF/private/signIn/registerConfirmation.xhtml"/>
+                                            <ui:fragment rendered="#{registrationController.registrationEnabled}">
+                                                <ui:fragment rendered="#{empty param.get('complete')}">
+                                                    <ui:include src="WEB-INF/private/signIn/register.xhtml"/>
+                                                </ui:fragment>
+                                                <ui:fragment rendered="#{param.get('complete') == 'true'}">
+                                                    <ui:include
+                                                            src="WEB-INF/private/signIn/registerConfirmation.xhtml"/>
+                                                </ui:fragment>
                                             </ui:fragment>
                                         </ui:fragment>
 
