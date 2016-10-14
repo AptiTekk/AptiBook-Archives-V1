@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>
                                         <h:commandLink value="#{resourceCategory.name}"
-                                                       action="#{searchByTimeController.resourceCategory(resourceCategory)}"
+                                                       action="#{searchByTimeController.setResourceCategory(resourceCategory)}"
                                                        style="font-weight: #{searchByTimeController.resourceCategory == resourceCategory ? 'bold' : 'normal'}">
                                             <f:ajax render="@form"/>
                                         </h:commandLink>
