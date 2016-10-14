@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Tag;
 
 import javax.ejb.Stateful;
@@ -16,14 +16,14 @@ import java.io.Serializable;
 @Stateful
 public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements Serializable {
 
-    public Tag findByName(AssetCategory assetCategory, String name) {
-        if (assetCategory == null || name == null)
+    public Tag findByName(ResourceCategory resourceCategory, String name) {
+        if (resourceCategory == null || name == null)
             return null;
 
         try {
             return entityManager
-                    .createQuery("SELECT t FROM Tag t WHERE t.assetCategory = ?1 AND t.name = ?2", Tag.class)
-                    .setParameter(1, assetCategory)
+                    .createQuery("SELECT t FROM Tag t WHERE t.resourceCategory = ?1 AND t.name = ?2", Tag.class)
+                    .setParameter(1, resourceCategory)
                     .setParameter(2, name)
                     .getSingleResult();
         } catch (PersistenceException e) {

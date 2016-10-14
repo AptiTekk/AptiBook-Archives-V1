@@ -1,0 +1,177 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:pf="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+>
+
+<ui:composition>
+    <h:panelGroup layout="block" id="resourceCategoriesPage">
+        <b:row id="resourceCategoriesPageContent">
+            <!-- Resource Category Selection List -->
+            <b:column colXs="12" colLg="5">
+                <h:form>
+                    <div class="form-group">
+                        <b:dataTable value="#{editResourceCategoryController.resourceCategories}" var="resourceCategory"
+                                     styleClass="table table-striped table-bordered" style="width:100%;"
+                                     responsive="true" searching="false" paginated="false">
+                            <b:dataTableColumn label="Resource Category">
+                                <b:navCommandLink value="#{resourceCategory.name}"
+                                                  iconAwesome="pencil-square-o"
+                                                  ajax="true"
+                                                  action="#{editResourceCategoryController.setSelectedResourceCategory(resourceCategory)}"
+                                                  update=":resourceCategoriesPage"
+                                                  style="font-weight: #{editResourceCategoryController.selectedResourceCategory == resourceCategory ? 'bold' : 'normal'}"/>
+                            </b:dataTableColumn>
+                        </b:dataTable>
+                    </div>
+                    <h:panelGroup layout="block" styleClass="btn-toolbar"
+                                  rendered="#{editResourceCategoryController.hasModifyPermission()}">
+                        <b:commandButton look="primary" value="Add New Resource Category" ajax="true"
+                                         update=":newResourceCategoryModalForm"
+                                         oncomplete="$('.newResourceCategoryModal').modal()"/>
+                    </h:panelGroup>
+                </h:form>
+            </b:column>
+
+            <!-- Resource Category Edit Fields -->
+            <b:column colXs="12" colLg="6" offsetLg="1">
+                <c:choose>
+                    <c:when test="#{editResourceCategoryController.selectedResourceCategory == null}">
+                        <h4>Please select a Resource Category.</h4>
+                        <b:messages showSummary="false" showDetail="true"/>
+                    </c:when>
+                    <c:otherwise>
+                        <h:form id="resourceCategoryEditForm">
+
+                            <div class="form-group">
+                                <h4>Resource Category Settings:</h4>
+                                * = Required. Name must be unique.
+                                <b:message for="resourceCategoryEditForm" showSummary="false"
+                                           showDetail="true"/>
+                            </div>
+                            <div class="form-group">
+                                <b:message for="resourceCategoryNameEdit" showSummary="false" showDetail="true"/>
+                                <b:inputText id="resourceCategoryNameEdit" label="Name:"
+                                             value="#{editResourceCategoryController.editableResourceCategoryName}"
+                                             required="true"
+                                             disabled="#{!editResourceCategoryController.hasModifyPermission()}"
+                                             requiredMessage="This is required." maxlength="32">
+                                    <f:validator binding="#{uniqueResourceCategoryValidator}"/>
+                                    <f:attribute name="exception"
+                                                 value="#{editResourceCategoryController.selectedResourceCategory}"/>
+                                </b:inputText>
+                            </div>
+                            <div class="form-group">
+                                <h:outputLabel value="Available Filters:"/>
+                                <!--@elvariable id="tag" type="java.lang.String"-->
+                                <pf:autoComplete multiple="true"
+                                                 value="#{tagController.selectedResourceCategoryTagNames}"
+                                                 completeMethod="#{tagController.getResourceCategoryTagSuggestions}"
+                                                 var="tag" itemLabel="#{tag}" itemValue="#{tag}"
+                                                 disabled="#{!editResourceCategoryController.hasModifyPermission()}"
+                                                 onkeyup="return event.keyCode == 188 || event.keyCode == 13 || event.keyCode == 32">
+                                    <pf:ajax event="keyup" process="@this" update="@this"/>
+                                </pf:autoComplete>
+                            </div>
+                            <div class="form-group">
+                                <b:buttonToolbar>
+                                    <b:commandButton look="primary"
+                                                     value="Save Changes"
+                                                     ajax="true"
+                                                     action="#{editResourceCategoryController.updateSettings()}"
+                                                     update=":resourceCategoriesPage" process="@form"
+                                                     disabled="#{!editResourceCategoryController.hasModifyPermission()}"/>
+                                    <b:commandButton look="default"
+                                                     value="Reset Form"
+                                                     ajax="true"
+                                                     action="#{editResourceCategoryController.resetSettings()}"
+                                                     update=":resourceCategoriesPage" process="@form"
+                                                     disabled="#{!editResourceCategoryController.hasModifyPermission()}"/>
+
+                                    <div class="pull-right btn-toolbar">
+                                        <b:commandButton look="danger" value="Delete Resource Category" ajax="true"
+                                                         update=":resourceCategoryDeletionConfirmModalForm"
+                                                         oncomplete="$('.resourceCategoryDeletionConfirmModal').modal()"
+                                                         disabled="#{!editResourceCategoryController.hasModifyPermission()}"/>
+
+                                    </div>
+                                </b:buttonToolbar>
+                            </div>
+                        </h:form>
+                        <hr/>
+                        <h:form id="reservationFieldEditForm">
+                            <div class="form-group">
+                                <h4>Reservation Request Fields:</h4>
+                                <b:message for="reservationFieldEditForm" showSummary="false"
+                                           showDetail="true"/>
+                            </div>
+                            <div class="form-group">
+                                <b:dataTable value="#{editResourceCategoryController.reservationFields}"
+                                             var="reservationField" searching="false" paginated="false">
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Title
+                                        </f:facet>
+                                        <b:navCommandLink
+                                                value="#{reservationField.title.length() > 32 ? reservationField.title.substring(0, 32).concat('...') : reservationField.title}"
+                                                iconAwesome="pencil-square-o"
+                                                ajax="true"
+                                                action="#{editReservationFieldController.setReservationField(reservationField)}"
+                                                update=":editReservationFieldModalForm"
+                                                oncomplete="$('.editReservationFieldModal').modal()"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Description
+                                        </f:facet>
+                                        #{reservationField.description.length() > 32 ? reservationField.description.substring(0, 32).concat("...") : reservationField.description}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Required
+                                        </f:facet>
+                                        #{reservationField.required ? 'Yes' : 'No'}
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            Size
+                                        </f:facet>
+                                        #{reservationField.multiLine ? 'Multi-Line' : 'Single-Line'}
+                                    </h:column>
+                                </b:dataTable>
+                            </div>
+                            <div class="form-group">
+                                <div class="btn-toolbar">
+                                    <b:commandButton look="primary" value="Add New Field" ajax="true"
+                                                     update=":newReservationFieldModalForm"
+                                                     oncomplete="$('.newReservationFieldModal').modal()"/>
+                                </div>
+                            </div>
+                        </h:form>
+                    </c:otherwise>
+                </c:choose>
+            </b:column>
+        </b:row>
+
+        <ui:include src="newResourceCategoryModal.xhtml"/>
+        <ui:include src="newReservationFieldModal.xhtml"/>
+        <ui:include src="editReservationFieldModal.xhtml"/>
+        <ui:include src="deleteReservationFieldModal.xhtml"/>
+        <ui:include src="deleteResourceCategoryModal.xhtml"/>
+    </h:panelGroup>
+
+</ui:composition>
+
+</html>

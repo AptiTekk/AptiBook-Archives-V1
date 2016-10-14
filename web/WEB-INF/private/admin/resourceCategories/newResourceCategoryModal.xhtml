@@ -1,0 +1,48 @@
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+>
+
+<ui:composition>
+    <h:form id="newResourceCategoryModalForm">
+        <b:modal styleClass="newResourceCategoryModal" title="New Resource Category">
+            <h:panelGroup id="newResourceCategoryFields">
+                <div class="form-group">
+                    * = Required. Name must be unique.<br/>
+                </div>
+                <div class="form-group">
+                    <b:message for="newResourceCategoryName" showSummary="false" showDetail="true"/>
+                    <b:inputText id="newResourceCategoryName" label="Name:" placeholder="Use plural form ('Rooms' rather than 'Room')."
+                                 value="#{newResourceCategoryController.name}"
+                                 required="true"
+                                 requiredMessage="This is required." maxlength="32">
+                        <f:validator binding="#{uniqueResourceCategoryValidator}"/>
+                    </b:inputText>
+                </div>
+                <b:fetchBeanInfos/>
+            </h:panelGroup>
+            <f:facet name="footer">
+                <b:commandButton value="Add" look="primary" ajax="true"
+                                 update="newResourceCategoryFields :resourceCategoriesPageContent"
+                                 oncomplete="if(!validationFailed) $('.newResourceCategoryModal').modal('hide')"
+                                 action="#{newResourceCategoryController.addResourceCategory}"/>
+                <b:button styleClass="btn btn-default"
+                          p:data-dismiss="modal" value="Cancel"/>
+            </f:facet>
+        </b:modal>
+    </h:form>
+</ui:composition>
+
+</html>

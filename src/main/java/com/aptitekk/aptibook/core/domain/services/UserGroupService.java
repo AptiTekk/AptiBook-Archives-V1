@@ -122,32 +122,32 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
     }
 
     /**
-     * Returns a list containing all assets below and including those belonging to the usergroup passed in.
+     * Returns a list containing all resources below and including those belonging to the usergroup passed in.
      * The list is in no specific order.
      *
      * @param origin The origin usergroup, from which the tree shall be traversed down.
      */
-    public List<Asset> getHierarchyDownAssets(UserGroup origin) {
+    public List<Resource> getHierarchyDownResources(UserGroup origin) {
         List<UserGroup> userGroups = getHierarchyDown(origin);
-        List<Asset> userGroupAssets = new ArrayList<>();
+        List<Resource> userGroupResources = new ArrayList<>();
         for (UserGroup userGroup : userGroups) {
-            userGroupAssets.addAll(userGroup.getAssets());
+            userGroupResources.addAll(userGroup.getResources());
         }
-        return userGroupAssets;
+        return userGroupResources;
     }
 
     /**
-     * Returns a list containing all reservations below and including those belonging to the assets of the usergroup passed in.
+     * Returns a list containing all reservations below and including those belonging to the resources of the usergroup passed in.
      * The list is in no specific order.
      *
      * @param origin The origin usergroup, from which the tree shall be traversed down.
      */
     public List<Reservation> getHierarchyDownReservations(UserGroup origin) {
-        List<Reservation> assetReservations = new ArrayList<>();
-        for (Asset asset : getHierarchyDownAssets(origin)) {
-            assetReservations.addAll(asset.getReservations());
+        List<Reservation> resourceReservations = new ArrayList<>();
+        for (Resource resource : getHierarchyDownResources(origin)) {
+            resourceReservations.addAll(resource.getReservations());
         }
-        return assetReservations;
+        return resourceReservations;
     }
 
 }

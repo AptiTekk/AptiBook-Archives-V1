@@ -57,7 +57,7 @@ hr {
 }
 
 .navbar-nav > li > .dropdown-menu {
-    width: 100%;
+    min-width: 100%;
     border: none;
     border-top: 4px solid #4272b7;
 }
@@ -140,6 +140,12 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 .aptibook .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary,
 .aptibook .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary {
     background: #4272b7;
+}
+
+.aptibook .ui-state-highlight,
+.aptibook .ui-widget-content .ui-state-highlight,
+.aptibook .ui-widget-header .ui-state-highlight {
+    background-color: #4272b7;
 }
 
 /* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */

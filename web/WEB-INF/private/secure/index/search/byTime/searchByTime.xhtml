@@ -16,7 +16,7 @@
 <ui:composition>
     <h:form id="searchByTimeForm">
 
-        <!-- Step 0: Select an Asset Category -->
+        <!-- Step 0: Select an Resource Category -->
         <ui:fragment rendered="#{searchByTimeController.currentStep == 0}">
             <b:row>
                 <b:column colXs="12">
@@ -29,12 +29,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <ui:repeat value="#{searchByTimeController.assetCategories}" var="assetCategory">
+                            <ui:repeat value="#{searchByTimeController.resourceCategories}" var="resourceCategory">
                                 <tr>
                                     <td>
-                                        <h:commandLink value="#{assetCategory.name}"
-                                                       action="#{searchByTimeController.setAssetCategory(assetCategory)}"
-                                                       style="font-weight: #{searchByTimeController.assetCategory == assetCategory ? 'bold' : 'normal'}">
+                                        <h:commandLink value="#{resourceCategory.name}"
+                                                       action="#{searchByTimeController.resourceCategory(resourceCategory)}"
+                                                       style="font-weight: #{searchByTimeController.resourceCategory == resourceCategory ? 'bold' : 'normal'}">
                                             <f:ajax render="@form"/>
                                         </h:commandLink>
                                     </td>
@@ -51,7 +51,7 @@
                     <b:commandButton look="primary" value="Next Step" iconAwesome="arrow-right" iconAlign="right"
                                      style="width: 50%; margin-left: 50%;" ajax="true"
                                      action="#{searchByTimeController.nextStep}" update="@form"
-                                     disabled="#{searchByTimeController.assetCategory == null}"/>
+                                     disabled="#{searchByTimeController.resourceCategory == null}"/>
                 </b:column>
             </b:row>
         </ui:fragment>
@@ -89,7 +89,7 @@
                                          iconAlign="right"
                                          style="width: 50%;"
                                          ajax="true" process="@form"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
+                                         action="#{availableResourcesController.searchForResources(searchByTimeController.resourceCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          update=":includeGroup"
                                          disabled="#{searchByTimeController.pickerEndTime == null}"/>
                     </b:buttonGroup>

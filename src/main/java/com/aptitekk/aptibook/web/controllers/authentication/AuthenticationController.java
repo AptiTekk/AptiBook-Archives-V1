@@ -123,7 +123,6 @@ public class AuthenticationController implements Serializable {
                 try {
                     userService.insert(user);
                     setAuthenticatedUser(user);
-                    LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                     SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                     redirectAfterLogin();
@@ -132,7 +131,6 @@ public class AuthenticationController implements Serializable {
                 }
             } else {
                 setAuthenticatedUser(existingUser);
-                LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                 SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                 redirectAfterLogin();
@@ -152,17 +150,13 @@ public class AuthenticationController implements Serializable {
 
         if (authenticatedUser == null) // Invalid Credentials
         {
-            LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
         } else if (!authenticatedUser.isVerified() && !authenticatedUser.isAdmin()) {
-            LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed due to being unverified.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified by email."));
             //TODO: Allow them to re-send the email.
         } else if (authenticatedUser.getUserState() != User.State.APPROVED && !authenticatedUser.isAdmin()) {
-            LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed due to being unapproved.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not yet been approved by an administrator."));
         } else {
-            LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
             redirectAfterLogin();

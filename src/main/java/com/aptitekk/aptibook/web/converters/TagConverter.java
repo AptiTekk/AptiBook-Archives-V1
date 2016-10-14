@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.converters;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Tag;
-import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.domain.services.TagService;
 
 import javax.enterprise.context.RequestScoped;
@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class TagConverter implements Converter, Serializable {
 
     @Inject
-    private AssetCategoryService assetCategoryService;
+    private ResourceCategoryService resourceCategoryService;
 
     @Inject
     private TagService tagService;
@@ -38,17 +38,17 @@ public class TagConverter implements Converter, Serializable {
         if (split.length != 2)
             return null;
 
-        AssetCategory assetCategory = assetCategoryService.findByName(split[0]);
-        if (assetCategory == null)
+        ResourceCategory resourceCategory = resourceCategoryService.findByName(split[0]);
+        if (resourceCategory == null)
             return null;
 
-        return tagService.findByName(assetCategory, split[1]);
+        return tagService.findByName(resourceCategory, split[1]);
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object o) {
         if (o instanceof Tag) {
-            return ((Tag) o).getAssetCategory().getName() + "|" + ((Tag) o).getName();
+            return ((Tag) o).getResourceCategory().getName() + "|" + ((Tag) o).getName();
         }
 
 

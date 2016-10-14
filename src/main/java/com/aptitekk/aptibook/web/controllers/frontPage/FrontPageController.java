@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.help.HelpController;
@@ -32,27 +32,27 @@ public class FrontPageController implements Serializable {
     private ReservationService reservationService;
 
     @Inject
-    private AssetCategoryService assetCategoryService;
+    private ResourceCategoryService resourceCategoryService;
 
     @Inject
     private HelpController helpController;
 
     private ReservationScheduleModel scheduleModel;
 
-    private List<AssetCategory> assetCategories;
+    private List<ResourceCategory> resourceCategories;
 
-    private boolean[] assetCategoryFilterValues;
+    private boolean[] resourceCategoryFilterValues;
 
-    private AssetCategory[] displayedCategories;
+    private ResourceCategory[] displayedCategories;
 
     @PostConstruct
     private void init() {
-        assetCategories = assetCategoryService.getAll();
-        assetCategoryFilterValues = new boolean[assetCategories.size()];
-        for (int i = 0; i < assetCategoryFilterValues.length; i++)
-            assetCategoryFilterValues[i] = true;
+        resourceCategories = resourceCategoryService.getAll();
+        resourceCategoryFilterValues = new boolean[resourceCategories.size()];
+        for (int i = 0; i < resourceCategoryFilterValues.length; i++)
+            resourceCategoryFilterValues[i] = true;
 
-        displayedCategories = buildDisplayedAssetCategories();
+        displayedCategories = buildDisplayedResourceCategories();
 
         scheduleModel = new ReservationScheduleModel() {
             @Override
@@ -74,14 +74,14 @@ public class FrontPageController implements Serializable {
         helpController.setCurrentTopic(HelpController.Topic.FRONT_PAGE);
     }
 
-    private AssetCategory[] buildDisplayedAssetCategories() {
-        List<AssetCategory> displayedCategories = new ArrayList<>();
-        for (int i = 0; i < assetCategoryFilterValues.length; i++) {
-            if (assetCategoryFilterValues[i]) {
-                displayedCategories.add(assetCategories.get(i));
+    private ResourceCategory[] buildDisplayedResourceCategories() {
+        List<ResourceCategory> displayedCategories = new ArrayList<>();
+        for (int i = 0; i < resourceCategoryFilterValues.length; i++) {
+            if (resourceCategoryFilterValues[i]) {
+                displayedCategories.add(resourceCategories.get(i));
             }
         }
-        AssetCategory[] displayedCategoriesArray = new AssetCategory[displayedCategories.size()];
+        ResourceCategory[] displayedCategoriesArray = new ResourceCategory[displayedCategories.size()];
         return displayedCategories.toArray(displayedCategoriesArray);
     }
 
@@ -89,16 +89,16 @@ public class FrontPageController implements Serializable {
         return scheduleModel;
     }
 
-    public List<AssetCategory> getAssetCategories() {
-        return assetCategories;
+    public List<ResourceCategory> getResourceCategories() {
+        return resourceCategories;
     }
 
-    public boolean[] getAssetCategoryFilterValues() {
-        return assetCategoryFilterValues;
+    public boolean[] getResourceCategoryFilterValues() {
+        return resourceCategoryFilterValues;
     }
 
     public void updateFilters() {
-        displayedCategories = buildDisplayedAssetCategories();
+        displayedCategories = buildDisplayedResourceCategories();
     }
 
 }

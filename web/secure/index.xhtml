@@ -17,11 +17,11 @@
         <p:outputLabel rendered="false"/>
 
         <h:panelGroup layout="block" id="includeGroup">
-            <ui:fragment rendered="#{availableAssetsController.availableAssets != null}">
+            <ui:fragment rendered="#{availableResourcesController.availableResources != null}">
                 <ui:include
-                        src="/WEB-INF/private/secure/index/search/#{requestReservationViewController.successfulReservation != null ? 'success' : requestReservationViewController.asset != null ? 'reserve' : 'byTime/results'}.xhtml"/>
+                        src="/WEB-INF/private/secure/index/search/#{requestReservationViewController.successfulReservation != null ? 'success' : requestReservationViewController.resource != null ? 'reserve' : 'byTime/results'}.xhtml"/>
             </ui:fragment>
-            <ui:fragment rendered="#{availableAssetsController.availableAssets == null}">
+            <ui:fragment rendered="#{availableResourcesController.availableResources == null}">
                 <ui:include src="/WEB-INF/private/secure/index/main.xhtml"/>
             </ui:fragment>
         </h:panelGroup>

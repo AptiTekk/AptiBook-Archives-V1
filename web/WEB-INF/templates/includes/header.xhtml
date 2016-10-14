@@ -44,7 +44,7 @@
                                 </b:navLink>
                             </ui:repeat>
                         </b:dropMenu>
-                        <b:dropMenu value="AptiBook Settings" iconAwesome="cogs"
+                        <b:dropMenu value="AptiBook Configuration" iconAwesome="cogs"
                                     rendered="#{not empty settingsViewController.pages}">
                             <ui:repeat value="#{settingsViewController.pages}" var="page">
                                 <b:navLink outcome="settings" value="#{page.name}" iconAwesome="#{page.iconAwesomeName}"

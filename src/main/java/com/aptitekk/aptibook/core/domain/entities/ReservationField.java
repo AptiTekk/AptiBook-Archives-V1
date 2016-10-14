@@ -26,7 +26,7 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
     private boolean required;
 
     @ManyToOne
-    private AssetCategory assetCategory;
+    private ResourceCategory resourceCategory;
 
     private boolean multiLine = false;
 
@@ -69,12 +69,12 @@ public class ReservationField extends MultiTenantEntity implements Serializable 
         this.required = required;
     }
 
-    public AssetCategory getAssetCategory() {
-        return assetCategory;
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
     }
 
-    public void setAssetCategory(AssetCategory assetCategory) {
-        this.assetCategory = assetCategory;
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
     }
 
     public boolean isMultiLine() {

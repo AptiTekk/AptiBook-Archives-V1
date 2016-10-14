@@ -6,11 +6,11 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.reserve;
 
-import com.aptitekk.aptibook.core.domain.entities.Asset;
+import com.aptitekk.aptibook.core.domain.entities.Resource;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.ReservationField;
 import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
-import com.aptitekk.aptibook.core.domain.services.AssetService;
+import com.aptitekk.aptibook.core.domain.services.ResourceService;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
@@ -38,7 +38,7 @@ public class RequestReservationViewController implements Serializable {
     private ReservationService reservationService;
 
     @Inject
-    private AssetService assetService;
+    private ResourceService resourceService;
 
     @Inject
     private NotificationService notificationService;
@@ -50,9 +50,9 @@ public class RequestReservationViewController implements Serializable {
     private TenantSessionService tenantSessionService;
 
     /**
-     * The asset that is being requested for reservation.
+     * The resource that is being requested for reservation.
      */
-    private Asset asset;
+    private Resource resource;
 
     /**
      * The reservation start time
@@ -81,13 +81,13 @@ public class RequestReservationViewController implements Serializable {
 
     public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
-        //Therefore, we check to make sure the asset is still available for reservation. (This also prevents reserving assets which are not on the page.)
-        asset = assetService.get(asset.getId()); //Refresh asset from database to get most recent reservation times.
+        //Therefore, we check to make sure the resource is still available for reservation. (This also prevents reserving resources which are not on the page.)
+        resource = resourceService.get(resource.getId()); //Refresh resource from database to get most recent reservation times.
 
-        if (reservationService.isAssetAvailableForReservation(asset, startTime, endTime)) {
+        if (reservationService.isResourceAvailableForReservation(resource, startTime, endTime)) {
             Reservation reservation = new Reservation();
             reservation.setUser(authenticationController.getAuthenticatedUser());
-            reservation.setAsset(asset);
+            reservation.setResource(resource);
 
             ZoneId currentTenantTimezone = tenantSessionService.getCurrentTenantZoneId();
             reservation.setStartTime(startTime.withZoneSameInstant(currentTenantTimezone));
@@ -95,7 +95,7 @@ public class RequestReservationViewController implements Serializable {
 
             reservation.setTitle(reservationTitle);
 
-            if (!asset.getNeedsApproval())
+            if (!resource.getNeedsApproval())
                 reservation.setStatus(Reservation.Status.APPROVED);
 
             try {
@@ -127,17 +127,17 @@ public class RequestReservationViewController implements Serializable {
      * Used when the user decides to cancel making a reservation request.
      */
     public void cancel() {
-        this.asset = null;
+        this.resource = null;
         this.startTime = null;
         this.endTime = null;
     }
 
-    public Asset getAsset() {
-        return asset;
+    public Resource getResource() {
+        return resource;
     }
 
-    public void setAsset(Asset asset) {
-        this.asset = asset;
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
     public ZonedDateTime getStartTime() {

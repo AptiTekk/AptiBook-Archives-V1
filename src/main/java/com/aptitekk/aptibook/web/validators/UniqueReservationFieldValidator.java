@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.validators;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.ReservationField;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldService;
 import com.aptitekk.aptibook.core.util.LogManager;
@@ -31,11 +31,11 @@ public class UniqueReservationFieldValidator implements Validator, Serializable 
 
     @Override
     public void validate(FacesContext facesContext, UIComponent uiComponent, Object inputText) throws ValidatorException {
-        Object assetCategory = uiComponent.getAttributes().get("assetCategory");
+        Object resourceCategory = uiComponent.getAttributes().get("resourceCategory");
         Object exceptionAttribute = uiComponent.getAttributes().get("exception");
 
-        if (inputText != null && inputText instanceof String && assetCategory != null && assetCategory instanceof AssetCategory) {
-            List<ReservationField> otherReservationFields = reservationFieldService.findByTitle((String) inputText, (AssetCategory) assetCategory);
+        if (inputText != null && inputText instanceof String && resourceCategory != null && resourceCategory instanceof ResourceCategory) {
+            List<ReservationField> otherReservationFields = reservationFieldService.findByTitle((String) inputText, (ResourceCategory) resourceCategory);
             if (otherReservationFields != null) {
                 if (otherReservationFields.isEmpty())
                     return;
