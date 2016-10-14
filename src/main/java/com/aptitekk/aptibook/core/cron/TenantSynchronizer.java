@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.*;
 import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
+import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import com.aptitekk.aptibook.core.util.LogManager;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -45,6 +46,11 @@ public class TenantSynchronizer {
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void synchronizeTenants() {
         LogManager.logDebug(getClass(), "Synchronizing Tenants...");
+
+        if (!AptiBookInfoProvider.isStarted()) {
+            LogManager.logInfo(getClass(), "Skipping run since AptiBook is not started.");
+            return;
+        }
 
         if (WOOCOMMERCE_URL == null || WOOCOMMERCE_CK == null || WOOCOMMERCE_CS == null) {
             LogManager.logError(getClass(), "Failed to Synchronize due to missing environment variable(s).");

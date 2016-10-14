@@ -8,6 +8,7 @@ package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.cron.TenantSynchronizer;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +37,8 @@ public class StartupService implements Serializable {
         for (Tenant tenant : tenantService.getAll()) {
             tenantService.ensureTenantIntegrity(tenant);
         }
+
+        AptiBookInfoProvider.setStarted();
 
         tenantSynchronizer.synchronizeTenants();
     }

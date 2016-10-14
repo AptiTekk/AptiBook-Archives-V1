@@ -6,7 +6,6 @@
 
 package com.aptitekk.aptibook.core.util;
 
-import com.aptitekk.aptibook.web.components.propertyTypes.BooleanField;
 import com.aptitekk.aptibook.web.controllers.AptiBookInfoController;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,8 +18,11 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class AptiBookInfoProvider {
+
+    private static final AtomicBoolean STARTED = new AtomicBoolean(false);
 
     private static final boolean USING_HEROKU = Boolean.parseBoolean(System.getenv("USING_HEROKU"));
 
@@ -76,6 +78,14 @@ public class AptiBookInfoProvider {
         } catch (Exception e) {
             LogManager.logException(AptiBookInfoController.class, "Could not load attributions", e);
         }
+    }
+
+    public static void setStarted() {
+        STARTED.set(true);
+    }
+
+    public static boolean isStarted() {
+        return STARTED.get();
     }
 
     public static boolean isUsingHeroku() {

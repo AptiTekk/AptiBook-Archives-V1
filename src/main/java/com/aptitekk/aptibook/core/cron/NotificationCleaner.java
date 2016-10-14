@@ -10,6 +10,7 @@ import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
+import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import com.aptitekk.aptibook.core.util.LogManager;
 import org.threeten.extra.Days;
 
@@ -35,6 +36,11 @@ public class NotificationCleaner {
     @Schedule(hour = "*", persistent = false)
     private void cleanReadNotifications() {
         LogManager.logDebug(getClass(), "Cleaning Notifications...");
+
+        if (!AptiBookInfoProvider.isStarted()) {
+            LogManager.logInfo(getClass(), "Skipping run since AptiBook is not started.");
+            return;
+        }
 
         int numNotificationsRemoved = 0;
         List<Tenant> tenants = tenantService.getAll();
