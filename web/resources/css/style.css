@@ -148,6 +148,10 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     background-color: #4272b7;
 }
 
+.aptibook .ui-widget-content .fc-today.ui-state-highlight {
+    background: none;
+}
+
 /* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN CALENDAR EVENT MODIFICATIONS ---------------------------------- */

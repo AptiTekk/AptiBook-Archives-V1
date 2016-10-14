@@ -20,7 +20,6 @@
                     <ol class="breadcrumb" style="margin-top: 20px">
                         <li><h:link outcome="index" value="Home"/></li>
                         <li class="active">My Reservations</li>
-                        <li class="active">Upcoming</li>
                     </ol>
                 </b:column>
             </b:row>
@@ -41,7 +40,7 @@
                     <ui:fragment rendered="#{empty myReservationsController.resourceCategories}">
                         <b:row>
                             <b:column colXs="12">
-                                <h4>You do not have any upcoming Reservations.</h4>
+                                <h3 align="center">You have no upcoming Reservations.</h3>
                             </b:column>
                         </b:row>
                     </ui:fragment>
