@@ -36,7 +36,6 @@ public class NotificationController implements Serializable {
 
     private List<Notification> allNotifications;
     private List<Notification> unreadNotifications;
-    private List<Notification> readNotifications;
 
     private User user;
 
@@ -50,7 +49,6 @@ public class NotificationController implements Serializable {
 
     private void loadNotifications() {
         allNotifications = notificationService.getAllForUser(user);
-
 
         //Build Unread Notifications List
         unreadNotifications = new ArrayList<>();

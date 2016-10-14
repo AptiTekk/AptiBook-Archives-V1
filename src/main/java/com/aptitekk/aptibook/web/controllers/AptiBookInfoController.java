@@ -8,14 +8,17 @@ package com.aptitekk.aptibook.web.controllers;
 
 import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Set;
 
 @Named
-@ApplicationScoped
+@ViewScoped
 public class AptiBookInfoController implements Serializable {
+
+    private String selectedAttribution = null;
 
     public String getVersion() {
         return AptiBookInfoProvider.getVersion();
@@ -23,6 +26,14 @@ public class AptiBookInfoController implements Serializable {
 
     public Map<String, String> getAttributionsMap() {
         return AptiBookInfoProvider.getAttributionsMap();
+    }
+
+    public String getSelectedAttribution() {
+        return selectedAttribution;
+    }
+
+    public void setSelectedAttribution(String attributionName) {
+        selectedAttribution = attributionName;
     }
 
 }

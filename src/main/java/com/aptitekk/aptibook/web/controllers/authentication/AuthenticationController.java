@@ -19,7 +19,6 @@ import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
-import org.primefaces.context.RequestContext;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -27,6 +26,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -91,13 +92,11 @@ public class AuthenticationController implements Serializable {
      * Login with Google
      *
      * @param googleUserInfoModel The User's details from Google.
-     * @return The outcome page.
      */
-    String loginWithGoogle(GoogleUserInfoModel googleUserInfoModel) {
+    public void loginWithGoogle(GoogleUserInfoModel googleUserInfoModel) {
         if (googleUserInfoModel == null)
-            return null;
+            return;
 
-        //TODO: Get from properties
         String whitelistedDomains = propertiesService.getPropertyByKey(Property.Key.GOOGLE_SIGN_IN_WHITELIST).getPropertyValue();
         String[] whitelist = whitelistedDomains.replaceAll("\\s+", "").toLowerCase().split(",");
 
@@ -122,30 +121,27 @@ public class AuthenticationController implements Serializable {
                     setAuthenticatedUser(user);
                     LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                     FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-                    return determineRedirectPath();
+
+                    redirectAfterLogin();
                 } catch (Exception e) {
                     LogManager.logException(getClass(), "Could not create User for Google Sign In", e);
                 }
-                return null;
             } else {
                 setAuthenticatedUser(existingUser);
                 LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-                return determineRedirectPath();
+
+                redirectAfterLogin();
             }
         } else {
             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Signing in with Google using emails @" + googleUserInfoModel.getEmail().toLowerCase().split("@")[1] + " is not allowed."));
         }
-        return null;
     }
 
     /**
      * Attempts to log the authenticatedUser in with the credentials they have input.
-     *
-     * @return The outcome page.
      */
-    public String login() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+    public void login() {
         FacesContext context = FacesContext.getCurrentInstance();
         User authenticatedUser = userService.getUserWithCredentials(emailAddress, password);
         password = null;
@@ -154,22 +150,18 @@ public class AuthenticationController implements Serializable {
         {
             LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Incorrect Credentials."));
-            return null;
         } else if (!authenticatedUser.isVerified() && !authenticatedUser.isAdmin()) {
             LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed due to being unverified.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not been verified by email."));
             //TODO: Allow them to re-send the email.
-            return null;
         } else if (authenticatedUser.getUserState() != User.State.APPROVED && !authenticatedUser.isAdmin()) {
             LogManager.logInfo(getClass(), "Login attempt for '" + emailAddress + "' has failed due to being unapproved.");
             context.addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Login Failed: Your account has not yet been approved by an administrator."));
-            return null;
         } else {
             LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
-            RequestContext.getCurrentInstance().execute("loading_start();");
-            return determineRedirectPath();
+            redirectAfterLogin();
         }
     }
 
@@ -180,31 +172,31 @@ public class AuthenticationController implements Serializable {
      */
     public String logout() {
         LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged out.");
-
-        oAuthController.clearTokens();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "index";
     }
 
     /**
-     * Determines where the user should be redirected after login.
+     * Redirects the user to the correct place after login.
      * Will take into account the page the user last tried to access, and will attempt to redirect them back to it.
      * Otherwise, an outcome page will be used.
-     *
-     * @return null if a redirect was made. Otherwise, an outcome page.
      */
-    private String determineRedirectPath() {
+    private void redirectAfterLogin() {
         String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
         if (originalUrl != null) {
             FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
-                return null;
+                return;
             } catch (IOException e) {
                 LogManager.logException(getClass(), "Could not redirect user to original url (" + originalUrl + ")", e);
             }
         }
-        return "secure";
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context != null) {
+            context.getApplication().getNavigationHandler().handleNavigation(context, null, "secure");
+        }
     }
 
     /**
@@ -244,7 +236,11 @@ public class AuthenticationController implements Serializable {
     public void forceUserRedirect() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null) {
-            context.getApplication().getNavigationHandler().handleNavigation(context, null, "index");
+            try {
+                TenantFilter.redirectUnauthorized((HttpServletRequest) context.getExternalContext().getRequest(), (HttpServletResponse) context.getExternalContext().getResponse());
+            } catch (IOException e) {
+                LogManager.logException(getClass(), "Could not force redirect", e);
+            }
         }
     }
 

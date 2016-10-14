@@ -10,10 +10,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui">
+      xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:b="http://bootsfaces.net/ui" xmlns:o="http://omnifaces.org/ui">
 
 <ui:composition>
-    <h:form id="loginForm">
+    <o:form id="loginForm">
+        <b:alert severity="warning"
+                 rendered="#{param.get('session-expired') == 'true'}">Your session has expired. Please sign in again.</b:alert>
         <b:messages for="loginForm" showSummary="false" showDetail="true"/>
         <b:inputText id="usernameInput" label="Email Address:" value="#{authenticationController.emailAddress}">
             <b:focus/>
@@ -29,11 +31,13 @@
             <b:image library="images" name="google-sign-in.svg" height="18px"/>
         </b:commandButton>
 
-        <hr/>
+        <h:panelGroup rendered="#{registrationController.registrationEnabled}">
+            <hr/>
 
-        <b:button value="Register" outcome="index" look="default" size="block" includeViewParams="true">
-            <f:param name="action" value="register"/>
-        </b:button>
-    </h:form>
+            <b:button value="Register" outcome="index" look="default" size="block" includeViewParams="true">
+                <f:param name="action" value="register"/>
+            </b:button>
+        </h:panelGroup>
+    </o:form>
 </ui:composition>
 </html>

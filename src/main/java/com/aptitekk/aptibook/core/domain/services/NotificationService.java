@@ -63,8 +63,9 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         for (User user : recipients) {
             sendNotification(Notification.Type.TYPE_APPROVAL_REQUEST,
                     "New User Registration",
-                    "<p> A new user, <b>" + newUser.getFullname() +
-                            "</b>, has registered for AptiBook, and is waiting for approval to sign in. Please approve or reject this user.</p>",
+                    "A new user, <b>" + newUser.getFullname() +
+                            "</b>, has registered for AptiBook, and is waiting for approval to sign in. " +
+                            "Please approve or reject this user.",
                     user);
         }
     }
