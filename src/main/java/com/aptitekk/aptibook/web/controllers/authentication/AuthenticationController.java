@@ -53,6 +53,8 @@ public class AuthenticationController implements Serializable {
     @Inject
     private NotificationService notificationService;
 
+    public static final String AUTHENTICATED_USER_ATTRIBUTE = "authenticatedUser";
+
     private String emailAddress;
     private String password;
 
@@ -61,7 +63,7 @@ public class AuthenticationController implements Serializable {
     @PostConstruct
     public void init() {
         if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
-            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser");
+            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE);
             if (attribute != null && attribute instanceof User) {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
@@ -120,7 +122,7 @@ public class AuthenticationController implements Serializable {
                     userService.insert(user);
                     setAuthenticatedUser(user);
                     LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                     redirectAfterLogin();
                 } catch (Exception e) {
@@ -129,7 +131,7 @@ public class AuthenticationController implements Serializable {
             } else {
                 setAuthenticatedUser(existingUser);
                 LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                 redirectAfterLogin();
             }
@@ -160,7 +162,7 @@ public class AuthenticationController implements Serializable {
         } else {
             LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_authenticatedUser", authenticatedUser);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
             redirectAfterLogin();
         }
     }

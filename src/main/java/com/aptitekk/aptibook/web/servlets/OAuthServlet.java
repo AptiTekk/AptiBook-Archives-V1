@@ -26,10 +26,11 @@ public class OAuthServlet extends HttpServlet {
             String tenant = state.split("=")[1];
             String code = req.getParameter("code");
             HttpSession session = req.getSession();
-            session.setAttribute(OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
+            session.setAttribute(tenant + "_" + OAuthController.GOOGLE_CODE_ATTRIBUTE, code);
             resp.sendRedirect(tenant + "/index.xhtml");
+        } else {
+            resp.sendRedirect(req.getContextPath());
         }
-
     }
 
     @Override

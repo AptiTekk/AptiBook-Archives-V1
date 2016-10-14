@@ -12,6 +12,7 @@ import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
 
 import javax.faces.application.ViewExpiredException;
 import javax.inject.Inject;
@@ -36,12 +37,8 @@ public class TenantFilter implements Filter {
 
     public static final String SESSION_ORIGINAL_URL = "Original-Url";
 
-    private FilterConfig filterConfig;
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.filterConfig = filterConfig;
-        LogManager.logInfo(getClass(), "Filter Initialized.");
     }
 
     @Override
@@ -67,7 +64,7 @@ public class TenantFilter implements Filter {
                             url = url.substring(0, url.indexOf(";"));
 
                         if (url.contains("/secure")) {
-                            Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_authenticatedUser");
+                            Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_" + AuthenticationController.AUTHENTICATED_USER_ATTRIBUTE);
                             if (attribute != null && attribute instanceof User) {
                                 httpServletRequest.getRequestDispatcher(url).forward(request, response);
                                 return;
