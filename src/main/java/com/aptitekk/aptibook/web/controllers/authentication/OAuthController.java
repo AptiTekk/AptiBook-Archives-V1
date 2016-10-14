@@ -10,7 +10,7 @@ import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.rest.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.core.util.FacesURIBuilder;
+import com.aptitekk.aptibook.web.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import com.github.scribejava.apis.GoogleApi20;

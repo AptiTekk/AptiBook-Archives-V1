@@ -4,9 +4,10 @@
  * Proprietary and confidential.
  */
 
-package com.aptitekk.aptibook.core.util;
+package com.aptitekk.aptibook.web.util;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.faces.context.FacesContext;

@@ -16,9 +16,9 @@ import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.rest.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.core.util.FacesSessionHelper;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.aptitekk.aptibook.web.filters.TenantFilter;
+import com.aptitekk.aptibook.web.util.SessionVariableManager;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -63,10 +63,12 @@ public class AuthenticationController implements Serializable {
     @PostConstruct
     public void init() {
         if (tenantSessionService != null && tenantSessionService.getCurrentTenant() != null) {
-            Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE);
+            Object attribute = SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).getVariableData(AUTHENTICATED_USER_ATTRIBUTE);
             if (attribute != null && attribute instanceof User) {
                 authenticatedUser = userService.get(((User) attribute).getId());
             }
+
+            //TODO: Move to RegistrationController.
             String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(RegistrationController.REGISTRATION_VERIFICATION_PARAMETER);
             if (id != null) {
                 User user = userService.findByCode(id);
@@ -122,7 +124,7 @@ public class AuthenticationController implements Serializable {
                     userService.insert(user);
                     setAuthenticatedUser(user);
                     LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
-                    FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
+                    SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                     redirectAfterLogin();
                 } catch (Exception e) {
@@ -131,7 +133,7 @@ public class AuthenticationController implements Serializable {
             } else {
                 setAuthenticatedUser(existingUser);
                 LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in with Google.");
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
+                SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
 
                 redirectAfterLogin();
             }
@@ -162,7 +164,7 @@ public class AuthenticationController implements Serializable {
         } else {
             LogManager.logInfo(getClass(), "'" + authenticatedUser.getEmailAddress() + "' has logged in.");
             setAuthenticatedUser(authenticatedUser);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
+            SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(AUTHENTICATED_USER_ATTRIBUTE, authenticatedUser);
             redirectAfterLogin();
         }
     }
@@ -184,9 +186,9 @@ public class AuthenticationController implements Serializable {
      * Otherwise, an outcome page will be used.
      */
     private void redirectAfterLogin() {
-        String originalUrl = FacesSessionHelper.getSessionVariableAsString(TenantFilter.SESSION_ORIGINAL_URL);
+        String originalUrl = SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).getStringVariableData(TenantFilter.ORIGINAL_URL_ATTRIBUTE);
         if (originalUrl != null) {
-            FacesSessionHelper.removeSessionVariable(TenantFilter.SESSION_ORIGINAL_URL);
+            SessionVariableManager.fromFacesUsingTenant(FacesContext.getCurrentInstance(), tenantSessionService.getCurrentTenant().getSlug()).clearVariableData(TenantFilter.ORIGINAL_URL_ATTRIBUTE);
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
                 return;
