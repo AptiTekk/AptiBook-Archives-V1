@@ -25,6 +25,7 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
             for (Reservation reservation : reservationList) {
                 ReservationScheduleEvent event = new ReservationScheduleEvent(reservation);
 
+                event.setStyleClass(reservation.getStatus().name().toLowerCase());
                 event.setEditable(false);
                 addEvent(event);
             }

@@ -18,13 +18,31 @@
         <b:modal styleClass="viewEventModal"
                  title="Viewing Reservation '#{viewEventModalController.selectedEvent.title}'">
             <h:panelGroup id="viewEventModalFields">
-                <b:inputText label="Reservation Title:" value="#{viewEventModalController.selectedEvent.reservation.title}"
+
+                <b:alert severity="warning" rendered="#{viewEventModalController.selectedEvent.reservation.pending}">
+                    This reservation is pending approval, and is subject to changes.
+                </b:alert>
+
+                <b:row>
+                    <b:inputText label="Category:" span="6"
+                                 value="#{viewEventModalController.selectedEvent.reservation.asset.assetCategory.name}"
+                                 readonly="true"/>
+                    <b:inputText label="Resource:" span="6"
+                                 value="#{viewEventModalController.selectedEvent.reservation.asset.name}"
+                                 readonly="true"/>
+                </b:row>
+
+                <b:inputText label="Reservation Title:"
+                             value="#{viewEventModalController.selectedEvent.reservation.title}"
                              readonly="true"/>
-                <b:inputText label="Reserved By:" value="#{viewEventModalController.selectedEvent.reservation.user.fullname}"
+                <b:inputText label="Reserved By:"
+                             value="#{viewEventModalController.selectedEvent.reservation.user.fullname}"
                              readonly="true"/>
-                <b:inputText label="Start Time:" value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.startTime))}"
+                <b:inputText label="Start Time:"
+                             value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.startTime))}"
                              readonly="true"/>
-                <b:inputText label="End Time:" value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.endTime))}"
+                <b:inputText label="End Time:"
+                             value="#{timeController.formatFriendly(timeController.applyTimeZone(viewEventModalController.selectedEvent.reservation.endTime))}"
                              readonly="true"/>
             </h:panelGroup>
             <f:facet name="footer">
