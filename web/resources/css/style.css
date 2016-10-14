@@ -159,7 +159,17 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     display: none;
 }
 
-.aptibook td.fc-day.fc-today {
+.aptibook .fc-day-grid td.fc-day.fc-today {
+    background-color: #fff;
+}
+
+.aptibook .fc-day-grid td.fc-day-number.fc-today {
+    border-top: 4px solid #4272b7;
+    color: #4272b7;
+    font-weight: bold;
+}
+
+.aptibook .fc-time-grid td.fc-day.fc-today {
     background-color: #e3efff;
 }
 
@@ -186,6 +196,16 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 
 .aptibook .fc-event.pending .fc-content {
     color: #666;
+}
+
+.aptibook .fc-event.rejected {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.aptibook .fc-event.rejected .fc-content {
+    color: #333;
+    text-decoration: line-through;
 }
 
 /* ---------------------------------- END CALENDAR EVENT MODIFICATIONS ---------------------------------- */

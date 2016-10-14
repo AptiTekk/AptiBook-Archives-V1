@@ -23,6 +23,10 @@
                     This reservation is pending approval, and is subject to changes.
                 </b:alert>
 
+                <b:alert severity="danger" rendered="#{viewEventModalController.selectedEvent.reservation.rejected}">
+                    This reservation has been rejected.
+                </b:alert>
+
                 <b:row>
                     <b:inputText label="Category:" span="6"
                                  value="#{viewEventModalController.selectedEvent.reservation.asset.assetCategory.name}"
