@@ -12,9 +12,8 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
-      >
+>
 
 <ui:composition>
     <style type="text/css">
@@ -37,9 +36,9 @@
                 <h:form>
                     <h4>Displayed Categories</h4>
 
-                    <c:forEach items="#{frontPageController.assetCategories}" var="category" varStatus="status">
+                    <c:forEach items="#{frontPageController.resourceCategories}" var="category" varStatus="status">
                     <!--suppress UnnecessaryLabelJS -->
-                        <b:switch value="#{frontPageController.assetCategoryFilterValues[status.index]}"
+                        <b:switch value="#{frontPageController.resourceCategoryFilterValues[status.index]}"
                               label="#{category.name}"
                               ajax="true" onchange="ajax:frontPageController.updateFilters();" oncomplete="PF('calendar').update();"
                    />
@@ -52,8 +51,8 @@
                 <p:schedule widgetVar="calendar" value="#{frontPageController.scheduleModel}"
                             timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6" allDaySlot="false"
                             styleClass="interactive-events">
-                    <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"
-                            update=":viewEventModalForm" oncomplete="$('.viewEventModal').modal()"/>
+                    <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}" onstart="loading_start()"
+                            update=":viewEventModalForm" oncomplete="loading_complete();$('.viewEventModal').modal()"/>
                 </p:schedule>
             </b:column>
             <b:column colXs="12" colMd="3">

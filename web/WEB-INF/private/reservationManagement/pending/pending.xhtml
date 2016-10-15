@@ -17,38 +17,38 @@
 <ui:composition>
     <h:panelGroup id="pendingReservations">
         <b:message for="pendingReservations" showSummary="false" showDetail="true"/>
-        <ui:fragment rendered="#{empty pendingReservationManagementController.assetCategories}">
+        <ui:fragment rendered="#{empty pendingReservationManagementController.resourceCategories}">
             <b:row>
                 <b:column colXs="12">
-                    <h4>There are currently no Reservations pending approval.</h4>
+                    <h4>No Reservations are Pending Approval.</h4>
                 </b:column>
             </b:row>
         </ui:fragment>
-        <ui:fragment rendered="#{not empty pendingReservationManagementController.assetCategories}">
-            <ui:repeat value="#{pendingReservationManagementController.assetCategories}" var="assetCategory">
+        <ui:fragment rendered="#{not empty pendingReservationManagementController.resourceCategories}">
+            <ui:repeat value="#{pendingReservationManagementController.resourceCategories}" var="resourceCategory">
                 <b:row>
                     <b:column colXs="12">
-                        <h4>#{assetCategory.name}</h4>
+                        <h4>#{resourceCategory.name}</h4>
                         <hr/>
                     </b:column>
                 </b:row>
                 <ui:repeat
-                        value="#{pendingReservationManagementController.getReservationDetailsForAssetCategory(assetCategory)}"
+                        value="#{pendingReservationManagementController.getReservationDetailsForResourceCategory(resourceCategory)}"
                         var="reservationDetails">
                     <b:row>
                         <b:column colXs="12">
                             <b:panel
                                     look="#{reservationDetails.currentDecision != null ? (reservationDetails.currentDecision.approved ? 'success' : 'danger') : 'default'}"
-                                    title="#{reservationDetails.reservation.asset.name}"
+                                    title="#{reservationDetails.reservation.resource.name}"
                                     collapsible="false">
                                 <b:row>
                                     <b:column colXs="12" colSm="2" style="width: 115px;">
                                         <div class="form-group">
                                             <p:lightBox>
                                                 <h:outputLink
-                                                        value="#{request.contextPath}/images/assets/#{reservationDetails.reservation.asset.id}">
+                                                        value="#{request.contextPath}/images/resources/#{reservationDetails.reservation.resource.id}">
                                                     <h:graphicImage
-                                                            url="/images/assets/#{reservationDetails.reservation.asset.id}"
+                                                            url="/images/resources/#{reservationDetails.reservation.resource.id}"
                                                             style="height: 100px; border-radius: 5px"/>
                                                 </h:outputLink>
                                             </p:lightBox>
@@ -100,11 +100,11 @@
                                             </b:column>
                                         </b:row>
                                         <b:row>
-                                            <b:column colXs="12" rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
+                                            <b:column colXs="12" rendered="#{not empty reservationFieldController.getReservationFields(resourceCategory)}">
                                                 <b:panel title="Field Entries" look="default" collapsible="true"
                                                          collapsed="true">
                                                     <ui:repeat
-                                                            value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                            value="#{reservationFieldController.getReservationFields(resourceCategory)}"
                                                             var="reservationField">
                                                         <ui:fragment rendered="#{reservationField.multiLine}">
                                                             <b:inputTextarea label="#{reservationField.title}"

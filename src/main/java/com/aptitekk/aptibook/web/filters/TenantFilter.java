@@ -12,6 +12,8 @@ import com.aptitekk.aptibook.core.domain.services.TenantService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
+import com.aptitekk.aptibook.web.util.SessionVariableManager;
 
 import javax.faces.application.ViewExpiredException;
 import javax.inject.Inject;
@@ -34,14 +36,10 @@ public class TenantFilter implements Filter {
     @Inject
     private UserService userService;
 
-    public static final String SESSION_ORIGINAL_URL = "Original-Url";
-
-    private FilterConfig filterConfig;
+    public static final String ORIGINAL_URL_ATTRIBUTE = "originalUrl";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.filterConfig = filterConfig;
-        LogManager.logInfo(getClass(), "Filter Initialized.");
     }
 
     @Override
@@ -67,7 +65,7 @@ public class TenantFilter implements Filter {
                             url = url.substring(0, url.indexOf(";"));
 
                         if (url.contains("/secure")) {
-                            Object attribute = ((HttpServletRequest) request).getSession(true).getAttribute(tenant.getSlug() + "_authenticatedUser");
+                            Object attribute = SessionVariableManager.fromServletUsingTenant((HttpServletRequest) request, tenant.getSlug()).getVariableData(AuthenticationController.AUTHENTICATED_USER_ATTRIBUTE);
                             if (attribute != null && attribute instanceof User) {
                                 httpServletRequest.getRequestDispatcher(url).forward(request, response);
                                 return;
@@ -147,7 +145,8 @@ public class TenantFilter implements Filter {
 
         String attemptedAccessPath = request.getRequestURI();
 
-        request.getSession().setAttribute(SESSION_ORIGINAL_URL, attemptedAccessPath + parameters);
+        if (request.getAttribute("tenant") != null)
+            SessionVariableManager.fromServletUsingTenant(request, ((Tenant) request.getAttribute("tenant")).getSlug()).setVariableData(ORIGINAL_URL_ATTRIBUTE, attemptedAccessPath + parameters);
         response.sendRedirect(request.getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 

@@ -22,10 +22,10 @@ public class Tag extends MultiTenantEntity implements Comparable<Tag> {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private AssetCategory assetCategory;
+    private ResourceCategory resourceCategory;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Asset> assets = new ArrayList<>();
+    private List<Resource> resources = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -43,20 +43,20 @@ public class Tag extends MultiTenantEntity implements Comparable<Tag> {
         this.name = name;
     }
 
-    public AssetCategory getAssetCategory() {
-        return assetCategory;
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
     }
 
-    public void setAssetCategory(AssetCategory assetCategory) {
-        this.assetCategory = assetCategory;
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
     }
 
-    public List<Asset> getAssets() {
-        return assets;
+    public List<Resource> getResources() {
+        return resources;
     }
 
-    public void setAssets(List<Asset> assets) {
-        this.assets = assets;
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
     }
 
     @Override
@@ -69,12 +69,12 @@ public class Tag extends MultiTenantEntity implements Comparable<Tag> {
 
         Tag other = (Tag) o;
 
-        return EqualsHelper.areEquals(getName(), other.getName()) && EqualsHelper.areEquals(getAssetCategory(), other.getAssetCategory());
+        return EqualsHelper.areEquals(getName(), other.getName()) && EqualsHelper.areEquals(getResourceCategory(), other.getResourceCategory());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(getName(), getAssetCategory());
+        return EqualsHelper.calculateHashCode(getName(), getResourceCategory());
     }
 
     @Override

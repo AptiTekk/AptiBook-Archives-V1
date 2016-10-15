@@ -6,9 +6,9 @@
 
 package com.aptitekk.aptibook.web.controllers.myReservations;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
@@ -34,7 +34,7 @@ public class MyReservationsController implements Serializable {
     private ReservationService reservationService;
 
     @Inject
-    private AssetCategoryService assetCategoryService;
+    private ResourceCategoryService resourceCategoryService;
 
     @Inject
     private AuthenticationController authenticationController;
@@ -42,7 +42,7 @@ public class MyReservationsController implements Serializable {
     @Inject
     private HelpController helpController;
 
-    private Map<AssetCategory, List<Reservation>> presentReservations;
+    private Map<ResourceCategory, List<Reservation>> presentReservations;
 
     private ReservationScheduleModel eventModel;
 
@@ -50,20 +50,12 @@ public class MyReservationsController implements Serializable {
     private void init() {
         buildPresentReservationList();
 
-        List<AssetCategory> assetCategories = assetCategoryService.getAll();
-        AssetCategory[] assetCategoriesDisplayed = new AssetCategory[assetCategories.size()];
-        assetCategories.toArray(assetCategoriesDisplayed);
+        List<ResourceCategory> resourceCategories = resourceCategoryService.getAll();
+        ResourceCategory[] resourceCategoriesDisplayed = new ResourceCategory[resourceCategories.size()];
+        resourceCategories.toArray(resourceCategoriesDisplayed);
         eventModel = new ReservationScheduleModel() {
             public List<Reservation> getReservationsBetweenDates(ZonedDateTime start, ZonedDateTime end) {
-                List<Reservation> allBetweenDates = reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), assetCategoriesDisplayed);
-
-                Iterator<Reservation> iterator = allBetweenDates.iterator();
-                while (iterator.hasNext()) {
-                    if (iterator.next().getStatus() == Reservation.Status.REJECTED)
-                        iterator.remove();
-                }
-
-                return allBetweenDates;
+                return reservationService.getAllBetweenDates(start, end, authenticationController.getAuthenticatedUser(), resourceCategoriesDisplayed);
             }
         };
 
@@ -83,18 +75,18 @@ public class MyReservationsController implements Serializable {
                 if (reservation.getEndTime().isBefore(now))
                     continue;
 
-                presentReservations.putIfAbsent(reservation.getAsset().getAssetCategory(), new ArrayList<>());
-                presentReservations.get(reservation.getAsset().getAssetCategory()).add(reservation);
+                presentReservations.putIfAbsent(reservation.getResource().getResourceCategory(), new ArrayList<>());
+                presentReservations.get(reservation.getResource().getResourceCategory()).add(reservation);
             }
         }
     }
 
-    public Set<AssetCategory> getAssetCategories() {
+    public Set<ResourceCategory> getResourceCategories() {
         return presentReservations.keySet();
     }
 
-    public List<Reservation> getPresentReservationsForCategory(AssetCategory assetCategory) {
-        return presentReservations.get(assetCategory);
+    public List<Reservation> getPresentReservationsForCategory(ResourceCategory resourceCategory) {
+        return presentReservations.get(resourceCategory);
     }
 
     public ReservationScheduleModel getEventModel() {

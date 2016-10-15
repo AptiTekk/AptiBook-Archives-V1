@@ -21,7 +21,7 @@ public class ReservationScheduleEvent extends DefaultScheduleEvent {
         this.reservation = reservation;
 
         //Set Title
-        setTitle(reservation.getAsset().getName() + " - " + (reservation.getTitle() != null ? reservation.getTitle() : "No Title."));
+        setTitle(reservation.getResource().getName() + " - " + (reservation.getTitle() != null ? reservation.getTitle() : "No Title."));
 
         //Set Time
         setStartDate(Date.from(reservation.getStartTime().toInstant()));

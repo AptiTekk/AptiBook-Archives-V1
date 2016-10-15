@@ -32,7 +32,7 @@
 
         <b:row>
             <b:column colXs="12">
-                <h4>Requesting Reservation for #{requestReservationViewController.asset.name}</h4>
+                <h4>Requesting Reservation for #{requestReservationViewController.resource.name}</h4>
             </b:column>
         </b:row>
         <h:form>
@@ -52,7 +52,7 @@
                             <b:row>
                                 <b:column colXs="12">
                                     <ui:repeat
-                                            value="#{requestReservationViewController.asset.assetCategory.reservationFields}"
+                                            value="#{requestReservationViewController.resource.resourceCategory.reservationFields}"
                                             var="reservationField">
                                         <ui:fragment rendered="#{reservationField.multiLine != true}">
                                             <b:message for="@next" showSummary="false" showDetail="true"/>

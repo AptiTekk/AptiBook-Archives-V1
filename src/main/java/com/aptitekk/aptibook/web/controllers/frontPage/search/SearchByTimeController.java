@@ -6,8 +6,8 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.search;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
-import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
 
 import javax.annotation.PostConstruct;
@@ -25,15 +25,15 @@ import java.util.List;
 public class SearchByTimeController implements Serializable {
 
     @Inject
-    private AssetCategoryService assetCategoryService;
+    private ResourceCategoryService resourceCategoryService;
 
     @Inject
     private TenantSessionService tenantSessionService;
 
     private int currentStep = 0;
 
-    private List<AssetCategory> assetCategories;
-    private AssetCategory assetCategory;
+    private List<ResourceCategory> resourceCategories;
+    private ResourceCategory resourceCategory;
 
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
@@ -43,7 +43,7 @@ public class SearchByTimeController implements Serializable {
         //Set Start and End times to this moment in time, formatted for the tenant's timezone.
         startTime = ZonedDateTime.now(tenantSessionService.getCurrentTenantZoneId());
         endTime = startTime;
-        assetCategories = assetCategoryService.getAll();
+        resourceCategories = resourceCategoryService.getAll();
     }
 
     public void nextStep() {
@@ -62,16 +62,16 @@ public class SearchByTimeController implements Serializable {
         this.currentStep = currentStep;
     }
 
-    public List<AssetCategory> getAssetCategories() {
-        return assetCategories;
+    public List<ResourceCategory> getResourceCategories() {
+        return resourceCategories;
     }
 
-    public AssetCategory getAssetCategory() {
-        return assetCategory;
+    public ResourceCategory getResourceCategory() {
+        return resourceCategory;
     }
 
-    public void setAssetCategory(AssetCategory assetCategory) {
-        this.assetCategory = assetCategory;
+    public void setResourceCategory(ResourceCategory resourceCategory) {
+        this.resourceCategory = resourceCategory;
     }
 
     public Date getPickerStartTime() {

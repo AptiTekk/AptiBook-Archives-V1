@@ -86,7 +86,7 @@ public class EditUserGroupController implements Serializable {
             return;
 
         if (editableGroupName != null) {
-            //Check if another AssetCategory has the same name.
+            //Check if another ResourceCategory has the same name.
             UserGroup userGroup = userGroupService.findByName(editableGroupName);
             if (userGroup != null && !userGroup.equals(selectedUserGroup))
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "A User Group with that name already exists!"));

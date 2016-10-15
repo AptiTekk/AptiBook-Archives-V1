@@ -9,7 +9,7 @@ package com.aptitekk.aptibook.web.controllers.reservationManagement.calendar;
 
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
-import com.aptitekk.aptibook.core.domain.services.AssetCategoryService;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.domain.services.UserGroupService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
@@ -41,7 +41,7 @@ public class CalendarReservationManagementController implements Serializable {
     AuthenticationController authenticationController;
 
     @Inject
-    AssetCategoryService assetCategoryService;
+    ResourceCategoryService resourceCategoryService;
 
     @Inject
     HelpController helpController;

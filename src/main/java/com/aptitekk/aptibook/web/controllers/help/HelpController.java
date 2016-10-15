@@ -28,8 +28,8 @@ public class HelpController implements Serializable {
         USER_MY_RESERVATIONS(null),
         USER_NOTIFICATIONS(null),
 
-        SETTINGS_ASSETS(null),
-        SETTINGS_ASSET_CATEGORIES(new String[]{"How To Add New Asset Categories", "ab-add-new-asset-categories"}),
+        SETTINGS_RESOURCES(null),
+        SETTINGS_RESOURCE_CATEGORIES(new String[]{"How To Add New Resource Categories", "ab-add-new-asset-categories"}),
         SETTINGS_USER_GROUPS(null),
         SETTINGS_USERS(null),
         SETTINGS_PERMISSIONS(null),
@@ -40,7 +40,7 @@ public class HelpController implements Serializable {
          * ["Name 1", "Slug 1", "Name 2", "Slug 2", ...]
          * <p>
          * The Slug is found in the URL of the article.
-         * For example: https://support.aptitekk.com/article/add-new-asset-categories has a slug of "add-new-asset-categories"
+         * For example: https://support.aptitekk.com/article/add-new-resource-categories has a slug of "add-new-resource-categories"
          */
         private String[] popularTopics;
 

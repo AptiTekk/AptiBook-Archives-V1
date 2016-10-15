@@ -32,10 +32,10 @@ public class Tenant extends GlobalEntity {
     // ----------------------------------------------------------- Tenant Dependent Entities
 
     @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
-    private List<Asset> assets;
+    private List<Resource> resources;
 
     @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
-    private List<AssetCategory> assetCategories;
+    private List<ResourceCategory> resourceCategories;
 
     @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
     private List<File> files;

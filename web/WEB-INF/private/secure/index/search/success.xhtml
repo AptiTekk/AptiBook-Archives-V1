@@ -15,7 +15,7 @@
 <ui:composition>
     <b:container>
         <b:row style="margin-top: 20px">
-            <ui:fragment rendered="#{requestReservationViewController.asset.needsApproval}">
+            <ui:fragment rendered="#{requestReservationViewController.resource.needsApproval}">
                 <b:column colXs="12">
                     <b:panel title="Reservation Requested" look="success" collapsible="false">
                         <h4>Success!</h4>
@@ -23,12 +23,12 @@
                                 value="Your reservation for #{requestReservationViewController.successfulReservation.title} has been requested."
                                 rendered="#{not empty requestReservationViewController.successfulReservation.title}"/>
                         <h:outputText
-                                value="Your reservation for #{requestReservationViewController.asset.name} has been requested."
+                                value="Your reservation for #{requestReservationViewController.resource.name} has been requested."
                                 rendered="#{empty requestReservationViewController.successfulReservation.title}"/>
                     </b:panel>
                 </b:column>
             </ui:fragment>
-            <ui:fragment rendered="#{!requestReservationViewController.asset.needsApproval}">
+            <ui:fragment rendered="#{!requestReservationViewController.resource.needsApproval}">
                 <b:column colXs="12">
                     <b:panel title="Reservation Approved" look="success" collapsible="false">
                         <h4>Success!</h4>
@@ -36,7 +36,7 @@
                                 value="Your reservation for #{requestReservationViewController.reservationTitle} has been approved."
                                 rendered="#{not empty requestReservationViewController.reservationTitle}"/>
                         <h:outputText
-                                value="Your reservation for #{requestReservationViewController.asset.name} has been approved."
+                                value="Your reservation for #{requestReservationViewController.resource.name} has been approved."
                                 rendered="#{empty requestReservationViewController.reservationTitle}"/>
                     </b:panel>
                 </b:column>

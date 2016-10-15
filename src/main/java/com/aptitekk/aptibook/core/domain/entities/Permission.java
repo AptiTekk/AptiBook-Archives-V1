@@ -18,13 +18,12 @@ public class Permission extends MultiTenantEntity implements Serializable {
     /**
      * Defines the groups of permissions.
      * The order in this enum determines the order shown to the user on the Permissions page.
-     * NOTE: Any modifications to the NAME of the group (not friendlyName) will clear its existence from the database!
      */
     public enum Group {
 
         GENERAL("General"),
-        ASSET_CATEGORIES("Asset Categories"),
-        ASSETS("Assets"),
+        RESOURCE_CATEGORIES("Resource Categories"),
+        RESOURCES("Resources"),
         USERS("Users"),
         GROUPS("Groups"),
         PERMISSIONS("Permissions"),
@@ -58,30 +57,30 @@ public class Permission extends MultiTenantEntity implements Serializable {
                         "<li>If a User Group is given this permission, any Users within the User Group are granted all permissions.</li>" +
                         "</ul>"),
 
-        ASSET_CATEGORIES_MODIFY_ALL(Group.ASSET_CATEGORIES, "May Modify Any Asset Categories",
-                "Users and User Groups with this permission may create, edit, and delete any Asset Categories." +
+        RESOURCE_CATEGORIES_MODIFY_ALL(Group.RESOURCE_CATEGORIES, "May Modify Any Resource Categories",
+                "Users and User Groups with this permission may create, edit, and delete any Resource Categories." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete any Asset Categories.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Asset Categories.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Resource Categories.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Resource Categories.</li>" +
                         "</ul>"),
 
-        ASSETS_MODIFY_OWN(Group.ASSETS, "May Modify Own Group's Assets",
-                "Users and User Groups with this permission may create, edit, and delete Assets for their User Group." +
+        RESOURCES_MODIFY_OWN(Group.RESOURCES, "May Modify Own Group's Resources",
+                "Users and User Groups with this permission may create, edit, and delete Resources for their User Group." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete Assets for the User Groups that the User is assigned to.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Assets for their User Group.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete Resources for the User Groups that the User is assigned to.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Resources for their User Group.</li>" +
                         "</ul>"),
-        ASSETS_MODIFY_HIERARCHY(Group.ASSETS, "May Modify Hierarchy's Assets",
-                "Users and User Groups with this permission may create, edit, and delete Assets for their User Group and that User Group's children." +
+        RESOURCES_MODIFY_HIERARCHY(Group.RESOURCES, "May Modify Hierarchy's Resources",
+                "Users and User Groups with this permission may create, edit, and delete Resources for their User Group and that User Group's children." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete Assets for the User Groups that the User is assigned to, and those User Groups' children.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Assets for their User Group and that User Group's children.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete Resources for the User Groups that the User is assigned to, and those User Groups' children.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete Resources for their User Group and that User Group's children.</li>" +
                         "</ul>"),
-        ASSETS_MODIFY_ALL(Group.ASSETS, "May Modify Any Assets",
-                "Users and User Groups with this permission may create, edit, and delete any Assets." +
+        RESOURCES_MODIFY_ALL(Group.RESOURCES, "May Modify Any Resources",
+                "Users and User Groups with this permission may create, edit, and delete any Resources." +
                         "<ul>" +
-                        "<li>If a User is given this permission, the User may create, edit, and delete any Assets.</li>" +
-                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Assets.</li>" +
+                        "<li>If a User is given this permission, the User may create, edit, and delete any Resources.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any Resources.</li>" +
                         "</ul>"),
 
         USERS_MODIFY_ALL(Group.USERS, "May Modify Any Users",

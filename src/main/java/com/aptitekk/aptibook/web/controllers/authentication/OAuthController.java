@@ -10,8 +10,9 @@ import com.aptitekk.aptibook.core.domain.entities.Property;
 import com.aptitekk.aptibook.core.domain.services.PropertiesService;
 import com.aptitekk.aptibook.core.rest.oAuthModels.GoogleUserInfoModel;
 import com.aptitekk.aptibook.core.tenant.TenantSessionService;
-import com.aptitekk.aptibook.core.util.FacesURIBuilder;
+import com.aptitekk.aptibook.web.util.FacesURIBuilder;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -23,7 +24,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -87,7 +87,7 @@ public class OAuthController implements Serializable {
         if (!googleSignInEnabled)
             return;
 
-        Object googleCode = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(GOOGLE_CODE_ATTRIBUTE);
+        Object googleCode = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_CODE_ATTRIBUTE);
         if (googleCode != null && googleCode instanceof String) {
             try {
                 OAuth2AccessToken accessToken = googleOAuthService.getAccessToken(googleCode.toString());
@@ -97,11 +97,12 @@ public class OAuthController implements Serializable {
                 Gson gson = new GsonBuilder().create();
                 GoogleUserInfoModel googleUserInfoModel = gson.fromJson(response.getBody(), GoogleUserInfoModel.class);
 
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(GOOGLE_CODE_ATTRIBUTE);
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_CODE_ATTRIBUTE);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
                 authenticationController.loginWithGoogle(googleUserInfoModel);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LogManager.logException(getClass(), "Could not parse Google Sign In Code", e);
+                FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);
             }
         }
 
@@ -119,17 +120,19 @@ public class OAuthController implements Serializable {
                 additionalParams.put("prompt", "consent");
                 FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl(additionalParams));
             } catch (IOException e) {
-                FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unfortunately, we were unable to Sign In with Google. Please try again later!"));
+                FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);
                 LogManager.logException(getClass(), "Could not Sign In with Google", e);
             }
         else {
-            FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "Unfortunately, we were unable to Sign In with Google. Please try again later!"));
+            FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);
             LogManager.logError(getClass(), "Could not Sign In with Google: googleOAuthService is null!");
         }
     }
 
-    void clearTokens() {
-        Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(GOOGLE_ACCESS_TOKEN_ATTRIBUTE);
+    private void clearTokens() {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_CODE_ATTRIBUTE);
+
+        Object attribute = FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_ACCESS_TOKEN_ATTRIBUTE);
         if (attribute != null && attribute instanceof OAuth2AccessToken) {
             OAuth2AccessToken accessToken = (OAuth2AccessToken) attribute;
             OAuthRequest request = new OAuthRequest(Verb.GET, GOOGLE_REVOKE_URL, googleOAuthService);
@@ -138,6 +141,8 @@ public class OAuthController implements Serializable {
             if (!response.isSuccessful())
                 LogManager.logError(getClass(), "Could not revoke Token: " + response.getMessage());
         }
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_ACCESS_TOKEN_ATTRIBUTE);
     }
 
     public boolean isGoogleSignInEnabled() {

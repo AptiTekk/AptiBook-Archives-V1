@@ -74,28 +74,28 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         if (reservation == null)
             return;
 
-        if (reservation.getAsset().getNeedsApproval()) {
+        if (reservation.getResource().getNeedsApproval()) {
             sendNotification(Notification.Type.TYPE_RESERVATION_REQUESTED,
                     "New Reservation Request",
                     "A new Reservation for <b>"
-                            + reservation.getAsset().getName()
+                            + reservation.getResource().getName()
                             + "</b> has been requested by "
                             + "<b>"
                             + reservation.getUser().getFullname()
                             + "</b>"
                             + ".",
-                    userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
+                    userGroupService.getHierarchyUp(reservation.getResource().getOwner()));
         } else {
             sendNotification(Notification.Type.TYPE_RESERVATION_REQUESTED,
                     "New Reservation Approved",
                     "A new Reservation for <b>"
-                            + reservation.getAsset().getName()
+                            + reservation.getResource().getName()
                             + "</b> has been automatically <i>approved</i> for "
                             + "<b>"
                             + reservation.getUser().getFullname()
                             + "</b>"
                             + ".",
-                    userGroupService.getHierarchyUp(reservation.getAsset().getOwner()));
+                    userGroupService.getHierarchyUp(reservation.getResource().getOwner()));
         }
     }
 
@@ -106,7 +106,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         if (reservation.getStatus() == Reservation.Status.APPROVED) {
             sendNotification(Notification.Type.TYPE_RESERVATION_APPROVED,
                     "Reservation Approved",
-                    "Your Reservation for <b>" + reservation.getAsset().getName()
+                    "Your Reservation for <b>" + reservation.getResource().getName()
                             + "</b> from <b>"
                             + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
@@ -116,7 +116,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
         } else if (reservation.getStatus() == Reservation.Status.REJECTED) {
             sendNotification(Notification.Type.TYPE_RESERVATION_REJECTED,
                     "Reservation Rejected",
-                    "Your Reservation for <b>" + reservation.getAsset().getName()
+                    "Your Reservation for <b>" + reservation.getResource().getName()
                             + "</b> from <b>"
                             + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
                             + "</b> to <b>"
