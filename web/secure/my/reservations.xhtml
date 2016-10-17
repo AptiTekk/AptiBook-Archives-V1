@@ -20,7 +20,6 @@
                     <ol class="breadcrumb" style="margin-top: 20px">
                         <li><h:link outcome="index" value="Home"/></li>
                         <li class="active">My Reservations</li>
-                        <li class="active">Upcoming</li>
                     </ol>
                 </b:column>
             </b:row>
@@ -38,38 +37,38 @@
                     </b:row>
                 </b:tab>
                 <b:tab title="Upcoming Reservations">
-                    <ui:fragment rendered="#{empty myReservationsController.assetCategories}">
+                    <ui:fragment rendered="#{empty myReservationsController.resourceCategories}">
                         <b:row>
                             <b:column colXs="12">
-                                <h4>You do not have any upcoming Reservations.</h4>
+                                <h3 align="center">You have no upcoming Reservations.</h3>
                             </b:column>
                         </b:row>
                     </ui:fragment>
-                    <ui:fragment rendered="#{not empty myReservationsController.assetCategories}">
-                        <ui:repeat value="#{myReservationsController.assetCategories.toArray()}" var="assetCategory">
+                    <ui:fragment rendered="#{not empty myReservationsController.resourceCategories}">
+                        <ui:repeat value="#{myReservationsController.resourceCategories.toArray()}" var="resourceCategory">
                             <b:row>
                                 <b:column colXs="12">
-                                    <h4>#{assetCategory.name}</h4>
+                                    <h4>#{resourceCategory.name}</h4>
                                     <hr/>
                                 </b:column>
                             </b:row>
                             <ui:repeat
-                                    value="#{myReservationsController.getPresentReservationsForCategory(assetCategory)}"
+                                    value="#{myReservationsController.getPresentReservationsForCategory(resourceCategory)}"
                                     var="reservation">
                                 <b:row>
                                     <b:column colXs="12">
                                         <b:panel styleClass="approvedReservationPanel"
                                                  look="#{reservation.pending ? 'default' : (reservation.approved ? 'success' : 'danger')}"
-                                                 title="#{reservation.asset.name} - #{reservation.pending ? 'Pending Approval' : (reservation.approved ? 'Approved' : 'Rejected')}"
+                                                 title="#{reservation.resource.name} - #{reservation.pending ? 'Pending Approval' : (reservation.approved ? 'Approved' : 'Rejected')}"
                                                  collapsible="false">
                                             <b:row>
                                                 <b:column colXs="12" colSm="2" style="width: 115px;">
                                                     <div class="form-group">
                                                         <p:lightBox>
                                                             <h:outputLink
-                                                                    value="#{request.contextPath}/images/assets/#{reservation.asset.id}">
+                                                                    value="#{request.contextPath}/images/resources/#{reservation.resource.id}">
                                                                 <h:graphicImage
-                                                                        url="/images/assets/#{reservation.asset.id}"
+                                                                        url="/images/resources/#{reservation.resource.id}"
                                                                         style="height: 100px; border-radius: 5px"/>
                                                             </h:outputLink>
                                                         </p:lightBox>
@@ -114,12 +113,12 @@
                                                     </b:row>
                                                     <b:row>
                                                         <b:column colXs="12"
-                                                                  rendered="#{not empty reservationFieldController.getReservationFields(assetCategory)}">
+                                                                  rendered="#{not empty reservationFieldController.getReservationFields(resourceCategory)}">
                                                             <b:panel title="Field Entries" look="default"
                                                                      collapsible="true"
                                                                      collapsed="true">
                                                                 <ui:repeat
-                                                                        value="#{reservationFieldController.getReservationFields(assetCategory)}"
+                                                                        value="#{reservationFieldController.getReservationFields(resourceCategory)}"
                                                                         var="reservationField">
                                                                     <ui:fragment
                                                                             rendered="#{reservationField.multiLine}">

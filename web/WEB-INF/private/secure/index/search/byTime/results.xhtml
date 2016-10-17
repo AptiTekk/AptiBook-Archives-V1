@@ -31,12 +31,12 @@
                 <h:form id="results-time-selection" styleClass="form-inline">
                     <div class="form-group">
                         Available
-                        <h:selectOneMenu value="#{searchByTimeController.assetCategory}"
+                        <h:selectOneMenu value="#{searchByTimeController.resourceCategory}"
                                          styleClass="form-control"
-                                         converter="#{assetCategoryConverter}">
-                            <f:selectItems value="#{searchByTimeController.assetCategories}"
-                                           var="assetCategory" itemLabel="#{assetCategory.name}"
-                                           itemValue="#{assetCategory}"/>
+                                         converter="#{resourceCategoryConverter}">
+                            <f:selectItems value="#{searchByTimeController.resourceCategories}"
+                                           var="resourceCategory" itemLabel="#{resourceCategory.name}"
+                                           itemValue="#{resourceCategory}"/>
                             <f:ajax render="@form"/>
                         </h:selectOneMenu>
                     </div>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="form-group">
                         <b:commandButton id="searchButton" look="primary" value="Search Again"
-                                         action="#{availableAssetsController.searchForAssets(searchByTimeController.assetCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
+                                         action="#{availableResourcesController.searchForResources(searchByTimeController.resourceCategory, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                          ajax="true" update=":includeGroup"/>
                     </div>
                 </h:form>
@@ -67,32 +67,32 @@
         </b:row>
         <hr/>
         <b:row style="margin-top:10px">
-            <b:column colXs="12" colMd="4" rendered="#{not empty availableAssetsController.filterTags}">
+            <b:column colXs="12" colMd="4" rendered="#{not empty availableResourcesController.filterTags}">
                 <h:form>
                     <b:panel look="default" title="Filters">
-                        <c:forEach items="#{availableAssetsController.filterTags}" var="tag" varStatus="status">
-                            <b:switch value="#{availableAssetsController.selectedFilterTags[status.index]}"
+                        <c:forEach items="#{availableResourcesController.filterTags}" var="tag" varStatus="status">
+                            <b:switch value="#{availableResourcesController.selectedFilterTags[status.index]}"
                                       label="#{tag.name}"
-                                      ajax="true" update=":availableAssetsList"
-                                      onchange="ajax:availableAssetsController.filterAssets()"/>
+                                      ajax="true" update=":availableResourcesList"
+                                      onchange="ajax:availableResourcesController.filterResources()"/>
                         </c:forEach>
                     </b:panel>
                 </h:form>
             </b:column>
             <b:column colXs="12" colMd="8">
-                <h:form id="availableAssetsList">
+                <h:form id="availableResourcesList">
                     <c:choose>
-                        <c:when test="#{empty availableAssetsController.filteredAssets}">
-                            <h2>No Available #{searchByTimeController.assetCategory.name} Found!</h2>
+                        <c:when test="#{empty availableResourcesController.filteredResources}">
+                            <h2>No Available #{searchByTimeController.resourceCategory.name} Found!</h2>
                         </c:when>
                         <c:otherwise>
 
-                            <ui:repeat value="#{availableAssetsController.filteredAssets}" var="asset">
-                                <b:panel look="info" collapsible="false" title="#{asset.name}">
+                            <ui:repeat value="#{availableResourcesController.filteredResources}" var="resourceEntity">
+                                <b:panel look="info" collapsible="false" title="#{resourceEntity.name}">
                                     <h:panelGroup layout="block" class="form-group">
                                         <p:lightBox>
-                                            <h:outputLink value="#{request.contextPath}/images/assets/#{asset.id}">
-                                                <h:graphicImage url="/images/assets/#{asset.id}"
+                                            <h:outputLink value="#{request.contextPath}/images/resources/#{resourceEntity.id}">
+                                                <h:graphicImage url="/images/resources/#{resourceEntity.id}"
                                                                 style="height: 100px; border-radius: 5px"/>
                                             </h:outputLink>
                                         </p:lightBox>
@@ -100,7 +100,7 @@
                                     <f:facet name="footer">
                                         <b:buttonToolbar>
                                             <b:commandButton look="default" value="Make Reservation" ajax="true"
-                                                             action="#{availableAssetsController.onMakeReservationFired(asset, searchByTimeController.startTime, searchByTimeController.endTime)}"
+                                                             action="#{availableResourcesController.onMakeReservationFired(resourceEntity, searchByTimeController.startTime, searchByTimeController.endTime)}"
                                                              update=":includeGroup"/>
                                         </b:buttonToolbar>
                                     </f:facet>

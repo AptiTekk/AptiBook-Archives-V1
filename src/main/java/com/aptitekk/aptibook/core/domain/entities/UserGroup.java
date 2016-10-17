@@ -24,7 +24,7 @@ public class UserGroup extends MultiTenantEntity implements Serializable {
     private String name;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
-    private List<Asset> assets;
+    private List<Resource> resources;
 
     @ManyToMany(mappedBy = "userGroups")
     private List<User> users = new ArrayList<>();
@@ -65,12 +65,12 @@ public class UserGroup extends MultiTenantEntity implements Serializable {
         this.name = name;
     }
 
-    public List<Asset> getAssets() {
-        return this.assets;
+    public List<Resource> getResources() {
+        return this.resources;
     }
 
-    public void setAssets(List<Asset> rooms) {
-        this.assets = rooms;
+    public void setResources(List<Resource> rooms) {
+        this.resources = rooms;
     }
 
     public List<User> getUsers() {

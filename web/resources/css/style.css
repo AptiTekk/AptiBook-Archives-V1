@@ -57,7 +57,7 @@ hr {
 }
 
 .navbar-nav > li > .dropdown-menu {
-    width: 100%;
+    min-width: 100%;
     border: none;
     border-top: 4px solid #4272b7;
 }
@@ -142,7 +142,83 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     background: #4272b7;
 }
 
+.aptibook .ui-state-highlight,
+.aptibook .ui-widget-content .ui-state-highlight,
+.aptibook .ui-widget-header .ui-state-highlight {
+    background-color: #4272b7;
+}
+
+.aptibook .ui-widget-content .fc-today.ui-state-highlight {
+    background: none;
+}
+
 /* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN CALENDAR EVENT MODIFICATIONS ---------------------------------- */
+
+.aptibook .fc-event {
+    border: 2px solid #ededed;
+    background-color: #4272b7;
+}
+
+.aptibook .interactive-events .fc .fc-event {
+    cursor: pointer;
+}
+
+.aptibook .fc-time-grid-event .fc-bg {
+    display: none;
+}
+
+.aptibook .fc-day-grid td.fc-day.fc-today {
+    background-color: #fff;
+}
+
+.aptibook .fc-day-grid td.fc-day-number.fc-today {
+    border-top: 4px solid #4272b7;
+    color: #4272b7;
+    font-weight: bold;
+}
+
+.aptibook .fc-time-grid td.fc-day.fc-today {
+    background-color: #e3efff;
+}
+
+.aptibook td.fc-day-number.fc-today {
+    color: inherit;
+}
+
+.aptibook .fc button {
+    border: none;
+}
+
+.aptibook .fc .fc-button-group button {
+    margin-right: 5px;
+}
+
+.aptibook .fc .fc-button-group button:last-child {
+    margin-right: 0;
+}
+
+.aptibook .fc-event.pending {
+    background-color: #fff;
+    border: 1px dashed #666;
+}
+
+.aptibook .fc-event.pending .fc-content {
+    color: #666;
+}
+
+.aptibook .fc-event.rejected {
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+}
+
+.aptibook .fc-event.rejected .fc-content {
+    color: #333;
+    text-decoration: line-through;
+}
+
+/* ---------------------------------- END CALENDAR EVENT MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN RESULTS PAGE MODIFICATIONS ---------------------------------- */
 
@@ -391,43 +467,6 @@ div.ui-autocomplete, div.ui-autocomplete > ul {
 }
 
 /* ---------------------------------- END DATEPICKER ---------------------------------- */
-
-/* ---------------------------------- BEGIN SCHEDULE ---------------------------------- */
-
-.fc-event {
-    border: 2px solid #ededed !important;
-    background-color: #4272b7 !important;
-}
-
-.interactive-events .fc .fc-event {
-    cursor: pointer;
-}
-
-.fc-time-grid-event .fc-bg {
-    display: none;
-}
-
-td.fc-day.fc-today {
-    background-color: #e3efff !important
-}
-
-td.fc-day-number.fc-today {
-    color: inherit;
-}
-
-.fc button {
-    border: none;
-}
-
-.fc .fc-button-group button {
-    margin-right: 5px;
-}
-
-.fc .fc-button-group button:last-child {
-    margin-right: 0;
-}
-
-/* ---------------------------------- END SCHEDULE ---------------------------------- */
 
 /* ---------------------------------- BEGIN DRAG DROP ---------------------------------- */
 

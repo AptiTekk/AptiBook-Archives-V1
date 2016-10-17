@@ -16,4 +16,7 @@ public class CommonFacesMessages {
     public static final String EXCEPTION_MESSAGE = "There was an internal error while fulfilling your request. We apologize for the inconvenience!";
     public static final FacesMessage EXCEPTION_FACES_MESSAGE = new FacesMessage(FacesMessage.SEVERITY_ERROR, null, EXCEPTION_MESSAGE);
 
+    public static final String GOOGLE_SIGN_IN_FAIL_MESSAGE = "Unfortunately, we were unable to Sign In with Google. Please try again later!";
+    public static final FacesMessage GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE = new FacesMessage(FacesMessage.SEVERITY_ERROR, null, GOOGLE_SIGN_IN_FAIL_MESSAGE);
+
 }

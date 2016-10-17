@@ -41,7 +41,7 @@
                                 <c:otherwise>
                                     <ul>
                                         <c:forEach items="#{permission.users.toArray()}" var="user">
-                                            <li>#{user.emailAddress}</li>
+                                            <li style="word-break: break-all">#{user.emailAddress}</li>
                                         </c:forEach>
                                     </ul>
                                 </c:otherwise>
@@ -58,7 +58,7 @@
                                 <c:otherwise>
                                     <ul>
                                         <c:forEach items="#{permission.userGroups.toArray()}" var="userGroup">
-                                            <li>#{userGroup.name}</li>
+                                            <li style="word-break: break-all">#{userGroup.name}</li>
                                         </c:forEach>
                                     </ul>
                                 </c:otherwise>

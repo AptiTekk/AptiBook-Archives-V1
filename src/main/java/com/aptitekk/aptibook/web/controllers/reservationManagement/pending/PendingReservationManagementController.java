@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationManagement.pending;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.ReservationDecision;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
@@ -56,7 +56,7 @@ public class PendingReservationManagementController implements Serializable {
     @Inject
     private NotificationService notificationService;
 
-    private Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap;
+    private Map<ResourceCategory, List<ReservationDetails>> reservationDetailsMap;
 
     private ReservationDetails reservationDetails;
 
@@ -104,7 +104,7 @@ public class PendingReservationManagementController implements Serializable {
 
                 buildReservationList();
 
-                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
+                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getResource().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("pendingReservation", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 LogManager.logException(getClass(), "Could not approve Reservation", e);
@@ -145,7 +145,7 @@ public class PendingReservationManagementController implements Serializable {
 
                 buildReservationList();
 
-                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getAsset().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
+                FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getResource().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 LogManager.logException(getClass(), "Could not reject Reservation", e);
@@ -153,12 +153,12 @@ public class PendingReservationManagementController implements Serializable {
         }
     }
 
-    public List<AssetCategory> getAssetCategories() {
+    public List<ResourceCategory> getResourceCategories() {
         return new ArrayList<>(reservationDetailsMap.keySet());
     }
 
-    public List<ReservationDetails> getReservationDetailsForAssetCategory(AssetCategory assetCategory) {
-        return reservationDetailsMap.get(assetCategory);
+    public List<ReservationDetails> getReservationDetailsForResourceCategory(ResourceCategory resourceCategory) {
+        return reservationDetailsMap.get(resourceCategory);
     }
 
     public ReservationDetails getReservationDetails() {

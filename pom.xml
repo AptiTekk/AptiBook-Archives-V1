@@ -335,6 +335,16 @@
             <artifactId>core</artifactId>
             <version>2.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.mindscapehq</groupId>
+            <artifactId>webprovider</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
         <!-- End Raygun -->
 
         <dependency>

@@ -25,7 +25,7 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
     private UserService userService;
 
     @Inject
-    private AssetCategoryService assetCategoryService;
+    private ResourceCategoryService resourceCategoryService;
 
     @Inject
     private PropertiesService propertiesService;
@@ -64,7 +64,7 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
 
     private void initializeNewTenant(Tenant tenant) {
         ensureTenantIntegrity(tenant);
-        addDefaultAssetCategories(tenant);
+        addDefaultResourceCategories(tenant);
     }
 
     public void ensureTenantIntegrity(Tenant tenant) {
@@ -175,11 +175,11 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
         }
     }
 
-    private void addDefaultAssetCategories(Tenant tenant) {
-        if (assetCategoryService.getAll(tenant).isEmpty()) {
+    private void addDefaultResourceCategories(Tenant tenant) {
+        if (resourceCategoryService.getAll(tenant).isEmpty()) {
             try {
-                AssetCategory assetCategory = new AssetCategory("Rooms");
-                assetCategoryService.insert(assetCategory, tenant);
+                ResourceCategory resourceCategory = new ResourceCategory("Rooms");
+                resourceCategoryService.insert(resourceCategory, tenant);
             } catch (Exception e) {
                 e.printStackTrace();
             }

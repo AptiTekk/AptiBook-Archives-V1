@@ -6,7 +6,10 @@
 
 package com.aptitekk.aptibook.core.domain.hibernate;
 
-import org.hibernate.boot.model.naming.*;
+import org.hibernate.boot.model.naming.Identifier;
+import org.hibernate.boot.model.naming.ImplicitForeignKeyNameSource;
+import org.hibernate.boot.model.naming.ImplicitJoinTableNameSource;
+import org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl;
 
 import java.util.List;
 import java.util.StringJoiner;
@@ -15,7 +18,12 @@ public class CustomNamingStrategy extends ImplicitNamingStrategyJpaCompliantImpl
 
     @Override
     public Identifier determineForeignKeyName(ImplicitForeignKeyNameSource source) {
-        return toIdentifier("FK_" + source.getTableName().getCanonicalName() + "_" + source.getReferencedTableName().getCanonicalName(), source.getBuildingContext());
+        List<Identifier> columnNames = source.getColumnNames();
+        StringJoiner stringJoiner = new StringJoiner("_");
+        for (Identifier identifier : columnNames) {
+            stringJoiner.add(identifier.getCanonicalName());
+        }
+        return toIdentifier("FK_" + stringJoiner.toString(), source.getBuildingContext());
     }
 
     @Override

@@ -26,8 +26,8 @@ public class ReservationDetailsController implements Serializable {
     @Inject
     private AuthenticationController authenticationController;
 
-    public Map<AssetCategory, List<ReservationDetails>> buildReservationList(Reservation.Status status) {
-        Map<AssetCategory, List<ReservationDetails>> reservationDetailsMap = new LinkedHashMap<>();
+    public Map<ResourceCategory, List<ReservationDetails>> buildReservationList(Reservation.Status status) {
+        Map<ResourceCategory, List<ReservationDetails>> reservationDetailsMap = new LinkedHashMap<>();
 
         Queue<UserGroup> queue = new LinkedList<>();
         queue.addAll(authenticationController.getAuthenticatedUser().getUserGroups());
@@ -38,15 +38,15 @@ public class ReservationDetailsController implements Serializable {
         while ((currentGroup = queue.poll()) != null) {
             queue.addAll(currentGroup.getChildren());
 
-            for (Asset asset : currentGroup.getAssets()) {
-                for (Reservation reservation : asset.getReservations()) {
+            for (Resource resource : currentGroup.getResources()) {
+                for (Reservation reservation : resource.getReservations()) {
 
                     //Found a reservation with a pending status.
                     if (reservation.getStatus() == status) {
-                        //If there is not an AssetCategory already in the notificationTypeSettings, add one with an empty list.
-                        reservationDetailsMap.putIfAbsent(asset.getAssetCategory(), new ArrayList<>());
+                        //If there is not an ResourceCategory already in the notificationTypeSettings, add one with an empty list.
+                        reservationDetailsMap.putIfAbsent(resource.getResourceCategory(), new ArrayList<>());
 
-                        reservationDetailsMap.get(asset.getAssetCategory()).add(generateReservationDetails(reservation));
+                        reservationDetailsMap.get(resource.getResourceCategory()).add(generateReservationDetails(reservation));
                     }
                 }
             }
@@ -58,7 +58,7 @@ public class ReservationDetailsController implements Serializable {
     private ReservationDetails generateReservationDetails(Reservation reservation) {
         //Traverse up the hierarchy and determine the decisions that have already been made.
         LinkedHashMap<UserGroup, ReservationDecision> hierarchyDecisions = new LinkedHashMap<>();
-        List<UserGroup> hierarchyUp = userGroupService.getHierarchyUp(reservation.getAsset().getOwner());
+        List<UserGroup> hierarchyUp = userGroupService.getHierarchyUp(reservation.getResource().getOwner());
         UserGroup behalfUserGroup = null;
         //This for loop descends to properly order the groups for display on the page.
         for (int i = hierarchyUp.size() - 1; i >= 0; i--) {

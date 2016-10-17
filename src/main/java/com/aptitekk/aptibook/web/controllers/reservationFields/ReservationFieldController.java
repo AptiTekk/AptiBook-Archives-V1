@@ -6,7 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.reservationFields;
 
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.ReservationField;
 import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
@@ -31,15 +31,15 @@ public class ReservationFieldController implements Serializable {
     @Inject
     private ReservationFieldEntryService reservationFieldEntryService;
 
-    private Map<AssetCategory, List<ReservationField>> reservationFieldCache = new HashMap<>();
+    private Map<ResourceCategory, List<ReservationField>> reservationFieldCache = new HashMap<>();
     private Map<Reservation, Map<ReservationField, String>> reservationFieldEntryCache = new HashMap<>();
 
-    public List<ReservationField> getReservationFields(AssetCategory assetCategory) {
-        //noinspection Java8CollectionsApi (Otherwise we are calling getAllForAssetCategory every time this method is called.)
-        if (reservationFieldCache.get(assetCategory) == null)
-            reservationFieldCache.put(assetCategory, reservationFieldService.getAllForAssetCategory(assetCategory));
+    public List<ReservationField> getReservationFields(ResourceCategory resourceCategory) {
+        //noinspection Java8CollectionsApi (Otherwise we are calling getAllForResourceCategory every time this method is called.)
+        if (reservationFieldCache.get(resourceCategory) == null)
+            reservationFieldCache.put(resourceCategory, reservationFieldService.getAllForResourceCategory(resourceCategory));
 
-        return reservationFieldCache.get(assetCategory);
+        return reservationFieldCache.get(resourceCategory);
     }
 
     public String getEntryTextForReservationField(Reservation reservation, ReservationField reservationField) {

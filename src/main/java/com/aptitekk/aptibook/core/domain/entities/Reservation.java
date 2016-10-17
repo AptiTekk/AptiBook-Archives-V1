@@ -40,7 +40,7 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     private ZonedDateTime endTime;
 
     @ManyToOne
-    private Asset asset;
+    private Resource resource;
 
     @ManyToOne
     private User user;
@@ -103,12 +103,12 @@ public class Reservation extends MultiTenantEntity implements Serializable {
         this.endTime = endTime;
     }
 
-    public Asset getAsset() {
-        return asset;
+    public Resource getResource() {
+        return resource;
     }
 
-    public void setAsset(Asset asset) {
-        this.asset = asset;
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
     public User getUser() {

@@ -6,11 +6,10 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
-import com.aptitekk.aptibook.core.domain.entities.Asset;
-import com.aptitekk.aptibook.core.domain.entities.AssetCategory;
+import com.aptitekk.aptibook.core.domain.entities.Resource;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
 import com.aptitekk.aptibook.core.domain.entities.User;
-import com.aptitekk.aptibook.core.util.LogManager;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -23,7 +22,7 @@ import java.util.*;
 public class ReservationService extends MultiTenantEntityServiceAbstract<Reservation> implements Serializable {
 
     @Inject
-    AssetService assetService;
+    ResourceService resourceService;
 
     @Inject
     NotificationService notificationService;
@@ -42,7 +41,7 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
     public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end) {
-        return getAllBetweenDates(start, end, null, (AssetCategory[]) null);
+        return getAllBetweenDates(start, end, null, (ResourceCategory[]) null);
     }
 
     /**
@@ -51,11 +50,11 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      *
      * @param start           The start date.
      * @param end             The end date. Should be after the start date.
-     * @param assetCategories The categories to filter by. Null if no category filtering should be performed.
+     * @param resourceCategories The categories to filter by. Null if no category filtering should be performed.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
-    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, AssetCategory... assetCategories) {
-        return getAllBetweenDates(start, end, null, assetCategories);
+    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, ResourceCategory... resourceCategories) {
+        return getAllBetweenDates(start, end, null, resourceCategories);
     }
 
     /**
@@ -65,23 +64,23 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
      * @param start           The start date.
      * @param end             The end date. Should be after the start date.
      * @param user            The user to filter by. Null if no user filtering should be performed.
-     * @param assetCategories The categories to filter by. Null if no category filtering should be performed.
+     * @param resourceCategories The categories to filter by. Null if no category filtering should be performed.
      * @return A list of reservations between the specified dates, or null if any date is null or the end date is not after the start date.
      */
-    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, User user, AssetCategory... assetCategories) {
+    public List<Reservation> getAllBetweenDates(ZonedDateTime start, ZonedDateTime end, User user, ResourceCategory... resourceCategories) {
         if (start == null || end == null || start.isAfter(end))
             return null;
 
-        if (assetCategories != null)
-            if (assetCategories.length == 0)
+        if (resourceCategories != null)
+            if (resourceCategories.length == 0)
                 return null;
 
-        StringBuilder queryBuilder = new StringBuilder("SELECT r FROM Reservation r JOIN r.asset a WHERE ((r.startTime BETWEEN ?1 AND ?2) OR (r.startTime < ?1 AND r.endTime > ?1)) AND r.tenant = ?3 ");
+        StringBuilder queryBuilder = new StringBuilder("SELECT r FROM Reservation r JOIN r.resource a WHERE ((r.startTime BETWEEN ?1 AND ?2) OR (r.startTime < ?1 AND r.endTime > ?1)) AND r.tenant = ?3 ");
         HashMap<Integer, Object> parameterMap = new HashMap<>();
 
-        if (assetCategories != null) {
-            queryBuilder.append("AND a.assetCategory IN ?4 ");
-            parameterMap.put(4, Arrays.asList(assetCategories));
+        if (resourceCategories != null) {
+            queryBuilder.append("AND a.resourceCategory IN ?4 ");
+            parameterMap.put(4, Arrays.asList(resourceCategories));
         }
 
         if (user != null) {
@@ -103,39 +102,39 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
     }
 
     /**
-     * Finds and returns a list of assets that are available for reservation at the given times from the given AssetCategory.
+     * Finds and returns a list of resources that are available for reservation at the given times from the given ResourceCategory.
      *
-     * @param assetCategory The AssetCategory that a reservation is desired to be made from
+     * @param resourceCategory The ResourceCategory that a reservation is desired to be made from
      * @param startTime     The reservation start time
      * @param endTime       The reservation end time
-     * @return A list of available assets during the selected times.
+     * @return A list of available resources during the selected times.
      */
-    public List<Asset> findAvailableAssets(AssetCategory assetCategory, ZonedDateTime startTime, ZonedDateTime endTime) {
-        //This list contains all the assets for the given AssetCategory.
-        List<Asset> assetsOfType = assetCategory.getAssets();
-        //This list is what will be returned, it will contain all of the assets that are available for reservation.
-        List<Asset> availableAssets = new ArrayList<>();
+    public List<Resource> findAvailableResources(ResourceCategory resourceCategory, ZonedDateTime startTime, ZonedDateTime endTime) {
+        //This list contains all the resources for the given ResourceCategory.
+        List<Resource> resourcesOfType = resourceCategory.getResources();
+        //This list is what will be returned, it will contain all of the resources that are available for reservation.
+        List<Resource> availableResources = new ArrayList<>();
 
-        for (Asset asset : assetsOfType) {
+        for (Resource resource : resourcesOfType) {
             //Check for intersections of previous reservations.
-            if (isAssetAvailableForReservation(asset, startTime, endTime)) {
-                availableAssets.add(asset);
+            if (isResourceAvailableForReservation(resource, startTime, endTime)) {
+                availableResources.add(resource);
             }
         }
-        return availableAssets;
+        return availableResources;
     }
 
     /**
-     * Checks if the specified asset is available for reservation during the specified times.
+     * Checks if the specified resource is available for reservation during the specified times.
      *
-     * @param asset     The asset to check
+     * @param resource     The resource to check
      * @param startTime The reservation start time
      * @param endTime   The reservation end time
      * @return true if available, false if not.
      */
-    public boolean isAssetAvailableForReservation(Asset asset, ZonedDateTime startTime, ZonedDateTime endTime) {
-        //Iterate over all reservations of the asset and check for intersections
-        for (Reservation reservation : asset.getReservations()) {
+    public boolean isResourceAvailableForReservation(Resource resource, ZonedDateTime startTime, ZonedDateTime endTime) {
+        //Iterate over all reservations of the resource and check for intersections
+        for (Reservation reservation : resource.getReservations()) {
             //Ignore rejected reservations.
             if (reservation.getStatus() == Reservation.Status.REJECTED)
                 continue;
