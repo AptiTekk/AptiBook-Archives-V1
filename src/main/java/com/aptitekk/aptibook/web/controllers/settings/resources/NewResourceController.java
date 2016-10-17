@@ -78,6 +78,7 @@ public class NewResourceController extends ResourceFieldSupplier implements Seri
                     try {
                         File file = fileService.createFileFromImagePart(image);
                         resource.setImage(file);
+                        image = null;
                     } catch (IOException e) {
                         LogManager.logException(getClass(), "Image Upload Failed", e);
                         FacesContext.getCurrentInstance().addMessage("newResourceModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));

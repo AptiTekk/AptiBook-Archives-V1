@@ -6,6 +6,7 @@
 
 package com.aptitekk.aptibook.core.domain.services;
 
+import com.aptitekk.aptibook.core.domain.entities.Resource;
 import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Tag;
 
@@ -15,6 +16,18 @@ import java.io.Serializable;
 
 @Stateful
 public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements Serializable {
+
+    @Override
+    public void delete(int id) throws Exception {
+        Tag tag = get(id);
+        if(tag != null) {
+            for(Resource resource : tag.getResources()){
+                resource.getTags().remove(tag);
+            }
+        }
+
+        super.delete(id);
+    }
 
     public Tag findByName(ResourceCategory resourceCategory, String name) {
         if (resourceCategory == null || name == null)
