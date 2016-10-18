@@ -18,8 +18,6 @@ public abstract class ReservationScheduleModel extends LazyScheduleModel {
 
     @Override
     public void loadEvents(Date start, Date end) {
-        //TODO: Create an expanding cache
-
         List<Reservation> reservationList = getReservationsBetweenDates(ZonedDateTime.ofInstant(start.toInstant(), ZoneId.systemDefault()), ZonedDateTime.ofInstant(end.toInstant(), ZoneId.systemDefault()));
         if (reservationList != null) {
             for (Reservation reservation : reservationList) {
