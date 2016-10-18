@@ -107,21 +107,22 @@
 
             <f:facet name="footer">
                 <div class="btn-toolbar">
-                    <h:commandButton styleClass="btn btn-primary" value="Save Changes"
-                                     action="#{editResourceController.updateSettings()}"
-                                     actionListener="#{groupTreeController.invalidateTrees}">
-                        <f:ajax execute="@form"
-                                render="editResourceModalContent :resourcesPageContent"
-                                onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editResourceModal').modal('hide')}}}"/>
-                    </h:commandButton>
                     <div class="pull-right btn-toolbar">
+                        <h:commandButton styleClass="btn btn-primary" value="Save Changes"
+                                         action="#{editResourceController.updateSettings()}"
+                                         actionListener="#{groupTreeController.invalidateTrees}">
+                            <f:ajax execute="@form"
+                                    render="editResourceModalContent :resourcesPageContent"
+                                    onevent="function closeModal(data) {if(data.status === 'success'){if(!(bfHasError || bfHasFatalError)){$('.editResourceModal').modal('hide')}}}"/>
+                        </h:commandButton>
 
-                        <b:commandButton look="danger" style="float: left;" value="Delete Resource"
-                                         ajax="true" update=":deleteResourceModalForm"
-                                         oncomplete="$('.deleteResourceModal').modal();$('.editResourceModal').modal('hide')"/>
                         <b:button value="Cancel" look="default"
                                   onclick="$('.editResourceModal').modal('hide');"/>
                     </div>
+                    <b:commandButton look="danger" style="float: left;" value="Delete Resource"
+                                     ajax="true" update=":deleteResourceModalForm"
+                                     oncomplete="$('.deleteResourceModal').modal();$('.editResourceModal').modal('hide')"/>
+
                 </div>
             </f:facet>
         </b:modal>
