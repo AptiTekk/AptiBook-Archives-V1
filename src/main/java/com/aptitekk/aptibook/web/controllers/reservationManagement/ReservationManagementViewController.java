@@ -21,48 +21,48 @@ import java.util.List;
 public class ReservationManagementViewController implements Serializable {
 
     @Inject
-    ReservationManagementSessionController reservationManagementSessionController;
+    ReservationManagementPagesController reservationManagementPagesController;
 
     @Inject
     private AuthenticationController authenticationController;
 
     @PostConstruct
     private void init() {
-        reservationManagementSessionController.checkPagesValidity();
+        reservationManagementPagesController.checkPagesValidity();
 
-        if (reservationManagementSessionController.getPages() != null) {
+        if (reservationManagementPagesController.getPages() != null) {
             String managementPage = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("managementPage");
             if (managementPage != null && !managementPage.isEmpty()) {
-                for (ReservationManagementSessionController.ManagementPage page : reservationManagementSessionController.getPages()) {
+                for (ReservationManagementPagesController.ManagementPage page : reservationManagementPagesController.getPages()) {
                     if (page.getName().equalsIgnoreCase(managementPage)) {
                         if (authenticationController.getAuthenticatedUser().getUserGroups().isEmpty()) {
-                            authenticationController.forceUserRedirect();
+                            authenticationController.invokeUserRedirect();
                             return;
                         }
-                        reservationManagementSessionController.setCurrentPage(page);
+                        reservationManagementPagesController.setCurrentPage(page);
                         break;
                     }
                 }
             } else {
-                reservationManagementSessionController.setCurrentPage(null);
+                reservationManagementPagesController.setCurrentPage(null);
             }
         }
     }
 
-    public List<ReservationManagementSessionController.ManagementPage> getPages() {
-        return reservationManagementSessionController.getPages();
+    public List<ReservationManagementPagesController.ManagementPage> getPages() {
+        return reservationManagementPagesController.getPages();
     }
 
-    public ReservationManagementSessionController.ManagementPage getCurrentPage() {
-        return reservationManagementSessionController.getCurrentPage();
+    public ReservationManagementPagesController.ManagementPage getCurrentPage() {
+        return reservationManagementPagesController.getCurrentPage();
     }
 
-    public void setCurrentPage(ReservationManagementSessionController.ManagementPage page) {
-        reservationManagementSessionController.setCurrentPage(page);
+    public void setCurrentPage(ReservationManagementPagesController.ManagementPage page) {
+        reservationManagementPagesController.setCurrentPage(page);
     }
 
     public String redirectIfPageIsNull() {
-        return reservationManagementSessionController.redirectIfPageIsNull();
+        return reservationManagementPagesController.redirectIfPageIsNull();
     }
 
 }

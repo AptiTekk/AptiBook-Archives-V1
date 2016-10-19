@@ -97,7 +97,7 @@ public class SessionVariableManager {
      */
     public String getStringVariableData(String variableName) {
         Object data = getVariableData(variableName);
-        return data instanceof String ? (String) data : null;
+        return data != null ? data.toString() : null;
     }
 
     /**

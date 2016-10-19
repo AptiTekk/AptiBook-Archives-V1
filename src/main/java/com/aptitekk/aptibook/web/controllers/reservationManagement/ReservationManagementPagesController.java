@@ -7,10 +7,10 @@
 package com.aptitekk.aptibook.web.controllers.reservationManagement;
 
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
-import com.aptitekk.aptibook.web.controllers.settings.SettingsSessionController;
+import com.aptitekk.aptibook.web.controllers.settings.SettingsPagesController;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Named
-@SessionScoped
-public class ReservationManagementSessionController implements Serializable {
+@ViewScoped
+public class ReservationManagementPagesController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum ManagementPage {
@@ -32,9 +32,9 @@ public class ReservationManagementSessionController implements Serializable {
         private String name;
         private String fileName;
         private String iconAwesomeName;
-        private SettingsSessionController.SettingsPage parent;
+        private SettingsPagesController.SettingsPage parent;
 
-        ManagementPage(String name, String fileName, String iconAwesomeName, SettingsSessionController.SettingsPage parent) {
+        ManagementPage(String name, String fileName, String iconAwesomeName, SettingsPagesController.SettingsPage parent) {
             this.name = name;
             this.fileName = fileName;
             this.iconAwesomeName = iconAwesomeName;
@@ -53,7 +53,7 @@ public class ReservationManagementSessionController implements Serializable {
             return iconAwesomeName;
         }
 
-        public SettingsSessionController.SettingsPage getParent() {
+        public SettingsPagesController.SettingsPage getParent() {
             return parent;
         }
     }
