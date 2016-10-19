@@ -284,9 +284,9 @@
     <orderEntry type="library" name="Maven: com.github.scribejava:scribejava-core:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.ocpsoft.prettytime:prettytime:4.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.threeten:threeten-extra:1.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: com.mindscapehq:core:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: com.mindscapehq:webprovider:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.7" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.4" level="project" />
     <orderEntry type="library" name="Maven: commons-validator:commons-validator:1.5.1" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.2" level="project" />
