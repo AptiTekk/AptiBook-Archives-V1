@@ -6,8 +6,6 @@
 
 package com.aptitekk.aptibook.web.controllers.settings;
 
-import com.aptitekk.aptibook.web.controllers.help.HelpController;
-
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -21,41 +19,41 @@ import java.util.List;
 public class SettingsViewController implements Serializable {
 
     @Inject
-    private SettingsSessionController settingsSessionController;
+    private SettingsPagesController settingsPagesController;
 
     @PostConstruct
     private void init() {
-        settingsSessionController.checkPagesValidity();
+        settingsPagesController.checkPagesValidity();
 
-        if (settingsSessionController.getPages() != null) {
+        if (settingsPagesController.getPages() != null) {
             String settingsPage = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("settingsPage");
             if (settingsPage != null && !settingsPage.isEmpty()) {
-                for (SettingsSessionController.SettingsPage page : settingsSessionController.getPages()) {
+                for (SettingsPagesController.SettingsPage page : settingsPagesController.getPages()) {
                     if (page.getName().equalsIgnoreCase(settingsPage)) {
-                        settingsSessionController.setCurrentPage(page);
+                        settingsPagesController.setCurrentPage(page);
                         break;
                     }
                 }
             } else {
-                settingsSessionController.setCurrentPage(null);
+                settingsPagesController.setCurrentPage(null);
             }
         }
     }
 
-    public List<SettingsSessionController.SettingsPage> getPages() {
-        return settingsSessionController.getPages();
+    public List<SettingsPagesController.SettingsPage> getPages() {
+        return settingsPagesController.getPages();
     }
 
-    public SettingsSessionController.SettingsPage getCurrentPage() {
-        return settingsSessionController.getCurrentPage();
+    public SettingsPagesController.SettingsPage getCurrentPage() {
+        return settingsPagesController.getCurrentPage();
     }
 
-    public void setCurrentPage(SettingsSessionController.SettingsPage page) {
-        settingsSessionController.setCurrentPage(page);
+    public void setCurrentPage(SettingsPagesController.SettingsPage page) {
+        settingsPagesController.setCurrentPage(page);
     }
 
     public String redirectIfPageIsNull() {
-        return settingsSessionController.redirectIfPageIsNull();
+        return settingsPagesController.redirectIfPageIsNull();
     }
 
 }

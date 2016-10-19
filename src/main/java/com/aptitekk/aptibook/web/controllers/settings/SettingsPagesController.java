@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationContro
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -20,8 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 
 @Named
-@SessionScoped
-public class SettingsSessionController implements Serializable {
+@ViewScoped
+public class SettingsPagesController implements Serializable {
 
     @SuppressWarnings("WeakerAccess")
     public enum SettingsPage {

@@ -46,7 +46,7 @@ public class EditPropertyController implements Serializable {
     @PostConstruct
     private void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
         buildPropertyInputGroups();

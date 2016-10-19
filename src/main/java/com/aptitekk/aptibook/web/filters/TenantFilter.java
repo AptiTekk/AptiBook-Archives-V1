@@ -37,6 +37,7 @@ public class TenantFilter implements Filter {
     private UserService userService;
 
     public static final String ORIGINAL_URL_ATTRIBUTE = "originalUrl";
+    public static final String INVOKE_UNAUTHORIZED_REDIRECT_ATTRIBUTE = "unauthorized";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -59,6 +60,12 @@ public class TenantFilter implements Filter {
                     Tenant tenant = tenantManagementService.getTenantBySlug(tenantSlug);
                     if (tenant != null) {
                         httpServletRequest.setAttribute("tenant", tenant);
+
+                        //Check for a request to redirect from a controller.
+                        if (SessionVariableManager.fromServletUsingTenant((HttpServletRequest) request, tenant.getSlug()).getBooleanVariableData(INVOKE_UNAUTHORIZED_REDIRECT_ATTRIBUTE)) {
+                            redirectUnauthorized(httpServletRequest, httpServletResponse);
+                            return;
+                        }
 
                         String url = pathSplit.length >= 3 ? path.substring(path.indexOf("/", 2)) : "/";
                         if (url.contains(";"))
@@ -129,7 +136,7 @@ public class TenantFilter implements Filter {
         request.getRequestDispatcher("/WEB-INF/error/500.xhtml").forward(request, response);
     }
 
-    public static void redirectUnauthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void redirectUnauthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String parameters = "?";
         //noinspection RedundantCast
         for (Map.Entry<String, String[]> entry : ((Map<String, String[]>) request.getParameterMap()).entrySet()) {
@@ -145,8 +152,11 @@ public class TenantFilter implements Filter {
 
         String attemptedAccessPath = request.getRequestURI();
 
-        if (request.getAttribute("tenant") != null)
-            SessionVariableManager.fromServletUsingTenant(request, ((Tenant) request.getAttribute("tenant")).getSlug()).setVariableData(ORIGINAL_URL_ATTRIBUTE, attemptedAccessPath + parameters);
+        if (request.getAttribute("tenant") != null) {
+            SessionVariableManager sessionVariableManager = SessionVariableManager.fromServletUsingTenant(request, ((Tenant) request.getAttribute("tenant")).getSlug());
+            sessionVariableManager.clearVariableData(INVOKE_UNAUTHORIZED_REDIRECT_ATTRIBUTE);
+            sessionVariableManager.setVariableData(ORIGINAL_URL_ATTRIBUTE, attemptedAccessPath + parameters);
+        }
         response.sendRedirect(request.getContextPath() + "/" + (request.getAttribute("tenant") != null ? ((Tenant) request.getAttribute("tenant")).getSlug() : ""));
     }
 

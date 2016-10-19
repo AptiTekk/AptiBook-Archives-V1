@@ -58,7 +58,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
         refreshUserLists();
