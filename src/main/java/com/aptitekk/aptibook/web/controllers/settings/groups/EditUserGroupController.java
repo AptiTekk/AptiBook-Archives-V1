@@ -64,7 +64,7 @@ public class EditUserGroupController implements Serializable {
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
 
