@@ -91,6 +91,10 @@ public class TenantSynchronizer {
                                 }
                             }
 
+                            //Change Tenant tier if needed.
+                            if (currentTenant != null && !tier.equals(currentTenant.getTier()))
+                                changeTenantTier(currentTenant, tier);
+
                             //Set Tenant Active or Inactive based on its subscription status.
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
@@ -200,6 +204,26 @@ public class TenantSynchronizer {
             }
         } else {
             LogManager.logError(getClass(), "Could not update slug for Tenant ID " + tenant.getId() + ": A Tenant with this slug already exists.");
+        }
+    }
+
+    /**
+     * Changes the provided tenant's tier to the specified tier.
+     *
+     * @param tenant  The tenant whose slug should be changed.
+     * @param newTier The new tier.
+     */
+    private void changeTenantTier(Tenant tenant, Tenant.Tier newTier) {
+        if (newTier.equals(tenant.getTier()))
+            return;
+
+        Tenant.Tier previousTier = tenant.getTier();
+        tenant.setTier(newTier);
+        try {
+            tenant = tenantService.merge(tenant);
+            LogManager.logInfo(getClass(), "Updated Tier For Tenant ID " + tenant.getId() + ". Previously: " + previousTier + "; Now: " + newTier);
+        } catch (Exception e) {
+            LogManager.logException(getClass(), "Could not update slug for Tenant ID " + tenant.getId(), e);
         }
     }
 
