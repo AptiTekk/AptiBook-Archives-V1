@@ -29,6 +29,34 @@ public class Tenant extends GlobalEntity {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    public enum Tier {
+        BRONZE("aptibook-bronze"),
+        SILVER("aptibook-silver"),
+        PLATINUM("aptibook-platinum");
+
+        private String sku;
+
+        Tier(String sku) {
+            this.sku = sku;
+        }
+
+        public String getSku() {
+            return sku;
+        }
+
+        public static Tier getTierBySku(String sku) {
+            for(Tier tier : values()) {
+                if(tier.getSku().equals(sku))
+                    return tier;
+            }
+
+            return null;
+        }
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Tier tier;
+
     // ----------------------------------------------------------- Tenant Dependent Entities
 
     @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
@@ -110,6 +138,14 @@ public class Tenant extends GlobalEntity {
         this.slug = slug.toLowerCase();
     }
 
+    public Tier getTier() {
+        return tier;
+    }
+
+    public void setTier(Tier tier) {
+        this.tier = tier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,11 +157,11 @@ public class Tenant extends GlobalEntity {
         Tenant other = (Tenant) o;
 
         return EqualsHelper.areEquals(isActive(), other.isActive()) && EqualsHelper.areEquals(getTimeSetInactive(), other.getTimeSetInactive()) && EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
-                && EqualsHelper.areEquals(getSlug(), other.getSlug());
+                && EqualsHelper.areEquals(getSlug(), other.getSlug()) && EqualsHelper.areEquals(getTier(), other.getTier());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(isActive(), getTimeSetInactive(), getSubscriptionId(), getSlug());
+        return EqualsHelper.calculateHashCode(isActive(), getTimeSetInactive(), getSubscriptionId(), getSlug(), getTier());
     }
 }
