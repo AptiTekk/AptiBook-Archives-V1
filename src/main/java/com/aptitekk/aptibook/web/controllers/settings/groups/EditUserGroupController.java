@@ -135,7 +135,7 @@ public class EditUserGroupController implements Serializable {
             }
 
             try {
-                userGroupService.delete(selectedUserGroup.getId()); //Remove selected group from database
+                userGroupService.delete(selectedUserGroup); //Remove selected group from database
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {

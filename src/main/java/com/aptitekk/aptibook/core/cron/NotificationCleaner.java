@@ -49,7 +49,7 @@ public class NotificationCleaner {
             for (Notification notification : notifications) {
                 if (notification.getRead() && Days.between(notification.getCreation(), ZonedDateTime.now()).getAmount() > 3) {
                     try {
-                        notificationService.delete(notification.getId());
+                        notificationService.delete(notification);
                         numNotificationsRemoved++;
                     } catch (Exception e) {
                         LogManager.logException(getClass(), "Could not delete Notification on cleanup.", e);

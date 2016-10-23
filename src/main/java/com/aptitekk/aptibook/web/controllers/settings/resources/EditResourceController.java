@@ -194,7 +194,7 @@ public class EditResourceController extends ResourceFieldSupplier implements Ser
         try {
             if (resourceService.get(selectedResource.getId()) != null) {
                 context.addMessage("resourcesForm_" + selectedResource.getResourceCategory().getId(), new FacesMessage("Successful", "Resource Deleted!"));
-                resourceService.delete(selectedResource.getId());
+                resourceService.delete(selectedResource);
                 refreshResources();
             } else {
                 throw new Exception("Resource not found!");

@@ -56,7 +56,7 @@ public class TagController implements Serializable {
     private void deleteTag(Tag tag) {
         try {
             if (tag != null) {
-                tagService.delete(tag.getId());
+                tagService.delete(tag);
             }
         } catch (Exception e) {
             e.printStackTrace();

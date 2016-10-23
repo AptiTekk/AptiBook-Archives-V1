@@ -286,7 +286,7 @@ public class TenantSynchronizer {
     private void deleteTenant(Tenant tenant) {
         try {
             int tenantId = tenant.getId();
-            tenantService.delete(tenant.getId());
+            tenantService.delete(tenant);
             LogManager.logInfo(getClass(), "Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
         } catch (Exception e) {
             LogManager.logException(getClass(), "Could not delete Tenant with ID " + tenant.getId(), e);
