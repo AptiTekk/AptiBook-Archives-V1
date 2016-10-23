@@ -27,7 +27,6 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -228,16 +227,12 @@ public class AuthenticationController implements Serializable {
     }
 
     /**
-     * Forces a redirect to the login page. (Used when the user doesn't have permission to access a page, for example.)
+     * Instructs the TenantFilter to perform a redirect to the login page. (Used when the user doesn't have permission to access a page, for example.)
      */
-    public void forceUserRedirect() {
+    public void invokeUserRedirect() {
         FacesContext context = FacesContext.getCurrentInstance();
         if (context != null) {
-            try {
-                TenantFilter.redirectUnauthorized((HttpServletRequest) context.getExternalContext().getRequest(), (HttpServletResponse) context.getExternalContext().getResponse());
-            } catch (IOException e) {
-                LogManager.logException(getClass(), "Could not force redirect", e);
-            }
+            SessionVariableManager.fromServletUsingTenant((HttpServletRequest) context.getExternalContext().getRequest(), tenantSessionService.getCurrentTenant().getSlug()).setVariableData(TenantFilter.INVOKE_UNAUTHORIZED_REDIRECT_ATTRIBUTE, true);
         }
     }
 

@@ -58,7 +58,7 @@ public class NewResourceController extends ResourceFieldSupplier implements Seri
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
         resetSettings();

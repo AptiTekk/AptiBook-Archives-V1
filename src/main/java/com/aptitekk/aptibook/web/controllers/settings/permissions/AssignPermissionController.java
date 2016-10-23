@@ -82,7 +82,7 @@ public class AssignPermissionController implements Serializable {
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
 

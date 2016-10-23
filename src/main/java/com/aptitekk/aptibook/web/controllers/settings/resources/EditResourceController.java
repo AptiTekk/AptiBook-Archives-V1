@@ -69,7 +69,7 @@ public class EditResourceController extends ResourceFieldSupplier implements Ser
     @PostConstruct
     public void init() {
         if (!hasPagePermission()) {
-            authenticationController.forceUserRedirect();
+            authenticationController.invokeUserRedirect();
             return;
         }
 
