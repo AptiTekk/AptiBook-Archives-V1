@@ -30,18 +30,48 @@ public class Tenant extends GlobalEntity {
     private String slug;
 
     public enum Tier {
-        BRONZE("aptibook-bronze"),
-        SILVER("aptibook-silver"),
-        PLATINUM("aptibook-platinum");
+        BRONZE("aptibook-bronze", 25, 5, 50),
+        SILVER("aptibook-silver", 100, 10, 100),
+        PLATINUM("aptibook-platinum", -1, -1, 200);
 
         private String sku;
+        private final int allowedResources;
+        private final int allowedResourceCategories;
+        private final int allowedUsers;
 
-        Tier(String sku) {
+        Tier(String sku, int allowedResources, int allowedResourceCategories, int allowedUsers) {
             this.sku = sku;
+            this.allowedResources = allowedResources;
+            this.allowedResourceCategories = allowedResourceCategories;
+            this.allowedUsers = allowedUsers;
         }
 
         public String getSku() {
             return sku;
+        }
+
+        /**
+         * Returns the number of Allowed Resources for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedResources() {
+            return allowedResources;
+        }
+
+        /**
+         * Returns the number of Allowed Resource Categories for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedResourceCategories() {
+            return allowedResourceCategories;
+        }
+
+        /**
+         * Returns the number of Allowed Users for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedUsers() {
+            return allowedUsers;
         }
 
         public static Tier getTierBySku(String sku) {
