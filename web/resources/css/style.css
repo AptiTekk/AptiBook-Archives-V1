@@ -218,6 +218,16 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     text-decoration: line-through;
 }
 
+.aptibook .fc-event.cancelled {
+    background-color: #ddd;
+    border: 1px solid #333;
+}
+
+.aptibook .fc-event.cancelled .fc-content {
+    color: #333;
+    text-decoration: line-through;
+}
+
 /* ---------------------------------- END CALENDAR EVENT MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN RESULTS PAGE MODIFICATIONS ---------------------------------- */

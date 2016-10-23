@@ -26,6 +26,7 @@ public class Permission extends MultiTenantEntity implements Serializable {
         RESOURCES("Resources"),
         USERS("Users"),
         GROUPS("Groups"),
+        RESERVATIONS("Reservations"),
         PERMISSIONS("Permissions"),
         PROPERTIES("Properties");
 
@@ -95,6 +96,13 @@ public class Permission extends MultiTenantEntity implements Serializable {
                         "<ul>" +
                         "<li>If a User is given this permission, the User may create, edit, and delete any User Groups.</li>" +
                         "<li>If a User Group is given this permission, any Users within the User Group may create, edit, and delete any User Groups.</li>" +
+                        "</ul>"),
+
+        RESERVATIONS_MODIFY_ALL(Group.RESERVATIONS,  "May Modify All Reservations",
+                "Users and User Groups with this permission may edit and cancel any Reservations." +
+                        "<ul>" +
+                        "<li>If a User is given this permission, the User may edit and cancel any Reservations.</li>" +
+                        "<li>If a User Group is given this permission, any Users within the User Group may edit and cancel any Reservations.</li>" +
                         "</ul>"),
 
         PERMISSIONS_MODIFY_ALL(Group.PERMISSIONS, "May Assign Any Permissions",
