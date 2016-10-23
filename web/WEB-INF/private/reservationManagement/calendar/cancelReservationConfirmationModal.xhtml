@@ -20,12 +20,14 @@
             <h3><label>Are you sure?</label></h3>
             <h5>This cannot be undone.</h5>
             <f:facet name="footer">
+                <div class="pull-left btn-toolbar">
                 <b:commandButton look="danger"
                                  p:data-dismiss="modal" value="Cancel Reservation" ajax="true"
                                  action="#{requestReservationViewController.cancelReservation(viewEventModalController.selectedEvent.reservation)}"
                                  update=":calendar"
                                  oncomplete="$('.viewEventModal').modal('hide')"
                                  />
+                </div>
                 <b:button look="default" p:data-dismiss="modal" value="Cancel"/>
             </f:facet>
         </b:modal>

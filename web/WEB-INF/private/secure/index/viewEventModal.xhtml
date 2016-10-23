@@ -55,13 +55,16 @@
                              readonly="true"/>
             </h:panelGroup>
             <f:facet name="footer">
+                <div class="pull-left btn-toolbar">
                 <b:button look="danger"
                           value="Cancel Reservation"
                           p:data-toggle="modal"
                           p:data-target=".cancelReservationConfirmationModal"
                           disabled="#{viewEventModalController.selectedEvent.reservation.cancelled }"
                           rendered="#{requestReservationViewController.allowedToCancelReservation(viewEventModalController.selectedEvent.reservation)}"/>
+              </div>
                 <b:button look="default" value="Close" onclick="$('.viewEventModal').modal('hide')"/>
+
             </f:facet>
         </b:modal>
     </h:form>

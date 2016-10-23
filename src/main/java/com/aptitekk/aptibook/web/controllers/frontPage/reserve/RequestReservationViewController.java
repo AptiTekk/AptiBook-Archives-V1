@@ -77,17 +77,26 @@ public class RequestReservationViewController implements Serializable {
     private Reservation successfulReservation = null;
 
 
-    public boolean allowedToCancelReservation(Reservation reservation){
-        if(authenticationController.userHasPermission(Permission.Descriptor.RESERVATIONS_MODIFY_ALL) || authenticationController.getAuthenticatedUser().equals(reservation.getUser())) {
-           return true;
-        }else{
+    public boolean allowedToCancelReservation(Reservation reservation) {
+        if (reservation != null) {
+            if (authenticationController.userHasPermission(Permission.Descriptor.RESERVATIONS_MODIFY_ALL) || authenticationController.getAuthenticatedUser().equals(reservation.getUser())) {
+                return true;
+            }
             return false;
+
         }
+        return false;
     }
 
-    public void cancelReservation(Reservation reservation){
+    public void cancelReservation(Reservation reservation) {
         reservation.setStatus(Reservation.Status.CANCELLED);
         try {
+            notificationService.sendNotification(Notification.Type.TYPE_RESERVATION_CANCELLED, "Reservation Cancelled",
+                    "Your reservation for <b>" +
+                            reservation.getTitle() +
+                            "</b> has been <i>cancelled.</i>",
+                    reservation.getUser()
+            );
             reservationService.merge(reservation);
         } catch (Exception e) {
             e.printStackTrace();
