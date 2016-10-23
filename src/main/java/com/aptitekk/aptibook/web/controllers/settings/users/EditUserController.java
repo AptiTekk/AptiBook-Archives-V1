@@ -81,7 +81,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
             }
         } else {
             try {
-                userService.delete(user.getId());
+                userService.delete(user);
                 FacesContext.getCurrentInstance().addMessage("userTablesForm",
                         new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User '" + user.getEmailAddress() + "' has been Rejected."));
                 refreshUserLists();
@@ -214,7 +214,7 @@ public class EditUserController extends UserFieldSupplier implements Serializabl
         try {
             if (userService.get(getSelectedUser().getId()) != null) {
                 context.addMessage("userEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Deleted!"));
-                userService.delete(getSelectedUser().getId());
+                userService.delete(getSelectedUser());
                 setSelectedUser(null);
             } else {
                 throw new Exception("User not found!");
