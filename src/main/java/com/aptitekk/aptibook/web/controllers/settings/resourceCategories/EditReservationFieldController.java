@@ -53,7 +53,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
         if (reservationField != null) {
             try {
                 String reservationTitle = reservationField.getTitle();
-                reservationFieldService.delete(reservationField.getId());
+                reservationFieldService.delete(reservationField);
                 editResourceCategoryController.refreshResourceCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationTitle + "' Deleted!"));
             } catch (Exception e) {

@@ -177,7 +177,7 @@ public class EditResourceCategoryController implements Serializable {
         try {
             if (resourceCategoryService.get(getSelectedResourceCategory().getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("resourceCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Resource Category Deleted!"));
-                resourceCategoryService.delete(getSelectedResourceCategory().getId());
+                resourceCategoryService.delete(getSelectedResourceCategory());
                 setSelectedResourceCategory(null);
             } else {
                 LogManager.logError(getClass(), "Error while deleting Resource Category: Resource Category not found.");

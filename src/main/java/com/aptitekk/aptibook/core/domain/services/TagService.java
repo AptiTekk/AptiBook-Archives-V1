@@ -18,19 +18,14 @@ import java.io.Serializable;
 public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements Serializable {
 
     @Override
-    public void delete(int id) {
-        Tag tag = get(id);
+    public void delete(Tag tag) throws Exception {
         if(tag != null) {
             for(Resource resource : tag.getResources()){
                 resource.getTags().remove(tag);
             }
         }
 
-        try {
-            super.delete(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super.delete(tag);
     }
 
     public Tag findByName(ResourceCategory resourceCategory, String name) {
