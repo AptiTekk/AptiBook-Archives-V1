@@ -82,7 +82,7 @@ public class AuthenticationController implements Serializable {
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Your account has been verified! You may sign in once your account has been approved by an administrator."));
                         } catch (Exception e) {
                             FacesContext.getCurrentInstance().addMessage("loginForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "We had a problem while verifying your account. Please try again later!"));
-                            LogManager.logException(getClass(), "Could not verify user", e);
+                            LogManager.logException(getClass(), e, "Could not verify user");
                         }
                     }
 
@@ -126,7 +126,7 @@ public class AuthenticationController implements Serializable {
 
                     redirectAfterLogin();
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not create User for Google Sign In", e);
+                    LogManager.logException(getClass(), e, "Could not create User for Google Sign In");
                 }
             } else {
                 setAuthenticatedUser(existingUser);
@@ -185,7 +185,7 @@ public class AuthenticationController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(originalUrl);
                 return;
             } catch (IOException e) {
-                LogManager.logException(getClass(), "Could not redirect user to original url (" + originalUrl + ")", e);
+                LogManager.logException(getClass(), e, "Could not redirect user to original url (" + originalUrl + ")");
             }
         }
 

@@ -113,11 +113,11 @@ public class TenantFilter implements Filter {
     }
 
     private void handleUncaughtException(Exception e, ServletRequest request, ServletResponse response) {
-        LogManager.logException(getClass(), "Uncaught Exception", e);
+        LogManager.logException(getClass(), e, "Uncaught Exception");
         try {
             redirectError(request, response);
         } catch (ServletException | IOException e1) {
-            LogManager.logException(getClass(), "Uncaught Exception", e);
+            LogManager.logException(getClass(), e, "Uncaught Exception");
         }
     }
 

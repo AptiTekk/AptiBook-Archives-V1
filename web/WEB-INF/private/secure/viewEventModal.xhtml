@@ -11,7 +11,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:b="http://bootsfaces.net/ui"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
 
@@ -56,19 +55,20 @@
             </h:panelGroup>
             <f:facet name="footer">
                 <div class="pull-left btn-toolbar">
-                <b:button look="danger"
-                          value="Cancel Reservation"
-                          p:data-toggle="modal"
-                          p:data-target=".cancelReservationConfirmationModal"
-                          disabled="#{viewEventModalController.selectedEvent.reservation.cancelled }"
-                          rendered="#{requestReservationViewController.allowedToCancelReservation(viewEventModalController.selectedEvent.reservation)}"/>
-              </div>
+                    <b:commandButton look="danger"
+                                     value="Cancel Reservation"
+                                     ajax="true"
+                                     update=":cancelReservationConfirmationModalForm"
+                                     oncomplete="$('.viewEventModal').modal('hide');$('.cancelReservationConfirmationModal').modal();"
+                                     disabled="#{viewEventModalController.selectedEvent.reservation.cancelled}"
+                                     rendered="#{(not viewEventModalController.selectedEvent.reservation.cancelled) and viewEventModalController.isAllowedToCancelSelectedEvent()}"/>
+                </div>
                 <b:button look="default" value="Close" onclick="$('.viewEventModal').modal('hide')"/>
 
             </f:facet>
         </b:modal>
     </h:form>
-    <ui:include src="/WEB-INF/private/reservationManagement/calendar/cancelReservationConfirmationModal.xhtml"/>
+    <ui:include src="cancelReservationConfirmationModal.xhtml"/>
 </ui:composition>
 
 </html>

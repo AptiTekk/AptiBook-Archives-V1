@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition>
+    <h:form id="cancelReservationConfirmationModalForm">
+        <b:modal title="Cancel Reservation Confirmation" styleClass="cancelReservationConfirmationModal"
+                 close-on-escape="false" backdrop="false">
+            Are you sure you want to cancel the reservation of
+            <span style="font-weight: bold;">#{viewEventModalController.selectedEvent.reservation.resource.name}</span> for
+            <span style="font-weight: bold;">#{viewEventModalController.selectedEvent.reservation.title}</span>?<br/>
+            This cannot be undone!
+            <f:facet name="footer">
+                <div class="pull-left btn-toolbar">
+                    <b:commandButton look="danger"
+                                     p:data-dismiss="modal" value="Cancel Reservation" ajax="true"
+                                     action="#{viewEventModalController.cancelSelectedEvent}"
+                                     update=":calendar"
+                                     oncomplete="$('.viewEventModal').modal('hide')"
+                    />
+                </div>
+                <b:button look="default" value="Cancel"
+                          onclick="$('.viewEventModal').modal();$('.cancelReservationConfirmationModal').modal('hide');return false;"/>
+            </f:facet>
+        </b:modal>
+    </h:form>
+</ui:composition>
+</html>

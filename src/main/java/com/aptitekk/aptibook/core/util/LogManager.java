@@ -28,7 +28,7 @@ public class LogManager {
         LOGGER.error("[" + clazz.getSimpleName() + "] " + message);
     }
 
-    public static void logException(Class clazz, String message, Throwable t) {
+    public static void logException(Class clazz, Throwable t, String message) {
         LOGGER.error("[" + clazz.getSimpleName() + "] " + message, t);
         if (RAYGUN_CLIENT != null && AptiBookInfoProvider.isUsingHeroku()) {
             List<String> tags = new ArrayList<>();

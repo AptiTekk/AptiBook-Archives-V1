@@ -80,7 +80,7 @@ public class NewResourceController extends ResourceFieldSupplier implements Seri
                         resource.setImage(file);
                         image = null;
                     } catch (IOException e) {
-                        LogManager.logException(getClass(), "Image Upload Failed", e);
+                        LogManager.logException(getClass(), e, "Image Upload Failed");
                         FacesContext.getCurrentInstance().addMessage("newResourceModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
                     }
                 }
@@ -96,7 +96,7 @@ public class NewResourceController extends ResourceFieldSupplier implements Seri
                 }
             }
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not persist new resource", e);
+            LogManager.logException(getClass(), e, "Could not persist new resource");
             FacesContext.getCurrentInstance().addMessage("resourcesForm_" + resourceCategory.getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
     }

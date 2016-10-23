@@ -54,7 +54,7 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
             if (!user.isAdmin() && (type == null || user.getNotificationTypeSettings().get(type)))
                 emailService.sendEmailNotification(notification);
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not insert Notification.", e);
+            LogManager.logException(getClass(), e, "Could not insert Notification.");
         }
     }
 
@@ -124,6 +124,39 @@ public class NotificationService extends MultiTenantEntityServiceAbstract<Notifi
                             + "</b> has been Rejected.",
                     reservation.getUser());
         }
+    }
+
+    public void sendReservationCancelledNotifications(Reservation reservation) {
+        if (reservation == null || reservation.getStatus() != Reservation.Status.CANCELLED)
+            return;
+
+        sendNotification(Notification.Type.TYPE_RESERVATION_CANCELLED_USER_GROUPS, "Reservation Cancelled",
+                "The reservation of <b>"
+                        + reservation.getResource().getName()
+                        + "</b> for <b>"
+                        + reservation.getTitle()
+                        + "</b>, which was requested by <b>"
+                        + reservation.getUser().getFullname()
+                        + "</b> from <b>"
+                        + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
+                        + "</b> to <b>"
+                        + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
+                        + "</b>, has been Cancelled.",
+                userGroupService.getHierarchyUp(reservation.getResource().getOwner())
+        );
+
+        sendNotification(Notification.Type.TYPE_RESERVATION_CANCELLED_USER, "Reservation Cancelled",
+                "Your reservation of <b>"
+                        + reservation.getResource().getName()
+                        + "</b> for <b>"
+                        + reservation.getTitle()
+                        + "</b> from <b>"
+                        + reservation.getStartTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
+                        + "</b> to <b>"
+                        + reservation.getEndTime().format(TimeController.FRIENDLY_DATE_FORMATTER)
+                        + "</b> has been Cancelled.",
+                reservation.getUser()
+        );
     }
 
     public void markAllAsReadForUser(User user) {

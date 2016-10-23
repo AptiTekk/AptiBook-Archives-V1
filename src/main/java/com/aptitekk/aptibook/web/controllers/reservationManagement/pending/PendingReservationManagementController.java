@@ -107,7 +107,7 @@ public class PendingReservationManagementController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have approved the Reservation of '" + reservationDetails.getReservation().getResource().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("pendingReservation", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
-                LogManager.logException(getClass(), "Could not approve Reservation", e);
+                LogManager.logException(getClass(), e, "Could not approve Reservation");
             }
         }
     }
@@ -148,7 +148,7 @@ public class PendingReservationManagementController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "You have rejected the Reservation of '" + reservationDetails.getReservation().getResource().getName() + "' for '" + reservationDetails.getReservation().getUser().getFullname() + "'."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("pendingReservations", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
-                LogManager.logException(getClass(), "Could not reject Reservation", e);
+                LogManager.logException(getClass(), e, "Could not reject Reservation");
             }
         }
     }

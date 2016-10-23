@@ -101,7 +101,7 @@ public class OAuthController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(tenantSessionService.getCurrentTenant().getSlug() + "_" + GOOGLE_ACCESS_TOKEN_ATTRIBUTE, accessToken);
                 authenticationController.loginWithGoogle(googleUserInfoModel);
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Could not parse Google Sign In Code", e);
+                LogManager.logException(getClass(), e, "Could not parse Google Sign In Code");
                 FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);
             }
         }
@@ -121,7 +121,7 @@ public class OAuthController implements Serializable {
                 FacesContext.getCurrentInstance().getExternalContext().redirect(googleOAuthService.getAuthorizationUrl(additionalParams));
             } catch (IOException e) {
                 FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);
-                LogManager.logException(getClass(), "Could not Sign In with Google", e);
+                LogManager.logException(getClass(), e, "Could not Sign In with Google");
             }
         else {
             FacesContext.getCurrentInstance().addMessage("loginForm", CommonFacesMessages.GOOGLE_SIGN_IN_FAIL_FACES_MESSAGE);

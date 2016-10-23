@@ -19,7 +19,6 @@ import com.sparkpost.resources.ResourceTransmissions;
 import com.sparkpost.transport.RestConnection;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -106,7 +105,7 @@ public class EmailService implements Serializable {
 
             return true;
         } catch (SparkPostException e) {
-            LogManager.logException(getClass(), "Unable to send an email to these addresses: "+recipientArray+".", e);
+            LogManager.logException(getClass(), e, "Unable to send an email to these addresses: "+recipientArray+".");
             return false;
         }
 

@@ -86,7 +86,7 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
                     FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Password Changed Successfully."));
                 } catch (PasswordStorage.CannotPerformOperationException e) {
-                    LogManager.logException(getClass(), "Could not change user password", e);
+                    LogManager.logException(getClass(), e, "Could not change user password");
                     FacesContext.getCurrentInstance().addMessage("userEditForm:passwordEdit",
                             new FacesMessage(FacesMessage.SEVERITY_INFO, null, "An error occurred while changing your password. Your password has not been changed."));
                 }
@@ -95,7 +95,7 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
             try {
                 user = userService.merge(user);
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Could not update User Settings", e);
+                LogManager.logException(getClass(), e, "Could not update User Settings");
                 FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
