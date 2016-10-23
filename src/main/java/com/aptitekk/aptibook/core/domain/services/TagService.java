@@ -26,7 +26,11 @@ public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements
             }
         }
 
-        super.delete(id);
+        try {
+            super.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Tag findByName(ResourceCategory resourceCategory, String name) {

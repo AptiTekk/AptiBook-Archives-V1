@@ -19,7 +19,8 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     public enum Status {
         PENDING,
         APPROVED,
-        REJECTED
+        REJECTED,
+        CANCELLED
     }
 
     private static final long serialVersionUID = 1L;
@@ -82,6 +83,8 @@ public class Reservation extends MultiTenantEntity implements Serializable {
     public boolean isRejected() {
         return status == Status.REJECTED;
     }
+
+    public boolean isCancelled(){return status == Status.CANCELLED;}
 
     public void setStatus(Status status) {
         this.status = status;

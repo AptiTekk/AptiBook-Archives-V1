@@ -27,7 +27,7 @@
                 <b:tab title="Calendar">
                     <b:row style="margin-top: 20px;">
                         <b:column colXs="12">
-                            <p:schedule widgetVar="calendar" value="#{myReservationsController.eventModel}"
+                            <p:schedule id="calendar" widgetVar="calendar" value="#{myReservationsController.eventModel}"
                                         timeZone="#{timeController.currentTimeZone}" aspectRatio="1.6"
                                         allDaySlot="false" styleClass="interactive-events">
                                 <p:ajax event="eventSelect" listener="#{viewEventModalController.onEventSelect}"

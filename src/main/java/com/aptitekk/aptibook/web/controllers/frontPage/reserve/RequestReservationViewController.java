@@ -6,10 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.reserve;
 
-import com.aptitekk.aptibook.core.domain.entities.Resource;
-import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.entities.ReservationField;
-import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
+import com.aptitekk.aptibook.core.domain.entities.*;
 import com.aptitekk.aptibook.core.domain.services.ResourceService;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
@@ -78,6 +75,33 @@ public class RequestReservationViewController implements Serializable {
      * Current Reservation being edited by user, variable to check if we can redirect to success page.
      */
     private Reservation successfulReservation = null;
+
+
+    public boolean allowedToCancelReservation(Reservation reservation) {
+        if (reservation != null) {
+            if (authenticationController.userHasPermission(Permission.Descriptor.RESERVATIONS_MODIFY_ALL) || authenticationController.getAuthenticatedUser().equals(reservation.getUser())) {
+                return true;
+            }
+            return false;
+
+        }
+        return false;
+    }
+
+    public void cancelReservation(Reservation reservation) {
+        reservation.setStatus(Reservation.Status.CANCELLED);
+        try {
+            notificationService.sendNotification(Notification.Type.TYPE_RESERVATION_CANCELLED, "Reservation Cancelled",
+                    "Your reservation for <b>" +
+                            reservation.getTitle() +
+                            "</b> has been <i>cancelled.</i>",
+                    reservation.getUser()
+            );
+            reservationService.merge(reservation);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void makeReservation() {
         //If the user refreshes the page and submits the form twice, multiple reservations can be made at the same time.
