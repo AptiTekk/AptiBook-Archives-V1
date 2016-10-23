@@ -29,6 +29,64 @@ public class Tenant extends GlobalEntity {
     @Column(nullable = false, unique = true)
     private String slug;
 
+    public enum Tier {
+        BRONZE("aptibook-bronze", 25, 5, 50),
+        SILVER("aptibook-silver", 100, 10, 100),
+        PLATINUM("aptibook-platinum", -1, -1, 200);
+
+        private String sku;
+        private final int allowedResources;
+        private final int allowedResourceCategories;
+        private final int allowedUsers;
+
+        Tier(String sku, int allowedResources, int allowedResourceCategories, int allowedUsers) {
+            this.sku = sku;
+            this.allowedResources = allowedResources;
+            this.allowedResourceCategories = allowedResourceCategories;
+            this.allowedUsers = allowedUsers;
+        }
+
+        public String getSku() {
+            return sku;
+        }
+
+        /**
+         * Returns the number of Allowed Resources for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedResources() {
+            return allowedResources;
+        }
+
+        /**
+         * Returns the number of Allowed Resource Categories for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedResourceCategories() {
+            return allowedResourceCategories;
+        }
+
+        /**
+         * Returns the number of Allowed Users for this Tier.
+         * A value of -1 means "Unlimited."
+         */
+        public int getAllowedUsers() {
+            return allowedUsers;
+        }
+
+        public static Tier getTierBySku(String sku) {
+            for(Tier tier : values()) {
+                if(tier.getSku().equals(sku))
+                    return tier;
+            }
+
+            return null;
+        }
+    }
+
+    @Enumerated(EnumType.STRING)
+    private Tier tier;
+
     // ----------------------------------------------------------- Tenant Dependent Entities
 
     @OneToMany(mappedBy = "tenant", cascade = javax.persistence.CascadeType.REMOVE)
@@ -110,6 +168,14 @@ public class Tenant extends GlobalEntity {
         this.slug = slug.toLowerCase();
     }
 
+    public Tier getTier() {
+        return tier;
+    }
+
+    public void setTier(Tier tier) {
+        this.tier = tier;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,11 +187,11 @@ public class Tenant extends GlobalEntity {
         Tenant other = (Tenant) o;
 
         return EqualsHelper.areEquals(isActive(), other.isActive()) && EqualsHelper.areEquals(getTimeSetInactive(), other.getTimeSetInactive()) && EqualsHelper.areEquals(getSubscriptionId(), other.getSubscriptionId())
-                && EqualsHelper.areEquals(getSlug(), other.getSlug());
+                && EqualsHelper.areEquals(getSlug(), other.getSlug()) && EqualsHelper.areEquals(getTier(), other.getTier());
     }
 
     @Override
     public int hashCode() {
-        return EqualsHelper.calculateHashCode(isActive(), getTimeSetInactive(), getSubscriptionId(), getSlug());
+        return EqualsHelper.calculateHashCode(isActive(), getTimeSetInactive(), getSubscriptionId(), getSlug(), getTier());
     }
 }

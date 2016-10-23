@@ -22,7 +22,7 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
     public static final String ROOT_GROUP_NAME = "root";
 
     @Override
-    public void delete(int id) throws Exception {
+    public void delete(int id) {
         UserGroup userGroup = get(id);
 
         if (userGroup != null) {
