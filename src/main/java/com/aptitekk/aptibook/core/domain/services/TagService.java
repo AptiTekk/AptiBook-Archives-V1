@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class TagService extends MultiTenantEntityServiceAbstract<Tag> implements Serializable {
 
     @Override
-    public void delete(int id) throws Exception {
+    public void delete(int id) {
         Tag tag = get(id);
         if(tag != null) {
             for(Resource resource : tag.getResources()){

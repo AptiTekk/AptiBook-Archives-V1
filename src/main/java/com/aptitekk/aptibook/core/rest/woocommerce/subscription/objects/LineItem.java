@@ -54,7 +54,7 @@ public class LineItem {
     @JsonProperty("product_id")
     private Integer productId;
     @JsonProperty("sku")
-    private Integer sku;
+    private String sku;
     @JsonProperty("meta")
     private List<MetaItem> meta = new ArrayList<>();
     @JsonIgnore
@@ -224,7 +224,7 @@ public class LineItem {
      * @return The sku
      */
     @JsonProperty("sku")
-    public Integer getSku() {
+    public String getSku() {
         return sku;
     }
 
@@ -232,7 +232,7 @@ public class LineItem {
      * @param sku The sku
      */
     @JsonProperty("sku")
-    public void setSku(Integer sku) {
+    public void setSku(String sku) {
         this.sku = sku;
     }
 
