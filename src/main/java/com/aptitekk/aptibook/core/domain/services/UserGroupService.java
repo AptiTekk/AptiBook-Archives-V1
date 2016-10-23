@@ -22,9 +22,7 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
     public static final String ROOT_GROUP_NAME = "root";
 
     @Override
-    public void delete(int id) {
-        UserGroup userGroup = get(id);
-
+    public void delete(UserGroup userGroup) throws Exception {
         if (userGroup != null) {
             //Remove user assignments
             for (User user : userGroup.getUsers()) {
@@ -32,7 +30,7 @@ public class UserGroupService extends MultiTenantEntityServiceAbstract<UserGroup
             }
         }
 
-        super.delete(id);
+        super.delete(userGroup);
     }
 
     /**
