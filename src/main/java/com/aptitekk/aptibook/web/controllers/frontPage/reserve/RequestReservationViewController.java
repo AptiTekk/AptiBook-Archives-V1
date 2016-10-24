@@ -6,10 +6,7 @@
 
 package com.aptitekk.aptibook.web.controllers.frontPage.reserve;
 
-import com.aptitekk.aptibook.core.domain.entities.Resource;
-import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.entities.ReservationField;
-import com.aptitekk.aptibook.core.domain.entities.ReservationFieldEntry;
+import com.aptitekk.aptibook.core.domain.entities.*;
 import com.aptitekk.aptibook.core.domain.services.ResourceService;
 import com.aptitekk.aptibook.core.domain.services.NotificationService;
 import com.aptitekk.aptibook.core.domain.services.ReservationFieldEntryService;
@@ -110,14 +107,14 @@ public class RequestReservationViewController implements Serializable {
                         try {
                             reservationFieldEntryService.insert(reservationFieldEntry);
                         } catch (Exception e) {
-                            LogManager.logException(getClass(), "Error persisting ReservationFieldEntry", e);
+                            LogManager.logException(getClass(), e, "Error persisting ReservationFieldEntry");
                         }
                     }
                 }
 
                 notificationService.sendNewReservationNotifications(reservation);
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error while creating new Reservation", e);
+                LogManager.logException(getClass(), e, "Error while creating new Reservation");
             }
         }
 

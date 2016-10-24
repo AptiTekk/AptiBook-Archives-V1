@@ -10,7 +10,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:b="http://bootsfaces.net/ui" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
 
 <ui:composition>
@@ -19,6 +20,9 @@
                  title="Viewing Reservation '#{viewEventModalController.selectedEvent.title}'">
             <h:panelGroup id="viewEventModalFields">
 
+                <b:alert severity="warning" rendered="#{viewEventModalController.selectedEvent.reservation.cancelled}">
+                    This reservation has been cancelled.
+                </b:alert>
                 <b:alert severity="warning" rendered="#{viewEventModalController.selectedEvent.reservation.pending}">
                     This reservation is pending approval, and is subject to changes.
                 </b:alert>
@@ -50,10 +54,21 @@
                              readonly="true"/>
             </h:panelGroup>
             <f:facet name="footer">
+                <div class="pull-left btn-toolbar">
+                    <b:commandButton look="danger"
+                                     value="Cancel Reservation"
+                                     ajax="true"
+                                     update=":cancelReservationConfirmationModalForm"
+                                     oncomplete="$('.viewEventModal').modal('hide');$('.cancelReservationConfirmationModal').modal();"
+                                     disabled="#{viewEventModalController.selectedEvent.reservation.cancelled}"
+                                     rendered="#{(not viewEventModalController.selectedEvent.reservation.cancelled) and viewEventModalController.isAllowedToCancelSelectedEvent()}"/>
+                </div>
                 <b:button look="default" value="Close" onclick="$('.viewEventModal').modal('hide')"/>
+
             </f:facet>
         </b:modal>
     </h:form>
+    <ui:include src="cancelReservationConfirmationModal.xhtml"/>
 </ui:composition>
 
 </html>

@@ -42,7 +42,7 @@ public class NewReservationFieldController extends ReservationFieldFieldSupplier
                 editResourceCategoryController.refreshResourceCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Added!"));
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error while adding new Reservation Field", e);
+                LogManager.logException(getClass(), e, "Error while adding new Reservation Field");
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }

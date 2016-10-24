@@ -95,7 +95,7 @@ public class NewUserController extends UserFieldSupplier implements Serializable
 
             resetFields();
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not Create User", e);
+            LogManager.logException(getClass(), e, "Could not Create User");
             FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
     }

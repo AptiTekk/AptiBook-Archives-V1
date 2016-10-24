@@ -89,13 +89,13 @@ public class RegistrationController extends UserFieldSupplier implements Seriali
                     LogManager.logInfo(getClass(), "New user has been created. User: " + user.getEmailAddress());
                     return "index?faces-redirect=true&includeViewParams=true&action=register&complete=true";
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not persist user", e);
+                    LogManager.logException(getClass(), e, "Could not persist user");
                     FacesContext.getCurrentInstance().addMessage("registerForm:emailAddress", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                     return null;
                 }
             }
         } catch (PasswordStorage.CannotPerformOperationException e) {
-            LogManager.logException(getClass(), "Could not add new user on registration due to crypto error", e);
+            LogManager.logException(getClass(), e, "Could not add new user on registration due to crypto error");
             FacesContext.getCurrentInstance().addMessage("registerForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             return null;
         }

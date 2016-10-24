@@ -74,7 +74,7 @@ public class EditUserGroupController implements Serializable {
     }
 
     private boolean hasPagePermission() {
-        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.GROUPS);
+        return authenticationController != null && authenticationController.userHasPermissionOfGroup(Permission.Group.USER_GROUPS);
     }
 
     private boolean hasModifyPermission() {
@@ -98,7 +98,7 @@ public class EditUserGroupController implements Serializable {
                     resetSettings();
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group Updated"));
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not update User Group", e);
+                    LogManager.logException(getClass(), e, "Could not update User Group");
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
@@ -129,7 +129,7 @@ public class EditUserGroupController implements Serializable {
                 try {
                     userGroupService.merge(child);
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Could not change UserGroup Parent", e);
+                    LogManager.logException(getClass(), e, "Could not change UserGroup Parent");
                     FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
@@ -139,7 +139,7 @@ public class EditUserGroupController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + selectedUserGroup.getName() + "' Deleted"));
                 selectedUserGroup = null;
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Could not delete User Group", e);
+                LogManager.logException(getClass(), e, "Could not delete User Group");
                 FacesContext.getCurrentInstance().addMessage("groupEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }
