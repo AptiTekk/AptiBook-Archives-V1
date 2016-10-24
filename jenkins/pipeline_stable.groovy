@@ -59,9 +59,7 @@ def runTests(mvnHome) {
 }
 
 def changeVersion(mvnHome, buildNumber) {
-    sh mvnHome + '/bin/mvn versions:set -DremoveSnapshot=true'
-    sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
-    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`cat currentVersion`.`date +%d`_' + buildNumber + '"'
+    sh mvnHome + '/bin/mvn versions:set -DnewVersion="`date +%Y.%m.%d`_' + buildNumber + '"'
     sh mvnHome + '/bin/mvn versions:commit'
     sh "git commit -a -m 'Jenkins Automatic Version Change'"
 }
@@ -72,33 +70,12 @@ def deployToProduction(mvnHome, herokuAppName, liveUrl, pingUrl) {
     sh "heroku git:remote --app ${herokuAppName}"
     sh "git push heroku HEAD:master -f"
     sleep 60
-    sh "heroku maintenance:off --app ${herokuAppName}"
-
-    def i = 0;
-    def found = false;
-
-    while (i < 60) {
-        sh "curl --silent ${pingUrl} > ping"
-        def response = readFile "ping"
-
-        if (response == "pong") {
-            found = true;
-            break
-        }
-
-        sleep 3
-        i++
-    }
 
     sh mvnHome + '/bin/mvn help:evaluate -Dexpression=project.version|grep -Ev \'(^\\[|Download\\w+:)\' > currentVersion'
     def version = readFile "currentVersion"
 
-    if (found)
-        slackSend color: "good", message: "[Job ${env.BUILD_NUMBER}] ${herokuAppName} version ${version} has been deployed successfully at ${liveUrl}."
-    else {
-        slackSend color: "danger", message: "[Job ${env.BUILD_NUMBER}] Deployment of ${herokuAppName} version ${version} was not detected after 3 minutes. Did it deploy?"
-        error
-    }
+    slackSend color: "good", message: "[Job ${env.BUILD_NUMBER}] ${herokuAppName} version ${version} has been deployed."
+    slackSend color: "#4272b7", message: "[Job ${env.BUILD_NUMBER}] Please disable Maintenance Mode when ready."
 }
 
 boolean getDeploymentApproval(jenkinsUrl) {
