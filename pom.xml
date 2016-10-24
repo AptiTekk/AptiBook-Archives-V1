@@ -12,13 +12,13 @@
 
     <groupId>com.aptitekk</groupId>
     <artifactId>aptibook</artifactId>
-    <version>2016.10-SNAPSHOT</version>
+    <version>dev-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
         <!-- Define the version of the JBoss BOMs we want to import to specify
         tested stacks. -->
-        <version.wildfly-swarm>dev-SNAPSHOT</version.wildfly-swarm>
+        <version.wildfly-swarm>2016.10.0</version.wildfly-swarm>
 
         <version.hibernate>5.0.7.Final</version.hibernate>
         <version.postgresql-jdbc>9.4.1211</version.postgresql-jdbc>
