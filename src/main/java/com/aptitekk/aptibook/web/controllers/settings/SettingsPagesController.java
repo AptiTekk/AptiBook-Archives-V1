@@ -28,7 +28,7 @@ public class SettingsPagesController implements Serializable {
     public enum SettingsPage {
         RESOURCE_CATEGORIES("Resource Categories", "resourceCategories", "folder-open", Permission.Group.RESOURCE_CATEGORIES, null),
         RESOURCES("Resources", "resources", "tags", Permission.Group.RESOURCES, RESOURCE_CATEGORIES),
-        USER_GROUPS("User Groups", "groups", "sitemap", Permission.Group.GROUPS, null),
+        USER_GROUPS("User Groups", "groups", "sitemap", Permission.Group.USER_GROUPS, null),
         USERS("Users", "users", "user", Permission.Group.USERS, USER_GROUPS),
         PERMISSIONS("Permissions", "permissions", "unlock", Permission.Group.PERMISSIONS, null),
         PROPERTIES("Properties", "properties", "cog", Permission.Group.PROPERTIES, null);

@@ -205,7 +205,7 @@ public class AssignPermissionController implements Serializable {
                     try {
                         userService.merge(user);
                     } catch (Exception e) {
-                        LogManager.logException(getClass(), "Could not assign Permission to User", e);
+                        LogManager.logException(getClass(), e, "Could not assign Permission to User");
                     }
                 }
             }
@@ -217,7 +217,7 @@ public class AssignPermissionController implements Serializable {
                     try {
                         userService.merge(user);
                     } catch (Exception e) {
-                        LogManager.logException(getClass(), "Could not remove Permission from User", e);
+                        LogManager.logException(getClass(), e, "Could not remove Permission from User");
                     }
                 }
             }
@@ -238,7 +238,7 @@ public class AssignPermissionController implements Serializable {
                         try {
                             userGroupService.merge(userGroup);
                         } catch (Exception e) {
-                            LogManager.logException(getClass(), "Could not assign Permission to User Group", e);
+                            LogManager.logException(getClass(), e, "Could not assign Permission to User Group");
                         }
                     }
                 } else {
@@ -247,7 +247,7 @@ public class AssignPermissionController implements Serializable {
                         try {
                             userGroupService.merge(userGroup);
                         } catch (Exception e) {
-                            LogManager.logException(getClass(), "Could not remove Permission from User Group", e);
+                            LogManager.logException(getClass(), e, "Could not remove Permission from User Group");
                         }
                     }
                 }

@@ -14,7 +14,6 @@ import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationContro
 import com.aptitekk.aptibook.web.util.CommonFacesMessages;
 import org.primefaces.event.NodeSelectEvent;
 
-import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -67,7 +66,7 @@ public class NewUserGroupController implements Serializable {
 
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "User Group '" + newGroup.getName() + "' Added"));
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not add User Group", e);
+            LogManager.logException(getClass(), e, "Could not add User Group");
             FacesContext.getCurrentInstance().addMessage("groupEditForm", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, CommonFacesMessages.EXCEPTION_MESSAGE));
         }
     }

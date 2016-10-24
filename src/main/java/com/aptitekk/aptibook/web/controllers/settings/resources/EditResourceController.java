@@ -142,7 +142,7 @@ public class EditResourceController extends ResourceFieldSupplier implements Ser
                     File file = fileService.createFileFromImagePart(image);
                     selectedResource.setImage(file);
                 } catch (IOException e) {
-                    LogManager.logException(getClass(), "Image Upload Failed", e);
+                    LogManager.logException(getClass(), e, "Image Upload Failed");
                     FacesContext.getCurrentInstance().addMessage("editResourceModalForm:imageUpload", new FacesMessage(FacesMessage.SEVERITY_ERROR, null, "The image upload failed. Please try again or try another file."));
                     update = false;
                 }
@@ -161,7 +161,7 @@ public class EditResourceController extends ResourceFieldSupplier implements Ser
                     FacesContext.getCurrentInstance().addMessage("resourcesForm_" + selectedResource.getResourceCategory().getId(), new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Resource '" + selectedResource.getName() + "' Updated"));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    LogManager.logException(getClass(), "Updating Resource Settings Failed", e);
+                    LogManager.logException(getClass(), e, "Updating Resource Settings Failed");
                     FacesContext.getCurrentInstance().addMessage("resourcesForm_" + selectedResource.getResourceCategory().getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
@@ -194,14 +194,14 @@ public class EditResourceController extends ResourceFieldSupplier implements Ser
         try {
             if (resourceService.get(selectedResource.getId()) != null) {
                 context.addMessage("resourcesForm_" + selectedResource.getResourceCategory().getId(), new FacesMessage("Successful", "Resource Deleted!"));
-                resourceService.delete(selectedResource.getId());
+                resourceService.delete(selectedResource);
                 refreshResources();
             } else {
                 throw new Exception("Resource not found!");
             }
         } catch (Exception e) {
             context.addMessage("resourcesForm_" + selectedResource.getResourceCategory().getId(), CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
-            LogManager.logException(getClass(), "Error while Deleting Resource", e);
+            LogManager.logException(getClass(), e, "Error while Deleting Resource");
         }
 
         selectedResource = null;

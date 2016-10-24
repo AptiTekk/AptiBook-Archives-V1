@@ -146,7 +146,7 @@ public class EditResourceCategoryController implements Serializable {
                     refreshResourceCategories();
                     FacesContext.getCurrentInstance().addMessage("resourceCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Resource Category Updated"));
                 } catch (Exception e) {
-                    LogManager.logException(getClass(), "Error updating Resource Category settings", e);
+                    LogManager.logException(getClass(), e, "Error updating Resource Category settings");
                     FacesContext.getCurrentInstance().addMessage("resourceCategoryEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
                 }
             }
@@ -177,13 +177,13 @@ public class EditResourceCategoryController implements Serializable {
         try {
             if (resourceCategoryService.get(getSelectedResourceCategory().getId()) != null) {
                 FacesContext.getCurrentInstance().addMessage("resourceCategoryEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Resource Category Deleted!"));
-                resourceCategoryService.delete(getSelectedResourceCategory().getId());
+                resourceCategoryService.delete(getSelectedResourceCategory());
                 setSelectedResourceCategory(null);
             } else {
                 LogManager.logError(getClass(), "Error while deleting Resource Category: Resource Category not found.");
             }
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Error while deleting Resource Category", e);
+            LogManager.logException(getClass(), e, "Error while deleting Resource Category");
             FacesContext.getCurrentInstance().addMessage("resourceCategoryEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
         }
 
@@ -204,7 +204,7 @@ public class EditResourceCategoryController implements Serializable {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "New Reservation Field Added."));
             } catch (Exception e) {
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
-                LogManager.logException(getClass(), "Could not add new Reservation Field", e);
+                LogManager.logException(getClass(), e, "Could not add new Reservation Field");
             }
         }
     }

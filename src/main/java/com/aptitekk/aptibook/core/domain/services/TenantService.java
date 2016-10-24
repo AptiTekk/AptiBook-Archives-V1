@@ -56,10 +56,10 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
     }
 
     @Override
-    public void insert(Tenant o) throws Exception {
-        super.insert(o);
+    public void insert(Tenant entity) throws Exception {
+        super.insert(entity);
 
-        initializeNewTenant(o);
+        initializeNewTenant(entity);
     }
 
     private void initializeNewTenant(Tenant tenant) {
@@ -77,8 +77,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
     private void checkForRootGroup(Tenant tenant) {
         if (userGroupService.getRootGroup(tenant) == null) {
             UserGroup rootGroup = new UserGroup(UserGroupService.ROOT_GROUP_NAME);
+            rootGroup.setTenant(tenant);
             try {
-                userGroupService.insert(rootGroup, tenant);
+                userGroupService.insert(rootGroup);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -95,8 +96,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
                 adminUser.setHashedPassword(PasswordStorage.createHash(UserService.DEFAULT_ADMIN_PASSWORD));
                 adminUser.setVerified(true);
                 adminUser.setUserState(User.State.APPROVED);
+                adminUser.setTenant(tenant);
                 try {
-                    userService.insert(adminUser, tenant);
+                    userService.insert(adminUser);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -141,8 +143,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
                 Property property = new Property();
                 property.setPropertyKey(key);
                 property.setPropertyValue(key.getDefaultValue());
+                property.setTenant(tenant);
                 try {
-                    propertiesService.insert(property, tenant);
+                    propertiesService.insert(property);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -166,8 +169,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
             if (!foundPermission) {
                 Permission permission = new Permission();
                 permission.setDescriptor(descriptor);
+                permission.setTenant(tenant);
                 try {
-                    permissionService.insert(permission, tenant);
+                    permissionService.insert(permission);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -179,7 +183,8 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
         if (resourceCategoryService.getAll(tenant).isEmpty()) {
             try {
                 ResourceCategory resourceCategory = new ResourceCategory("Rooms");
-                resourceCategoryService.insert(resourceCategory, tenant);
+                resourceCategory.setTenant(tenant);
+                resourceCategoryService.insert(resourceCategory);
             } catch (Exception e) {
                 e.printStackTrace();
             }

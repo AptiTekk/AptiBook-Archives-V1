@@ -23,6 +23,7 @@ import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
+import javax.ws.rs.ServerErrorException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,6 @@ public class TenantSynchronizer {
     private static final String WOOCOMMERCE_CK = System.getenv("WOOCOMMERCE_CK");
     private static final String WOOCOMMERCE_CS = System.getenv("WOOCOMMERCE_CS");
 
-    private static final int APTIBOOK_SKU = 1;
     private static final String URL_SLUG_META_KEY = "URL Slug";
 
     @Inject
@@ -73,7 +73,8 @@ public class TenantSynchronizer {
                     for (LineItem lineItem : lineItems) {
 
                         //Check that the line item is AptiBook
-                        if (lineItem.getSku() == APTIBOOK_SKU) {
+                        Tenant.Tier tier;
+                        if ((tier = Tenant.Tier.getTierBySku(lineItem.getSku())) != null) {
                             subscriptionIdsEncountered.add(subscription.getId());
 
                             Tenant currentTenant = tenantService.getTenantBySubscriptionId(subscription.getId());
@@ -90,11 +91,15 @@ public class TenantSynchronizer {
                                 }
                             }
 
+                            //Change Tenant tier if needed.
+                            if (currentTenant != null && !tier.equals(currentTenant.getTier()))
+                                changeTenantTier(currentTenant, tier);
+
                             //Set Tenant Active or Inactive based on its subscription status.
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
-                                    createNewTenant(subscription.getId(), slug);
+                                    createNewTenant(subscription.getId(), slug, tier);
                                 }
                             } else {
                                 if (status != Status.ACTIVE) {
@@ -150,12 +155,14 @@ public class TenantSynchronizer {
         try {
             return service.getAll().getSubscriptions();
         } catch (ClientErrorException e) {
-            LogManager.logException(getClass(), "Could not Synchronize Tenants due to Client Error", e);
-            return null;
+            LogManager.logException(getClass(), e, "Could not Synchronize Tenants due to Client Error");
+        } catch (ServerErrorException e) {
+            LogManager.logError(getClass(), "Could not Synchronize Tenants due to Server Error: " + e.getMessage());
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not Synchronize Tenants due to Unknown Error.", e);
-            return null;
+            LogManager.logException(getClass(), e, "Could not Synchronize Tenants due to Unknown Error.");
         }
+
+        return null;
     }
 
     /**
@@ -193,10 +200,30 @@ public class TenantSynchronizer {
                 tenant = tenantService.merge(tenant);
                 LogManager.logInfo(getClass(), "Updated Slug For Tenant ID " + tenant.getId() + ". Previously: " + previousSlug + "; Now: " + newSlug);
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Could not update slug for Tenant ID " + tenant.getId(), e);
+                LogManager.logException(getClass(), e, "Could not update slug for Tenant ID " + tenant.getId());
             }
         } else {
             LogManager.logError(getClass(), "Could not update slug for Tenant ID " + tenant.getId() + ": A Tenant with this slug already exists.");
+        }
+    }
+
+    /**
+     * Changes the provided tenant's tier to the specified tier.
+     *
+     * @param tenant  The tenant whose slug should be changed.
+     * @param newTier The new tier.
+     */
+    private void changeTenantTier(Tenant tenant, Tenant.Tier newTier) {
+        if (newTier.equals(tenant.getTier()))
+            return;
+
+        Tenant.Tier previousTier = tenant.getTier();
+        tenant.setTier(newTier);
+        try {
+            tenant = tenantService.merge(tenant);
+            LogManager.logInfo(getClass(), "Updated Tier For Tenant ID " + tenant.getId() + ". Previously: " + previousTier + "; Now: " + newTier);
+        } catch (Exception e) {
+            LogManager.logException(getClass(), e, "Could not update slug for Tenant ID " + tenant.getId());
         }
     }
 
@@ -215,7 +242,7 @@ public class TenantSynchronizer {
             tenant = tenantService.merge(tenant);
             LogManager.logInfo(getClass(), "Set Tenant ID " + tenant.getId() + (active ? " Active." : " Inactive."));
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive"), e);
+            LogManager.logException(getClass(), e, "Could not set Tenant ID " + tenant.getId() + (active ? " Active" : " Inactive"));
         }
     }
 
@@ -226,7 +253,7 @@ public class TenantSynchronizer {
      * @param slug           The slug of the tenant.
      * @return The newly created tenant, unless one already existed with the specified parameters, or the slug was null.
      */
-    private Tenant createNewTenant(int subscriptionId, String slug) {
+    private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier) {
         if (slug == null || slug.isEmpty())
             return null;
 
@@ -239,13 +266,14 @@ public class TenantSynchronizer {
         tenant.setActive(true);
         tenant.setSlug(slug);
         tenant.setSubscriptionId(subscriptionId);
+        tenant.setTier(tier);
 
         try {
             tenantService.insert(tenant);
-            LogManager.logInfo(getClass(), "Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", and Slug " + tenant.getSlug());
+            LogManager.logInfo(getClass(), "Created new Tenant with ID " + tenant.getId() + ", Subscription ID " + tenant.getSubscriptionId() + ", Slug " + tenant.getSlug() + ", and Tier " + tier);
             return tenant;
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not create Tenant for Subscription ID " + tenant.getSubscriptionId(), e);
+            LogManager.logException(getClass(), e, "Could not create Tenant for Subscription ID " + tenant.getSubscriptionId());
             return null;
         }
     }
@@ -258,10 +286,10 @@ public class TenantSynchronizer {
     private void deleteTenant(Tenant tenant) {
         try {
             int tenantId = tenant.getId();
-            tenantService.delete(tenant.getId());
+            tenantService.delete(tenant);
             LogManager.logInfo(getClass(), "Deleted Tenant with ID " + tenantId + " due to being inactive for 30 days.");
         } catch (Exception e) {
-            LogManager.logException(getClass(), "Could not delete Tenant with ID " + tenant.getId(), e);
+            LogManager.logException(getClass(), e, "Could not delete Tenant with ID " + tenant.getId());
         }
     }
 

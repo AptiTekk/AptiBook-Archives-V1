@@ -41,7 +41,7 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
                 editResourceCategoryController.refreshResourceCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationField.getTitle() + "' Updated!"));
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error while updating Reservation Field", e);
+                LogManager.logException(getClass(), e, "Error while updating Reservation Field");
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
 
@@ -53,11 +53,11 @@ public class EditReservationFieldController extends ReservationFieldFieldSupplie
         if (reservationField != null) {
             try {
                 String reservationTitle = reservationField.getTitle();
-                reservationFieldService.delete(reservationField.getId());
+                reservationFieldService.delete(reservationField);
                 editResourceCategoryController.refreshResourceCategories();
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", new FacesMessage(FacesMessage.SEVERITY_INFO, null, "Field '" + reservationTitle + "' Deleted!"));
             } catch (Exception e) {
-                LogManager.logException(getClass(), "Error while deleting Reservation Field", e);
+                LogManager.logException(getClass(), e, "Error while deleting Reservation Field");
                 FacesContext.getCurrentInstance().addMessage("reservationFieldEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
             }
         }

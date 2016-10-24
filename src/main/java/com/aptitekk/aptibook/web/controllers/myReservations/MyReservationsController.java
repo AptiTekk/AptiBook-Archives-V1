@@ -6,10 +6,10 @@
 
 package com.aptitekk.aptibook.web.controllers.myReservations;
 
-import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.entities.Reservation;
-import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
+import com.aptitekk.aptibook.core.domain.entities.ResourceCategory;
 import com.aptitekk.aptibook.core.domain.services.ReservationService;
+import com.aptitekk.aptibook.core.domain.services.ResourceCategoryService;
 import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.web.components.primeFaces.schedule.ReservationScheduleModel;
 import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationController;
@@ -73,6 +73,10 @@ public class MyReservationsController implements Serializable {
 
                 //Ignore reservations that have ended.
                 if (reservation.getEndTime().isBefore(now))
+                    continue;
+
+                //Ignore cancelled reservations.
+                if (reservation.isCancelled())
                     continue;
 
                 presentReservations.putIfAbsent(reservation.getResource().getResourceCategory(), new ArrayList<>());

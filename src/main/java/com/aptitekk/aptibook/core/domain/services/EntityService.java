@@ -17,9 +17,9 @@ public interface EntityService<T> {
 
     List<T> getAll();
 
-    void insert(T o) throws Exception;
+    void insert(T entity) throws Exception;
 
-    void delete(int id) throws Exception;
+    void delete(T entity) throws Exception;
 
     T merge(T entity) throws Exception;
 

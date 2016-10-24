@@ -42,7 +42,7 @@ public class AptiBookInfoProvider {
             aptiBookProperties.load(propertiesStream);
             propertiesStream.close();
         } catch (IOException e) {
-            LogManager.logException(AptiBookInfoController.class, "Could not load aptibook.properties", e);
+            LogManager.logException(AptiBookInfoController.class, e, "Could not load aptibook.properties");
         }
 
         try {
@@ -76,7 +76,7 @@ public class AptiBookInfoProvider {
 
             attributionsInputStream.close();
         } catch (Exception e) {
-            LogManager.logException(AptiBookInfoController.class, "Could not load attributions", e);
+            LogManager.logException(AptiBookInfoController.class, e, "Could not load attributions");
         }
     }
 

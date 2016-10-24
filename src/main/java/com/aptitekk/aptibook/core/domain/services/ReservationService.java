@@ -33,6 +33,9 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
     @Inject
     UserService userService;
 
+
+
+
     /**
      * Retrieves reservations from the database that occur within the specified dates.
      *
@@ -137,6 +140,9 @@ public class ReservationService extends MultiTenantEntityServiceAbstract<Reserva
         for (Reservation reservation : resource.getReservations()) {
             //Ignore rejected reservations.
             if (reservation.getStatus() == Reservation.Status.REJECTED)
+                continue;
+            //If user canceled reservation, allow resource to be reserved.
+            if(reservation.getStatus() == Reservation.Status.CANCELLED)
                 continue;
 
             //If the reservation's end time is before our start time, we're okay.
