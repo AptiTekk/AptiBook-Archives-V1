@@ -40,7 +40,7 @@ hr {
 
 .navbar {
     background-color: #fff !important;
-    box-shadow: #aaa 0 -5px 20px 1px;
+    box-shadow: #666 0 0 15px -2px;
     border-bottom: 4px solid #4272b7 !important;
 }
 
@@ -127,7 +127,16 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 .aptibook .pagination > .active > a:hover,
 .aptibook .pagination > .active > span:hover,
 .aptibook .pagination > .active > a:focus,
-.aptibook .pagination > .active > span:focus {
+.aptibook .pagination > .active > span:focus,
+.aptibook .btn-primary.disabled:hover,
+.aptibook .btn-primary[disabled]:hover,
+.aptibook fieldset[disabled] .btn-primary:hover,
+.aptibook .btn-primary.disabled:focus,
+.aptibook .btn-primary[disabled]:focus,
+.aptibook fieldset[disabled] .btn-primary:focus,
+.aptibook .btn-primary.disabled.focus,
+.aptibook .btn-primary[disabled].focus,
+.aptibook fieldset[disabled] .btn-primary.focus {
     background-color: #4272b7;
     border-color: #39629C;
 }
@@ -153,6 +162,26 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 }
 
 /* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN PANEL MODIFICATIONS ---------------------------------- */
+
+.aptibook .panel.panel-primary {
+    box-shadow: #666 0 0 10px -2px;
+    border: none;
+}
+
+.aptibook .panel.panel-primary .panel-heading {
+    background-color: #4272b7;
+    box-shadow: #666 0 5px 10px -5px;
+    color: white;
+    border: none;
+}
+
+.aptibook .panel.panel-primary .panel-heading a:after {
+    color: white;
+}
+
+/* ---------------------------------- END PANEL MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN CALENDAR EVENT MODIFICATIONS ---------------------------------- */
 
