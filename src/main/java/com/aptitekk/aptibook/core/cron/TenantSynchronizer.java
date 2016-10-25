@@ -89,6 +89,12 @@ public class TenantSynchronizer {
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
                                     createNewTenant(subscription.getId(), slug);
+                                    /*if(subscription.getBillingAddress().getEmail() != null){
+                                        //send email
+                                        System.out.println("Not null");
+                                    }else{
+                                        System.out.println("Null");
+                                    }*/
                                     //TODO Send email to tenant billing_address
                                 }
                             } else {
