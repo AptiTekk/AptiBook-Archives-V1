@@ -7,9 +7,7 @@
 package com.aptitekk.aptibook.core.cron;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
-import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
-import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.*;
 import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
