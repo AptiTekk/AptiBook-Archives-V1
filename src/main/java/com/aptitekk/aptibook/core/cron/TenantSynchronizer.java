@@ -15,7 +15,6 @@ import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilte
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import com.aptitekk.aptibook.core.util.LogManager;
-import com.aptitekk.aptibook.core.util.PasswordGenerator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -27,8 +26,6 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.ServerErrorException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;

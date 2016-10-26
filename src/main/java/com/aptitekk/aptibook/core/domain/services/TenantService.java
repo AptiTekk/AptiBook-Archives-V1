@@ -14,7 +14,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
-import java.util.EnumMap;
 import java.util.List;
 
 @Stateless
