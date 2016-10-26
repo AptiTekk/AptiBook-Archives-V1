@@ -78,8 +78,8 @@ public class Tenant extends GlobalEntity {
         }
 
         public static Tier getTierBySku(String sku) {
-            for(Tier tier : values()) {
-                if(tier.getSku().equals(sku))
+            for (Tier tier : values()) {
+                if (tier.getSku().equals(sku))
                     return tier;
             }
 
