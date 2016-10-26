@@ -7,12 +7,15 @@
 package com.aptitekk.aptibook.core.cron;
 
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
+import com.aptitekk.aptibook.core.domain.services.EmailService;
 import com.aptitekk.aptibook.core.domain.services.TenantService;
+import com.aptitekk.aptibook.core.domain.services.UserService;
 import com.aptitekk.aptibook.core.rest.woocommerce.subscription.objects.*;
 import com.aptitekk.aptibook.core.rest.woocommerce.util.WooCommerceSecurityFilter;
 import com.aptitekk.aptibook.core.tenant.TenantManagementService;
 import com.aptitekk.aptibook.core.util.AptiBookInfoProvider;
 import com.aptitekk.aptibook.core.util.LogManager;
+import com.aptitekk.aptibook.core.util.PasswordGenerator;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -24,6 +27,8 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.ServerErrorException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,13 @@ public class TenantSynchronizer {
 
     @Inject
     private TenantManagementService tenantManagementService;
+
+    @Inject
+    private EmailService emailService;
+
+    @Inject
+    private UserService userService;
+
 
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void synchronizeTenants() {
@@ -99,7 +111,7 @@ public class TenantSynchronizer {
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
-                                    createNewTenant(subscription.getId(), slug, tier);
+                                    createNewTenant(subscription.getId(), slug, tier, subscription.getBillingAddress().getEmail());
                                 }
                             } else {
                                 if (status != Status.ACTIVE) {
@@ -253,8 +265,10 @@ public class TenantSynchronizer {
      * @param slug           The slug of the tenant.
      * @return The newly created tenant, unless one already existed with the specified parameters, or the slug was null.
      */
-    private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier) {
+    private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier, String adminEmail) {
         if (slug == null || slug.isEmpty())
+            return null;
+        if (adminEmail == null || adminEmail.isEmpty())
             return null;
 
         if (tenantService.getTenantBySlug(slug) != null)
@@ -262,11 +276,13 @@ public class TenantSynchronizer {
         if (tenantService.getTenantBySubscriptionId(subscriptionId) != null)
             return null;
 
+
         Tenant tenant = new Tenant();
         tenant.setActive(true);
         tenant.setSlug(slug);
         tenant.setSubscriptionId(subscriptionId);
         tenant.setTier(tier);
+        tenant.setAdminEmail(adminEmail);
 
         try {
             tenantService.insert(tenant);

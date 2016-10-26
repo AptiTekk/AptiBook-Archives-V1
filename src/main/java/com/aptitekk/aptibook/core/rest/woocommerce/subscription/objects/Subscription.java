@@ -52,8 +52,8 @@ public class Subscription {
     private String note;
     @JsonProperty("line_items")
     private List<LineItem> lineItems = new ArrayList<LineItem>();
-/*    @JsonProperty("billing_address")
-    private BillingAddress billingAddress;*/
+    @JsonProperty("billing_address")
+    private BillingAddress billingAddress;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -237,14 +237,15 @@ public class Subscription {
         this.lineItems = lineItems;
     }
 
- /*   *//**
+
+    /**
      * @return
-     *  The Billing address object
-     *//*
+     * BillingAddress object
+     */
     @JsonProperty
     public BillingAddress getBillingAddress() {
         return billingAddress;
-    }*/
+    }
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

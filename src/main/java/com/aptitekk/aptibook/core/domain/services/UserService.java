@@ -11,6 +11,7 @@ import com.aptitekk.aptibook.core.domain.entities.Permission;
 import com.aptitekk.aptibook.core.domain.entities.Tenant;
 import com.aptitekk.aptibook.core.domain.entities.User;
 import com.aptitekk.aptibook.core.domain.entities.UserGroup;
+import com.aptitekk.aptibook.core.util.PasswordGenerator;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
@@ -22,7 +23,7 @@ import java.util.List;
 public class UserService extends MultiTenantEntityServiceAbstract<User> implements Serializable {
 
     public static final String ADMIN_EMAIL_ADDRESS = "admin";
-    static final String DEFAULT_ADMIN_PASSWORD = "admin";
+
 
     @Inject
     private PermissionService permissionService;

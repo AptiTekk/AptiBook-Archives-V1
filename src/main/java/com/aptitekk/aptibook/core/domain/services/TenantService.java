@@ -8,11 +8,13 @@ package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.*;
+import com.aptitekk.aptibook.core.util.PasswordGenerator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.PersistenceException;
 import java.io.Serializable;
+import java.util.EnumMap;
 import java.util.List;
 
 @Stateless
@@ -32,6 +34,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
 
     @Inject
     private PermissionService permissionService;
+
+    @Inject
+    private EmailService emailService;
 
     public Tenant getTenantBySubscriptionId(int subscriptionId) {
         try {
@@ -93,10 +98,20 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
             try {
                 adminUser = new User();
                 adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
-                adminUser.setHashedPassword(PasswordStorage.createHash(UserService.DEFAULT_ADMIN_PASSWORD));
+                String password = PasswordGenerator.generateRandomPassword(10);
+                adminUser.setHashedPassword(PasswordStorage.createHash(password));
+                emailService.sendEmailNotification(tenant.getAdminEmail(), "AptiBook Registration", "<p>Thank you for registering with AptiBook! "
+                        + "You can login to AptiBook here: "
+                        + "https://aptibook.aptitekk.com/"
+                        + tenant.getSlug()
+                        + "<center>Username: <b>admin</b><br>"
+                        + "Password: "
+                        + "<b>" + password + "</b></center>");
+                password = null; //Is the necessary?
                 adminUser.setVerified(true);
                 adminUser.setUserState(User.State.APPROVED);
                 adminUser.setTenant(tenant);
+
                 try {
                     userService.insert(adminUser);
                 } catch (Exception e) {
