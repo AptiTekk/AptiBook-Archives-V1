@@ -45,13 +45,6 @@ public class TenantSynchronizer {
     @Inject
     private TenantManagementService tenantManagementService;
 
-    @Inject
-    private EmailService emailService;
-
-    @Inject
-    private UserService userService;
-
-
     @Schedule(minute = "*", hour = "*", persistent = false)
     public void synchronizeTenants() {
         LogManager.logDebug(getClass(), "Synchronizing Tenants...");
