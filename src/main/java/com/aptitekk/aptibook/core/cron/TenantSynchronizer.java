@@ -99,7 +99,7 @@ public class TenantSynchronizer {
                             Status status = subscription.getStatus();
                             if (currentTenant == null) {
                                 if (status == Status.ACTIVE) {
-                                    createNewTenant(subscription.getId(), slug, tier);
+                                    createNewTenant(subscription.getId(), slug, tier, subscription.getBillingAddress().getEmail());
                                 }
                             } else {
                                 if (status != Status.ACTIVE) {
@@ -253,8 +253,10 @@ public class TenantSynchronizer {
      * @param slug           The slug of the tenant.
      * @return The newly created tenant, unless one already existed with the specified parameters, or the slug was null.
      */
-    private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier) {
+    private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier, String adminEmail) {
         if (slug == null || slug.isEmpty())
+            return null;
+        if (adminEmail == null || adminEmail.isEmpty())
             return null;
 
         if (tenantService.getTenantBySlug(slug) != null)
@@ -262,11 +264,13 @@ public class TenantSynchronizer {
         if (tenantService.getTenantBySubscriptionId(subscriptionId) != null)
             return null;
 
+
         Tenant tenant = new Tenant();
         tenant.setActive(true);
         tenant.setSlug(slug);
         tenant.setSubscriptionId(subscriptionId);
         tenant.setTier(tier);
+        tenant.setAdminEmail(adminEmail);
 
         try {
             tenantService.insert(tenant);

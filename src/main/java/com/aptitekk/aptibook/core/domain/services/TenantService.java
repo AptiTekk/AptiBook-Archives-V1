@@ -8,6 +8,7 @@ package com.aptitekk.aptibook.core.domain.services;
 
 import com.aptitekk.aptibook.core.crypto.PasswordStorage;
 import com.aptitekk.aptibook.core.domain.entities.*;
+import com.aptitekk.aptibook.core.util.PasswordGenerator;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -32,6 +33,9 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
 
     @Inject
     private PermissionService permissionService;
+
+    @Inject
+    private EmailService emailService;
 
     public Tenant getTenantBySubscriptionId(int subscriptionId) {
         try {
@@ -93,10 +97,20 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
             try {
                 adminUser = new User();
                 adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
-                adminUser.setHashedPassword(PasswordStorage.createHash(UserService.DEFAULT_ADMIN_PASSWORD));
+                String password = PasswordGenerator.generateRandomPassword(10);
+                adminUser.setHashedPassword(PasswordStorage.createHash(password));
+                emailService.sendEmailNotification(tenant.getAdminEmail(), "AptiBook Registration", "<p>Thank you for registering with AptiBook! We are very excited to hear about how you and your team uses AptiBook.</p>"
+                        + "<p>You can sign in to AptiBook using the URL and credentials below. Once you sign in, you can change your password by clicking <b>admin</b> on the navigation bar and visiting <b>My Account</b>.<br>"
+                        + "https://aptibook.aptitekk.com/" + tenant.getSlug() + "</p>"
+                        + "<center>"
+                        + "Username: <b>admin</b> <br>"
+                        + "Password: <b>" + password + "</b>"
+                        + "</center>"
+                        + "<p>Please let us know of any way we can be of assistance, and be sure to check out our knowledge base at https://support.aptitekk.com/. Enjoy!</p>");
                 adminUser.setVerified(true);
                 adminUser.setUserState(User.State.APPROVED);
                 adminUser.setTenant(tenant);
+
                 try {
                     userService.insert(adminUser);
                 } catch (Exception e) {

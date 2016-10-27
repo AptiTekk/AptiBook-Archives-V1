@@ -10,7 +10,6 @@ package com.aptitekk.aptibook.core.domain.services;
 import com.aptitekk.aptibook.core.domain.entities.Notification;
 import com.aptitekk.aptibook.core.util.LogManager;
 import com.sparkpost.Client;
-import com.sparkpost.exception.SparkPostErrorServerResponseException;
 import com.sparkpost.exception.SparkPostException;
 import com.sparkpost.model.AddressAttributes;
 import com.sparkpost.model.RecipientAttributes;

@@ -21,6 +21,8 @@ public class Tenant extends GlobalEntity {
 
     private boolean active;
 
+    private String adminEmail;
+
     private ZonedDateTime timeSetInactive;
 
     @Column(nullable = false, unique = true)
@@ -28,6 +30,7 @@ public class Tenant extends GlobalEntity {
 
     @Column(nullable = false, unique = true)
     private String slug;
+
 
     public enum Tier {
         BRONZE("aptibook-bronze", 25, 5, 50),
@@ -75,8 +78,8 @@ public class Tenant extends GlobalEntity {
         }
 
         public static Tier getTierBySku(String sku) {
-            for(Tier tier : values()) {
-                if(tier.getSku().equals(sku))
+            for (Tier tier : values()) {
+                if (tier.getSku().equals(sku))
                     return tier;
             }
 
@@ -174,6 +177,14 @@ public class Tenant extends GlobalEntity {
 
     public void setTier(Tier tier) {
         this.tier = tier;
+    }
+
+    public String getAdminEmail() {
+        return adminEmail;
+    }
+
+    public void setAdminEmail(String adminEmail) {
+        this.adminEmail = adminEmail;
     }
 
     @Override
