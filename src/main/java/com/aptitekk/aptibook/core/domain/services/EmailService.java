@@ -21,10 +21,7 @@ import com.sparkpost.transport.RestConnection;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Stateless
@@ -102,10 +99,14 @@ public class EmailService implements Serializable {
             connection = new RestConnection(client, API_URL);
             ResourceTransmissions.create(connection, 0, transmission);
 
-
             return true;
         } catch (SparkPostException e) {
-            LogManager.logException(getClass(), e, "Unable to send an email to these addresses: "+recipientArray+".");
+            StringJoiner stringJoiner = new StringJoiner(",");
+            for (RecipientAttributes recipientAttributes : recipientArray) {
+                stringJoiner.add(recipientAttributes.getAddress().getEmail());
+            }
+
+            LogManager.logException(getClass(), e, "Unable to send an email to these addresses: " + stringJoiner.toString());
             return false;
         }
 

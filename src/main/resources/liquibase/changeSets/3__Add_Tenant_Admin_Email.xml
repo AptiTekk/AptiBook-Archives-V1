@@ -1,17 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
   ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
   ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
   ~ Proprietary and confidential.
   -->
 
+<!-- Created 10/25/2016-->
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
 
-    <include file="changeSets/1__Initial_Schema.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/2__Add_Tenant_Tiers.xml" relativeToChangelogFile="true"/>
-    <include file="changeSets/3__Add_Tenant_Admin_Email.xml" relativeToChangelogFile="true"/>
+    <!-- Adds tiers to tenants -->
+    <changeSet id="3" author="PashaShestakov">
+        <addColumn tableName="tenant">
+            <column name="adminemail" type="TEXT"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

@@ -38,46 +38,6 @@ hr {
     margin-bottom: 15px !important;
 }
 
-.navbar {
-    background-color: #fff !important;
-    box-shadow: #aaa 0 -5px 20px 1px;
-    border-bottom: 4px solid #4272b7 !important;
-}
-
-.navbar-toggle .icon-bar {
-    background-color: #6D6E71;
-}
-
-.navbar-brand {
-    padding-top: 5px !important;
-}
-
-.navbar-brand img {
-    height: 40px;
-}
-
-.navbar-nav > li > .dropdown-menu {
-    min-width: 100%;
-    border: none;
-    border-top: 4px solid #4272b7;
-}
-
-.navbar-nav > li > .dropdown-menu > li > a {
-    padding: 3px 15px !important;
-}
-
-.navbar-nav > li > .dropdown-menu > li > a > span {
-    margin-right: 5px;
-}
-
-.navbar-nav > li > .dropdown-menu .fa {
-    width: 16px;
-}
-
-.manage-nav-link a::before {
-    content: '<span class="glyphicon glyphicon-edit" />';
-}
-
 .footer {
     width: 100%;
     height: 50px;
@@ -115,6 +75,100 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
     margin-bottom: 0;
 }
 
+/* ---------------------------------- BEGIN NAVBAR MODIFICATIONS ---------------------------------- */
+.aptibook .navbar {
+    background-color: #fff !important;
+    box-shadow: #aaa 0 -5px 20px 1px;
+    font-family: "Open Sans", Helvetica, Arial, sans-serif;
+}
+
+.aptibook .navbar-toggle .icon-bar {
+    background-color: #6D6E71;
+}
+
+.aptibook .navbar-brand {
+    padding-top: 5px !important;
+}
+
+.aptibook .navbar-brand img {
+    height: 40px;
+}
+
+.aptibook .navbar-nav > li > .dropdown-menu {
+    min-width: 100%;
+    border: none;
+}
+
+.aptibook .navbar-nav > li > .dropdown-menu > li > a {
+    padding: 3px 15px !important;
+}
+
+.aptibook .navbar-nav > li > .dropdown-menu > li > a > span {
+    margin-right: 5px;
+}
+
+.aptibook .navbar-nav > li > .dropdown-menu .fa {
+    width: 16px;
+}
+
+.aptibook .manage-nav-link a::before {
+    content: '<span class="glyphicon glyphicon-edit" />';
+}
+
+.aptibook .badge.notifications-badge {
+    position: absolute;
+    left: 30px;
+    top: 4px;
+    padding: 2px;
+    background-color: #4272b7;
+}
+
+@media (min-width: 768px) {
+    .aptibook .navbar-nav.navbar-right {
+        background-color: #4272b7;
+        color: white;
+        padding-right: 0;
+        padding-left: 5px;
+        height: 35px;
+        margin-top: 15px;
+        border-top-left-radius: 5px;
+        min-width: 60%;
+    }
+
+    .aptibook .navbar-default .navbar-nav > li {
+        height: 100%;
+    }
+
+    .aptibook .navbar-default .navbar-nav > li > a, .aptibook .navbar-default .navbar-nav > li > a:focus {
+        color: white;
+        height: 100%;
+        padding-top: 8px;
+    }
+
+    .aptibook .navbar-default .navbar-nav > li > a:hover, .aptibook .navbar-default .navbar-nav > li.open > a {
+        color: white;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .aptibook .badge.notifications-badge {
+        background-color: transparent;
+        left: 48px;
+    }
+
+    .aptibook .nav-notifications {
+        float: right;
+        width: 80px;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .aptibook .nav-notifications a {
+        padding-left: 36px;
+    }
+
+}
+
+/* ---------------------------------- END NAVBAR MODIFICATIONS ---------------------------------- */
+
 /* ---------------------------------- BEGIN COLOR MODIFICATIONS ---------------------------------- */
 
 .aptibook a {
@@ -127,7 +181,16 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 .aptibook .pagination > .active > a:hover,
 .aptibook .pagination > .active > span:hover,
 .aptibook .pagination > .active > a:focus,
-.aptibook .pagination > .active > span:focus {
+.aptibook .pagination > .active > span:focus,
+.aptibook .btn-primary.disabled:hover,
+.aptibook .btn-primary[disabled]:hover,
+.aptibook fieldset[disabled] .btn-primary:hover,
+.aptibook .btn-primary.disabled:focus,
+.aptibook .btn-primary[disabled]:focus,
+.aptibook fieldset[disabled] .btn-primary:focus,
+.aptibook .btn-primary.disabled.focus,
+.aptibook .btn-primary[disabled].focus,
+.aptibook fieldset[disabled] .btn-primary.focus {
     background-color: #4272b7;
     border-color: #39629C;
 }
@@ -153,6 +216,26 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 }
 
 /* ---------------------------------- END COLOR MODIFICATIONS ---------------------------------- */
+
+/* ---------------------------------- BEGIN PANEL MODIFICATIONS ---------------------------------- */
+
+.aptibook .panel.panel-primary {
+    box-shadow: #666 0 0 10px -2px;
+    border: none;
+}
+
+.aptibook .panel.panel-primary .panel-heading {
+    background-color: #4272b7;
+    box-shadow: #666 0 5px 10px -5px;
+    color: white;
+    border: none;
+}
+
+.aptibook .panel.panel-primary .panel-heading a:after {
+    color: white;
+}
+
+/* ---------------------------------- END PANEL MODIFICATIONS ---------------------------------- */
 
 /* ---------------------------------- BEGIN CALENDAR EVENT MODIFICATIONS ---------------------------------- */
 
