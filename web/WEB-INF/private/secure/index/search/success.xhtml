@@ -17,7 +17,7 @@
         <b:row style="margin-top: 20px">
             <ui:fragment rendered="#{requestReservationViewController.resource.needsApproval}">
                 <b:column colXs="12">
-                    <b:panel title="Reservation Requested" look="success" collapsible="false">
+                    <b:panel title="Reservation Requested" look="primary" collapsible="false">
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for #{requestReservationViewController.successfulReservation.title} has been requested."
@@ -30,7 +30,7 @@
             </ui:fragment>
             <ui:fragment rendered="#{!requestReservationViewController.resource.needsApproval}">
                 <b:column colXs="12">
-                    <b:panel title="Reservation Approved" look="success" collapsible="false">
+                    <b:panel title="Reservation Approved" look="primary" collapsible="false">
                         <h4>Success!</h4>
                         <h:outputText
                                 value="Your reservation for #{requestReservationViewController.reservationTitle} has been approved."

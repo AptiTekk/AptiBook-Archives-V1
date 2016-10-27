@@ -69,7 +69,7 @@
         <b:row style="margin-top:10px">
             <b:column colXs="12" colMd="4" rendered="#{not empty availableResourcesController.filterTags}">
                 <h:form>
-                    <b:panel look="default" title="Filters">
+                    <b:panel look="primary" title="Filters">
                         <c:forEach items="#{availableResourcesController.filterTags}" var="tag" varStatus="status">
                             <b:switch value="#{availableResourcesController.selectedFilterTags[status.index]}"
                                       label="#{tag.name}"
@@ -88,7 +88,7 @@
                         <c:otherwise>
 
                             <ui:repeat value="#{availableResourcesController.filteredResources}" var="resourceEntity">
-                                <b:panel look="info" collapsible="false" title="#{resourceEntity.name}">
+                                <b:panel look="primary" collapsible="false" title="#{resourceEntity.name}">
                                     <h:panelGroup layout="block" class="form-group">
                                         <p:lightBox>
                                             <h:outputLink value="#{request.contextPath}/images/resources/#{resourceEntity.id}">

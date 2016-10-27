@@ -14,17 +14,7 @@
 >
 
 <ui:composition>
-    <style type="text/css">
-        .notifications-badge {
-            position: absolute;
-            left: 30px;
-            top: 8px;
-            padding: 2px;
-            background-color: #0081c2;
-        }
-    </style>
-
-    <b:navBar brandImg="#{resource['images:Logo.svg']}"
+    <b:navBar brandImg="#{resource['images:Logo-Header.png']}"
               brandHref="#{facesContext.viewRoot.viewId.contains('inactive_tenant.xhtml') ? null : facesNavigationController.getUrlFromNavigationCase('index')}"
               fixed="top"
               onclick="loading_start()" fluid="true">
@@ -32,7 +22,7 @@
                 layout="block" id="header">
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
-                    <b:navbarLinks pull="right" style="margin-right: 20px">
+                    <b:navbarLinks pull="right">
                         <b:dropMenu value="Reservation Management" iconAwesome="calendar-check-o"
                                     rendered="#{not empty reservationManagementViewController.pages}">
                             <ui:repeat value="#{reservationManagementViewController.pages}" var="page">
@@ -65,7 +55,7 @@
                             <b:navCommandLink action="#{authenticationController.logout}" value="Sign Out"
                                               iconAwesome="sign-out" style="cursor:pointer;"/>
                         </b:dropMenu>
-                        <b:navLink outcome="notifications" iconAwesome="bell"
+                        <b:navLink outcome="notifications" iconAwesome="bell" styleClass="nav-notifications"
                                    onclick="loading_start()" id="notifications">
                             <ui:fragment
                                     rendered="#{notificationController.unreadNotifications != null}">
