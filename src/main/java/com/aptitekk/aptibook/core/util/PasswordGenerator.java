@@ -11,22 +11,21 @@ import java.util.Random;
 
 public class PasswordGenerator {
     private static final Random RANDOM = new SecureRandom();
+    private static final String VALID_CHARACTERS = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789+@";
+
     /**
-     * Generate a random String suitable for use as a temporary password.
+     * Generates a random String suitable for use as a temporary password.
      *
-     * @return String suitable for use as a temporary password
-     * @since 2.4
+     * @param length The length of the password, in characters.
+     * @return A random password with the specified length.
      */
-    public static String generateRandomPassword(int length)
-    {
-        String letters = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789+@";
-        String pw = "";
-        for (int i=0; i<length; i++)
-        {
-            int index = (int)(RANDOM.nextDouble()*letters.length());
-            pw += letters.substring(index, index+1);
+    public static String generateRandomPassword(int length) {
+        StringBuilder passwordBuilder = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int index = (int) (RANDOM.nextDouble() * VALID_CHARACTERS.length());
+            passwordBuilder.append(VALID_CHARACTERS.charAt(index));
         }
-        return pw;
+        return passwordBuilder.toString();
     }
 
 }

@@ -33,6 +33,7 @@ public class WooCommerceSecurityFilter implements ClientRequestFilter {
                         requestContext.getUri())
                         .queryParam(CONSUMER_KEY_PARAM, consumerKey)
                         .queryParam(CONSUMER_SECRET_PARAM, consumerSecret)
+                        .queryParam("filter[limit]", -1) //Prevent pagination
                         .build());
     }
 }

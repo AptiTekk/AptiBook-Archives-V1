@@ -99,14 +99,14 @@ public class TenantService extends GlobalEntityServiceAbstract<Tenant> implement
                 adminUser.setEmailAddress(UserService.ADMIN_EMAIL_ADDRESS);
                 String password = PasswordGenerator.generateRandomPassword(10);
                 adminUser.setHashedPassword(PasswordStorage.createHash(password));
-                emailService.sendEmailNotification(tenant.getAdminEmail(), "AptiBook Registration", "<p>Thank you for registering with AptiBook! "
-                        + "You can login to AptiBook here: "
-                        + "https://aptibook.aptitekk.com/"
-                        + tenant.getSlug()
-                        + "<center>Username: <b>admin</b><br>"
-                        + "Password: "
-                        + "<b>" + password + "</b></center>");
-                password = null; //Is the necessary?
+                emailService.sendEmailNotification(tenant.getAdminEmail(), "AptiBook Registration", "<p>Thank you for registering with AptiBook! We are very excited to hear about how you and your team uses AptiBook.</p>"
+                        + "<p>You can sign in to AptiBook using the URL and credentials below. Once you sign in, you can change your password by clicking <b>admin</b> on the navigation bar and visiting <b>My Account</b>.<br>"
+                        + "https://aptibook.aptitekk.com/" + tenant.getSlug() + "</p>"
+                        + "<center>"
+                        + "Username: <b>admin</b> <br>"
+                        + "Password: <b>" + password + "</b>"
+                        + "</center>"
+                        + "<p>Please let us know of any way we can be of assistance, and be sure to check out our knowledge base at https://support.aptitekk.com/. Enjoy!</p>");
                 adminUser.setVerified(true);
                 adminUser.setUserState(User.State.APPROVED);
                 adminUser.setTenant(tenant);

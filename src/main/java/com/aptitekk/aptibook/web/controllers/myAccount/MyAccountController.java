@@ -94,6 +94,7 @@ public class MyAccountController extends UserFieldSupplier implements Serializab
 
             try {
                 user = userService.merge(user);
+                resetFields();
             } catch (Exception e) {
                 LogManager.logException(getClass(), e, "Could not update User Settings");
                 FacesContext.getCurrentInstance().addMessage("userEditForm", CommonFacesMessages.EXCEPTION_FACES_MESSAGE);
