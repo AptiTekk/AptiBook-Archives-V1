@@ -124,6 +124,11 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 }
 
 @media (min-width: 768px) {
+    .aptibook .navbar-right .dropdown-menu {
+        left: 0;
+        right: auto;
+    }
+
     .aptibook .navbar-nav.navbar-right {
         background-color: #4272b7;
         color: white;
