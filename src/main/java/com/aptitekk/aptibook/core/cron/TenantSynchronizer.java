@@ -254,16 +254,25 @@ public class TenantSynchronizer {
      * @return The newly created tenant, unless one already existed with the specified parameters, or the slug was null.
      */
     private Tenant createNewTenant(int subscriptionId, String slug, Tenant.Tier tier, String adminEmail) {
-        if (slug == null || slug.isEmpty())
+        if (slug == null || slug.isEmpty()) {
+            LogManager.logError(getClass(), "Could not Create Tenant: Slug is empty/null");
             return null;
-        if (adminEmail == null || adminEmail.isEmpty())
-            return null;
+        }
 
-        if (tenantService.getTenantBySlug(slug) != null)
+        if (adminEmail == null || adminEmail.isEmpty()) {
+            LogManager.logError(getClass(), "Could not Create Tenant: Admin Email is empty/null");
             return null;
-        if (tenantService.getTenantBySubscriptionId(subscriptionId) != null)
-            return null;
+        }
 
+        if (tenantService.getTenantBySlug(slug) != null) {
+            LogManager.logError(getClass(), "Could not Create Tenant: Another tenant with this slug exists! (" + slug + ")");
+            return null;
+        }
+
+        if (tenantService.getTenantBySubscriptionId(subscriptionId) != null) {
+            LogManager.logError(getClass(), "Could not Create Tenant: Another tenant with this subscription ID exists! (" + subscriptionId + ")");
+            return null;
+        }
 
         Tenant tenant = new Tenant();
         tenant.setActive(true);
