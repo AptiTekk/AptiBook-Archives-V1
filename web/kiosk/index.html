@@ -16,18 +16,51 @@
     <script src="../resources/aptibook-kiosk/angular/angular-route.min.js"></script>
     <script src="app.js"></script>
 </head>
-<body ng-controller="KioskController">
+<body>
 
 <div class="container-fluid">
     <div class="row">
         <!-- Main Area (Contains Resource Name, Current Reservation, Status) -->
-        <div class="main col-xs-9">
-            <div class="status">
-                {{isOccupied ? "busy" : "open"}}
-            </div>
-            <div class="resource-name">
+        <div class="main col-xs-9" ng-controller="ReservationsController"
+             ng-class="isAvailable ? 'open' : 'busy'">
+            <!-- The name of the Resource -->
+            <div class="resource-name" ng-controller="ResourceController">
                 {{resource.name}}
             </div>
+
+            <!-- The middle Content area, containing reservation details and messages -->
+            <div class="content">
+
+                <!-- Details about the current reservation (if one is in progress) -->
+                <div class="reservation-details" ng-hide="isAvailable">
+                    <div class="reservation-title">
+                        {{reservations[currentReservationIndex].title}}
+                    </div>
+                    <div class="reservation-time">
+                        {{reservations[currentReservationIndex].startTime | date:"hh:mm"}} -
+                        {{reservations[currentReservationIndex].endTime | date:"hh:mm"}}
+                    </div>
+                    <!-- Toolbar for the current reservation (if one is in progress) -->
+                    <div class="btn-toolbar reservation-toolbar">
+                        <button class="btn btn-default">
+                            Add More Time
+                        </button>
+                        <button class="btn btn-default" style="margin-left: 10px;">
+                            End Early
+                        </button>
+                    </div>
+                </div>
+
+                <div class="available-message" ng-show="isAvailable">
+
+                </div>
+            </div>
+
+            <!-- The status of the Resource (Open or Busy) -->
+            <div class="status">
+                <img ng-src="../resources/aptibook-kiosk/images/{{(isAvailable ? 'available.svg' : 'reserved.svg')}}" />
+            </div>
+
         </div>
 
         <!-- Sidebar (Contains Time, Reservations) -->
@@ -48,12 +81,12 @@
             <div class="reservations" ng-controller="ReservationsController">
                 <ul>
                     <li class="reservation" ng-class="{past: reservation.past}" ng-repeat="reservation in reservations">
-                        <span class="reservation-title">
+                        <div class="reservation-title">
                             {{reservation.title}}
-                        </span>
-                        <span class="reservation-start-end">
+                        </div>
+                        <div class="reservation-start-end">
                             {{reservation.startTime | date:"hh:mm"}} - {{reservation.endTime | date:"hh:mm"}}
-                        </span>
+                        </div>
                     </li>
                 </ul>
             </div>
