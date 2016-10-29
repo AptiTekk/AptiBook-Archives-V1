@@ -28,7 +28,7 @@
 
         <b:commandButton look="default" size="block" ajax="true" action="#{oAuthController.signInWithGoogle}"
                          update="@form" rendered="#{oAuthController.googleSignInEnabled}">
-            <b:image library="images" name="google-sign-in.svg" height="18px"/>
+            <b:image library="aptibook" name="images/google-sign-in.svg" height="18px"/>
         </b:commandButton>
 
         <h:panelGroup rendered="#{registrationController.registrationEnabled}">

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (C) 2016 AptiTekk, LLC. (https://AptiTekk.com/) - All Rights Reserved
+  ~ Unauthorized copying of any part of AptiBook, via any medium, is strictly prohibited.
+  ~ Proprietary and confidential.
+  -->
+
+<html lang="en" ng-app="kiosk">
+<head>
+    <meta charset="UTF-8">
+    <title>AptiBook Kiosk</title>
+
+    <link rel="stylesheet" href="../resources/aptibook-kiosk/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../resources/aptibook-kiosk/css/style.css"/>
+    <script src="../resources/aptibook-kiosk/angular/angular.min.js"></script>
+    <script src="../resources/aptibook-kiosk/angular/angular-route.min.js"></script>
+    <script src="app.js"></script>
+</head>
+<body ng-controller="KioskController">
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Main Area (Contains Resource Name, Current Reservation, Status) -->
+        <div class="main col-xs-9">
+            <div class="status">
+                {{isOccupied ? "busy" : "open"}}
+            </div>
+            <div class="resource-name">
+                {{resource.name}}
+            </div>
+        </div>
+
+        <!-- Sidebar (Contains Time, Reservations) -->
+        <div class="side col-xs-3">
+            <!-- Displays Time -->
+            <div class="clock" ng-controller="TimeController">
+                {{currentTime | date:"hh" + (currentTime.getSeconds() % 2 === 0 ? ":" : " ") + "mm"}}
+            </div>
+
+            <!-- Displays Today's Date -->
+            <div class="date" ng-controller="TimeController">
+                <span class="today-label">Today</span> <span class="today">{{currentTime | date:"EEE, MMM dd"}}</span>
+            </div>
+
+            <hr>
+
+            <!-- Displays Upcoming and Past Reservations for Today -->
+            <div class="reservations" ng-controller="ReservationsController">
+                <ul>
+                    <li class="reservation" ng-class="{past: reservation.past}" ng-repeat="reservation in reservations">
+                        <span class="reservation-title">
+                            {{reservation.title}}
+                        </span>
+                        <span class="reservation-start-end">
+                            {{reservation.startTime | date:"hh:mm"}} - {{reservation.endTime | date:"hh:mm"}}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contains Reserve Button -->
+            <div class="footer">
+                <button class="btn-reserve btn btn-primary btn-block">
+                    Reserve
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
