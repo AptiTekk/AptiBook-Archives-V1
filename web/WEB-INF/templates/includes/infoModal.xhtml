@@ -28,7 +28,7 @@
                     <b:dataTableColumn label="Library Name">
                         <b:navCommandLink value="#{attributionName}" ajax="true"
                                           action="#{aptiBookInfoController.setSelectedAttribution(attributionName)}"
-                                          update=":attributionModalForm" oncomplete="$('.attributionModal').modal();"/>
+                                          update=":attributionModalForm" oncomplete="$('.attributionModal').modal('show');$('.infoModal').modal('hide');"/>
                     </b:dataTableColumn>
                 </b:dataTable>
             </h:panelGroup>
