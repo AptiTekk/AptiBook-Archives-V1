@@ -23,6 +23,8 @@ CREATE TABLE file (
 -- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; 
 --
 
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+
 CREATE SEQUENCE hibernate_sequence
 START WITH 1
 INCREMENT BY 1
@@ -36,10 +38,10 @@ CACHE 1;
 
 CREATE TABLE notification (
   id integer NOT NULL,
-  body character varying(255),
+  body TEXT,
   creation timestamp without time zone,
   notif_read boolean,
-  subject character varying(255),
+  subject TEXT,
   tenant_id integer NOT NULL,
   user_id integer
 );
@@ -50,7 +52,7 @@ CREATE TABLE notification (
 
 CREATE TABLE permission (
   id integer NOT NULL,
-  descriptor character varying(255),
+  descriptor TEXT,
   tenant_id integer NOT NULL
 );
 
@@ -60,8 +62,8 @@ CREATE TABLE permission (
 
 CREATE TABLE property (
   id integer NOT NULL,
-  propertykey character varying(255),
-  propertyvalue character varying(255),
+  propertykey TEXT,
+  propertyvalue TEXT,
   tenant_id integer NOT NULL
 );
 
@@ -74,8 +76,8 @@ CREATE TABLE reservation (
   datecreated timestamp without time zone,
   endtime timestamp without time zone,
   starttime timestamp without time zone,
-  status character varying(255),
-  title character varying(255),
+  status TEXT,
+  title TEXT,
   tenant_id integer NOT NULL,
   resource_id integer,
   user_id integer
@@ -88,7 +90,7 @@ CREATE TABLE reservation (
 CREATE TABLE reservationdecision (
   id integer NOT NULL,
   approved boolean NOT NULL,
-  comment character varying(255),
+  comment TEXT,
   tenant_id integer NOT NULL,
   reservation_id integer NOT NULL,
   user_id integer NOT NULL,
@@ -101,10 +103,10 @@ CREATE TABLE reservationdecision (
 
 CREATE TABLE reservationfield (
   id integer NOT NULL,
-  description character varying(255),
+  description TEXT,
   multiline boolean NOT NULL,
   required boolean NOT NULL,
-  title character varying(255),
+  title TEXT,
   tenant_id integer NOT NULL,
   resourcecategory_id integer
 );
@@ -124,7 +126,7 @@ CREATE TABLE reservationfield_reservationfieldentry (
 
 CREATE TABLE reservationfieldentry (
   id integer NOT NULL,
-  content character varying(255),
+  content TEXT,
   tenant_id integer NOT NULL,
   field_id integer,
   reservation_id integer
@@ -136,7 +138,7 @@ CREATE TABLE reservationfieldentry (
 
 CREATE TABLE resource (
   id integer NOT NULL,
-  name character varying(255),
+  name TEXT,
   needsapproval boolean,
   tenant_id integer NOT NULL,
   image_id integer,
@@ -159,7 +161,7 @@ CREATE TABLE resource_tag (
 
 CREATE TABLE resourcecategory (
   id integer NOT NULL,
-  name character varying(255),
+  name TEXT,
   tenant_id integer NOT NULL
 );
 
@@ -169,7 +171,7 @@ CREATE TABLE resourcecategory (
 
 CREATE TABLE tag (
   id integer NOT NULL,
-  name character varying(255),
+  name TEXT,
   tenant_id integer NOT NULL,
   resourcecategory_id integer NOT NULL
 );
@@ -181,7 +183,7 @@ CREATE TABLE tag (
 CREATE TABLE tenant (
   id integer NOT NULL,
   active boolean NOT NULL,
-  slug character varying(255) NOT NULL,
+  slug TEXT NOT NULL,
   subscriptionid integer NOT NULL,
   timesetinactive timestamp without time zone
 );
@@ -192,15 +194,15 @@ CREATE TABLE tenant (
 
 CREATE TABLE "user" (
   id integer NOT NULL,
-  emailaddress character varying(255),
-  firstname character varying(255),
-  hashedpassword character varying(255),
-  lastname character varying(255),
-  location character varying(255),
-  notificationtypesettings character varying(255),
-  phonenumber character varying(255),
-  userstate character varying(255),
-  verificationcode character varying(255),
+  emailaddress TEXT,
+  firstname TEXT,
+  hashedpassword TEXT,
+  lastname TEXT,
+  location TEXT,
+  notificationtypesettings TEXT,
+  phonenumber TEXT,
+  userstate TEXT,
+  verificationcode TEXT,
   verified boolean NOT NULL,
   tenant_id integer NOT NULL
 );
@@ -229,7 +231,7 @@ CREATE TABLE user_usergroup (
 
 CREATE TABLE usergroup (
   id integer NOT NULL,
-  name character varying(255),
+  name TEXT,
   tenant_id integer NOT NULL,
   parent_id integer
 );

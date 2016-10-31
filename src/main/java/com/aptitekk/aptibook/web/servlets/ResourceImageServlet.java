@@ -31,7 +31,7 @@ public class ResourceImageServlet extends HttpServlet {
 
     @Override
     public void init() {
-        String imageNotFoundPath = "/resources/images/notFound.jpg";
+        String imageNotFoundPath = "/resources/aptibook/images/notFound.jpg";
         try {
             imageNotFoundFile = new File(getServletContext().getResource(imageNotFoundPath).toURI());
         } catch (MalformedURLException | URISyntaxException e) {

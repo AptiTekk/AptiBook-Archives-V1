@@ -25,6 +25,8 @@ import javax.faces.validator.ValidatorException;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,6 +34,7 @@ public class Property extends MultiTenantEntity implements Serializable {
 
     public enum Group {
 
+        PERSONALIZATION("Personalization", null),
         REGISTRATION("Registration", null),
         GOOGLE_SIGN_IN("Google Sign In", null),
         DATE_TIME("Date And Time", DateTimeChangeListener.class);
@@ -46,6 +49,17 @@ public class Property extends MultiTenantEntity implements Serializable {
 
         public String getFriendlyName() {
             return friendlyName;
+        }
+
+        public List<Key> getKeys() {
+            Key[] allKeys = Key.values();
+            List<Key> groupKeys = new ArrayList<>();
+            for (Key key : allKeys) {
+                if (key.getGroup().equals(this))
+                    groupKeys.add(key);
+            }
+
+            return groupKeys;
         }
 
         public void firePropertiesChangedEvent() {
@@ -81,6 +95,8 @@ public class Property extends MultiTenantEntity implements Serializable {
     }
 
     public enum Key {
+
+        PERSONALIZATION_ORGANIZATION_NAME(null, Group.PERSONALIZATION, new SingleLineField("Organization Name", 64)),
 
         REGISTRATION_ENABLED("true", Group.REGISTRATION, new BooleanField("Enable User Registration")),
 

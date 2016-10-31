@@ -18,6 +18,8 @@ import com.aptitekk.aptibook.web.controllers.authentication.AuthenticationContro
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -64,6 +66,8 @@ public class RequestReservationViewController implements Serializable {
     /**
      * The Title for reservation being edited.
      */
+    @Size(max = 64, message = "This may only be 64 characters long.")
+    @Pattern(regexp = "[^<>;=]*", message = "These characters are not allowed: < > ; =")
     private String reservationTitle;
 
     /**

@@ -11,7 +11,7 @@
     width: 100%;
     height: 100%;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.6) url("#{resource['images:spinner.gif']}") no-repeat center;
+    background: rgba(255, 255, 255, 0.6) url("#{resource['aptibook:images/spinner.gif']}") no-repeat center;
     transition: opacity 0.1s ease-in-out;
     opacity: 0;
     pointer-events: none;
@@ -30,7 +30,7 @@
 }
 
 .texture-bg {
-    background: url("#{resource['images:background.png']}");
+    background: url("#{resource['aptibook:images/background.png']}");
 }
 
 hr {
@@ -124,6 +124,11 @@ span.no-decoration a:hover, span.no-decoration a:active, span.no-decoration a:fo
 }
 
 @media (min-width: 768px) {
+    .aptibook .navbar-right .dropdown-menu {
+        left: 0;
+        right: auto;
+    }
+
     .aptibook .navbar-nav.navbar-right {
         background-color: #4272b7;
         color: white;

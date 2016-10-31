@@ -14,14 +14,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="#{resource['images/favicons/apple-touch-icon.png']}"/>
-    <link rel="icon" type="image/png" href="#{resource['images/favicons/favicon-32x32.png']}" sizes="32x32"/>
-    <link rel="icon" type="image/png" href="#{resource['images/favicons/android-chrome-192x192.png']}" sizes="192x192"/>
-    <link rel="icon" type="image/png" href="#{resource['images/favicons/favicon-16x16.png']}" sizes="16x16"/>
-    <link rel="manifest" href="#{resource['images/favicons/manifest.json']}"/>
-    <link rel="mask-icon" href="#{resource['images/favicons/safari-pinned-tab.svg']}"/>
-    <link rel="shortcut icon" href="#{resource['images/favicons/favicon.ico']}"/>
-    <meta name="msapplication-config" content="#{resource['images/favicons/browserconfig.xml']}"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="#{resource['aptibook:images/favicons/apple-touch-icon.png']}"/>
+    <link rel="icon" type="image/png" href="#{resource['aptibook:images/favicons/favicon-32x32.png']}" sizes="32x32"/>
+    <link rel="icon" type="image/png" href="#{resource['aptibook:images/favicons/android-chrome-192x192.png']}" sizes="192x192"/>
+    <link rel="icon" type="image/png" href="#{resource['aptibook:images/favicons/favicon-16x16.png']}" sizes="16x16"/>
+    <link rel="manifest" href="#{resource['aptibook:images/favicons/manifest.json']}"/>
+    <link rel="mask-icon" href="#{resource['aptibook:images/favicons/safari-pinned-tab.svg']}"/>
+    <link rel="shortcut icon" href="#{resource['aptibook:images/favicons/favicon.ico']}"/>
+    <meta name="msapplication-config" content="#{resource['aptibook:images/favicons/browserconfig.xml']}"/>
     <meta name="theme-color" content="#ffffff"/>
 
     <script type="text/javascript">
@@ -72,7 +72,7 @@
 
     <title>AptiBook</title>
 
-    <h:outputStylesheet library="css" name="v2016-10-26/style.css"/>
+    <h:outputStylesheet library="aptibook" name="css/v2016-10-26/style.css"/>
     <ui:insert name="css"/>
 
 </h:head>
@@ -83,7 +83,7 @@
     <ui:include src="includes/helpModal.xhtml"/>
     <ui:include src="includes/infoModal.xhtml"/>
 
-    <h:outputScript library="js" name="fix_double_click.js"/>
+    <h:outputScript library="aptibook" name="js/fix_double_click.js"/>
     <ui:insert name="js"/>
 </h:body>
 </html>

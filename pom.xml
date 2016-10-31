@@ -101,7 +101,7 @@
             </plugin>
 
             <!-- Install BootsFaces Jar -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
                 <version>2.5.2</version>
@@ -110,11 +110,11 @@
                         <id>install-external</id>
                         <phase>clean</phase>
                         <configuration>
-                            <file>${project.basedir}/lib/bootsfaces-0.9.2-SNAPSHOT.jar</file>
+                            <file>${project.basedir}/lib/bootsfaces-aptibook-SNAPSHOT.jar</file>
                             <repositoryLayout>default</repositoryLayout>
                             <groupId>net.bootsfaces</groupId>
                             <artifactId>bootsfaces</artifactId>
-                            <version>0.9.2-SNAPSHOT</version>
+                            <version>aptibook-SNAPSHOT</version>
                             <packaging>jar</packaging>
                             <generatePom>true</generatePom>
                         </configuration>
@@ -123,7 +123,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
@@ -280,6 +280,13 @@
         <!-- End Testing Dependencies -->
 
         <!-- Front-End Dependencies -->
+        <!--<dependency>
+            <groupId>net.bootsfaces</groupId>
+            <artifactId>bootsfaces</artifactId>
+            <version>aptibook-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bootsfaces-aptibook-SNAPSHOT.jar</systemPath>
+        </dependency>-->
         <dependency>
             <groupId>net.bootsfaces</groupId>
             <artifactId>bootsfaces</artifactId>

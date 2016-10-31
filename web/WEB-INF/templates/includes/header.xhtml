@@ -14,7 +14,7 @@
 >
 
 <ui:composition>
-    <b:navBar brandImg="#{resource['images:Logo-Header.png']}"
+    <b:navBar brandImg="#{resource['aptibook:images/Logo.png']}"
               brandHref="#{facesContext.viewRoot.viewId.contains('inactive_tenant.xhtml') ? null : facesNavigationController.getUrlFromNavigationCase('index')}"
               fixed="top"
               onclick="loading_start()" fluid="true">
@@ -23,6 +23,16 @@
             <ui:fragment rendered="#{authenticationController.authenticatedUser != null}">
                 <h:form>
                     <b:navbarLinks pull="right">
+                        <b:dropMenu value="#{authenticationController.authenticatedUser.fullname}"
+                                    iconAwesome="user">
+                            <b:navLink outcome="myReservations" value="My Reservations" iconAwesome="calendar"
+                                       onclick="loading_start()"/>
+                            <b:navLink outcome="myAccount" value="My Account" iconAwesome="pencil"
+                                       onclick="loading_start()"/>
+                            <b:navLink/>
+                            <b:navCommandLink action="#{authenticationController.logout()}" value="Sign Out"
+                                       iconAwesome="sign-out" style="cursor:pointer;"/>
+                        </b:dropMenu>
                         <b:dropMenu value="Reservation Management" iconAwesome="calendar-check-o"
                                     rendered="#{not empty reservationManagementViewController.pages}">
                             <ui:repeat value="#{reservationManagementViewController.pages}" var="page">
@@ -44,16 +54,6 @@
                                     <f:param name="settingsPage" value="#{page.name}"/>
                                 </b:navLink>
                             </ui:repeat>
-                        </b:dropMenu>
-                        <b:dropMenu value="#{authenticationController.authenticatedUser.fullname}"
-                                    iconAwesome="user">
-                            <b:navLink outcome="myReservations" value="My Reservations" iconAwesome="calendar"
-                                       onclick="loading_start()"/>
-                            <b:navLink outcome="myAccount" value="My Account" iconAwesome="pencil"
-                                       onclick="loading_start()"/>
-                            <b:navLink/>
-                            <b:navCommandLink action="#{authenticationController.logout}" value="Sign Out"
-                                              iconAwesome="sign-out" style="cursor:pointer;"/>
                         </b:dropMenu>
                         <b:navLink outcome="notifications" iconAwesome="bell" styleClass="nav-notifications"
                                    onclick="loading_start()" id="notifications">
